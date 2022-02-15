@@ -1,8 +1,8 @@
-#include <windows.h>
 #include <tchar.h>
+#include <windows.h>
 
-TCHAR const CLASS_NAME[] = _T("MainWndClass");
-TCHAR const WINDOW_TITLE[] = _T("My first window");
+const TCHAR CLASS_NAME[] = L"MainWndClass";
+const TCHAR WINDOW_TITLE[] = L"My first window";
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 int MainLoop();
@@ -27,12 +27,12 @@ int WINAPI WinMain(
 	{
 		return 1;
 	}
-	
+
 	// Показываем главное окно приложения
 	ShowWindow(hMainWindow, nCmdShow);
 	UpdateWindow(hMainWindow);
 
-	// Запускаем цикл выборки сообщений, пока не получим 
+	// Запускаем цикл выборки сообщений, пока не получим
 	// сигнал о завершении приложения
 	return MainLoop();
 }
@@ -40,13 +40,13 @@ int WINAPI WinMain(
 HWND CreateMainWindow(HINSTANCE hInstance)
 {
 	HWND hMainWindow = CreateWindowEx(
-		0,
+		0, // DWORD dwExStyle;
 		CLASS_NAME,
 		WINDOW_TITLE,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		NULL,
+		nullptr,
 		NULL,
 		hInstance,
 		NULL);
@@ -64,6 +64,7 @@ int MainLoop()
 		{
 			// произошла ошибка - нужно обработать ее и, вероятно,
 			// завершить работу приложения
+			break;
 		}
 		else
 		{
@@ -101,22 +102,20 @@ LRESULT CALLBACK WindowProc(
 
 bool RegisterWndClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wndClass =
-	{
-		sizeof(wndClass),	//UINT cbSize;
+	WNDCLASSEX wndClass = {
+		sizeof(wndClass), //UINT cbSize;
 		CS_HREDRAW | CS_VREDRAW, //UINT style;
-		&WindowProc,		//WNDPROC lpfnWndProc;
-		0,					//int cbClsExtra;
-		0,					//int cbWndExtra;
-		hInstance,			//HINSTANCE hInstance;
-		NULL,				//HICON hIcon;
+		&WindowProc, //WNDPROC lpfnWndProc;
+		0, //int cbClsExtra;
+		0, //int cbWndExtra;
+		hInstance, //HINSTANCE hInstance;
+		NULL, //HICON hIcon;
 		LoadCursor(NULL, IDC_ARROW), //HCURSOR hCursor;
-		(HBRUSH)(COLOR_BTNFACE + 1), //HBRUSH hbrBackground;
-		NULL,				//LPCTSTR lpszMenuName;
-		CLASS_NAME,			//LPCTSTR lpszClassName;
-		NULL,				//HICON hIconSm;
+		reinterpret_cast<HBRUSH>(COLOR_WINDOW), //HBRUSH hbrBackground;
+		NULL, //LPCTSTR lpszMenuName;
+		CLASS_NAME, //LPCTSTR lpszClassName;
+		NULL, //HICON hIconSm;
 	};
 
 	return RegisterClassEx(&wndClass) != FALSE;
 }
-
