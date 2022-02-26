@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample02_raster_images_basics", "sample02_raster_images_basics\sample02_raster_images_basics.vcxproj", "{3BB66D59-73C5-45D7-A8CA-E6A355CDB703}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample01_gdiplus_basics", "sample01_gdiplus_basics\sample01_gdiplus_basics.vcxproj", "{D72D068B-36BD-4E41-810F-6D79A321DBA9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03_raster_images_basics_wtl", "sample03_raster_images_basics_wtl\sample03_raster_images_basics_wtl.vcxproj", "{ED83C7F3-16C7-4068-A1D2-D652D576C948}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04_fonts_and_texts_wtl", "sample04_fonts_and_texts_wtl\sample04_fonts_and_texts_wtl.vcxproj", "{ED83C7F3-16C7-4068-A1D2-DE52D576C948}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample05_file_dialog", "sample05_file_dialog\sample05_file_dialog.vcxproj", "{3BB66D59-73C9-45D7-A8CA-E6A355CDB703}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample06_file_dialog_wtl", "sample06_file_dialog_wtl\sample06_file_dialog.vcxproj", "{ED84C7F3-16C7-4068-A1D2-DE52D576C948}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample07_double_buffering", "sample07_double_buffering\sample07_double_buffering.vcxproj", "{4FE8870C-863F-42A1-9287-F935FE3FA90C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BB66D59-73C5-45D7-A8CA-E6A355CDB703}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3BB66D59-73C5-45D7-A8CA-E6A355CDB703}.Debug|Win32.Build.0 = Debug|Win32
+		{3BB66D59-73C5-45D7-A8CA-E6A355CDB703}.Release|Win32.ActiveCfg = Release|Win32
+		{3BB66D59-73C5-45D7-A8CA-E6A355CDB703}.Release|Win32.Build.0 = Release|Win32
+		{D72D068B-36BD-4E41-810F-6D79A321DBA9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D72D068B-36BD-4E41-810F-6D79A321DBA9}.Debug|Win32.Build.0 = Debug|Win32
+		{D72D068B-36BD-4E41-810F-6D79A321DBA9}.Release|Win32.ActiveCfg = Release|Win32
+		{D72D068B-36BD-4E41-810F-6D79A321DBA9}.Release|Win32.Build.0 = Release|Win32
+		{ED83C7F3-16C7-4068-A1D2-D652D576C948}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ED83C7F3-16C7-4068-A1D2-D652D576C948}.Debug|Win32.Build.0 = Debug|Win32
+		{ED83C7F3-16C7-4068-A1D2-D652D576C948}.Release|Win32.ActiveCfg = Release|Win32
+		{ED83C7F3-16C7-4068-A1D2-D652D576C948}.Release|Win32.Build.0 = Release|Win32
+		{ED83C7F3-16C7-4068-A1D2-DE52D576C948}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ED83C7F3-16C7-4068-A1D2-DE52D576C948}.Debug|Win32.Build.0 = Debug|Win32
+		{ED83C7F3-16C7-4068-A1D2-DE52D576C948}.Release|Win32.ActiveCfg = Release|Win32
+		{ED83C7F3-16C7-4068-A1D2-DE52D576C948}.Release|Win32.Build.0 = Release|Win32
+		{3BB66D59-73C9-45D7-A8CA-E6A355CDB703}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3BB66D59-73C9-45D7-A8CA-E6A355CDB703}.Debug|Win32.Build.0 = Debug|Win32
+		{3BB66D59-73C9-45D7-A8CA-E6A355CDB703}.Release|Win32.ActiveCfg = Release|Win32
+		{3BB66D59-73C9-45D7-A8CA-E6A355CDB703}.Release|Win32.Build.0 = Release|Win32
+		{ED84C7F3-16C7-4068-A1D2-DE52D576C948}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ED84C7F3-16C7-4068-A1D2-DE52D576C948}.Debug|Win32.Build.0 = Debug|Win32
+		{ED84C7F3-16C7-4068-A1D2-DE52D576C948}.Release|Win32.ActiveCfg = Release|Win32
+		{ED84C7F3-16C7-4068-A1D2-DE52D576C948}.Release|Win32.Build.0 = Release|Win32
+		{4FE8870C-863F-42A1-9287-F935FE3FA90C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4FE8870C-863F-42A1-9287-F935FE3FA90C}.Debug|Win32.Build.0 = Debug|Win32
+		{4FE8870C-863F-42A1-9287-F935FE3FA90C}.Release|Win32.ActiveCfg = Release|Win32
+		{4FE8870C-863F-42A1-9287-F935FE3FA90C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4901769-F3B0-448C-AFC0-AB663427CD0E}
+	EndGlobalSection
+EndGlobal
