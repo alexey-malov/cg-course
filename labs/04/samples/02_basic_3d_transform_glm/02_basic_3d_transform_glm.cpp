@@ -4,7 +4,8 @@
 //
 #include <GLFW/glfw3.h>
 #include <chrono>
-#include <gl/GLU.h>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <stdexcept>
 
 class GLFWInitializer final
@@ -70,7 +71,6 @@ private:
 
 	static GLFWwindow* MakeWindow(int w, int h, const char* title)
 	{
-		// 
 		glfwWindowHint(GLFW_DEPTH_BITS, 24);
 		return glfwCreateWindow(w, h, title, nullptr, nullptr);
 	}
@@ -119,19 +119,19 @@ private:
 		double aspect = double(width) / double(height);
 
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluPerspective(60, aspect, 0.1, 10.0);
+		const auto projMat = glm::perspective(60.0 * M_PI / 180.0, aspect, 0.1, 10.0);
+		glLoadMatrixd(&projMat[0][0]);
 	}
 
 	static void SetupCameraMatrix()
 	{
 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		gluLookAt(
-			0, -4, 4, // Положение камеры
-			0, 0, 0, // Точка, в которую направлена камера
-			0, 1, 0 // Направление "вверх"
+		const auto lookAtMat = glm::lookAt(
+			glm::dvec3(0, -4, 4), // Положение камеры
+			glm::dvec3(0, 0, 0), // Точка, в которую направлена камера
+			glm::dvec3(0, 1, 0) // Направление "вверх"
 		);
+		glLoadMatrixd(&lookAtMat[0][0]);
 	}
 };
 

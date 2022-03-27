@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_basic_3d_transform", "01_basic_3d_transform\01_basic_3d_transform.vcxproj", "{002B794B-67CA-4411-AF4A-302062AC4A94}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_basic_3d_transform_glm", "02_basic_3d_transform_glm\02_basic_3d_transform_glm.vcxproj", "{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{002B794B-67CA-4411-AF4A-302062AC4A94}.Release|x64.Build.0 = Release|x64
 		{002B794B-67CA-4411-AF4A-302062AC4A94}.Release|x86.ActiveCfg = Release|Win32
 		{002B794B-67CA-4411-AF4A-302062AC4A94}.Release|x86.Build.0 = Release|Win32
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Debug|x64.ActiveCfg = Debug|x64
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Debug|x64.Build.0 = Debug|x64
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Debug|x86.ActiveCfg = Debug|Win32
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Debug|x86.Build.0 = Debug|Win32
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x64.ActiveCfg = Release|x64
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x64.Build.0 = Release|x64
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x86.ActiveCfg = Release|Win32
+		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
