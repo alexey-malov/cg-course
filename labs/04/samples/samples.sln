@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_basic_3d_transform", "01
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_basic_3d_transform_glm", "02_basic_3d_transform_glm\02_basic_3d_transform_glm.vcxproj", "{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03_3d_axes", "03_3d_axes\03_3d_axes.vcxproj", "{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x64.Build.0 = Release|x64
 		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x86.ActiveCfg = Release|Win32
 		{CB13BEFF-1D61-4BDA-8CBB-637248F6BBAB}.Release|x86.Build.0 = Release|Win32
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Debug|x64.ActiveCfg = Debug|x64
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Debug|x64.Build.0 = Debug|x64
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Debug|x86.ActiveCfg = Debug|Win32
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Debug|x86.Build.0 = Debug|Win32
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Release|x64.ActiveCfg = Release|x64
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Release|x64.Build.0 = Release|x64
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Release|x86.ActiveCfg = Release|Win32
+		{8A1F2CC1-AE82-4AE7-80D3-9165A4EFA451}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
