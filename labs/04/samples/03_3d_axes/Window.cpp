@@ -45,7 +45,6 @@ void Window::OnMouseMove(double x, double y)
 }
 
 // Вращаем камеру вокруг начала координат
-
 void Window::RotateCamera(double xAngleRadians, double yAngleRadians)
 {
 	// Извлекаем из 1 и 2 строки матрицы камеры направления осей вращения,
