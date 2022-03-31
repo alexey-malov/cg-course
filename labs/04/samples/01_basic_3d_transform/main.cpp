@@ -70,7 +70,6 @@ private:
 
 	static GLFWwindow* MakeWindow(int w, int h, const char* title)
 	{
-		//
 		glfwWindowHint(GLFW_DEPTH_BITS, 24);
 		return glfwCreateWindow(w, h, title, nullptr, nullptr);
 	}
