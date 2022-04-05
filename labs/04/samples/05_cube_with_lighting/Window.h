@@ -1,17 +1,18 @@
-п»ї#pragma once
+#pragma once
 #include "BaseWindow.h"
+#include "Cube.h"
 
 class Window : public BaseWindow
 {
 public:
-	using BaseWindow::BaseWindow;
+	Window(int w, int h, const char* title);
 
 private:
 	void OnMouseButton(int button, int action, [[maybe_unused]] int mods) override;
 
 	void OnMouseMove(double x, double y) override;
 
-	// Р’СЂР°С‰Р°РµРј РєР°РјРµСЂСѓ РІРѕРєСЂСѓРі РЅР°С‡Р°Р»Р° РєРѕРѕСЂРґРёРЅР°С‚
+	// Вращаем камеру вокруг начала координат
 	void RotateCamera(double xAngleRadians, double yAngleRadians);
 
 	void OnResize(int width, int height) override;
@@ -20,13 +21,10 @@ private:
 
 	void Draw(int width, int height) override;
 
-	static void SetupProjectionMatrix(int width, int height);
-
 	void SetupCameraMatrix();
 
-	// Р Р°Р·РјРµСЂ РІРёРґРёРјРѕРіРѕ РѕР±СЉРµРјР°, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РµРЅ РїРѕРјРµСЃС‚РёС‚СЊСЃСЏ РІ РїРѕСЂС‚ РїСЂРѕСЃРјРѕС‚СЂР°
-	static constexpr double FRUSTUM_SIZE = 2;
-	// Р Р°СЃСЃС‚РѕСЏРЅРёРµ РѕС‚ РєР°РјРµСЂС‹ РґРѕ С‚РѕС‡РєРё РІСЂР°С‰РµРЅРёСЏ
+	Cube m_cube;
+	// Расстояние от камеры до точки вращения
 	static constexpr double DISTANCE_TO_ORIGIN = 2;
 
 	bool m_leftButtonPressed = false;
