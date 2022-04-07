@@ -2,7 +2,7 @@
 #include "DirectLight.h"
 
 DirectLight::DirectLight(glm::vec3 direction)
-	: m_direction{ direction, 1.0f }
+	: m_direction{ direction, 0.0f }
 {
 }
 

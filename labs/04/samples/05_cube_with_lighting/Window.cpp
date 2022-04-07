@@ -32,12 +32,23 @@ Window::Window(int w, int h, const char* title)
 	: BaseWindow(w, h, title)
 	, m_cube(CUBE_SIZE)
 {
-	m_cube.SetSideColor(CubeSide::NEGATIVE_X, 255, 0, 0);
-	m_cube.SetSideColor(CubeSide::POSITIVE_X, 0, 255, 0);
-	m_cube.SetSideColor(CubeSide::NEGATIVE_Y, 0, 0, 255);
-	m_cube.SetSideColor(CubeSide::POSITIVE_Y, 255, 255, 0);
-	m_cube.SetSideColor(CubeSide::NEGATIVE_Z, 0, 255, 255);
-	m_cube.SetSideColor(CubeSide::POSITIVE_Z, 255, 0, 255);
+#if 1
+	m_cube.SetSideColor(CubeSide::NEGATIVE_X, { 1, 0, 0, 1 });
+	m_cube.SetSideColor(CubeSide::POSITIVE_X, { 0, 1, 0, 1 });
+	m_cube.SetSideColor(CubeSide::NEGATIVE_Y, { 0, 0, 1, 1 });
+	m_cube.SetSideColor(CubeSide::POSITIVE_Y, { 1, 1, 0, 1 });
+	m_cube.SetSideColor(CubeSide::NEGATIVE_Z, { 0, 1, 1, 1 });
+	m_cube.SetSideColor(CubeSide::POSITIVE_Z, { 1, 0, 1, 1 });
+#else
+	m_cube.SetSideColor(CubeSide::NEGATIVE_X, { 1, 1, 1, 1 });
+	m_cube.SetSideColor(CubeSide::POSITIVE_X, { 1, 1, 1, 1 });
+	m_cube.SetSideColor(CubeSide::NEGATIVE_Y, { 1, 1, 1, 1 });
+	m_cube.SetSideColor(CubeSide::POSITIVE_Y, { 1, 1, 1, 1 });
+	m_cube.SetSideColor(CubeSide::NEGATIVE_Z, { 1, 1, 1, 1 });
+	m_cube.SetSideColor(CubeSide::POSITIVE_Z, { 1, 1, 1, 1 });
+#endif
+	m_cube.SetSpecularColor({ 1, 1, 1, 1 });
+	m_cube.SetShininess(4.0f);
 }
 
 void Window::OnMouseButton(int button, int action, int mods)
@@ -97,12 +108,6 @@ void Window::OnResize(int width, int height)
 
 void Window::OnRunStart()
 {
-	DirectLight light{ { -0.0f, 0.0f, 1.0f } };
-	light.SetDiffuseIntensity({ 0.5f, 0.5f, 0.5f, 1.0f });
-	light.SetAmbientIntensity({ 0.2f, 0.2f, 0.2f, 1.0f });
-	light.SetSpecularIntensity({ 0.3f, 0.3f, 0.3f, 1.0f });
-	light.Apply(GL_LIGHT0);
-
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
@@ -116,19 +121,21 @@ void Window::OnRunStart()
 
 	// Включаем тест глубины для удаления невидимых линий и поверхностей
 	glEnable(GL_DEPTH_TEST);
+
+	// Направление на источник света (совпадает с позицией наблюдателя)
+	DirectLight light{ { 0.0f, 0.0f, 1.0f } };
+	light.SetDiffuseIntensity({ 0.5f, 0.5f, 0.5f, 1.0f });
+	light.SetAmbientIntensity({ 0.0f, 0.0f, 0.0f, 1.0f });
+	light.SetSpecularIntensity({ 0.3f, 0.3f, 0.3f, 1.0f });
+	light.Apply(GL_LIGHT0);
 }
 
 void Window::Draw(int width, int height)
 {
+	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	SetupCameraMatrix();
-
-	glEnable(GL_COLOR_MATERIAL);
-	// Цвет вершины будет определять диффузную и рассеянную составляющие материала
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, glm::value_ptr(glm::vec4{ 0.3f, 0.3f, 0.3f, 1.0f }));
 
 	m_cube.Draw();
 }

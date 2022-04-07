@@ -1,15 +1,16 @@
-#include "pch.h"
+п»ї#include "pch.h"
 #include "Cube.h"
 
 Cube::Cube(float size)
 	: m_size(size)
 {
-	SetSideColor(CubeSide::NEGATIVE_X, 255, 255, 255);
-	SetSideColor(CubeSide::POSITIVE_X, 255, 255, 255);
-	SetSideColor(CubeSide::NEGATIVE_Y, 255, 255, 255);
-	SetSideColor(CubeSide::POSITIVE_Y, 255, 255, 255);
-	SetSideColor(CubeSide::NEGATIVE_Z, 255, 255, 255);
-	SetSideColor(CubeSide::POSITIVE_Z, 255, 255, 255);
+	constexpr glm::vec4 defaultColor{ 1, 1, 1, 1 };
+	SetSideColor(CubeSide::NEGATIVE_X, defaultColor);
+	SetSideColor(CubeSide::POSITIVE_X, defaultColor);
+	SetSideColor(CubeSide::NEGATIVE_Y, defaultColor);
+	SetSideColor(CubeSide::POSITIVE_Y, defaultColor);
+	SetSideColor(CubeSide::NEGATIVE_Z, defaultColor);
+	SetSideColor(CubeSide::POSITIVE_Z, defaultColor);
 }
 
 void Cube::Draw() const
@@ -33,7 +34,7 @@ void Cube::Draw() const
     |    |/
 	4----5
 	*/
-	// Массив координат вершин
+	// РњР°СЃСЃРёРІ РєРѕРѕСЂРґРёРЅР°С‚ РІРµСЂС€РёРЅ
 	static constexpr float vertices[8][3] = {
 		{ -1, -1, -1 }, // 0
 		{ +1, -1, -1 }, // 1
@@ -45,50 +46,53 @@ void Cube::Draw() const
 		{ -1, +1, +1 }, // 7
 	};
 
-	// Массив координат граней (в порядке, совпадающем с
-	// порядком объявления их в массиве цветов)
-	// индексы вершин граней перечисляются в порядке их обхода
-	// против часовой стрелки (если смотреть на грань снаружи)
+	// РњР°СЃСЃРёРІ РєРѕРѕСЂРґРёРЅР°С‚ РіСЂР°РЅРµР№ (РІ РїРѕСЂСЏРґРєРµ, СЃРѕРІРїР°РґР°СЋС‰РµРј СЃ
+	// РїРѕСЂСЏРґРєРѕРј РѕР±СЉСЏРІР»РµРЅРёСЏ РёС… РІ РјР°СЃСЃРёРІРµ С†РІРµС‚РѕРІ)
+	// РёРЅРґРµРєСЃС‹ РІРµСЂС€РёРЅ РіСЂР°РЅРµР№ РїРµСЂРµС‡РёСЃР»СЏСЋС‚СЃСЏ РІ РїРѕСЂСЏРґРєРµ РёС… РѕР±С…РѕРґР°
+	// РїСЂРѕС‚РёРІ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРё (РµСЃР»Рё СЃРјРѕС‚СЂРµС‚СЊ РЅР° РіСЂР°РЅСЊ СЃРЅР°СЂСѓР¶Рё)
 	static constexpr unsigned char faces[6][4] = {
-		{ 4, 7, 3, 0 }, // грань x<0
-		{ 5, 1, 2, 6 }, // грань x>0
-		{ 4, 0, 1, 5 }, // грань y<0
-		{ 7, 6, 2, 3 }, // грань y>0
-		{ 0, 3, 2, 1 }, // грань z<0
-		{ 4, 5, 6, 7 }, // грань z>0
+		{ 4, 7, 3, 0 }, // РіСЂР°РЅСЊ x<0
+		{ 5, 1, 2, 6 }, // РіСЂР°РЅСЊ x>0
+		{ 4, 0, 1, 5 }, // РіСЂР°РЅСЊ y<0
+		{ 7, 6, 2, 3 }, // РіСЂР°РЅСЊ y>0
+		{ 0, 3, 2, 1 }, // РіСЂР°РЅСЊ z<0
+		{ 4, 5, 6, 7 }, // РіСЂР°РЅСЊ z>0
 	};
 	static size_t const faceCount = sizeof(faces) / sizeof(*faces);
+
+	glEnable(GL_COLOR_MATERIAL);
+	// Р¦РІРµС‚ РІРµСЂС€РёРЅС‹ Р±СѓРґРµС‚ СѓРїСЂР°РІР»СЏС‚СЊ РґРёС„С„СѓР·РЅС‹Рј Рё С„РѕРЅРѕРІС‹Рј С†РІРµС‚РѕРј РјР°С‚РµСЂРёР°Р»Р°
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(m_specularColor));
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
 
 	glBegin(GL_QUADS);
 	{
 		for (size_t face = 0; face < faceCount; ++face)
 		{
-			// устанавливаем цвет грани
-			glColor4ubv(m_sideColors[face]);
-			const unsigned char * facePoints = faces[face];
+			// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РґРёС„С„СѓР·РЅС‹Р№ Рё С„РѕРЅРѕРІС‹Р№ С†РІРµС‚ РіСЂР°РЅРё
+			glColor4fv(glm::value_ptr(m_sideColors[face]));
+			const unsigned char* facePoints = faces[face];
 
-			// получаем вершины очередной грани куба
-			auto p0 = glm::make_vec3( vertices[facePoints[0]]);
+			// РїРѕР»СѓС‡Р°РµРј РІРµСЂС€РёРЅС‹ РѕС‡РµСЂРµРґРЅРѕР№ РіСЂР°РЅРё РєСѓР±Р°
+			auto p0 = glm::make_vec3(vertices[facePoints[0]]);
 			auto p1 = glm::make_vec3(vertices[facePoints[1]]);
 			auto p2 = glm::make_vec3(vertices[facePoints[2]]);
 			auto p3 = glm::make_vec3(vertices[facePoints[3]]);
-			// Вычисляем координаты вершин куба с учетом его размера
+			// Р’С‹С‡РёСЃР»СЏРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅ РєСѓР±Р° СЃ СѓС‡РµС‚РѕРј РµРіРѕ СЂР°Р·РјРµСЂР°
 			p0 *= m_size * 0.5f;
 			p1 *= m_size * 0.5f;
 			p2 *= m_size * 0.5f;
 			p3 *= m_size * 0.5f;
 
-			// Вычисляем нормаль к грани куба через
-			// векторное произведение его смежных сторон
+			// Р’С‹С‡РёСЃР»СЏРµРј РЅРѕСЂРјР°Р»СЊ Рє РіСЂР°РЅРё РєСѓР±Р° С‡РµСЂРµР·
+			// РІРµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РµРіРѕ СЃРјРµР¶РЅС‹С… СЃС‚РѕСЂРѕРЅ
 			auto v01 = p1 - p0;
 			auto v02 = p2 - p0;
 			auto normal = glm::normalize(glm::cross(v01, v02));
 
 			glNormal3fv(glm::value_ptr(normal));
 
-			// В классе CVector3f перегружен оператор приведения к типу cosnt float*
-			// поэтому фактически следующая строка эквивалентна
-			// glVertex3fv(&p0.x);
 			glVertex3fv(glm::value_ptr(p0));
 			glVertex3fv(glm::value_ptr(p1));
 			glVertex3fv(glm::value_ptr(p2));
@@ -98,11 +102,18 @@ void Cube::Draw() const
 	glEnd();
 }
 
-void Cube::SetSideColor(CubeSide side, GLubyte r, GLubyte g, GLubyte b, GLubyte a)
+void Cube::SetSideColor(CubeSide side, const glm::vec4& color)
 {
-	int index = static_cast<int>(side);
-	m_sideColors[index][0] = r;
-	m_sideColors[index][1] = g;
-	m_sideColors[index][2] = b;
-	m_sideColors[index][3] = a;
+	unsigned index = static_cast<unsigned>(side);
+	m_sideColors[index] = color;
+}
+
+void Cube::SetSpecularColor(glm::vec4 color)
+{
+	m_specularColor = color;
+}
+
+void Cube::SetShininess(float shininess)
+{
+	m_shininess = shininess;
 }

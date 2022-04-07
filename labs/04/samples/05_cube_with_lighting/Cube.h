@@ -13,14 +13,16 @@ enum class CubeSide
 class Cube
 {
 public:
-	// Создаем куб с заданной длиной стороны
 	explicit Cube(float size = 1);
 	void Draw() const;
-	void SetSideColor(CubeSide side, GLubyte r, GLubyte g, GLubyte b, GLubyte a = 255);
+
+	void SetSideColor(CubeSide side, const glm::vec4& color);
+	void SetSpecularColor(glm::vec4 color);
+	void SetShininess(float shininess);
 
 private:
 	float m_size;
-
-	// Цвета сторон куба
-	GLubyte m_sideColors[6][4];
+	glm::vec4 m_sideColors[6];
+	glm::vec4 m_specularColor = { 0, 0, 0, 1 };
+	float m_shininess = 1;
 };
