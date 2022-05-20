@@ -3,16 +3,7 @@
 #include "FrameBuffer.h"
 #include "RenderContext.h"
 
-using namespace boost::interprocess::ipcdetail;
-using boost::mutex;
-
-CRenderer::CRenderer(void)
-:m_rendering(0)			// Изначальное состояние: "не рисуем"
-,m_stopping(0)			// Не останавливаемся
-,m_totalChunks(0)		// Общее количество обрабатываемых блоков изображения
-,m_renderedChunks(0)	// Количество обработанных блоков изображения
-{
-}
+using std::mutex;
 
 CRenderer::~CRenderer(void)
 {
@@ -21,62 +12,39 @@ CRenderer::~CRenderer(void)
 }
 
 // Выполняется ли в данный момент построение изображения в буфере кадра?
-bool CRenderer::IsRendering()const
+bool CRenderer::IsRendering() const
 {
-	// Считываем потокобезопасным образом значение переменной m_rendering
-	return atomic_read32(const_cast<volatile boost::uint32_t*>(&m_rendering)) != 0;
+	return m_rendering;
 }
 
 // Установлен ли флаг, сообщающий о необходимости завершения работы
-bool CRenderer::IsStopping()const
+bool CRenderer::IsStopping() const
 {
 	// Считываем потокобезопасным образом значение переменной m_stopping
-	return atomic_read32(const_cast<volatile boost::uint32_t *>(&m_stopping)) != 0;
+	return m_stopping;
 }
 
 bool CRenderer::SetRendering(bool rendering)
 {
-	/*
-	Атомарное (в рамках нескольких потоков) выполнение следующщей 
-	последовательности операций:
-		wasRendering = m_rendering != 0;
-		if (m_rendering == !rendering)
-		{
-			m_rendering = rendering;
-		}
-	*/
-	bool wasRendering = atomic_cas32(&m_rendering, rendering, !rendering) != 0;
-
-	// Сообщаем, произошло ли изменение значения флага
-	return wasRendering != rendering;
+	bool expected = !rendering;
+	return m_rendering.compare_exchange_strong(expected, rendering);
 }
 
 bool CRenderer::SetStopping(bool stopping)
 {
-	/*
-	Атомарное (в рамках нескольких потоков) выполнение следующщей 
-	последовательности операций:
-		wasStopping = wasStopping != 0;
-		if (m_stopping == !stopping)
-		{
-			m_stopping = stopping;
-		}
-	*/
-	bool wasStopping = atomic_cas32(&m_stopping, stopping, !stopping) != 0;
-
-	// Сообщаем, произошло ли изменение значения флага
-	return wasStopping != stopping;
+	bool expected = !stopping;
+	return m_stopping.compare_exchange_strong(expected, stopping);
 }
 
-bool CRenderer::GetProgress(unsigned & renderedChunks, unsigned & totalChunks)const
+bool CRenderer::GetProgress(unsigned& renderedChunks, unsigned& totalChunks) const
 {
 	// Захватываем мьютекс на время работы данного метода
-	mutex::scoped_lock lock(m_mutex);
+	std::lock_guard lock(m_mutex);
 
 	// Получаем потокобезопасным образом значения переменных
 	// m_renderedChunks и m_totalChunks
-	renderedChunks = atomic_read32(const_cast<volatile boost::uint32_t*>(&m_renderedChunks));
-	totalChunks = atomic_read32(const_cast<volatile boost::uint32_t*>(&m_totalChunks));;
+	renderedChunks = m_renderedChunks;
+	totalChunks = m_totalChunks;
 
 	// Сообщаем, все ли блоки изображения были обработаны
 	return (totalChunks > 0) && (renderedChunks == totalChunks);
@@ -85,7 +53,7 @@ bool CRenderer::GetProgress(unsigned & renderedChunks, unsigned & totalChunks)co
 /*
 Выполняет основную работу по построению изображения в буфере кадра
 */
-void CRenderer::RenderFrame(CScene const& scene, CRenderContext const & context, CFrameBuffer & frameBuffer)
+void CRenderer::RenderFrame(CScene const& scene, CRenderContext const& context, CFrameBuffer& frameBuffer)
 {
 	// Запоминаем ширину и высоту буфера кадра, чтобы каждый раз не вызывать
 	// методы класса CFrameBuffer
@@ -96,18 +64,26 @@ void CRenderer::RenderFrame(CScene const& scene, CRenderContext const & context,
 	Задаем общее количество блоков изображения 
 	Под блоком изображения здесь понимается 1 строка буфера кадра
 	*/
-	atomic_write32(&m_totalChunks, height);
+	m_totalChunks = height;
 
 	// Пробегаем все строки буфера кадра
 	// При включенной поддержке OpenMP итерации цикла по строкам изображения
 	// будут выполняться в параллельных потоках
 #ifdef _OPENMP
-	#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic)
 #endif
 	for (int y = 0; y < height; ++y)
 	{
-		// Адрес y-й строки изображения
-		boost::uint32_t * rowPixels = frameBuffer.GetPixels(y);
+		std::uint32_t * rowPixels = nullptr;
+
+		// Синхронизируем доступ к frameBuffer из вспомогательных потоков
+#ifdef _OPENMP
+		#pragma omp critical
+#endif
+		{
+			// Получаем адрес начала y-й строки в буфере кадра
+			rowPixels = frameBuffer.GetPixels(y);
+		}
 
 		// Цикл по строкам выполняется только, если поступил запрос от пользователя
 		// об остановке построения изображения
@@ -121,8 +97,7 @@ void CRenderer::RenderFrame(CScene const& scene, CRenderContext const & context,
 				rowPixels[size_t(x)] = context.CalculatePixelColor(scene, x, y);
 			}
 
-			// Увеличиваем потокобезопасным образом количество обработанных блоков (строк) изображения
-			atomic_inc32(&m_renderedChunks);	//-V1206
+			++m_renderedChunks;
 		}
 	}
 
@@ -134,7 +109,7 @@ void CRenderer::RenderFrame(CScene const& scene, CRenderContext const & context,
 
 // Запускает визуализацию сцены в буфере кадра в фоновом потоке
 // Возвращает false, если еще не была завершена работа ранее запущенного потока
-bool CRenderer::Render(CScene const& scene, CRenderContext const & context, CFrameBuffer & frameBuffer)
+bool CRenderer::Render(CScene const& scene, CRenderContext const& context, CFrameBuffer& frameBuffer)
 {
 	// Пытаемся перейти в режим рендеринга
 	if (!SetRendering(true))
@@ -145,15 +120,15 @@ bool CRenderer::Render(CScene const& scene, CRenderContext const & context, CFra
 
 	// Блокируем доступ к общим (для фонового и основного потока) данным класса
 	// вплоть до завершения работа метода Render
-	mutex::scoped_lock lock(m_mutex);
+	std::lock_guard lock(m_mutex);
 
 	// Очищаем буфер кадра
 	frameBuffer.Clear();
 
 	// Сбрасываем количество обработанных и общее количество блоков изображения
-	// сигнализируя о том, что еще ничего не сделано	
-	atomic_write32(&m_totalChunks, 0);
-	atomic_write32(&m_renderedChunks, 0);
+	// сигнализируя о том, что еще ничего не сделано
+	m_totalChunks = 0;
+	m_renderedChunks = 0;
 
 	// Сбрасываем запрос на остановку построения изображения
 	if (SetStopping(false))
@@ -166,12 +141,12 @@ bool CRenderer::Render(CScene const& scene, CRenderContext const & context, CFra
 
 	// Запускаем метод RenderFrame в параллельном потоке, передавая ему
 	// необходимый набор параметров
-	m_thread = boost::thread(
-		&CRenderer::RenderFrame,	// Адрес метода RenderFrame
-		this, 						// Указатель this
-		boost::ref(scene), 			// Ссылка на scene
-		boost::ref(context), 		// Ссылка на context
-		boost::ref(frameBuffer));	// Ссылка на frameBuffer
+	m_thread = std::thread(
+		&CRenderer::RenderFrame, // Адрес метода RenderFrame
+		this, // Указатель this
+		std::ref(scene), // Ссылка на scene
+		std::ref(context), // Ссылка на context
+		std::ref(frameBuffer)); // Ссылка на frameBuffer
 
 	// Выходим, сообщая о том, что процесс построения изображения запущен
 	return true;

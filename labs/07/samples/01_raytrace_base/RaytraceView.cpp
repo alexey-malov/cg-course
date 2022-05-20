@@ -9,14 +9,14 @@
 #include "RaytraceView.h"
 
 CRaytraceView::CRaytraceView()
-:m_pFrameBuffer(new CFrameBuffer(800, 600))
+	: m_pFrameBuffer(std::make_unique<CFrameBuffer>(800, 600))
 {
 }
 
 CRaytraceView::~CRaytraceView()
 {
 	// Необходимо остановить фоновую работу объекта CRenderer до разрушения
-	// данных класса CRaytraceView, т.к. CRenderer использует для своей работы 
+	// данных класса CRaytraceView, т.к. CRenderer использует для своей работы
 	// другие объекты, в частности, буфер кадра, разрушать которые можно только
 	// после остановки CRenderer
 	m_renderer.Stop();
@@ -53,12 +53,12 @@ LRESULT CRaytraceView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	{
 		int w = m_pFrameBuffer->GetWidth();
 		int h = m_pFrameBuffer->GetHeight();
-		// Рисуем буфер кадра в левой верхнем углу 
+		// Рисуем буфер кадра в левом верхнем углу
 		// клиентской области окна
 		DrawFrameBuffer(dc, 0, 0);
 
 		// Т.к. мы отключили очистку заднего фона экрана,
-		// область справа и снизу от изображения придется 
+		// область справа и снизу от изображения придется
 		// очистить вручную
 
 		// Очищаем правую часть клиентской области
@@ -73,7 +73,7 @@ LRESULT CRaytraceView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 			dc.FillRect(CRect(0, h, clientWidth, clientHeight), whiteBrush);
 		}
 	}
-	else	// Буфер кадра по каким-то причинам не определен
+	else // Буфер кадра по каким-то причинам не определен
 	{
 		ATLASSERT(!"Something bad with the frame buffer");
 	}
@@ -81,7 +81,7 @@ LRESULT CRaytraceView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	return 0;
 }
 
-void CRaytraceView::DrawFrameBuffer(CDC & dc, int x, int y)
+void CRaytraceView::DrawFrameBuffer(CDC& dc, int x, int y)
 {
 	int w = m_pFrameBuffer->GetWidth();
 	int h = m_pFrameBuffer->GetHeight();
@@ -90,16 +90,16 @@ void CRaytraceView::DrawFrameBuffer(CDC & dc, int x, int y)
 	// перекинуть содержимое буфера кадра на экран без создания дополнительных bitmap-ов
 	BITMAPINFO bmpInfo;
 	memset(&bmpInfo, 0, sizeof(bmpInfo));
-	BITMAPINFOHEADER & hdr = bmpInfo.bmiHeader;
+	BITMAPINFOHEADER& hdr = bmpInfo.bmiHeader;
 	hdr.biSize = sizeof(hdr);
 	hdr.biWidth = w;
 	// По умолчанию BMP файл хранится "вверх ногами" (сначала нижний ряд пикселей)
 	// Чтобы использовать привычный вариант хранения пикселей высота должна быть отрицательной
 	hdr.biHeight = -h;
-	hdr.biPlanes = 1;						// Количество цветовых плоскостей в изображении
-	hdr.biBitCount = sizeof(boost::uint32_t) << 3;	// Цвет каждого пикселя занимает 32 бита
+	hdr.biPlanes = 1; // Количество цветовых плоскостей в изображении
+	hdr.biBitCount = sizeof(std::uint32_t) << 3; // Цвет каждого пикселя занимает 32 бита
 	hdr.biCompression = BI_RGB;
-	hdr.biSizeImage = w * h * static_cast<int>(sizeof(boost::uint32_t));
+	hdr.biSizeImage = w * h * static_cast<int>(sizeof(std::uint32_t));
 
 	// Используя функцию SetDIBitsToDevice (см. MSDN) перекидываем массив пикселей
 	// из памяти в контекст устройства
@@ -108,11 +108,11 @@ void CRaytraceView::DrawFrameBuffer(CDC & dc, int x, int y)
 		w, h, // Ширина и высота изображений
 		0, 0, // Координаты рисуемой области изображения
 		0, h, // Номер начальной строки и количество строк
-		m_pFrameBuffer->GetPixels(),	// Адрес пикселей
+		m_pFrameBuffer->GetPixels(), // Адрес пикселей
 		&bmpInfo, // Адрес информации о пикселях
-		DIB_RGB_COLORS);// сигнализируем о том, что значения в таблице 
-						// bmpInfo.bmiColors интерпретируются как RGB значения,
-						// а не индексы логической палитры
+		DIB_RGB_COLORS); // сигнализируем о том, что значения в таблице
+	// bmpInfo.bmiColors интерпретируются как RGB значения,
+	// а не индексы логической палитры
 }
 
 LRESULT CRaytraceView::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)

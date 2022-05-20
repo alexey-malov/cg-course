@@ -22,24 +22,24 @@ public:
 	}
 
 	// Очистка содержимого буфера заданным цветом
-	void Clear(boost::uint32_t color = 0);
+	void Clear(std::uint32_t color = 0);
 
 	// Получение адреса начала соотв. строки пикселей (для чтения)
-	const boost::uint32_t * GetPixels(unsigned row = 0)const throw()
+	const std::uint32_t * GetPixels(unsigned row = 0)const throw()
 	{
 		assert(row < m_height);
 		return &m_pixels[size_t(row * m_width)];
 	}
 
 	// Получение адреса начала соотв. строки пикселей (для записи)
-	boost::uint32_t * GetPixels(unsigned row = 0)throw()
+	std::uint32_t * GetPixels(unsigned row = 0)throw()
 	{
 		assert(row < m_height);
 		return &m_pixels[size_t(row * m_width)];
 	}
 
 	// Получение цвета пикселя с заданными координатами
-	boost::uint32_t GetPixel(unsigned x, unsigned y)const throw()
+	std::uint32_t GetPixel(unsigned x, unsigned y)const throw()
 	{
 		assert(x < m_width);
 		assert(y < m_height);
@@ -47,7 +47,7 @@ public:
 	}
 
 	// Установка цвета пикселя с заданными координатами
-	void SetPixel(unsigned x, unsigned y, boost::uint32_t color) throw()
+	void SetPixel(unsigned x, unsigned y, std::uint32_t color) throw()
 	{
 		assert(x < m_width);
 		assert(y < m_height);
@@ -55,7 +55,7 @@ public:
 	}
 
 private:
-	std::vector<boost::uint32_t> m_pixels;
+	std::vector<std::uint32_t> m_pixels;
 	unsigned m_width;
 	unsigned m_height;
 };

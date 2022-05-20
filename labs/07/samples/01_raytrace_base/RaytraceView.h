@@ -38,10 +38,10 @@ private:
 	LRESULT OnTimer(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 
-	// Отрисовка содержимого буфера кадра на контексте устройства
+	// РћС‚СЂРёСЃРѕРІРєР° СЃРѕРґРµСЂР¶РёРјРѕРіРѕ Р±СѓС„РµСЂР° РєР°РґСЂР° РЅР° РєРѕРЅС‚РµРєСЃС‚Рµ СѓСЃС‚СЂРѕР№СЃС‚РІР°
 	void DrawFrameBuffer(CDC & dc, int x, int y);
 	bool UpdateFrameBuffer();
 private:
 	CRenderer m_renderer;
-	std::auto_ptr<CFrameBuffer> m_pFrameBuffer;
+	std::unique_ptr<CFrameBuffer> m_pFrameBuffer;
 };

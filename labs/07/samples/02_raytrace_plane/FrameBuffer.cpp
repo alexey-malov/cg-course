@@ -8,7 +8,7 @@ CFrameBuffer::CFrameBuffer(unsigned width, unsigned height)
 {
 }
 
-void CFrameBuffer::Clear(boost::uint32_t color)
+void CFrameBuffer::Clear(std::uint32_t color)
 {
 	std::fill(m_pixels.begin(), m_pixels.end(), color);
 }

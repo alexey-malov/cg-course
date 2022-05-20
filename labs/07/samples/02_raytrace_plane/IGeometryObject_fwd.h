@@ -2,4 +2,4 @@
 
 class IGeometryObject;
 
-typedef boost::shared_ptr<IGeometryObject> IGeometryObjectPtr;
+using IGeometryObjectPtr = std::shared_ptr<IGeometryObject>;

@@ -21,7 +21,7 @@ public:
 	Трассирует путь луча по сцене, проходящего через пиксель с указанными координатами
 	Возвращает цвет данного пикселя в формате 0xAARRBBGG
 	*/
-	boost::uint32_t CalculatePixelColor(CScene const& scene, int x, int y)const;
+	std::uint32_t CalculatePixelColor(CScene const& scene, int x, int y)const;
 
 	/*
 	Задает параметры видового порта

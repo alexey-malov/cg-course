@@ -1,6 +1,7 @@
 #pragma once
 
 class CFrameBuffer;
+class CScene;
 
 /*
 	Класс CRenderer, выполняющий визуализацию сцены в буфере кадра.
@@ -10,11 +11,10 @@ class CFrameBuffer;
 class CRenderer
 {
 public:
-	CRenderer(void);
 	~CRenderer(void);
 
 	// Выполняется ли в данный момент построение изображения в буфере кадра?
-	bool IsRendering()const;
+	bool IsRendering() const;
 
 	/*
 		Сообщает о прогрессе выполнения работы:
@@ -24,14 +24,14 @@ public:
 			true - изображение построено полностью
 			false - изображение построено не полностью
 	*/
-	bool GetProgress(unsigned & renderedChunks, unsigned & totalChunks)const;
+	bool GetProgress(unsigned& renderedChunks, unsigned& totalChunks) const;
 
 	/*
 		Запускает фоновый поток для визуализации сцены в заданном буфере кадра
 		Возвращает true, если поток был запущен и false, если поток запущен не был,
 		т.к. не завершилась текущая операция по построению изображения в буфере кадра
 	*/
-	bool Render(CFrameBuffer & frameBuffer);
+	bool Render(CFrameBuffer& frameBuffer);
 
 	/*
 		Выполняет принудительную остановку фонового построения изображения.
@@ -39,11 +39,12 @@ public:
 		если на момент их вызова выполняется построение изображения в буфере кадра
 	*/
 	void Stop();
+
 private:
 	/*
 		Визуализация кадра, выполняемая в фоновом потоке
 	*/
-	void RenderFrame(CFrameBuffer & frameBuffer);
+	void RenderFrame(CFrameBuffer& frameBuffer);
 
 	// Устанавливаем потокобезопасным образом флаг о том, что идет построение изображения
 	// Возвращаем true, если значение флага изменилось, и false, если нет
@@ -54,30 +55,30 @@ private:
 	bool SetStopping(bool stopping);
 
 	// Установлен ли флаг, сообщающий о необходимости завершения работы
-	bool IsStopping()const;
+	bool IsStopping() const;
 
 	/*
 		Вычисляет цвет пикселя буфера кадра в координатах (x, y) 
 		буфера кадра размером frameWidth * frameHeight
 	*/
-	boost::uint32_t CalculatePixelColor(int x, int y, unsigned frameWidth, unsigned frameHeight)const;
+	uint32_t CalculatePixelColor(int x, int y, unsigned frameWidth, unsigned frameHeight)const;
 
 private:
 	// Поток, в котором выполняется построение изображения
-	boost::thread m_thread;
+	std::thread m_thread;
 
 	// Мьютекс для обеспечения доступа к переменным m_totalChunks и m_renderedChunks
-	mutable boost::mutex m_mutex;
+	mutable std::mutex m_mutex;
 
 	// Идет ли в данный момент построение изображения?
-	volatile boost::uint32_t m_rendering;
+	std::atomic_bool m_rendering{ false };
 
 	// Сигнал рабочему потоку о необходимости остановить работу
-	volatile boost::uint32_t m_stopping;
+	std::atomic_bool m_stopping{ false };
 
 	// Общее количество блоков изображения (для вычисления прогресса)
-	volatile boost::uint32_t m_totalChunks;
+	std::atomic_uint32_t m_totalChunks{ 0 };
 
 	// Количество обработанных блоков изображения (для вычисления прогресса)
-	volatile boost::uint32_t m_renderedChunks;
+	std::atomic_uint32_t m_renderedChunks{ 0 };
 };

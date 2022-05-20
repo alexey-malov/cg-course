@@ -11,9 +11,8 @@ CRenderContext::CRenderContext(void)
 {
 }
 
-boost::uint32_t CRenderContext::CalculatePixelColor(CScene const& scene, int x, int y)const
+std::uint32_t CRenderContext::CalculatePixelColor(CScene const& scene, int x, int y)const
 {
-	using namespace boost;
 	// Проверяем принадлежность точки видовому порту
 	if (!m_viewPort.TestPoint(x, y))
 	{

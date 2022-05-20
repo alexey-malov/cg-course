@@ -6,10 +6,10 @@
 #pragma once
 
 // Change these values to use different versions
-#define WINVER		0x0500
+#define WINVER		0x0501
 #define _WIN32_WINNT	0x0501
-#define _WIN32_IE	0x0501
-#define _RICHEDIT_VER	0x0200
+#define _WIN32_IE	0x0600
+#define _RICHEDIT_VER	0x0300
 
 #include <atlbase.h>
 #undef _ATL_MIN_CRT
@@ -30,11 +30,13 @@ extern CAppModule _Module;
 #include <algorithm>
 #include <memory>
 #include <process.h>
+#include <cassert>
 #include <math.h>
-#include <boost/thread.hpp>
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-#include <boost/interprocess/detail/atomic.hpp>
+#include <thread>
+#include <functional>
+#include <atomic>
+#include <mutex>
+#include <memory>
 
 #if defined _M_IX86
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")

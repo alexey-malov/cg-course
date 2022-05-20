@@ -14,8 +14,7 @@ CRenderer::~CRenderer(void)
 // Выполняется ли в данный момент построение изображения в буфере кадра?
 bool CRenderer::IsRendering() const
 {
-	// Считываем потокобезопасным образом значение переменной m_rendering
-	return m_rendering != 0;
+	return m_rendering;
 }
 
 // Установлен ли флаг, сообщающий о необходимости завершения работы
@@ -75,7 +74,7 @@ void CRenderer::RenderFrame(CScene const& scene, CRenderContext const& context, 
 #endif
 	for (int y = 0; y < height; ++y)
 	{
-		std::uint32_t * rowPixels = NULL;
+		std::uint32_t * rowPixels = nullptr;
 
 		// Синхронизируем доступ к frameBuffer из вспомогательных потоков
 #ifdef _OPENMP

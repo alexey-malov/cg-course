@@ -51,5 +51,5 @@ private:
 	CScene	m_scene;
 	CCheckerShader m_shader;
 	CPlane m_plane;
-	std::auto_ptr<CFrameBuffer> m_pFrameBuffer;
+	std::unique_ptr<CFrameBuffer> m_pFrameBuffer;
 };
