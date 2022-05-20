@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_raytrace_base", "01_raytrace_base\01_raytrace_base.vcxproj", "{67E752D7-8EDD-42F0-9C7B-213A479AA71F}"
 EndProject
@@ -12,16 +12,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04_more_objects", "04_more_objects\04_more_objects.vcxproj", "{17E7F706-BB01-4529-8E5D-7774924E09B7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05_triangle_mesh", "05_triangle_mesh\05_triangle_mesh.vcxproj", "{B1A51519-2BB3-43E9-86EF-3C2BD6160985}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_raytrace_base_sdl", "01_raytrace_base_sdl\01_raytrace_base_sdl.vcxproj", "{8DF3B33E-869F-400A-854B-4D895F1F36CA}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_raytrace_plane_sdl", "02_raytrace_plane_sdl\02_raytrace_plane_sdl.vcxproj", "{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03_sphere_and_light_sdl", "03_sphere_and_light_sdl\03_sphere_and_light_sdl.vcxproj", "{02A13530-9417-4DF5-95A2-C5804C947557}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04_more_objects_sdl", "04_more_objects_sdl\04_more_objects_sdl.vcxproj", "{38AF03D8-31E3-4D23-9141-FCA58118FBC9}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05_triangle_mesh_sdl", "05_triangle_mesh_sdl\05_triangle_mesh_sdl.vcxproj", "{43C84490-2B80-4656-BEF2-256CFDC4FEEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,38 +50,11 @@ Global
 		{B1A51519-2BB3-43E9-86EF-3C2BD6160985}.Release|Win32.Build.0 = Release|Win32
 		{B1A51519-2BB3-43E9-86EF-3C2BD6160985}.Release-OMP|Win32.ActiveCfg = Release-OMP|Win32
 		{B1A51519-2BB3-43E9-86EF-3C2BD6160985}.Release-OMP|Win32.Build.0 = Release-OMP|Win32
-		{8DF3B33E-869F-400A-854B-4D895F1F36CA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8DF3B33E-869F-400A-854B-4D895F1F36CA}.Debug|Win32.Build.0 = Debug|Win32
-		{8DF3B33E-869F-400A-854B-4D895F1F36CA}.Release|Win32.ActiveCfg = Release|Win32
-		{8DF3B33E-869F-400A-854B-4D895F1F36CA}.Release|Win32.Build.0 = Release|Win32
-		{8DF3B33E-869F-400A-854B-4D895F1F36CA}.Release-OMP|Win32.ActiveCfg = Release-OMP|Win32
-		{8DF3B33E-869F-400A-854B-4D895F1F36CA}.Release-OMP|Win32.Build.0 = Release-OMP|Win32
-		{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}.Debug|Win32.Build.0 = Debug|Win32
-		{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}.Release|Win32.ActiveCfg = Release|Win32
-		{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}.Release|Win32.Build.0 = Release|Win32
-		{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}.Release-OMP|Win32.ActiveCfg = Release|Win32
-		{978291AF-F8A0-4541-870E-CAB9BD2F4F7A}.Release-OMP|Win32.Build.0 = Release|Win32
-		{02A13530-9417-4DF5-95A2-C5804C947557}.Debug|Win32.ActiveCfg = Debug|Win32
-		{02A13530-9417-4DF5-95A2-C5804C947557}.Debug|Win32.Build.0 = Debug|Win32
-		{02A13530-9417-4DF5-95A2-C5804C947557}.Release|Win32.ActiveCfg = Release|Win32
-		{02A13530-9417-4DF5-95A2-C5804C947557}.Release|Win32.Build.0 = Release|Win32
-		{02A13530-9417-4DF5-95A2-C5804C947557}.Release-OMP|Win32.ActiveCfg = Release|Win32
-		{02A13530-9417-4DF5-95A2-C5804C947557}.Release-OMP|Win32.Build.0 = Release|Win32
-		{38AF03D8-31E3-4D23-9141-FCA58118FBC9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{38AF03D8-31E3-4D23-9141-FCA58118FBC9}.Debug|Win32.Build.0 = Debug|Win32
-		{38AF03D8-31E3-4D23-9141-FCA58118FBC9}.Release|Win32.ActiveCfg = Release|Win32
-		{38AF03D8-31E3-4D23-9141-FCA58118FBC9}.Release|Win32.Build.0 = Release|Win32
-		{38AF03D8-31E3-4D23-9141-FCA58118FBC9}.Release-OMP|Win32.ActiveCfg = Release-OMP|Win32
-		{38AF03D8-31E3-4D23-9141-FCA58118FBC9}.Release-OMP|Win32.Build.0 = Release-OMP|Win32
-		{43C84490-2B80-4656-BEF2-256CFDC4FEEA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{43C84490-2B80-4656-BEF2-256CFDC4FEEA}.Debug|Win32.Build.0 = Debug|Win32
-		{43C84490-2B80-4656-BEF2-256CFDC4FEEA}.Release|Win32.ActiveCfg = Release|Win32
-		{43C84490-2B80-4656-BEF2-256CFDC4FEEA}.Release|Win32.Build.0 = Release|Win32
-		{43C84490-2B80-4656-BEF2-256CFDC4FEEA}.Release-OMP|Win32.ActiveCfg = Release-OMP|Win32
-		{43C84490-2B80-4656-BEF2-256CFDC4FEEA}.Release-OMP|Win32.Build.0 = Release-OMP|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0E7B1F2-5850-4D7C-BCF4-EB6A2C2DA666}
 	EndGlobalSection
 EndGlobal
