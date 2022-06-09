@@ -144,7 +144,7 @@ bool CRenderer::Render(CScene const& scene, CRenderContext const& context, CFram
 
 	// Запускаем метод RenderFrame в параллельном потоке, передавая ему
 	// необходимый набор параметров
-	m_thread = std::thread(
+	m_thread = std::jthread(
 		&CRenderer::RenderFrame, // Адрес метода RenderFrame
 		this, // Указатель this
 		std::ref(scene), // Ссылка на scene
@@ -164,8 +164,11 @@ void CRenderer::Stop()
 		// завершить работу
 		SetStopping(true);
 
-		// Дожидаемся окончания работы рабочего потока
-		m_thread.join();
+		// Дожидаемся окончания работы рабочего потока, если он не закончил работу
+		if (m_thread.joinable())
+		{
+			m_thread.join();
+		}
 
 		// Сбрасываем флаг остановки, если поток завершил свою работу до вызова SetStopping(true)
 		SetStopping(false);

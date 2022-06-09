@@ -60,7 +60,7 @@ private:
 
 private:
 	// Поток, в котором выполняется построение изображения
-	std::thread m_thread;
+	std::jthread m_thread;
 
 	// Мьютекс для обеспечения доступа к переменным m_totalChunks и m_renderedChunks
 	mutable std::mutex m_mutex;

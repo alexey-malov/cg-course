@@ -73,11 +73,11 @@ void CRenderer::RenderFrame(CFrameBuffer& frameBuffer)
 #endif
 	for (int y = 0; y < height; ++y)
 	{
-		std::uint32_t * rowPixels = nullptr;
+		std::uint32_t* rowPixels = nullptr;
 
 		// Синхронизируем доступ к frameBuffer из вспомогательных потоков
 #ifdef _OPENMP
-		#pragma omp critical
+#pragma omp critical
 #endif
 		{
 			// Получаем адрес начала y-й строки в буфере кадра
@@ -140,7 +140,7 @@ bool CRenderer::Render(CFrameBuffer& frameBuffer)
 
 	// Запускаем метод RenderFrame в параллельном потоке, передавая ему
 	// необходимый набор параметров
-	m_thread = std::thread(
+	m_thread = std::jthread(
 		&CRenderer::RenderFrame, // Адрес метода RenderFrame
 		this, // Указатель this
 		std::ref(frameBuffer)); // Ссылка на frameBuffer
@@ -158,8 +158,11 @@ void CRenderer::Stop()
 		// завершить работу
 		SetStopping(true);
 
-		// Дожидаемся окончания работы рабочего потока
-		m_thread.join();
+		// Дожидаемся окончания работы рабочего потока, если он не закончил работу
+		if (m_thread.joinable())
+		{
+			m_thread.join();
+		}
 
 		// Сбрасываем флаг остановки, если поток завершил свою работу до вызова SetStopping(true)
 		SetStopping(false);
@@ -167,7 +170,7 @@ void CRenderer::Stop()
 }
 
 // Вычисляем цвет пикселя буфера кадра
-uint32_t CRenderer::CalculatePixelColor(int x, int y, unsigned frameWidth, unsigned frameHeight)const
+uint32_t CRenderer::CalculatePixelColor(int x, int y, unsigned frameWidth, unsigned frameHeight) const
 {
 	// Пока здесь у нас заглушка - вычисляется цвет точки фрактала Мандельброта
 	// (см. Википедию)

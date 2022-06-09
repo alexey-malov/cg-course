@@ -65,7 +65,7 @@ private:
 
 private:
 	// ѕоток, в котором выполн€етс€ построение изображени€
-	std::thread m_thread;
+	std::jthread m_thread;
 
 	// ћьютекс дл€ обеспечени€ доступа к переменным m_totalChunks и m_renderedChunks
 	mutable std::mutex m_mutex;

@@ -111,8 +111,11 @@ public:
 			{
 				if(::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 				{
-					if(msg.message == WM_USER)
-						AddThread(_T(""), SW_SHOWNORMAL);
+					if (msg.message == WM_USER)
+					{
+						TCHAR cmdLine[] = _T("");
+						AddThread(cmdLine, SW_SHOWNORMAL);
+					}
 				}
 			}
 			else
