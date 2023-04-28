@@ -63,7 +63,7 @@ void Cube::Draw() const
 	glEnable(GL_COLOR_MATERIAL);
 	// Цвет вершины будет управлять диффузным и фоновым цветом материала
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(m_specularColor));
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(m_specularColor));
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
 
 	glBegin(GL_QUADS);
