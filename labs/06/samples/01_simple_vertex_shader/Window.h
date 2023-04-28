@@ -2,6 +2,7 @@
 #include "BaseWindow.h"
 #include "Cube.h"
 #include "GLEWInitializer.h"
+#include "Shader.h"
 
 class Window : public BaseWindow
 {
