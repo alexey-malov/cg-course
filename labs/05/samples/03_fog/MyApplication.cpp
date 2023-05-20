@@ -54,7 +54,7 @@ void CMyApplication::OnDisplay()
 	glFogfv(GL_FOG_COLOR, fogColor);
 
 	// и его плотность
-	glFogf(GL_FOG_DENSITY, 0.4);
+	glFogf(GL_FOG_DENSITY, 0.4f);
 
 	// Включаем освещение и рисуем чайник
 	glEnable(GL_LIGHTING);
