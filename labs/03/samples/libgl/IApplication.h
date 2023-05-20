@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IEventDispatcher.h"
 #include "IApplicationListener.h"
+#include "IEventDispatcher.h"
 
 class IApplication : public IEventDispatcher<IApplicationListener>
 {

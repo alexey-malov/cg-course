@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="01_orbit_calculation.cpp">
+    <ClCompile Include="10_orbit_calculation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainApp.cpp">
@@ -26,10 +26,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainApp.h">
+    <ClInclude Include="KeplerMotionLaws.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeplerMotionLaws.h">
+    <ClInclude Include="MainApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

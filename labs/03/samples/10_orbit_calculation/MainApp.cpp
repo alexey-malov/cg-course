@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 
-const double CMainApp::DEFAULT_SCALE = 100; // 40 пикселей на астрономическую единицу
+const double CMainApp::DEFAULT_SCALE = 100; // 40 РїРёРєСЃРµР»РµР№ РЅР° Р°СЃС‚СЂРѕРЅРѕРјРёС‡РµСЃРєСѓСЋ РµРґРёРЅРёС†Сѓ
 const double CMainApp::MIN_SCALE = 5;
 const double CMainApp::MAX_SCALE = 500;
 const double CMainApp::SCALE_FACTOR = 1.02;
@@ -213,15 +213,15 @@ void CMainApp::OnReshape(int width, int height)
 		return;
 	}
 
-	// Задаем порт просмотра размером с клиентскую область окна
+	// Р—Р°РґР°РµРј РїРѕСЂС‚ РїСЂРѕСЃРјРѕС‚СЂР° СЂР°Р·РјРµСЂРѕРј СЃ РєР»РёРµРЅС‚СЃРєСѓСЋ РѕР±Р»Р°СЃС‚СЊ РѕРєРЅР°
 	glViewport(0, 0, width, height);
 	double hw = width * 0.5;
 	double hh = height * 0.5;
 
-	// Вычисляем соотношение сторон окна
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РѕРєРЅР°
 	double aspect = double(width) / height;
 
-	// Устанавливаем матрицу проецирования
+	// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°С‚СЂРёС†Сѓ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(-hw / m_scale, hw / m_scale, -hh / m_scale, hh / m_scale);

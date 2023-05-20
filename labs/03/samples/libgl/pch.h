@@ -10,4 +10,4 @@
 // add headers that you want to pre-compile here
 #include "common_inc.h"
 
-#endif //PCH_H
+#endif // PCH_H
