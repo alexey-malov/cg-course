@@ -1,9 +1,9 @@
-﻿#include "../libgl/GdiPlusInitializer.h"
+#include "../libgl/GdiPlusInitializer.h"
 #include "MyApplication.h"
 #include "common_inc.h"
 
 CMyApplication app("Texture mapping example", 800, 600);
-CGdiPlusInitializer gdiPlusInitializer;
+CGdiPlusInitializer gdiplusInitializer;
 
 int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
