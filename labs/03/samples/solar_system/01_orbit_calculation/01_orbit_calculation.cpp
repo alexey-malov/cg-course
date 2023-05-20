@@ -17,13 +17,13 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	double E;
 	double result = 0;
-	DWORD tick = GetTickCount();
+	auto const tick = GetTickCount64();
 	for (int i = 0; i < 100; ++i)
 	{
 		E = SolveKeplerEquation(M, e, maxIter); // halley_iterate(fn, M, M - e, M + e, 10, maxIter);
 		result += ((i & 1) * 2 - 1) + E;
 	}
-	std::cout << GetTickCount() - tick << "\n";
+	std::cout << GetTickCount64() - tick << "\n";
 
 	double tg_v_2 = sqrt((1 + e) / (1 - e)) * tan(E * 0.5);
 	double v = atan(tg_v_2) * 2;
