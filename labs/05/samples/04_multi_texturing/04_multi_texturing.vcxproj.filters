@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_fog.cpp">
+    <ClCompile Include="04_multi_texturing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyApplication.cpp">
@@ -23,11 +23,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="MyApplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

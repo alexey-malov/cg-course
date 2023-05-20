@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4e96be31-118f-4e9d-a9e2-0bfc46fa3b8c}</ProjectGuid>
-    <RootNamespace>My03fog</RootNamespace>
+    <ProjectGuid>{8b132c29-6c6f-4aea-8b6d-4f46fa95e7bd}</ProjectGuid>
+    <RootNamespace>My04multitexturing</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -135,11 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="03_fog.cpp" />
+    <ClCompile Include="04_multi_texturing.cpp" />
     <ClCompile Include="MyApplication.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MyApplication.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libgl\libgl.vcxproj">
@@ -148,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyApplication.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
