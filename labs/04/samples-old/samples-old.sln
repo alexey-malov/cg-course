@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09.quad_strip", "09.quad_st
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "10.polygon", "10.polygon\10.polygon.vcxproj", "{0B280461-F11D-4B7D-9B8B-E82D8379DA18}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "11.rotation", "11.rotation\11.rotation.vcxproj", "{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -121,6 +123,14 @@ Global
 		{0B280461-F11D-4B7D-9B8B-E82D8379DA18}.Release|x64.Build.0 = Release|x64
 		{0B280461-F11D-4B7D-9B8B-E82D8379DA18}.Release|x86.ActiveCfg = Release|Win32
 		{0B280461-F11D-4B7D-9B8B-E82D8379DA18}.Release|x86.Build.0 = Release|Win32
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Debug|x64.ActiveCfg = Debug|x64
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Debug|x64.Build.0 = Debug|x64
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Debug|x86.ActiveCfg = Debug|Win32
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Debug|x86.Build.0 = Debug|Win32
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Release|x64.ActiveCfg = Release|x64
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Release|x64.Build.0 = Release|x64
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Release|x86.ActiveCfg = Release|Win32
+		{9C19D266-88B3-4FE3-8EEC-AA73F4E8A76A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
