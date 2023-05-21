@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07.triangle_fan", "07.trian
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08.quad", "08.quad\08.quad.vcxproj", "{69155CA6-1CC8-4899-96EC-E33F77B0674F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09.quad_strip", "09.quad_strip\09.quad_strip.vcxproj", "{C377472E-77FF-4478-839C-124B2BCD21CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{69155CA6-1CC8-4899-96EC-E33F77B0674F}.Release|x64.Build.0 = Release|x64
 		{69155CA6-1CC8-4899-96EC-E33F77B0674F}.Release|x86.ActiveCfg = Release|Win32
 		{69155CA6-1CC8-4899-96EC-E33F77B0674F}.Release|x86.Build.0 = Release|Win32
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Debug|x64.ActiveCfg = Debug|x64
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Debug|x64.Build.0 = Debug|x64
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Debug|x86.ActiveCfg = Debug|Win32
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Debug|x86.Build.0 = Debug|Win32
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Release|x64.ActiveCfg = Release|x64
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Release|x64.Build.0 = Release|x64
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Release|x86.ActiveCfg = Release|Win32
+		{C377472E-77FF-4478-839C-124B2BCD21CC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
