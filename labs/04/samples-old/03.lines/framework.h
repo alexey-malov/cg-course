@@ -13,4 +13,5 @@
 #include <memory.h>
 #include <tchar.h>
 #include <gl\gl.h>
+#define _USE_MATH_DEFINES
 #include <math.h>

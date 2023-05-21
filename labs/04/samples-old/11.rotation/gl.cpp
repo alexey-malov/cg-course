@@ -5,9 +5,6 @@
 #include "gl.h"
 #include "Graphics.h"
 
-#define MAX_LOADSTRING 100
-#define M_PI 3.1415927
-
 // Global Variables:
 HINSTANCE hInst;                                               // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl");                  // window class name
@@ -114,7 +111,7 @@ float angleX = 0;
 float angleY = 0;
 float angleZ = 0;
 
-DWORD lastTick = GetTickCount();
+ULONGLONG lastTick = GetTickCount64();
 
 void DrawObjects()
 {
@@ -143,7 +140,7 @@ void DrawObjects()
 	}
 
 	// подсчитываем время, прошедшее с момента последнего нарисованного кадра
-	DWORD currentTick = GetTickCount();
+	ULONGLONG currentTick = GetTickCount64();
 	float time = (currentTick - lastTick) * 0.001f;
 	lastTick = currentTick;
 

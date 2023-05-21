@@ -13,4 +13,3 @@
 #include <memory.h>
 #include <tchar.h>
 #include <gl\gl.h>
-#include <math.h>

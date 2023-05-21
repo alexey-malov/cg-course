@@ -5,8 +5,6 @@
 #include "gl.h"
 #include "Graphics.h"
 
-#define MAX_LOADSTRING 100
-
 // Global Variables:
 HINSTANCE hInst;                                               // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl");                  // window class name

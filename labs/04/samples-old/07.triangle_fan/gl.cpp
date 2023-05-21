@@ -5,13 +5,10 @@
 #include "gl.h"
 #include "Graphics.h"
 
-#define MAX_LOADSTRING 100
-#define M_PI 3.1415927
-
 // Global Variables:
 HINSTANCE hInst;                                               // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl");                  // window class name
-const TCHAR WINDOW_TITLE[] = TEXT("Triangle strip");     // The title bar text
+const TCHAR WINDOW_TITLE[] = TEXT("Triangle fan");     // The title bar text
 
 // Foward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -96,7 +93,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 void DrawTriangleFan()
 {
-	// включаем проволочный режим рисовани¤ полигонов дл¤ лицевых и нелицевых граней
+	// включаем проволочный режим рисования полигонов для лицевых и нелицевых граней
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glBegin(GL_TRIANGLE_FAN);
@@ -105,7 +102,7 @@ void DrawTriangleFan()
 		// центральна¤ вершина "веера"
 		glVertex3d(0, 0.5, 0);
 
-		// теперь объ¤вл¤ем вершины веера, расположенные по его периметру
+		// теперь объявляем вершины веера, расположенные по его периметру
 		for (int angle = 0; angle < 320; angle += 13)
 		{
 			double rad = M_PI * angle / 180;
@@ -117,7 +114,7 @@ void DrawTriangleFan()
 	}
 	glEnd();
 
-	// включаем режим рисовани¤ полигонов "с заполнением" дл¤ лицевых и нелицевых граней
+	// включаем режим рисования полигонов "с заполнением" для лицевых и нелицевых граней
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glBegin(GL_TRIANGLE_FAN);
@@ -138,7 +135,7 @@ void DrawTriangleFan()
 
 void DrawScene()
 {
-	// просто очищаем буфер рисовани¤
+	// просто очищаем буфер рисования
 	ClearBuffers(0, 0, 0, 0);
 
 	DrawTriangleFan();
@@ -153,7 +150,6 @@ void OnPaint(HWND hWnd)
 	PAINTSTRUCT ps;
 	BeginPaint(hWnd, &ps);
 
-	// –исуем сцену - пока это будет просто закрашенна¤ красным цветом клиенстка¤ область окна
 	DrawScene();
 
 	EndPaint(hWnd, &ps);

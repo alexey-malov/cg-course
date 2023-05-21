@@ -5,13 +5,10 @@
 #include "gl.h"
 #include "Graphics.h"
 
-#define MAX_LOADSTRING 100
-#define M_PI 3.1415927
-
 // Global Variables:
 HINSTANCE hInst;                                               // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl");                  // window class name
-const TCHAR WINDOW_TITLE[] = TEXT("Quads");     // The title bar text
+const TCHAR WINDOW_TITLE[] = TEXT("Quad Strip");     // The title bar text
 
 // Foward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -146,7 +143,6 @@ void OnPaint(HWND hWnd)
 	PAINTSTRUCT ps;
 	BeginPaint(hWnd, &ps);
 
-	// Рисуем сцену - пока это будет просто закрашенная красным цветом клиенсткая область окна
 	DrawScene();
 
 	EndPaint(hWnd, &ps);

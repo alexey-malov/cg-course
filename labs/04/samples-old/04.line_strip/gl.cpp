@@ -5,9 +5,6 @@
 #include "gl.h"
 #include "Graphics.h"
 
-#define MAX_LOADSTRING 100
-#define M_PI 3.1415927
-
 // Global Variables:
 HINSTANCE hInst;                                               // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl");                  // window class name
@@ -94,7 +91,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
-DWORD g_lastTick = GetTickCount();
+ULONGLONG g_lastTick = GetTickCount64();
 float g_currentAngleX = 0;
 float g_currentAngleY = 0;
 #define CURVE_LENGTH 100
@@ -105,7 +102,7 @@ float g_currentAngleY = 0;
 void DrawLineStrip()
 {
 	// вычисляем время с момента предыдущего кадра
-	DWORD currentTick = GetTickCount();
+	ULONGLONG currentTick = GetTickCount64();
 	float delta = (currentTick - g_lastTick) * 0.001f;
 	g_lastTick = currentTick;
 
@@ -157,7 +154,6 @@ void OnPaint(HWND hWnd)
 	PAINTSTRUCT ps;
 	BeginPaint(hWnd, &ps);
 
-	// Рисуем сцену - пока это будет просто закрашенная красным цветом клиенсткая область окна
 	DrawScene();
 
 	EndPaint(hWnd, &ps);
