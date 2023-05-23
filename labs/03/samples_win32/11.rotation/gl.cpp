@@ -9,6 +9,7 @@
 HINSTANCE hInst;                                               // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl");                  // window class name
 const TCHAR WINDOW_TITLE[] = TEXT("Rotation");     // The title bar text
+const UINT_PTR TIMER_ID = 0;
 
 // Foward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -191,6 +192,7 @@ void OnPaint(HWND hWnd)
 
 bool OnCreate(HWND hWnd)
 {
+	SetTimer(hWnd, TIMER_ID, USER_TIMER_MINIMUM, nullptr);
 	// инициализируем OpenGL
 	return InitOpenGL(hWnd);
 }
@@ -224,6 +226,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		OnPaint(hWnd);
+		break;
+	case WM_TIMER:
+		InvalidateRect(hWnd, nullptr, false);
 		break;
 	case WM_DESTROY:
 		DestroyOpenGL();
