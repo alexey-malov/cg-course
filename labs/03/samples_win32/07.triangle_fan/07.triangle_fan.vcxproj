@@ -133,12 +133,10 @@
   <ItemGroup>
     <ClInclude Include="gl.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Graphics.h" />
     <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gl.cpp" />
-    <ClCompile Include="Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="gl.rc" />
@@ -146,6 +144,11 @@
   <ItemGroup>
     <Image Include="gl.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libgl\libgl.vcxproj">
+      <Project>{4e843e75-ec1e-4423-abc1-6ac5069704da}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

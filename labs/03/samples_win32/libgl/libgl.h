@@ -14,10 +14,8 @@ bool InitOpenGL(HWND hWnd, BYTE colorBits = 32, BYTE depthBits = 16, BYTE stenci
 // освобождаем ресурсы, связанные с OpenGL
 void DestroyOpenGL();
 
-
 void ClearBuffers(float r, float g, float b, float a);
 
 void EndDrawing();
-
 
 #endif // !defined(AFX_GRAPHICS_H__4EF982B4_DE4E_4BCF_8CD2_080AA3646DF4__INCLUDED_)

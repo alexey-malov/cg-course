@@ -3,7 +3,7 @@
 
 #include "framework.h"
 #include "gl.h"
-#include "Graphics.h"
+#include "../libgl/libgl.h"
 
 // Global Variables:
 HINSTANCE hInst;                                               // current instance
