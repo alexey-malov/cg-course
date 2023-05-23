@@ -1,4 +1,4 @@
-//
+п»ї//
 //////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_GRAPHICS_H__4EF982B4_DE4E_4BCF_8CD2_080AA3646DF4__INCLUDED_)
@@ -8,10 +8,10 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-// Инициализация ресурсов, связанных с OpenGL
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЂРµСЃСѓСЂСЃРѕРІ, СЃРІСЏР·Р°РЅРЅС‹С… СЃ OpenGL
 bool InitOpenGL(HWND hWnd, BYTE colorBits = 32, BYTE depthBits = 16, BYTE stencilBits = 0);
 
-// освобождаем ресурсы, связанные с OpenGL
+// РѕСЃРІРѕР±РѕР¶РґР°РµРј СЂРµСЃСѓСЂСЃС‹, СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ OpenGL
 void DestroyOpenGL();
 
 void ClearBuffers(float r, float g, float b, float a);
