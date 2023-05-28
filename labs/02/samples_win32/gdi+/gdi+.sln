@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01.draw_rectangle", "01.draw_rectangle\01.draw_rectangle.vcxproj", "{761C3994-D08E-47E7-9159-3D9709C7FF96}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02.draw_image", "02.draw_image\02.draw_image.vcxproj", "{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{761C3994-D08E-47E7-9159-3D9709C7FF96}.Release|x64.Build.0 = Release|x64
 		{761C3994-D08E-47E7-9159-3D9709C7FF96}.Release|x86.ActiveCfg = Release|Win32
 		{761C3994-D08E-47E7-9159-3D9709C7FF96}.Release|x86.Build.0 = Release|Win32
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Debug|x64.ActiveCfg = Debug|x64
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Debug|x64.Build.0 = Debug|x64
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Debug|x86.ActiveCfg = Debug|Win32
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Debug|x86.Build.0 = Debug|Win32
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Release|x64.ActiveCfg = Release|x64
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Release|x64.Build.0 = Release|x64
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Release|x86.ActiveCfg = Release|Win32
+		{DFB96EFF-16A6-40F6-B760-8C46BB2297F1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
