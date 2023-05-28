@@ -6,16 +6,18 @@
 
 // Глобальные переменные
 HINSTANCE g_hInstance;                                // current instance
-const TCHAR g_title[] = TEXT("Gdi demo");             // Текст в заголовке окна
+const TCHAR g_title[] = TEXT("Вывод текста на экран");// Текст в заголовке окна
 const TCHAR g_windowClass[] = TEXT("GdiDemoClass");   // Имя класса окна
 const TCHAR g_helloWorld[] = TEXT("ПС-Rules!!!");     // строка, для вывода на поверхность окна
 
-// Foward declarations of functions included in this code module:
+// инициализация приложения, обеспечение его минимальной работоспособности
 ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void OnPaint(HWND hWnd);
 int MessageLoop();
+
+// обработчики сообщений
+void OnPaint(HWND hwnd);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -34,9 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	return MessageLoop();
 }
 
-
-
-// Цикл обработки сообщений сообщений
+// Цикл обработки сообщений
 int MessageLoop()
 {
 	MSG msg;
@@ -49,19 +49,6 @@ int MessageLoop()
 	return (int) msg.wParam;
 }
 
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    This function and its usage is only necessary if you want this code
-//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
-//    function that was added to Windows 95. It is important to call this function
-//    so that the application will get 'well formed' small icons associated
-//    with it.
-//
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
 	WNDCLASSEX wcex{};
@@ -85,16 +72,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	HWND hWnd;
@@ -119,15 +96,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_PAINT	- Paint the main window
-//  WM_DESTROY	- post a quit message and return
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 

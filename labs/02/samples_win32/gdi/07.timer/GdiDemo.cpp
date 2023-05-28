@@ -6,7 +6,7 @@
 
 // Глобальные переменные
 HINSTANCE g_hInstance;                                // current instance
-const TCHAR g_title[] = TEXT("Gdi demo");             // Текст в заголовке окна
+const TCHAR g_title[] = TEXT("Таймер");               // Текст в заголовке окна
 const TCHAR g_windowClass[] = TEXT("GdiDemoClass");   // Имя класса окна
 
 const UINT_PTR DRAW_TIMER_ID = 1;
@@ -60,7 +60,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	return MessageLoop();
 }
 
-// Цикл обработки сообщений сообщений
+// Цикл обработки сообщений
 int MessageLoop()
 {
 	MSG msg;

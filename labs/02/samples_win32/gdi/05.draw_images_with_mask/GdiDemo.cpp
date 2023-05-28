@@ -5,9 +5,9 @@
 #include "GdiDemo.h"
 
 // Глобальные переменные
-HINSTANCE g_hInstance; // current instance
+HINSTANCE g_hInstance;                                       // current instance
 const TCHAR g_title[] = TEXT("Работа с маской изображения"); // Текст в заголовке окна
-const TCHAR g_windowClass[] = TEXT("GdiDemoClass"); // Имя класса окна
+const TCHAR g_windowClass[] = TEXT("GdiDemoClass");          // Имя класса окна
 
 // графические ресурсы
 HBITMAP g_dogBitmap = NULL;
@@ -45,7 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	return MessageLoop();
 }
 
-// Цикл обработки сообщений сообщений
+// Цикл обработки сообщений
 int MessageLoop()
 {
 	MSG msg;

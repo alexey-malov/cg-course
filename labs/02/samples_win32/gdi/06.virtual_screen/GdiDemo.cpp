@@ -6,7 +6,7 @@
 
 // Глобальные переменные
 HINSTANCE g_hInstance;                                // current instance
-const TCHAR g_title[] = TEXT("Виртуальный экран");             // Текст в заголовке окна
+const TCHAR g_title[] = TEXT("Виртуальный экран");    // Текст в заголовке окна
 const TCHAR g_windowClass[] = TEXT("GdiDemoClass");   // Имя класса окна
 
 // графические ресурсы

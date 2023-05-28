@@ -5,18 +5,24 @@
 #include "GdiDemo.h"
 
 // Глобальные переменные
-HINSTANCE g_hInstance;                                // current instance
-const TCHAR g_title[] = TEXT("Gdi demo");             // Текст в заголовке окна
-const TCHAR g_windowClass[] = TEXT("GdiDemoClass");   // Имя класса окна
-const TCHAR g_helloWorld[] = TEXT("Работа со шрифтами и их свойствами!"); // строка, для вывода на поверхность окна
-HFONT g_helloWorldFont = NULL;
+HINSTANCE g_hInstance;                                                       // current instance
+const TCHAR g_title[] = TEXT("Работа со шрифтами и их свойствамиo");         // Текст в заголовке окна
+const TCHAR g_windowClass[] = TEXT("GdiDemoClass");                          // Имя класса окна
+const TCHAR g_message[] = TEXT("Работа со шрифтами и их свойствами!");       // строка, для вывода на поверхность окна
+HFONT g_messageFont = NULL;
 
-// Foward declarations of functions included in this code module:
+// инициализация приложения, обеспечение его минимальной работоспособности
 ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void OnPaint(HDC hdc);
 int MessageLoop();
+
+// иницилизация / деинициализация ресурсов системы
+void InitGraphicResources(HWND hWnd);
+void FreeGraphicResources();
+
+// обработчики сообщений
+void OnPaint(HDC hdc);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -37,7 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 void InitGraphicResources(HWND hWnd)
 {
-	g_helloWorldFont = CreateFont(
+	g_messageFont = CreateFont(
 		50, // Высота шрифта
 		0, // Средняя ширина шрифта
 		0, // Угол наклона вертикальной оси шрифта в десятых долях градуса
@@ -57,7 +63,7 @@ void InitGraphicResources(HWND hWnd)
 
 void FreeGraphicResources()
 {
-	DeleteObject(g_helloWorldFont);
+	DeleteObject(g_messageFont);
 }
 
 // Цикл обработки сообщений
@@ -73,19 +79,6 @@ int MessageLoop()
 	return (int) msg.wParam;
 }
 
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    This function and its usage is only necessary if you want this code
-//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
-//    function that was added to Windows 95. It is important to call this function
-//    so that the application will get 'well formed' small icons associated
-//    with it.
-//
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
 	WNDCLASSEX wcex{};
@@ -109,16 +102,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	HWND hWnd;
@@ -143,15 +126,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_PAINT	- Paint the main window
-//  WM_DESTROY	- post a quit message and return
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
@@ -189,11 +163,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void OnPaint(HDC hdc)
 {
 	// сохраняем предыдущий фонт контекста устройства и выбираем созданный фонт
-	HGDIOBJ oldFont = SelectObject(hdc, g_helloWorldFont);
+	HGDIOBJ oldFont = SelectObject(hdc, g_messageFont);
 
 	SetTextColor(hdc, RGB(70, 120, 35));
 	// выводим текст на экран новым цветом и шрифтом
-	TextOut(hdc, 0, 0, g_helloWorld, (int)_tcslen(g_helloWorld));
+	TextOut(hdc, 0, 0, g_message, (int)_tcslen(g_message));
 
 	// восстанавливаем предыдущий фонт контекста устройства
 	SelectObject(hdc, oldFont);
