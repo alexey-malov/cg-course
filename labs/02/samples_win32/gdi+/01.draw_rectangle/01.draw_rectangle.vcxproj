@@ -134,7 +134,6 @@
     <ClInclude Include="01.draw_rectangle.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="01.draw_rectangle.cpp" />
