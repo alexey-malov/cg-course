@@ -96,7 +96,7 @@ BEGIN
         MENUITEM "GL_MODULATE",                 ID_GL_MODULATE
         MENUITEM "GL_DECAL",                    ID_GL_DECAL
         MENUITEM "GL_ADD",                      ID_GL_ADD
-        MENUITEM "GL_REPLACE",                   ID_GL_REPLACE
+        MENUITEM "GL_REPLAE",                   ID_GL_REPLACE
         MENUITEM SEPARATOR
         MENUITEM "Turn off texture",            ID_NO_TEXTURE
     END

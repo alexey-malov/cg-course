@@ -1,15 +1,10 @@
 // gl.cpp : Defines the entry point for the application.
 //
 
+#include "stdafx.h"
 #include "resource.h"
-
-#include "../libgl/GdiPlusInitializer.h"
-#include "../libgl/TextureLoader.h"
-
-
-#include "../libgl/stdafx.h"
-#include "../libgl/Graphics.h"
-#include "../libgl/Utils.h"
+#include "Graphics.h"
+#include "Utils.h"
 
 
 
@@ -17,9 +12,6 @@
 #define M_PI 3.1415927
 
 // Global Variables:
-
-CGdiPlusInitializer gdi;
-CTextureLoader textureLoader;
 HINSTANCE hInst; // current instance
 auto WINDOW_CLASS_NAME = L"gl"; // window class name
 auto WINDOW_TITLE = L"Textures"; // The title bar text
@@ -71,8 +63,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
-
-	return static_cast<int>(msg.wParam);
+	return msg.wParam;
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -89,7 +80,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_GL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = (LPCTSTR)IDR_MAIN_MENU;
+	wcex.lpszMenuName =  L"Menu";
 	wcex.lpszClassName = WINDOW_CLASS_NAME;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
@@ -348,7 +339,7 @@ bool OnCreate(HWND hWnd)
 	// инициализируем OpenGL
 	if (InitOpenGL(hWnd))
 	{
-		g_sheepTexture = textureLoader.LoadTexture2D(L"sheep.bmp");
+		g_sheepTexture = LoadTextureFromRgbBitmapFile("sheep.bmp");
 		if (g_sheepTexture)
 		{
 			return true;
@@ -376,7 +367,7 @@ void OnSize(HWND hWnd)
 void ReloadTexture()
 {
 	glDeleteTextures(1, &g_sheepTexture);
-	g_sheepTexture = textureLoader.LoadTexture2D(L"sheep.bmp");
+	g_sheepTexture = LoadTextureFromRgbBitmapFile("sheep.bmp");
 }
 
 void OnCommand(WPARAM wParam, LPARAM lParam)

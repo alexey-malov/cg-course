@@ -1,21 +1,16 @@
 ﻿// gl.cpp : Defines the entry point for the application.
 //
 
-#include "resource.h"
-#include "../libgl/GdiPlusInitializer.h"
-#include "../libgl/TextureLoader.h"
+#include "StdAfx.h"
+#include "Graphics.h"
+#include "Utils.h"
 
-#include "../libgl/Graphics.h"
-#include "../libgl/Utils.h"
-#include "../libgl/stdafx.h"
+#include "resource.h"
 
 #define MAX_LOADSTRING 100
-#define M_PI 3.1415927
+#define M_PI 3.1415927f
 
 // Global Variables:
-
-CGdiPlusInitializer gdi;
-CTextureLoader textureLoader;
 HINSTANCE hInst; // current instance
 const TCHAR WINDOW_CLASS_NAME[] = L"gl"; // window class name
 const TCHAR WINDOW_TITLE[] = L"Texture + lighting "; // The title bar text
@@ -67,7 +62,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
-	return static_cast<int>(msg.wParam);
+	return msg.wParam;
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -84,7 +79,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_GL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = (LPCTSTR)IDR_MAIN_MENU;
+	wcex.lpszMenuName = L"Menu";
 	wcex.lpszClassName = WINDOW_CLASS_NAME;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
@@ -134,8 +129,8 @@ void CalculateSpherePoint(float alpha, float beta, Vector3d* spherePoint)
 
 void CalculateSphereTextureCoordinate(float alpha, float beta, Vector2d* texCoord)
 {
-	texCoord->x = static_cast<float>(alpha / (2 * M_PI));
-	texCoord->y = static_cast<float>(beta / M_PI + 0.5f);
+	texCoord->x = alpha / (2 * M_PI);
+	texCoord->y = beta / (M_PI) + 0.5f; // 0.5f * sinf(beta) + 0.5f;
 }
 
 GLint g_textureEnvMode = 1;
@@ -162,7 +157,7 @@ void DrawSphere()
 		Vector2d tex;
 
 		float alpha = 0;
-		float beta = static_cast<float>(-M_PI / 2 + STEP_BETA);
+		float beta = -M_PI / 2 + STEP_BETA;
 		southPoleTex.DeclareTextureCoord();
 		southPole.DeclareOpenGLNormal();
 		southPole.DeclareOpenGLVertex();
@@ -182,8 +177,8 @@ void DrawSphere()
 	}
 	glEnd();
 
-	float beta = static_cast<float>(-M_PI / 2 + STEP_BETA);
-	float beta1 = static_cast<float>(-M_PI / 2 + STEP_BETA * 2);
+	float beta = -M_PI / 2 + STEP_BETA;
+	float beta1 = -M_PI / 2 + STEP_BETA * 2;
 	for (int par = 1; par < (SPHERE_PARALLELS - 1); ++par, beta = beta1, beta1 += STEP_BETA)
 	{
 		glBegin(GL_QUAD_STRIP);
@@ -556,7 +551,7 @@ bool OnCreate(HWND hWnd)
 	// инициализируем OpenGL
 	if (InitOpenGL(hWnd))
 	{
-		if ((g_earthTexture = textureLoader.LoadTexture2D(L"earth.bmp")) != 0)
+		if ((g_earthTexture = LoadTextureFromRgbBitmapFile("earth.bmp")) != 0)
 		{
 			return true;
 		}

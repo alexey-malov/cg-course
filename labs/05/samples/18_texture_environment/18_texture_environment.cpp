@@ -1,22 +1,15 @@
 ﻿// gl.cpp : Defines the entry point for the application.
 //
 
+#include "stdafx.h"
+#include "Graphics.h"
+#include "Utils.h"
 #include "resource.h"
-
-#include "../libgl/GdiPlusInitializer.h"
-#include "../libgl/TextureLoader.h"
-
-#include "../libgl/Graphics.h"
-#include "../libgl/Utils.h"
-#include "../libgl/stdafx.h"
 
 #define MAX_LOADSTRING 100
 #define M_PI 3.1415927
 
 // Global Variables:
-
-CGdiPlusInitializer gdi;
-CTextureLoader textureLoader;
 HINSTANCE hInst; // current instance
 const TCHAR WINDOW_CLASS_NAME[] = L"gl"; // window class name
 const TCHAR WINDOW_TITLE[] = L"Texture environment modes"; // The title bar text
@@ -68,7 +61,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
-	return static_cast<int>(msg.wParam);
+	return msg.wParam;
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -85,7 +78,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_GL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = (LPCTSTR)IDR_MAIN_MENU;
+	wcex.lpszMenuName = L"Menu";
 	wcex.lpszClassName = WINDOW_CLASS_NAME;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
@@ -139,19 +132,19 @@ void DrawQuad()
 	glBegin(GL_QUADS);
 	{
 		glColor3f(1, 0, 0);
-		glTexCoord2f(0, 1);
+		glTexCoord2f(0, 0);
 		glVertex2f(-1, -1);
 
 		glColor3f(0, 1, 0);
-		glTexCoord2f(1, 1);
+		glTexCoord2f(1, 0);
 		glVertex2f(1, -1);
 
 		glColor3f(0, 0, 1);
-		glTexCoord2f(1, 0);
+		glTexCoord2f(1, 1);
 		glVertex2f(1, 1);
 
 		glColor3f(1, 0, 1);
-		glTexCoord2f(0, 0);
+		glTexCoord2f(0, 1);
 		glVertex2f(-1, 1);
 	}
 	glEnd();
@@ -286,7 +279,7 @@ bool LoadEagleTexture()
 
 	glGenTextures(1, &g_eagleTexture);
 	glBindTexture(GL_TEXTURE_2D, g_eagleTexture);
-	g_eagleTexture = textureLoader.LoadTexture2D(L"eagle.bmp");
+	g_eagleTexture = LoadTextureFromRgbBitmapFile("eagle.bmp");
 	return true;
 }
 

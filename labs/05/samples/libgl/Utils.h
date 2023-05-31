@@ -172,4 +172,6 @@ struct QuadFace
 // вычисляем нормаль к треугольнику
 void CalculateTriangleNormal(Vector3d const& a, Vector3d const& b, Vector3d const& c, Vector3d *normal);
 
+GLuint LoadTextureFromRgbBitmapFile(const char fileName[]);
+
 #endif // !defined(AFX_UTILS_H__E853DC92_4248_4C69_A444_CDA5510C9091__INCLUDED_)
