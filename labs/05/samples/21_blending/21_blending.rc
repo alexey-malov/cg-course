@@ -1,0 +1,159 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""resource.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_GL                  ICON    DISCARDABLE     "21_blending.ICO"
+IDI_SMALL               ICON    DISCARDABLE     "SMALL.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Background"
+    BEGIN
+        MENUITEM "White",                       ID_WHITE_BACKGROUND
+        MENUITEM "Black",                       ID_BLACK_BACKGROUND
+    END
+    POPUP "Transparency"
+    BEGIN
+        MENUITEM "Draw only back faces",        ID_TRANSPARENCY_DRAWONLYBACKFACES
+
+        MENUITEM "Draw only front faces",       ID_TRANSPARENCY_DRAWONLYFRONTFACES
+
+        MENUITEM "Draw front and back faces",   ID_TRANSPARENCY_DRAWFRONTANDBACKFACES
+
+    END
+    POPUP "Src blend"
+    BEGIN
+        MENUITEM "GL_ZERO",                     ID_SRCBLEND_GLZERO
+        MENUITEM "GL_ONE",                      ID_SRCBLEND_GLONE
+        MENUITEM "GL_DST_COLOR",                ID_SRCBLEND_GLDSTCOLOR
+        MENUITEM "GL_ONE_MINUS_DST_COLOR",      ID_SRCBLEND_GLONEMINUSDSTCOLOR
+
+        MENUITEM "GL_SRC_ALPHA",                ID_SRCBLEND_GLSRCALPHA
+        MENUITEM "GL_ONE_MINUS_SRC_ALPHA",      ID_SRCBLEND_GLONEMINUSSRCALPHA
+
+        MENUITEM "GL_DST_ALPHA",                ID_SRCBLEND_GLDSTALPHA
+        MENUITEM "GL_ONE_MINUS_DST_ALPHA",      ID_SRCBLEND_GLONEMINUSDSTALPHA
+
+        MENUITEM "GL_SRC_ALPHA_SATURATE",       ID_SRCBLEND_GLSRCALPHASATURATE
+
+    END
+    POPUP "Dst blend"
+    BEGIN
+        MENUITEM "GL_ZERO",                     ID_DSTBLEND_GLZERO
+        MENUITEM "GL_ONE",                      ID_DSTBLEND_GLONE
+        MENUITEM "GL_SRC_COLOR",                ID_DSTBLEND_GLSRCCOLOR
+        MENUITEM "GL_ONE_MINUS_SRC_COLOR",      ID_DSTBLEND_GLONEMINUSSRCCOLOR
+
+        MENUITEM "GL_SRC_ALPHA",                ID_DSTBLEND_GLSRCALPHA
+        MENUITEM "GL_ONE_MINUS_SRC_ALPHA",      ID_DSTBLEND_GLONEMINUSSRCALPHA
+
+        MENUITEM "GL_DST_ALPHA",                ID_DSTBLEND_GLDSTALPHA
+        MENUITEM "GL_ONE_MINUS_DST_ALPHA",      ID_DSTBLEND_GLONEMINUSDSTALPHA
+
+    END
+    POPUP "Animation"
+    BEGIN
+        MENUITEM "On",                          ID_ANIMATION_ON
+        MENUITEM "Off",                         ID_ANIMATION_OFF
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
