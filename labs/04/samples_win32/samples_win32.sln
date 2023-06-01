@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgl", "libgl\libgl.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "13.light_cube", "13.light_cube\13.light_cube.vcxproj", "{EAD2D171-6E71-421C-906B-E9FC8F040CB8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "14.light_sphere", "14.light_sphere\14.light_sphere.vcxproj", "{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{EAD2D171-6E71-421C-906B-E9FC8F040CB8}.Release|x64.Build.0 = Release|x64
 		{EAD2D171-6E71-421C-906B-E9FC8F040CB8}.Release|x86.ActiveCfg = Release|Win32
 		{EAD2D171-6E71-421C-906B-E9FC8F040CB8}.Release|x86.Build.0 = Release|Win32
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Debug|x64.ActiveCfg = Debug|x64
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Debug|x64.Build.0 = Debug|x64
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Debug|x86.ActiveCfg = Debug|Win32
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Debug|x86.Build.0 = Debug|Win32
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Release|x64.ActiveCfg = Release|x64
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Release|x64.Build.0 = Release|x64
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Release|x86.ActiveCfg = Release|Win32
+		{C4F74C67-0CFB-4FBF-8EBE-CFA82E2BAAED}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
