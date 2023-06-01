@@ -62,7 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wcex;
+	WNDCLASSEX wcex{};
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -272,7 +272,7 @@ float angleX = 0;
 float angleY = 0;
 float angleZ = 0;
 
-DWORD lastTick = GetTickCount();
+ULONGLONG lastTick = GetTickCount64();
 
 void RotateCube()
 {
@@ -283,7 +283,7 @@ void RotateCube()
 	glRotatef(angleZ, 0, 0, 1);
 
 	// подсчитываем время, прошедшее с момента последнего нарисованного кадра
-	DWORD currentTick = GetTickCount();
+	ULONGLONG currentTick = GetTickCount64();
 	float time = (currentTick - lastTick) * 0.001f;
 	lastTick = currentTick;
 

@@ -62,7 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wcex;
+	WNDCLASSEX wcex{};
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -176,8 +176,8 @@ void DrawSphere()
 		Color4d color;
 
 		float alpha = 0;
-		float beta = -M_PI / 2 + STEP_BETA;
-		CalculateSpherePointColor(alpha, -M_PI / 2, &color);
+		float beta = (float) -M_PI / 2 + STEP_BETA;
+		CalculateSpherePointColor(alpha, (float) -M_PI / 2, &color);
 		color.SetOpenGLColor();
 		southPole.DeclareOpenGLNormal();
 		southPole.DeclareOpenGLVertex();
@@ -197,8 +197,8 @@ void DrawSphere()
 	}
 	glEnd();
 
-	float beta = -M_PI / 2 + STEP_BETA;
-	float beta1 = -M_PI / 2 + STEP_BETA * 2;
+	float beta = (float) -M_PI / 2 + STEP_BETA;
+	float beta1 = (float) -M_PI / 2 + STEP_BETA * 2;
 	for (int par = 1; par < (SPHERE_PARALLELS - 1); ++par, beta = beta1, beta1 += STEP_BETA)
 	{
 		glBegin(GL_QUAD_STRIP);
@@ -243,7 +243,7 @@ void DrawSphere()
 	glBegin(GL_TRIANGLE_FAN);
 	{
 		Color4d color;
-		CalculateSpherePointColor(0, M_PI / 2, &color);
+		CalculateSpherePointColor(0, (float)M_PI / 2, &color);
 		color.SetOpenGLColor();
 		northPole.DeclareOpenGLNormal();
 		northPole.DeclareOpenGLVertex();
@@ -324,7 +324,7 @@ float angleX = 0;
 float angleY = 0;
 float angleZ = 0;
 
-DWORD lastTick = GetTickCount();
+ULONGLONG lastTick = GetTickCount64();
 
 void RotateSphere()
 {
@@ -335,7 +335,7 @@ void RotateSphere()
 	glRotatef(angleZ, 0, 0, 1);
 
 	// подсчитываем время, прошедшее с момента последнего нарисованного кадра
-	DWORD currentTick = GetTickCount();
+	ULONGLONG currentTick = GetTickCount64();
 	float time = (currentTick - lastTick) * 0.001f;
 	lastTick = currentTick;
 
