@@ -3,7 +3,6 @@
 
 #include "pch.h"
 #include "libgl.h"
-#include "framework.h"
 //////////////////////////////////////////////////////////////////////
 
 static HWND g_hWnd = NULL;
