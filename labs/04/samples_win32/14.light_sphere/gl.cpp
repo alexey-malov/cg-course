@@ -60,7 +60,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wcex{};
+	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -72,7 +72,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_GL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = (LPCWSTR)NULL;
+	wcex.lpszMenuName = (LPCWSTR)IDR_MAIN_MENU;
 	wcex.lpszClassName = WINDOW_CLASS_NAME;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
