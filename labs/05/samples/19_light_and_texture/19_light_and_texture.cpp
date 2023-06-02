@@ -1,16 +1,21 @@
 ﻿// gl.cpp : Defines the entry point for the application.
 //
 
-#include "StdAfx.h"
-#include "Graphics.h"
-#include "Utils.h"
-
 #include "resource.h"
+#include "../libgl/GdiPlusInitializer.h"
+#include "../libgl/TextureLoader.h"
+
+#include "../libgl/Graphics.h"
+#include "../libgl/Utils.h"
+#include "../libgl/stdafx.h"
 
 #define MAX_LOADSTRING 100
-#define M_PI 3.1415927f
+#define M_PI 3.1415927
 
 // Global Variables:
+
+CGdiPlusInitializer gdi;
+CTextureLoader textureLoader;
 HINSTANCE hInst; // current instance
 const TCHAR WINDOW_CLASS_NAME[] = L"gl"; // window class name
 const TCHAR WINDOW_TITLE[] = L"Texture + lighting "; // The title bar text
@@ -62,7 +67,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
-	return msg.wParam;
+	return static_cast<int>(msg.wParam);
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -79,7 +84,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_GL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = L"Menu";
+	wcex.lpszMenuName = (LPCTSTR)IDR_MAIN_MENU;
 	wcex.lpszClassName = WINDOW_CLASS_NAME;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
@@ -551,7 +556,7 @@ bool OnCreate(HWND hWnd)
 	// инициализируем OpenGL
 	if (InitOpenGL(hWnd))
 	{
-		if ((g_earthTexture = LoadTextureFromRgbBitmapFile("earth.bmp")) != 0)
+		if ((g_earthTexture = textureLoader.LoadTexture2D(L"earth.bmp")) != 0)
 		{
 			return true;
 		}
