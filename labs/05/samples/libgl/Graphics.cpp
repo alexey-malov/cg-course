@@ -36,7 +36,7 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 			PFD_GENERIC_ACCELERATED |	// формат пикселей поддерживается драйвером видеокарты - будет работать аппаратное ускорение
 			PFD_DOUBLEBUFFER,			// используется двойная буферизация
 		PFD_TYPE_RGBA,					// BYTE  iPixelType; тип пикселей - RGBA
-		colorBits,						// BYTE  cColorBits; количество бит на пиксель
+		(byte)colorBits,						// BYTE  cColorBits; количество бит на пиксель
 		0,								// BYTE  cRedBits;	пофиг
 		0,								// BYTE  cRedShift;	пофиг
 		0,								// BYTE  cGreenBits;	пофиг
@@ -50,8 +50,8 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 		0,								// BYTE  cAccumGreenBits;	пофиг
 		0,								// BYTE  cAccumBlueBits;	пофиг
 		0,								// BYTE  cAccumAlphaBits;	пофиг
-		depthBits,						// BYTE  cDepthBits;	количество бит в буфере глубины. Обычно 16 или 24
-		stencilBits,					// BYTE  cStencilBits;	количество бит в буфере трафарета. Обычно 0 или 8
+		(byte)depthBits, // BYTE  cDepthBits;	количество бит в буфере глубины. Обычно 16 или 24
+		(byte)stencilBits, // BYTE  cStencilBits;	количество бит в буфере трафарета. Обычно 0 или 8
 		0,								// BYTE  cAuxBuffers; количество дополнительных буферов
 		0,								// BYTE  iLayerType; не используется
 		0,								// BYTE  bReserved; зарезервировано

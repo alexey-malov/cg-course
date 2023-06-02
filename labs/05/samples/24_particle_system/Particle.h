@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Utils.h"
+#include "../libgl/Utils.h"
 
 class Particle  
 {

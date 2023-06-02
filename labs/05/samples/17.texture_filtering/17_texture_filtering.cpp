@@ -1,15 +1,22 @@
 // gl.cpp : Defines the entry point for the application.
 //
 
-#include "stdafx.h"
-#include "Graphics.h"
-#include "Utils.h"
 #include "resource.h"
+
+#include "../libgl/GdiPlusInitializer.h"
+#include "../libgl/TextureLoader.h"
+
+#include "../libgl/Graphics.h"
+#include "../libgl/Utils.h"
+#include "../libgl/stdafx.h"
 
 #define MAX_LOADSTRING 100
 #define M_PI 3.1415927
 
 // Global Variables:
+
+CGdiPlusInitializer gdi;
+CTextureLoader textureLoader;
 HINSTANCE hInst; // current instance
 const TCHAR WINDOW_CLASS_NAME[] = L"gl"; // window class name
 const TCHAR WINDOW_TITLE[] = L"Texture filtering modes"; // The title bar text
@@ -61,7 +68,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
-	return msg.wParam;
+	return static_cast<int>(msg.wParam);
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -78,7 +85,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_GL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = L"Menu";
+	wcex.lpszMenuName = (LPCTSTR)IDR_MAIN_MENU;
 	wcex.lpszClassName = WINDOW_CLASS_NAME;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
@@ -342,15 +349,20 @@ bool LoadSheepTexture()
 
 	glGenTextures(1, &g_sheepTexture);
 	glBindTexture(GL_TEXTURE_2D, g_sheepTexture);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep0.bmp", 0);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep1.bmp", 1);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep2.bmp", 2);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep3.bmp", 3);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep4.bmp", 4);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep5.bmp", 5);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep6.bmp", 6);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep7.bmp", 7);
-	LoadTextureMipLevelFromRgbBitmapFile("sheep8.bmp", 8);
+
+	textureLoader.BuildMipmaps(false);
+	textureLoader.SetMagFilter(g_magFilter);
+	textureLoader.SetMinFilter(g_minFilter);
+	textureLoader.LoadTexture2D(L"sheep0.bmp", 1, 0);
+	textureLoader.LoadTexture2D(L"sheep1.bmp", 1, 1);
+	textureLoader.LoadTexture2D(L"sheep2.bmp", 1, 2);
+	textureLoader.LoadTexture2D(L"sheep3.bmp", 1, 3);
+	textureLoader.LoadTexture2D(L"sheep4.bmp", 1, 4);
+	textureLoader.LoadTexture2D(L"sheep5.bmp", 1, 5);
+	textureLoader.LoadTexture2D(L"sheep6.bmp", 1, 6);
+	textureLoader.LoadTexture2D(L"sheep7.bmp", 1, 7);
+	textureLoader.LoadTexture2D(L"sheep8.bmp", 1, 8);
+
 	return true;
 }
 
