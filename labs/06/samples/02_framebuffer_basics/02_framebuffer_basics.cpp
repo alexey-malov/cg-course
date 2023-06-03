@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "MyApplication.h"
+#include "../libgl/GDIPlusInitializer.h"
 
-CMyApplication app("Blur filter example (click to toggle, press up/down keys to change dispersion)", 800, 600);
+CMyApplication app("FrameBuffer example", 800, 600);
+CGDIPlusInitializer gdiplusInit;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
