@@ -9,6 +9,7 @@
 #include <cassert>
 #include <fstream>
 #include <set>
+#include <algorithm>
 #include <sstream>
 #include <vector>
 #include <algorithm>

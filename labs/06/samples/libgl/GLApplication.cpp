@@ -245,16 +245,11 @@ void CGLApplication::SetTimer(int milliseconds, TimerProc proc, int value)
 	glutTimerFunc(milliseconds, proc, value);
 }
 
-void CGLApplication::MainLoop(void)
+void CGLApplication::MainLoop()
 {
 	// Вызываем обработчик OnInit, который может быть
 	// перегружен в классе-наследнике
 	OnInit();
 	// И переходим в цикл обработки сообщений GLUT
 	glutMainLoop();
-}
-
-// Данный метод может быть перегружен классами-наследниками
-void CGLApplication::OnInit()
-{
 }

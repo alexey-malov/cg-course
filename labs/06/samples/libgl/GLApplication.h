@@ -18,7 +18,8 @@ protected:
 		bool needDepth = true,
 		bool needStencil = false);
 
-	virtual void OnInit();
+	// Данный метод может быть перегружен классами-наследниками
+	virtual void OnInit(){};
 	// Данный метод всегда должен быть перегружен
 	virtual void OnDisplay() = 0;
 

@@ -3,6 +3,9 @@
 class CBaseTexture
 {
 public:
+	CBaseTexture(CBaseTexture const&) = delete;
+	CBaseTexture& operator=(CBaseTexture const&) = delete;
+
 	// Генерируем имя для текстурного объекта
 	void Create()
 	{
@@ -52,10 +55,6 @@ protected:
 
 private:
 	GLuint m_texture;
-
-private:
-	CBaseTexture(CBaseTexture const&);
-	CBaseTexture& operator=(CBaseTexture const&);
 };
 
 template <bool t_managed, class TBase>

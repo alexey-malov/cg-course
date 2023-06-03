@@ -7,6 +7,9 @@ class CProgramInfo
 public:
 	CProgramInfo(GLuint program);
 
+	CProgramInfo(CProgramInfo const&) = delete;
+	CProgramInfo& operator=(CProgramInfo const&) = delete;
+
 	// Определяем по идентификатору типа его строковое представление
 	static std::string TypeToString(GLenum type);
 
@@ -21,10 +24,6 @@ public:
 	void PrintAttributeInfo(GLuint index, std::ostream& stream) const;
 
 	void Print(std::ostream& stream) const;
-
-private:
-	CProgramInfo(CProgramInfo const&);
-	CProgramInfo& operator=(CProgramInfo const&);
 
 	CProgramHandle m_program;
 };

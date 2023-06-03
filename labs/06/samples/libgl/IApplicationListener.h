@@ -21,46 +21,19 @@ public:
 template <class Base>
 class CApplicationListenerImpl : public Base
 {
-	virtual void OnDisplay()
-	{
-	}
+	virtual void OnDisplay() {}
 
-	virtual void OnReshape(int width, int height)
-	{
-		height;
-	}
+	virtual void OnReshape(int width, int height) {}
 
-	virtual void OnKeyboard(unsigned char key, int x, int y)
-	{
-		key;
-		x;
-		y;
-	}
+	virtual void OnKeyboard(unsigned char key, int x, int y) {}
 
-	virtual void OnSpecialKey(int key, int x, int y)
-	{
-		key;
-		x;
-		y;
-	}
+	virtual void OnSpecialKey(int key, int x, int y) {}
 
-	virtual void OnMouse(int button, int state, int x, int y)
-	{
-		button;
-		state;
-		x;
-		y;
-	}
+	virtual void OnMouse(int button, int state, int x, int y) {}
 
-	virtual void OnMotion(int x, int y)
-	{
-		x;
-		y;
-	}
+	virtual void OnMotion(int x, int y) {}
 
-	virtual void OnIdle()
-	{
-	}
+	virtual void OnIdle() {}
 };
 
 typedef CApplicationListenerImpl<IApplicationListener> CApplicationListener;

@@ -28,6 +28,11 @@ protected:
 	}
 
 public:
+	// Делаем недоступными конструктор копирования
+	// и оператор присваивания
+	CShaderBase(CShaderBase const&) = delete;
+	CShaderBase& operator=(CShaderBase const&) = delete;
+
 	// Задаем исходный код шейдера
 	void SetSource(GLsizei count, const GLchar** strings, const GLint* lengths)
 	{
@@ -136,11 +141,6 @@ public:
 	}
 
 private:
-	// Делаем недоступными конструктор копирования
-	// и оператор присваивания
-	CShaderBase(CShaderBase const&);
-	CShaderBase& operator=(CShaderBase const&);
-
 	GLuint m_shader;
 };
 
@@ -226,6 +226,9 @@ protected:
 	}
 
 public:
+	CProgramBase(CProgramBase const&) = delete;
+	CProgramBase& operator=(CProgramBase const&) = delete;
+
 	// Получаем целочисленный идентификатор программного объекта
 	operator GLuint() const
 	{
@@ -442,8 +445,6 @@ public:
 	}
 
 private:
-	CProgramBase(CProgramBase const&);
-	CProgramBase& operator=(CProgramBase const&);
 	GLuint m_program;
 };
 
