@@ -135,8 +135,8 @@ void CalculateSpherePoint(float alpha, float beta, Vector3d* spherePoint)
 
 void CalculateSphereTextureCoordinate(float alpha, float beta, Vector2d* texCoord)
 {
-	texCoord->x = alpha / (2 * M_PI);
-	texCoord->y = beta / (M_PI) + 0.5f; // 0.5f * sinf(beta) + 0.5f;
+	texCoord->x = static_cast<float>(alpha / (2 * M_PI));
+	texCoord->y = static_cast<float>(beta / M_PI + 0.5f);
 }
 
 void DrawSphere()
@@ -161,7 +161,7 @@ void DrawSphere()
 		Vector2d tex;
 
 		float alpha = 0;
-		float beta = -M_PI / 2 + STEP_BETA;
+		float beta = static_cast<float>(-M_PI / 2 + STEP_BETA);
 		southPoleTex.DeclareTextureCoord();
 		southPole.DeclareOpenGLNormal();
 		southPole.DeclareOpenGLVertex();
@@ -181,8 +181,8 @@ void DrawSphere()
 	}
 	glEnd();
 
-	float beta = -M_PI / 2 + STEP_BETA;
-	float beta1 = -M_PI / 2 + STEP_BETA * 2;
+	float beta = static_cast<float>(-M_PI / 2 + STEP_BETA);
+	float beta1 = static_cast<float>(-M_PI / 2 + STEP_BETA * 2);
 	for (int par = 1; par < (SPHERE_PARALLELS - 1); ++par, beta = beta1, beta1 += STEP_BETA)
 	{
 		glBegin(GL_QUAD_STRIP);
