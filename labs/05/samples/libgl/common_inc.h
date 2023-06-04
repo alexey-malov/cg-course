@@ -3,6 +3,8 @@
 // Фикс GDI+ для версий Windows 10 SDK ниже 2104
 #define NOMINMAX
 
+
+
 #include <windows.h>
 #include <assert.h>
 #include <GL/glew.h>

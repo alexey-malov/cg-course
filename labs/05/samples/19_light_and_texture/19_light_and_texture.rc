@@ -1,0 +1,144 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""resource.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_GL                  ICON    DISCARDABLE     "19_light_and_texture.ICO"
+IDI_SMALL               ICON    DISCARDABLE     "SMALL.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Light"
+    BEGIN
+        MENUITEM "Light 0",                     ID_LIGHT0
+        MENUITEM "Light 1",                     ID_LIGHT1
+        MENUITEM "Light 2",                     ID_LIGHT2
+        MENUITEM "Light 3",                     ID_LIGHT3
+    END
+    POPUP "Material"
+    BEGIN
+        MENUITEM "Material 0",                  ID_MATERIAL0
+        MENUITEM "Material 1",                  ID_MATERIAL1
+        MENUITEM "Material 2",                  ID_MATERIAL2
+        MENUITEM "Material 3",                  ID_MATERIAL3
+    END
+    POPUP "Background"
+    BEGIN
+        MENUITEM "White",                       ID_WHITE_BACKGROUND
+        MENUITEM "Black",                       ID_BLACK_BACKGROUND
+    END
+    POPUP "Texture environment mode"
+    BEGIN
+        MENUITEM "No texture",                  ID_NO_TEXTURE
+        MENUITEM SEPARATOR
+        MENUITEM "GL_MODULATE",                 ID_GL_MODULATE
+        MENUITEM "GL_DECAL",                    ID_GL_DECAL
+        MENUITEM "GL_REPLACE",                  ID_GL_REPLACE
+        MENUITEM "GL_ADD",                      ID_GL_ADD
+    END
+    POPUP "Options"
+    BEGIN
+        MENUITEM "Fill mode",                   ID_FILL_MODE
+        MENUITEM "Wireframe mode",              ID_WIREFRAME
+        MENUITEM "Points mode",                 ID_POINTS_MODE
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
