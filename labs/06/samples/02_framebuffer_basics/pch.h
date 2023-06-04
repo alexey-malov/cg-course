@@ -1,6 +1,6 @@
 #pragma once
 
-// Фикс GDI+ для версий Windows 10 SDK ниже 2104
+// Р¤РёРєСЃ GDI+ РґР»СЏ РІРµСЂСЃРёР№ Windows 10 SDK РЅРёР¶Рµ 2104
 #define NOMINMAX
 
 #include <Windows.h>
@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <tchar.h>
 
-// Фикс GDI+ для версий Windows 10 SDK ниже 2104
+// Р¤РёРєСЃ GDI+ РґР»СЏ РІРµСЂСЃРёР№ Windows 10 SDK РЅРёР¶Рµ 2104
 using std::max;
 using std::min;
 
