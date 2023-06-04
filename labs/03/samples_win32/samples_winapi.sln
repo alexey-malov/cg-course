@@ -29,8 +29,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "11.rotation", "11.rotation\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgl", "libgl\libgl.vcxproj", "{4E843E75-EC1E-4423-ABC1-6AC5069704DA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample01_simplest_glut_console_app", "sample01_simplest_glut_console_app\sample01_simplest_glut_console_app.vcxproj", "{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -143,14 +141,6 @@ Global
 		{4E843E75-EC1E-4423-ABC1-6AC5069704DA}.Release|x64.Build.0 = Release|x64
 		{4E843E75-EC1E-4423-ABC1-6AC5069704DA}.Release|x86.ActiveCfg = Release|Win32
 		{4E843E75-EC1E-4423-ABC1-6AC5069704DA}.Release|x86.Build.0 = Release|Win32
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Debug|x64.ActiveCfg = Debug|x64
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Debug|x64.Build.0 = Debug|x64
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Debug|x86.ActiveCfg = Debug|Win32
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Debug|x86.Build.0 = Debug|Win32
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Release|x64.ActiveCfg = Release|x64
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Release|x64.Build.0 = Release|x64
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Release|x86.ActiveCfg = Release|Win32
-		{CD39AFB2-7F5C-4B08-A948-D737FC243DE7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
