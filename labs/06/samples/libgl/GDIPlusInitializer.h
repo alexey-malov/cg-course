@@ -6,8 +6,9 @@ public:
 	CGDIPlusInitializer();
 	~CGDIPlusInitializer();
 
+	CGDIPlusInitializer(CGDIPlusInitializer const&) = delete;
+	CGDIPlusInitializer& operator=(CGDIPlusInitializer const&) = delete;
+
 private:
-	CGDIPlusInitializer(CGDIPlusInitializer const&);
-	CGDIPlusInitializer& operator=(CGDIPlusInitializer const&);
 	ULONG_PTR m_token;
 };

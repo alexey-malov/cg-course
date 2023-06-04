@@ -147,6 +147,7 @@
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GDIPlusInitializer.h" />
     <ClInclude Include="GLApplication.h" />
+    <ClInclude Include="GLEWInitializer.h" />
     <ClInclude Include="IApplication.h" />
     <ClInclude Include="IApplicationListener.h" />
     <ClInclude Include="IEventDispatcher.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="GDIPlusInitializer.cpp" />
     <ClCompile Include="GLApplication.cpp" />
+    <ClCompile Include="GLEWInitializer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

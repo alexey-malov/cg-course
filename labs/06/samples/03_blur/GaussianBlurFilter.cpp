@@ -95,7 +95,7 @@ void CGaussianBlurFilter::ActivateProgram(float sigma) const
 	glUseProgram(m_program);
 	glUniform1i(m_imageLocation, 0);
 	std::vector<float> gauss = CalcGauss(m_filterRadius, sigma);
-	glUniform1fv(m_coefficientsLocation, gauss.size(), &gauss[0]);
+	glUniform1fv(m_coefficientsLocation, static_cast<GLsizei>(gauss.size()), &gauss[0]);
 }
 
 void CGaussianBlurFilter::SetupViewportAndMatrices() const
@@ -135,14 +135,17 @@ void CGaussianBlurFilter::DrawRectangle() const
 {
 	glBegin(GL_QUADS);
 	{
-		glTexCoord2f(0, 1);
-		glVertex2f(0, 0);
-		glTexCoord2f(0, 0);
-		glVertex2f(0, m_height);
-		glTexCoord2f(1, 0);
-		glVertex2f(m_width, m_height);
-		glTexCoord2f(1, 1);
-		glVertex2f(m_width, 0);
+		glTexCoord2i(0, 1);
+		glVertex2i(0, 0);
+
+		glTexCoord2i(0, 0);
+		glVertex2i(0, m_height);
+
+		glTexCoord2i(1, 0);
+		glVertex2i(m_width, m_height);
+
+		glTexCoord2i(1, 1);
+		glVertex2i(m_width, 0);
 	}
 	glEnd();
 }
@@ -269,7 +272,7 @@ std::vector<float> CGaussianBlurFilter::CalcGauss(size_t size, float sigma)
 	std::vector<float> gauss(size);
 
 	// Вычисляем коэффициенты гауссова распределения
-	const float k1 = 1.0f / sqrtf(2 * std::numbers::pi * sigma * sigma);
+	const float k1 = 1.0f / sqrtf(2 * static_cast<float>(std::numbers::pi) * sigma * sigma);
 	const float k2 = 1.0f / (2 * sigma * sigma);
 
 	float sum = 0;

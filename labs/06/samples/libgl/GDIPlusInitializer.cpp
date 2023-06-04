@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GDIPlusInitializer.h"
 
-CGDIPlusInitializer::CGDIPlusInitializer(void)
+CGDIPlusInitializer::CGDIPlusInitializer()
 {
 	Gdiplus::GdiplusStartupInput input;
 	Gdiplus::GdiplusStartupOutput output;
@@ -13,7 +13,7 @@ CGDIPlusInitializer::CGDIPlusInitializer(void)
 	}
 }
 
-CGDIPlusInitializer::~CGDIPlusInitializer(void)
+CGDIPlusInitializer::~CGDIPlusInitializer()
 {
 	Gdiplus::GdiplusShutdown(m_token);
 }

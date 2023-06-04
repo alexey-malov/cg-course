@@ -307,7 +307,7 @@ public:
 		{
 			std::vector<char> buffer(length);
 			GetInfoLog(length, &length, &buffer[0]);
-			std::string log(&buffer[0], length - 1);
+			std::string log(&buffer[0], static_cast<size_t>(length) - 1);
 			return log;
 		}
 		else
