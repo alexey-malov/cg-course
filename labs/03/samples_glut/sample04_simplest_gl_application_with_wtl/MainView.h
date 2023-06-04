@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "glviewimpl.h"
 
 class CMainView : public CGLViewImpl<CMainView>
@@ -15,11 +15,11 @@ public:
 	BEGIN_MSG_MAP(CMainView)
 		MSG_WM_SIZE(OnSize)
 		MSG_WM_TIMER(OnTimer);
-		// вызываем карту сообщений родительского окна
+		// РІС‹Р·С‹РІР°РµРј РєР°СЂС‚Сѓ СЃРѕРѕР±С‰РµРЅРёР№ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР°
 		CHAIN_MSG_MAP(CGLViewImpl<CMainView>) 
 	END_MSG_MAP()
 protected:
-	// Обновляем содержимое буфера кадра
+	// РћР±РЅРѕРІР»СЏРµРј СЃРѕРґРµСЂР¶РёРјРѕРµ Р±СѓС„РµСЂР° РєР°РґСЂР°
 	virtual void DrawScene();
 	virtual void AfterCreate();
 	virtual void BeforeDestroy();

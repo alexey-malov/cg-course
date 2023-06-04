@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "glapplication.h"
 
 class CMyApplication : public CGLApplication
@@ -8,7 +8,7 @@ public:
 	~CMyApplication(void);
 
 protected:
-	// Перегружаем необходимые виртуальные методы родительского класса
+	// РџРµСЂРµРіСЂСѓР¶Р°РµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ РІРёСЂС‚СѓР°Р»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РєР»Р°СЃСЃР°
 	virtual void OnInit();
 	virtual void OnDisplay(void);
 	virtual void OnReshape(int width, int height);

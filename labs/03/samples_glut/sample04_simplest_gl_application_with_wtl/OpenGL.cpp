@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+п»ї#include "StdAfx.h"
 #include "OpenGL.h"
 
 COpenGL::COpenGL(HWND hwnd, bool needDepth, bool needStencil)
@@ -9,21 +9,21 @@ COpenGL::COpenGL(HWND hwnd, bool needDepth, bool needStencil)
 	PIXELFORMATDESCRIPTOR pfd;
 	ZeroMemory(&pfd, sizeof(pfd));
 
-	// Заполняем поля структуры PIXELFORMATDESCRIPTOR,
-	// задающей желаемые параметры буфера кадра OpenGL
-	pfd.nSize = sizeof(pfd);		// инициализируем размер структуры
-	pfd.nVersion = 1;				// Windows поддерживает только версию 1
+	// Р—Р°РїРѕР»РЅСЏРµРј РїРѕР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ PIXELFORMATDESCRIPTOR,
+	// Р·Р°РґР°СЋС‰РµР№ Р¶РµР»Р°РµРјС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ Р±СѓС„РµСЂР° РєР°РґСЂР° OpenGL
+	pfd.nSize = sizeof(pfd);		// РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЂР°Р·РјРµСЂ СЃС‚СЂСѓРєС‚СѓСЂС‹
+	pfd.nVersion = 1;				// Windows РїРѕРґРґРµСЂР¶РёРІР°РµС‚ С‚РѕР»СЊРєРѕ РІРµСЂСЃРёСЋ 1
 	pfd.dwFlags =
-		PFD_SUPPORT_OPENGL |		// буфер поддерживает рисование OpenGL
-		PFD_DRAW_TO_WINDOW |		// буфер поддерживает рисование в окне
-		PFD_DOUBLEBUFFER |			// используется двойная буферизация
-		PFD_GENERIC_ACCELERATED;	// и аппаратное ускорение
-	pfd.iPixelType = PFD_TYPE_RGBA;	// формат пикселей - RGBA
-	pfd.cColorBits = 32;			// 32 бита на хранение цвета
+		PFD_SUPPORT_OPENGL |		// Р±СѓС„РµСЂ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ СЂРёСЃРѕРІР°РЅРёРµ OpenGL
+		PFD_DRAW_TO_WINDOW |		// Р±СѓС„РµСЂ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ СЂРёСЃРѕРІР°РЅРёРµ РІ РѕРєРЅРµ
+		PFD_DOUBLEBUFFER |			// РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґРІРѕР№РЅР°СЏ Р±СѓС„РµСЂРёР·Р°С†РёСЏ
+		PFD_GENERIC_ACCELERATED;	// Рё Р°РїРїР°СЂР°С‚РЅРѕРµ СѓСЃРєРѕСЂРµРЅРёРµ
+	pfd.iPixelType = PFD_TYPE_RGBA;	// С„РѕСЂРјР°С‚ РїРёРєСЃРµР»РµР№ - RGBA
+	pfd.cColorBits = 32;			// 32 Р±РёС‚Р° РЅР° С…СЂР°РЅРµРЅРёРµ С†РІРµС‚Р°
 	pfd.cDepthBits = 
-		needDepth ? 24 : 0;	// если нужно, испольузем 24-битный буфер глубины
+		needDepth ? 24 : 0;	// РµСЃР»Рё РЅСѓР¶РЅРѕ, РёСЃРїРѕР»СЊСѓР·РµРј 24-Р±РёС‚РЅС‹Р№ Р±СѓС„РµСЂ РіР»СѓР±РёРЅС‹
 	pfd.cStencilBits = 
-		needStencil ? 8 : 0;	// если нужно, используем 8-битный буфер трафарета
+		needStencil ? 8 : 0;	// РµСЃР»Рё РЅСѓР¶РЅРѕ, РёСЃРїРѕР»СЊР·СѓРµРј 8-Р±РёС‚РЅС‹Р№ Р±СѓС„РµСЂ С‚СЂР°С„Р°СЂРµС‚Р°
 
 	int pixelFormat = m_dc.ChoosePixelFormat(&pfd);
 
@@ -54,7 +54,7 @@ COpenGL::~COpenGL(void)
 	Destroy();
 }
 
-// Освобождаем контекст устройства и ресурсы, связанные с OpenGL
+// РћСЃРІРѕР±РѕР¶РґР°РµРј РєРѕРЅС‚РµРєСЃС‚ СѓСЃС‚СЂРѕР№СЃС‚РІР° Рё СЂРµСЃСѓСЂСЃС‹, СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ OpenGL
 void COpenGL::Destroy(void)
 {
 	if (m_rc)
@@ -70,7 +70,7 @@ void COpenGL::Destroy(void)
 	}
 }
 
-// Выполняем обмен лицевого и теневого буферов кадра
+// Р’С‹РїРѕР»РЅСЏРµРј РѕР±РјРµРЅ Р»РёС†РµРІРѕРіРѕ Рё С‚РµРЅРµРІРѕРіРѕ Р±СѓС„РµСЂРѕРІ РєР°РґСЂР°
 void COpenGL::SwapBuffers()
 {
 	if (m_dc && m_rc)

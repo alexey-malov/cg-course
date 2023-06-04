@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "OpenGL.h"
 
@@ -8,7 +8,7 @@ class ATL_NO_VTABLE CGLViewImpl : public ATL::CWindowImpl<T, TBase, TWinTraits>
 public:
 	
 	CGLViewImpl(bool needDepth = true, bool needStencil = false)
-		:m_needDepth(needDepth)	// Запоминаем параметры буфера кадра
+		:m_needDepth(needDepth)	// Р—Р°РїРѕРјРёРЅР°РµРј РїР°СЂР°РјРµС‚СЂС‹ Р±СѓС„РµСЂР° РєР°РґСЂР°
 		,m_needStencil(needStencil)
 	{
 
@@ -16,7 +16,7 @@ public:
 
 	DECLARE_WND_CLASS(NULL);
 
-	// Обрабатываем минимум необходимых сообщений
+	// РћР±СЂР°Р±Р°С‚С‹РІР°РµРј РјРёРЅРёРјСѓРј РЅРµРѕР±С…РѕРґРёРјС‹С… СЃРѕРѕР±С‰РµРЅРёР№
 	BEGIN_MSG_MAP(CGLViewImpl)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -24,24 +24,24 @@ public:
 		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 	END_MSG_MAP()
 protected:
-	// Данный метод должен быть перегружен в классах-наследниках
+	// Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ РІ РєР»Р°СЃСЃР°С…-РЅР°СЃР»РµРґРЅРёРєР°С…
 	virtual void DrawScene() = 0;
 
 	virtual void AfterCreate()
 	{
-		// Ничего не делаем - можно перегрузить в классе наследнике
+		// РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј - РјРѕР¶РЅРѕ РїРµСЂРµРіСЂСѓР·РёС‚СЊ РІ РєР»Р°СЃСЃРµ РЅР°СЃР»РµРґРЅРёРєРµ
 	}
 
 	virtual void BeforeDestroy()
 	{
-		// Ничего не делаем - можно перегрузить в классе наследнике
+		// РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј - РјРѕР¶РЅРѕ РїРµСЂРµРіСЂСѓР·РёС‚СЊ РІ РєР»Р°СЃСЃРµ РЅР°СЃР»РµРґРЅРёРєРµ
 	}
 private:
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
 		CPaintDC dc(*this);
 
-		// Если OpenGL был проинициализирован, то вызываем метод рисования сцены
+		// Р•СЃР»Рё OpenGL Р±С‹Р» РїСЂРѕРёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ, С‚Рѕ РІС‹Р·С‹РІР°РµРј РјРµС‚РѕРґ СЂРёСЃРѕРІР°РЅРёСЏ СЃС†РµРЅС‹
 		if (m_pGL.get())
 		{
 			DrawScene();
@@ -52,7 +52,7 @@ private:
 
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
-		// Инициализируем OpenGL
+		// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј OpenGL
 		m_pGL.reset(new COpenGL(*this, m_needDepth, m_needStencil));
 		AfterCreate();
 		return 0;
@@ -61,7 +61,7 @@ private:
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
 		BeforeDestroy();
-		// Деинициализируем OpenGL
+		// Р”РµРёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј OpenGL
 		if (m_pGL.get())
 		{
 			m_pGL.release();
@@ -71,8 +71,8 @@ private:
 
 	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
-		// ничего не делаем, сообщая системе о том, что очистка
-		// клиентской области окна проведена
+		// РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј, СЃРѕРѕР±С‰Р°СЏ СЃРёСЃС‚РµРјРµ Рѕ С‚РѕРј, С‡С‚Рѕ РѕС‡РёСЃС‚РєР°
+		// РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё РѕРєРЅР° РїСЂРѕРІРµРґРµРЅР°
 		return 0;
 	}
 	

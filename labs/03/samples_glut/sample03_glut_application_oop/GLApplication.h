@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <cassert>
 #include <gl/glut.h>
 #include <math.h>
@@ -21,15 +21,15 @@ protected:
 	virtual ~CGLApplication(void);
 
 	virtual void OnInit();
-	// Методы-обработчики событий могут быть перегружены в классе-наследнике
-	virtual void OnDisplay() = 0; // данный метод всегда должен быть перегружен
+	// РњРµС‚РѕРґС‹-РѕР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№ РјРѕРіСѓС‚ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅС‹ РІ РєР»Р°СЃСЃРµ-РЅР°СЃР»РµРґРЅРёРєРµ
+	virtual void OnDisplay() = 0; // РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ РІСЃРµРіРґР° РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ
 	virtual void OnReshape(int width, int height);
 	virtual void OnKeyboard(unsigned char key, int x, int y);
 	virtual void OnMouse(int button, int state, int x, int y);
 	virtual void OnMotion(int x, int y);
 	virtual void OnIdle();
 
-	// Инициирует перерисовку изображения в окне
+	// РРЅРёС†РёРёСЂСѓРµС‚ РїРµСЂРµСЂРёСЃРѕРІРєСѓ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ РѕРєРЅРµ
 	void PostRedisplay();
 
 private:

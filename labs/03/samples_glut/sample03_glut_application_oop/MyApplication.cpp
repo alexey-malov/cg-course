@@ -1,4 +1,4 @@
-#define _USE_MATH_DEFINES
+п»ї#define _USE_MATH_DEFINES
 #include "MyApplication.h"
 
 CMyApplication::CMyApplication(const char* title)
@@ -12,46 +12,46 @@ CMyApplication::~CMyApplication(void)
 
 void CMyApplication::OnInit()
 {
-	// Задаем цвет очистки буфера кадра
+	// Р—Р°РґР°РµРј С†РІРµС‚ РѕС‡РёСЃС‚РєРё Р±СѓС„РµСЂР° РєР°РґСЂР°
 	glClearColor(1, 1, 0, 1);
 }
 
 void CMyApplication::OnDisplay(void)
 {
-	// Очищаем буфер цвета и буфер глубины
+	// РћС‡РёС‰Р°РµРј Р±СѓС„РµСЂ С†РІРµС‚Р° Рё Р±СѓС„РµСЂ РіР»СѓР±РёРЅС‹
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Настраиваем цвет вершин
+	// РќР°СЃС‚СЂР°РёРІР°РµРј С†РІРµС‚ РІРµСЂС€РёРЅ
 	glColor3f(0, 0, 1);
 
-	// Рисуем закрашенный эллипс
+	// Р РёСЃСѓРµРј Р·Р°РєСЂР°С€РµРЅРЅС‹Р№ СЌР»Р»РёРїСЃ
 	FillEllipse(150, 120, 100, 90);
 }
 
 void CMyApplication::OnReshape(int width, int height)
 {
-	// Настраиваем порт просмотра
+	// РќР°СЃС‚СЂР°РёРІР°РµРј РїРѕСЂС‚ РїСЂРѕСЃРјРѕС‚СЂР°
 	glViewport(0, 0, width, height);
 
-	// Делаем текущей матрицу проецирования и настраиваем ее параметры
+	// Р”РµР»Р°РµРј С‚РµРєСѓС‰РµР№ РјР°С‚СЂРёС†Сѓ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ Рё РЅР°СЃС‚СЂР°РёРІР°РµРј РµРµ РїР°СЂР°РјРµС‚СЂС‹
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, -1, 1);
 
-	// Делаем текущей матрицей матрицу моделирования-вида
+	// Р”РµР»Р°РµРј С‚РµРєСѓС‰РµР№ РјР°С‚СЂРёС†РµР№ РјР°С‚СЂРёС†Сѓ РјРѕРґРµР»РёСЂРѕРІР°РЅРёСЏ-РІРёРґР°
 	glMatrixMode(GL_MODELVIEW);
 }
 
-// Рисуем закрашенный эллипс
+// Р РёСЃСѓРµРј Р·Р°РєСЂР°С€РµРЅРЅС‹Р№ СЌР»Р»РёРїСЃ
 void CMyApplication::FillEllipse(float xCenter, float yCenter, float rx, float ry, int points)
 {
 	const float step = float(2 * M_PI / points);
 
-	// Эллипс представлет в виде "веера" из треугольников
+	// Р­Р»Р»РёРїСЃ РїСЂРµРґСЃС‚Р°РІР»РµС‚ РІ РІРёРґРµ "РІРµРµСЂР°" РёР· С‚СЂРµСѓРіРѕР»СЊРЅРёРєРѕРІ
 	glBegin(GL_TRIANGLE_FAN);
-	// Начальная точка веера располагается в центре эллипса
+	// РќР°С‡Р°Р»СЊРЅР°СЏ С‚РѕС‡РєР° РІРµРµСЂР° СЂР°СЃРїРѕР»Р°РіР°РµС‚СЃСЏ РІ С†РµРЅС‚СЂРµ СЌР»Р»РёРїСЃР°
 	glVertex2d(xCenter, yCenter);
-	// Остальные точки - равномерно по его границе
+	// РћСЃС‚Р°Р»СЊРЅС‹Рµ С‚РѕС‡РєРё - СЂР°РІРЅРѕРјРµСЂРЅРѕ РїРѕ РµРіРѕ РіСЂР°РЅРёС†Рµ
 	for (float angle = 0; angle <= 2 * M_PI; angle += step)
 	{
 		float a = (fabsf(angle - (float)(2 * M_PI)) < 1e-5) ? 0 : angle;

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 class CFlower
 {
@@ -8,7 +8,7 @@ public:
 	~CFlower(void);
 	CFlower(CFlower const& f);
 private:
-	// запрещаем присваивание объектов CFlower
+	// Р·Р°РїСЂРµС‰Р°РµРј РїСЂРёСЃРІР°РёРІР°РЅРёРµ РѕР±СЉРµРєС‚РѕРІ CFlower
 	CFlower& operator=(CFlower const&);
 	mutable GLuint m_displayList;
 	float m_minRadius;
