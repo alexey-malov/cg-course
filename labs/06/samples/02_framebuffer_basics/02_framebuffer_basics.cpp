@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "MyApplication.h"
 #include "../libgl/GDIPlusInitializer.h"
+#include "MyApplication.h"
 
 CMyApplication app("FrameBuffer example", 800, 600);
 CGDIPlusInitializer gdiplusInit;
@@ -23,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	catch (std::exception const& e)
 	{
-		std::cout << e.what();
+		std::cout << e.what() << std::endl;
 		return 1;
 	}
 

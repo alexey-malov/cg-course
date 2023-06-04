@@ -1,7 +1,9 @@
 #include "pch.h"
+#include "../libgl/GDIPlusInitializer.h"
 #include "MyApplication.h"
 
 CMyApplication app("Blur filter example (click to toggle, press up/down keys to change dispersion)", 800, 600);
+CGDIPlusInitializer gdiplusInit;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -21,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	catch (std::exception const& e)
 	{
-		std::cout << e.what();
+		std::cout << e.what() << std::endl;
 		return 1;
 	}
 
