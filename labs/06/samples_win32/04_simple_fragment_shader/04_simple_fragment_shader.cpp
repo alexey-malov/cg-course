@@ -11,7 +11,7 @@ void InitApplication()
 {
 	glewInit();
 
-	// check if shaders
+	// check if shaders are supported
 	if (!GLEW_ARB_shader_objects)
 	{
 		throw std::runtime_error("GL_ARB_shader_objects OpenGL extension is not supported.");
