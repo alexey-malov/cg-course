@@ -1,8 +1,9 @@
 // ParticleSystem.cpp: implementation of the ParticleSystem class.
 //
 //////////////////////////////////////////////////////////////////////
+#include "pch.h"
 
-#include "../libgl/StdAfx.h"
+#include "StdAfx.h"
 #include "ParticleSystem.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -39,7 +40,7 @@ void ParticleSystem::Process(float time)
 			InitParticle(index);
 		}
 		particle.GetPosition() += particle.GetSpeed() * time;
-
+		//particle.SetPosition(particle.GetPosition() * time);
 		if (
 			(particle.GetSpeed().y < 0) &&
 			(particle.GetPosition().y < m_particleSize*0.5f)

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
-#include "pch.h"
 
+#include "pch.h"
 #include "stdafx.h"
 #include "Graphics.h"
 
@@ -11,6 +11,31 @@ static HGLRC	g_RC = NULL;	// openGL render context
 static int g_colorBufferBits;	// количество бит цвета на пиксель
 static int g_depthBufferBits;	// количество бит в буффере глубины
 static int g_stencilBufferBits;	// количество бит в буффере трафарета
+
+extern bool multiTextureSupported = false;
+extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB = NULL;
+extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2f = NULL;
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
+
+void InitExtensions()
+{
+	const char *extString = (const char *)glGetString(GL_EXTENSIONS);
+
+	if (strstr(extString, "GL_ARB_multitexture"))
+	{
+		multiTextureSupported = true;
+		glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
+		glMultiTexCoord2f = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2f");
+	}
+
+	if (strstr(extString, "WGL_EXT_swap_control"))
+	{
+		wglSwapIntervalEXT  = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+		wglSwapIntervalEXT(1);
+	}
+
+	
+}
 
 // Инициализация ресурсов, связанных с OpenGL
 bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
@@ -89,6 +114,7 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 		return false;
 	}
 
+	InitExtensions();
 	
 	return true;
 }
