@@ -32,7 +32,7 @@ GLuint CTextureLoader::LoadTexture2D(
 
 	if (bmp.GetLastStatus() != Gdiplus::Ok)
 	{
-		throw std::runtime_error("Error loading texture file " + std::string(fileName.begin(), fileName.end()));
+		throw std::runtime_error("Error loading texture file");
 	}
 
 	// Определяем формат пикселей для использования
