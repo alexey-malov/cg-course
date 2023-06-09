@@ -32,4 +32,4 @@ a) Через встроенный в Visual Studio менеджер пакет�
 ![image](https://github.com/alexey-malov/cg-course/assets/6040682/ac212a00-a621-415c-a80b-1533b38ac9b8)
 
 6) В примере должна быть включена мультипроцессорная компиляция для ускорения сборки:
-![image](https://github.com/nightnoryu/cg-course/assets/40693425/4de41764-11bc-4774-b22a-5a4345f57d27)
+![image](/images/multi-processor_compilation.png)
