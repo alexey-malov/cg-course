@@ -99,6 +99,12 @@
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.fsh "$(OutDir)"
+xcopy /Y *.vsh "$(OutDir)"
+xcopy /Y *.gsh "$(OutDir)"
+xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -115,6 +121,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.fsh "$(OutDir)"
+xcopy /Y *.vsh "$(OutDir)"
+xcopy /Y *.gsh "$(OutDir)"
+xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -135,6 +147,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.fsh "$(OutDir)"
+xcopy /Y *.vsh "$(OutDir)"
+xcopy /Y *.gsh "$(OutDir)"
+xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -154,6 +172,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.fsh "$(OutDir)"
+xcopy /Y *.vsh "$(OutDir)"
+xcopy /Y *.gsh "$(OutDir)"
+xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="06_simple_geometry_shader.cpp" />
