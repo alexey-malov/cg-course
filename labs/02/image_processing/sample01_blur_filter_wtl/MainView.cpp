@@ -1,4 +1,4 @@
-// sample01_blur_filter_wtlView.cpp : implementation of the CMainView class
+п»ї// sample01_blur_filter_wtlView.cpp : implementation of the CMainView class
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +9,6 @@
 #include "BlurFilter.h"
 
 using namespace Gdiplus;
-
 
 CMainView::CMainView()
 {
@@ -37,7 +36,7 @@ LRESULT CMainView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 {
 	CPaintDC dc(m_hWnd);
 
-	// Если исходное и обработанное изображения заданы, то нарисуем их рядом друг с другом
+	// Р•СЃР»Рё РёСЃС…РѕРґРЅРѕРµ Рё РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ Р·Р°РґР°РЅС‹, С‚Рѕ РЅР°СЂРёСЃСѓРµРј РёС… СЂСЏРґРѕРј РґСЂСѓРі СЃ РґСЂСѓРіРѕРј
 	if ((m_pSrcPicture.get() != NULL) && (m_pDstPicture.get() != NULL))
 	{
 		Graphics g(dc);

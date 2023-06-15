@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
-    <ProjectGuid>{F3CF3FAE-8AFE-4C9B-8095-1D1C077FE9F5}</ProjectGuid>
-    <RootNamespace>sample02_blur_filter_wtl_optimized</RootNamespace>
+    <ProjectGuid>{23639512-0151-4FBD-A471-AB747C88AAB4}</ProjectGuid>
+    <RootNamespace>sample01_blur_filter_wtl</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -85,20 +85,19 @@
       <MkTypLibCompatible>false</MkTypLibCompatible>
       <TargetEnvironment>Win32</TargetEnvironment>
       <GenerateStublessProxies>true</GenerateStublessProxies>
-      <TypeLibraryName>$(IntDir)sample02_blur_filter_wtl_optimized.tlb</TypeLibraryName>
+      <TypeLibraryName>$(IntDir)sample01_blur_filter_wtl.tlb</TypeLibraryName>
       <HeaderFileName>sample01_blur_filter_wtl.h</HeaderFileName>
       <DllDataFileName />
-      <InterfaceIdentifierFileName>sample02_blur_filter_wtl_optimized_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>sample02_blur_filter_wtl_optimized_p.c</ProxyFileName>
+      <InterfaceIdentifierFileName>sample01_blur_filter_wtl_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>sample01_blur_filter_wtl_p.c</ProxyFileName>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -113,19 +112,23 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>false</MkTypLibCompatible>
       <GenerateStublessProxies>true</GenerateStublessProxies>
-      <TypeLibraryName>$(IntDir)sample02_blur_filter_wtl_optimized.tlb</TypeLibraryName>
+      <TypeLibraryName>$(IntDir)sample01_blur_filter_wtl.tlb</TypeLibraryName>
       <HeaderFileName>sample01_blur_filter_wtl.h</HeaderFileName>
       <DllDataFileName>
       </DllDataFileName>
-      <InterfaceIdentifierFileName>sample02_blur_filter_wtl_optimized_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>sample02_blur_filter_wtl_optimized_p.c</ProxyFileName>
+      <InterfaceIdentifierFileName>sample01_blur_filter_wtl_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>sample01_blur_filter_wtl_p.c</ProxyFileName>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -133,7 +136,6 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -147,7 +149,11 @@
       <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -155,17 +161,16 @@
       <MkTypLibCompatible>false</MkTypLibCompatible>
       <TargetEnvironment>Win32</TargetEnvironment>
       <GenerateStublessProxies>true</GenerateStublessProxies>
-      <TypeLibraryName>$(IntDir)sample02_blur_filter_wtl_optimized.tlb</TypeLibraryName>
+      <TypeLibraryName>$(IntDir)sample01_blur_filter_wtl.tlb</TypeLibraryName>
       <HeaderFileName>sample01_blur_filter_wtl.h</HeaderFileName>
       <DllDataFileName />
-      <InterfaceIdentifierFileName>sample02_blur_filter_wtl_optimized_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>sample02_blur_filter_wtl_optimized_p.c</ProxyFileName>
+      <InterfaceIdentifierFileName>sample01_blur_filter_wtl_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>sample01_blur_filter_wtl_p.c</ProxyFileName>
     </Midl>
     <ClCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
@@ -179,25 +184,28 @@
       <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>false</MkTypLibCompatible>
       <GenerateStublessProxies>true</GenerateStublessProxies>
-      <TypeLibraryName>$(IntDir)sample02_blur_filter_wtl_optimized.tlb</TypeLibraryName>
+      <TypeLibraryName>$(IntDir)sample01_blur_filter_wtl.tlb</TypeLibraryName>
       <HeaderFileName>sample01_blur_filter_wtl.h</HeaderFileName>
       <DllDataFileName>
       </DllDataFileName>
-      <InterfaceIdentifierFileName>sample02_blur_filter_wtl_optimized_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>sample02_blur_filter_wtl_optimized_p.c</ProxyFileName>
+      <InterfaceIdentifierFileName>sample01_blur_filter_wtl_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>sample01_blur_filter_wtl_p.c</ProxyFileName>
     </Midl>
     <ClCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
@@ -211,7 +219,11 @@
     <Link>
       <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.jpg "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
@@ -237,11 +249,11 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\sample02_blur_filter_wtl_optimized.ico" />
+    <Image Include="res\sample01_blur_filter_wtl.ico" />
     <Image Include="res\toolbar.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="sample02_blur_filter_wtl_optimized.rc" />
+    <ResourceCompile Include="sample01_blur_filter_wtl.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,4 @@
-// sample01_blur_filter_wtl.cpp : main source file for sample01_blur_filter_wtl.exe
+п»ї// sample01_blur_filter_wtl.cpp : main source file for sample01_blur_filter_wtl.exe
 //
 
 #include "stdafx.h"
@@ -42,7 +42,7 @@ public:
 
 		if (Gdiplus::GdiplusStartup(&m_token, &input, &output) != Gdiplus::Ok)
 		{
-			// Не удалось инициализировать GDI+
+			// РќРµ СѓРґР°Р»РѕСЃСЊ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ GDI+
 			throw std::runtime_error("Failed to initialize GDI+");
 		}
 	}

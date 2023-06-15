@@ -1,4 +1,4 @@
-// sample01_blur_filter_wtlView.h : interface of the CMainView class
+п»ї// sample01_blur_filter_wtlView.h : interface of the CMainView class
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,11 +24,11 @@ public:
 
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 private:
-	// Исходное изображение
-	std::auto_ptr<Gdiplus::Bitmap> m_pSrcPicture;
+	// РСЃС…РѕРґРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
+	std::unique_ptr<Gdiplus::Bitmap> m_pSrcPicture;
 
-	// Обработанное изображение
-	std::auto_ptr<Gdiplus::Bitmap> m_pDstPicture;
+	// РћР±СЂР°Р±РѕС‚Р°РЅРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
+	std::unique_ptr<Gdiplus::Bitmap> m_pDstPicture;
 
 	
 
