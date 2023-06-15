@@ -148,7 +148,6 @@
     <ClInclude Include="common_inc.h" />
     <ClInclude Include="GdiPlusInitializer.h" />
     <ClInclude Include="GLApplication.h" />
-    <ClInclude Include="glati.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="linear_algebra.h" />
@@ -164,7 +163,6 @@
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector3.h" />
-    <ClInclude Include="wglati.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />

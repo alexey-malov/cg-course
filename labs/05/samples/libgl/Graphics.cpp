@@ -4,22 +4,19 @@
 #include "stdafx.h"
 #include "Graphics.h"
 
-static HWND		g_hWnd = NULL;
-static HDC		g_DC = NULL;	// window device context
-static HGLRC	g_RC = NULL;	// openGL render context
+static HWND g_hWnd = NULL;
+static HDC g_DC = NULL; // window device context
+static HGLRC g_RC = NULL; // openGL render context
 
-static int g_colorBufferBits;	// количество бит цвета на пиксель
-static int g_depthBufferBits;	// количество бит в буффере глубины
-static int g_stencilBufferBits;	// количество бит в буффере трафарета
+static int g_colorBufferBits; // количество бит цвета на пиксель
+static int g_depthBufferBits; // количество бит в буффере глубины
+static int g_stencilBufferBits; // количество бит в буффере трафарета
 
-extern bool multiTextureSupported = false;
-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB = NULL;
-extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2f = NULL;
-PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
+bool multiTextureSupported = false;
 
 void InitExtensions()
 {
-	const char *extString = (const char *)glGetString(GL_EXTENSIONS);
+	const char* extString = (const char*)glGetString(GL_EXTENSIONS);
 
 	if (strstr(extString, "GL_ARB_multitexture"))
 	{
@@ -30,11 +27,9 @@ void InitExtensions()
 
 	if (strstr(extString, "WGL_EXT_swap_control"))
 	{
-		wglSwapIntervalEXT  = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+		wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
 		wglSwapIntervalEXT(1);
 	}
-
-	
 }
 
 // Инициализация ресурсов, связанных с OpenGL
@@ -53,36 +48,35 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 		return false;
 	}
 
-	PIXELFORMATDESCRIPTOR pfd = 
-	{
-		sizeof(PIXELFORMATDESCRIPTOR),	// WORD  nSize;	размер структуры
-		1,								// WORD  nVersion; версия OpenGL (должна быть равна 1)
-		PFD_SUPPORT_OPENGL |			// флаги: буфер поддерживает рисование OpenGL
-			PFD_GENERIC_ACCELERATED |	// формат пикселей поддерживается драйвером видеокарты - будет работать аппаратное ускорение
-			PFD_DOUBLEBUFFER,			// используется двойная буферизация
-		PFD_TYPE_RGBA,					// BYTE  iPixelType; тип пикселей - RGBA
-		(byte)colorBits,						// BYTE  cColorBits; количество бит на пиксель
-		0,								// BYTE  cRedBits;	пофиг
-		0,								// BYTE  cRedShift;	пофиг
-		0,								// BYTE  cGreenBits;	пофиг
-		0,								// BYTE  cGreenShift;	пофиг
-		0,								// BYTE  cBlueBits;	пофиг
-		0,								// BYTE  cBlueShift;	пофиг
-		0,								// BYTE  cAlphaBits;	пофиг
-		0,								// BYTE  cAlphaShift;	пофиг
-		0,								// BYTE  cAccumBits;	пофиг
-		0,								// BYTE  cAccumRedBits;	пофиг
-		0,								// BYTE  cAccumGreenBits;	пофиг
-		0,								// BYTE  cAccumBlueBits;	пофиг
-		0,								// BYTE  cAccumAlphaBits;	пофиг
+	PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR), // WORD  nSize;	размер структуры
+		1, // WORD  nVersion; версия OpenGL (должна быть равна 1)
+		PFD_SUPPORT_OPENGL | // флаги: буфер поддерживает рисование OpenGL
+			PFD_GENERIC_ACCELERATED | // формат пикселей поддерживается драйвером видеокарты - будет работать аппаратное ускорение
+			PFD_DOUBLEBUFFER, // используется двойная буферизация
+		PFD_TYPE_RGBA, // BYTE  iPixelType; тип пикселей - RGBA
+		(byte)colorBits, // BYTE  cColorBits; количество бит на пиксель
+		0, // BYTE  cRedBits;	пофиг
+		0, // BYTE  cRedShift;	пофиг
+		0, // BYTE  cGreenBits;	пофиг
+		0, // BYTE  cGreenShift;	пофиг
+		0, // BYTE  cBlueBits;	пофиг
+		0, // BYTE  cBlueShift;	пофиг
+		0, // BYTE  cAlphaBits;	пофиг
+		0, // BYTE  cAlphaShift;	пофиг
+		0, // BYTE  cAccumBits;	пофиг
+		0, // BYTE  cAccumRedBits;	пофиг
+		0, // BYTE  cAccumGreenBits;	пофиг
+		0, // BYTE  cAccumBlueBits;	пофиг
+		0, // BYTE  cAccumAlphaBits;	пофиг
 		(byte)depthBits, // BYTE  cDepthBits;	количество бит в буфере глубины. Обычно 16 или 24
 		(byte)stencilBits, // BYTE  cStencilBits;	количество бит в буфере трафарета. Обычно 0 или 8
-		0,								// BYTE  cAuxBuffers; количество дополнительных буферов
-		0,								// BYTE  iLayerType; не используется
-		0,								// BYTE  bReserved; зарезервировано
-		0,								// DWORD dwLayerMask; не используется
-		0,								// DWORD dwVisibleMask; пусть будет 0
-		0,								// DWORD dwDamageMask; не используется более
+		0, // BYTE  cAuxBuffers; количество дополнительных буферов
+		0, // BYTE  iLayerType; не используется
+		0, // BYTE  bReserved; зарезервировано
+		0, // DWORD dwLayerMask; не используется
+		0, // DWORD dwVisibleMask; пусть будет 0
+		0, // DWORD dwDamageMask; не используется более
 	};
 
 	int pixelFormat = ChoosePixelFormat(g_DC, &pfd);
@@ -90,7 +84,7 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 	{
 		return false;
 	}
-	
+
 	if (!SetPixelFormat(g_DC, pixelFormat, &pfd))
 	{
 		return false;
@@ -104,9 +98,9 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 	}
 
 	/*
-		т.к. с данным контекстом устройства могут быть связаны 
-		несколько контекстов рендеринга а работать мы можем в 
-		один момент времени из данного потока выполнения только с одним из них, 
+		т.к. с данным контекстом устройства могут быть связаны
+		несколько контекстов рендеринга а работать мы можем в
+		один момент времени из данного потока выполнения только с одним из них,
 		то делаем этот контекст рендеринга текущим
 	*/
 	if (!wglMakeCurrent(g_DC, g_RC))
@@ -115,7 +109,7 @@ bool InitOpenGL(HWND hWnd, int colorBits, int depthBits, int stencilBits)
 	}
 
 	InitExtensions();
-	
+
 	return true;
 }
 

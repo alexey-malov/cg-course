@@ -69,16 +69,10 @@
     <ClInclude Include="MapTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wglati.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="linear_algebra.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="glati.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

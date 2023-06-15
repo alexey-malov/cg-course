@@ -13,9 +13,8 @@
 //#define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
 // Windows Header Files:
-#include "wglati.h"
-#include "glati.h"
 #include <gl\gl.h>
+#include <gl/wglew.h>
 // #include <gl\glaux.h>
 #include <gl\glu.h>
 #include <windows.h>

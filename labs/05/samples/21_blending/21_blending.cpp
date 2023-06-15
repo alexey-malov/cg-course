@@ -11,7 +11,7 @@
 #include "../libgl/stdafx.h"
 
 #define MAX_LOADSTRING 100
-#define M_PI 3.1415927
+#define M_PI 3.1415927f
 
 // Global Variables:
 
