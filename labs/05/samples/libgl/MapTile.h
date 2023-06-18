@@ -17,6 +17,7 @@
 
 struct MapTile
 {
+	
 	// карта высот
 	GLfloat heightMap[VERTEX_TILE_SIZE * VERTEX_TILE_SIZE];
 

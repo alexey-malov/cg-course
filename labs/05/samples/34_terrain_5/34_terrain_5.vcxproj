@@ -95,6 +95,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glu32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.bmp "$(OutDir)"
+xcopy /Y *.raw "$(OutDir)"
+
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -113,6 +119,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glu32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y *.bmp "$(OutDir)"
+xcopy /Y *.raw "$(OutDir)"
+
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -128,10 +140,10 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y *.jpg "$(OutDir)"
-xcopy /Y *.bmp "$(OutDir)"
-xcopy /Y *.psd "$(OutDir)"
-xcopy /Y *.raw "$(OutDir)"</Command>
+      <Command>xcopy /Y *.bmp "$(OutDir)"
+xcopy /Y *.raw "$(OutDir)"
+
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,10 +164,10 @@ xcopy /Y *.raw "$(OutDir)"</Command>
       <AdditionalDependencies>opengl32.lib;glu32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y *.jpg "$(OutDir)"
-xcopy /Y *.bmp "$(OutDir)"
-xcopy /Y *.psd "$(OutDir)"
-xcopy /Y *.raw "$(OutDir)"</Command>
+      <Command>xcopy /Y *.bmp "$(OutDir)"
+xcopy /Y *.raw "$(OutDir)"
+
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
