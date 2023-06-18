@@ -7,7 +7,7 @@
 #include "../libgl/TextureLoader.h"
 
 #include "../libgl/Graphics.h"
-#include "../libgl/MapTile.h"
+#include "MapTile.h"
 #include "../libgl/StdAfx.h"
 #include "../libgl/Utils.h"
 

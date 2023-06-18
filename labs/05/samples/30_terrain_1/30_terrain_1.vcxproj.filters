@@ -27,6 +27,9 @@
     <ClInclude Include="30_terrain_1.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="MapTile.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="30_terrain_1.cpp">

@@ -9,7 +9,7 @@
 #include "../libgl/stdafx.h"
 #include "../libgl/Camera.h"
 #include "../libgl/Graphics.h"
-#include "../libgl/MapTile.h"
+#include "MapTile.h"
 #include "../libgl/Utils.h"
 
 #define MAX_LOADSTRING 100

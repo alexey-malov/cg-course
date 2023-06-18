@@ -173,6 +173,7 @@ xcopy /Y *.raw "$(OutDir)"
   <ItemGroup>
     <ClInclude Include="33_terrain_4.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="MapTile.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

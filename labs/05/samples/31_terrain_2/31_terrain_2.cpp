@@ -8,7 +8,7 @@
 
 #include "../libgl/StdAfx.h"
 #include "../libgl/Graphics.h"
-#include "../libgl/MapTile.h"
+#include "MapTile.h"
 #include "../libgl/Utils.h"
 
 
