@@ -17,6 +17,15 @@ endif()
 
 add_executable(raytracer
     src/main.cpp
+    src/core/config.hpp
+    src/core/math.hpp
+    src/core/point3_io.hpp
+    src/core/point3.hpp
+    src/core/ray.hpp
+    src/core/ray_io.hpp
+    src/core/vector2.hpp
+    src/core/vector3.hpp
+    src/core/vector3_io.hpp
 )
 
 target_link_libraries(raytracer PRIVATE glm::glm)
