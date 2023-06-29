@@ -10,5 +10,7 @@ int main()
 	core::Vector3f direction;
 	core::Point3f start;
 	core::Ray r{ start, direction };
+	core::RayDifferential rd{start, direction};
+	rd.ScaleDifferentials(3.5f);
 	std::cout << r << std::endl;
 }

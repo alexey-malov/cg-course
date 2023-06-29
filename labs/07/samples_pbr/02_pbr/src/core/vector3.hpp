@@ -17,8 +17,13 @@ using Vec3Impl = glm::vec<3, T>;
 }
 
 template <typename T>
+class Point3;
+
+template <typename T>
 class Vector3
 {
+	using Impl = detail::Vec3Impl<T>;
+
 public:
 	constexpr Vector3() = default;
 	constexpr Vector3(T x, T y, T z) noexcept
@@ -36,10 +41,38 @@ public:
 	constexpr T Y() const noexcept { return m_impl.y; }
 	constexpr T Z() const noexcept { return m_impl.z; }
 
+	constexpr Vector3& operator*=(T s) noexcept
+	{
+		m_impl *= s;
+		return *this;
+	}
+
+	constexpr Vector3& operator-=(const Vector3& rhs)
+	{
+		m_impl -= rhs.m_impl;
+		return *this;
+	}
+
 private:
-	detail::Vec3Impl<T> m_impl{};
+	constexpr Vector3(const Impl& impl)
+		: m_impl{ impl }
+	{
+	}
+
+	Impl m_impl{};
 };
 
+template <typename T>
+Vector3<T> operator*(T s, Vector3<T> vec) noexcept
+{
+	return vec *= s;
+}
+
+template <typename T>
+Vector3<T> operator*(Vector3<T> vec, T scale) noexcept
+{
+	return vec *= scale;
+}
 using Vector3f = Vector3<Float>;
 using Vector3i = Vector3<int>;
 
