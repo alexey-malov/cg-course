@@ -159,16 +159,16 @@ int WINAPI WinMain(
 других) методов существует по нескольку версий:
 
 ```cpp
-Status DrawEllipse(IN const Pen\* pen,
+Status DrawEllipse(IN const Pen* pen,
     IN REAL x,
     IN REAL y,
     IN REAL width,
     IN REAL height);
 
-Status DrawEllipse(IN const Pen\* pen,
+Status DrawEllipse(IN const Pen* pen,
     IN const Rect& rect);
 
-Status DrawEllipse(IN const Pen\* pen,
+Status DrawEllipse(IN const Pen* pen,
     IN INT x,
     IN INT y,
     IN INT width,
@@ -265,7 +265,7 @@ void OnPaint(HWND hwnd)
 создаваться изображение должно между инициализацией и деинициализацией GDI+. В противном случае изображение создано не будет.
 
 ```cpp
-Gdiplus::Image \* g_pImage = NULL;
+Gdiplus::Image * g_pImage = NULL;
 int WINAPI WinMain(
                 HINSTANCE hInstance,
                 HINSTANCE /*hPrevInstance*/,
@@ -335,7 +335,7 @@ void OnPaint(HWND hwnd)
 ```cpp
 #include <memory>    // нужен для подключения умного указателя std::auto_ptr
 …
-Gdiplus::Bitmap \* g_pBitmap = NULL;
+Gdiplus::Bitmap * g_pBitmap = NULL;
 
 int WINAPI WinMain(
                 HINSTANCE hInstance,
@@ -493,7 +493,7 @@ public:
     CApplicationView();
     DECLARE_WND_CLASS(NULL)
 
-    BOOL PreTranslateMessage(MSG\* pMsg);
+    BOOL PreTranslateMessage(MSG* pMsg);
 
     BEGIN_MSG_MAP(CApplicationView)
         MESSAGE_HANDLER(WM_PAINT, OnPaint)
@@ -573,7 +573,7 @@ public:
     CApplicationView ();
     DECLARE_WND_CLASS(NULL)
 
-    BOOL PreTranslateMessage(MSG\* pMsg);
+    BOOL PreTranslateMessage(MSG* pMsg);
 
     BEGIN_MSG_MAP(CApplicationView)
 
@@ -820,8 +820,8 @@ void OnOpenFile(HWND hwnd, UINT codeNotify)
     ofn.lpstrFile = fileName;
     ofn.nMaxFile = MAX_PATH;
     ofn.lpstrFilter =
-        _T("Images (BMP, PNG, JPG, TIFF)\0\*.bmp;\*.png;\*.jpg;\*.tif\0")
-        _T("All files\0\*.\*\0")
+        _T("Images (BMP, PNG, JPG, TIFF)\0*.bmp;*.png;*.jpg;*.tif\0")
+        _T("All files\0*.*\0")
         _T("\0");
 
     if (GetOpenFileName(&ofn))
@@ -877,8 +877,8 @@ void OnPaint(HWND hwnd)
 ```cpp
 void InitFileNameStructure(
     HWND hwndOwner,
-    OPENFILENAME \* pOpenFileName,
-    TCHAR \* pFileName,
+    OPENFILENAME * pOpenFileName,
+    TCHAR * pFileName,
     DWORD maxFileName)
 {
     ZeroMemory(pOpenFileName, sizeof(OPENFILENAME));
@@ -889,8 +889,8 @@ void InitFileNameStructure(
     pOpenFileName->nMaxFile = maxFileName;
     pOpenFileName->lpstrFile = pFileName;
     pOpenFileName->lpstrFilter =
-        _T("Images (BMP, PNG, JPG, TIFF)\0\*.bmp;\*.png;\*.jpg;\*.tif\0")
-        _T("All files\0\*.\*\0")
+        _T("Images (BMP, PNG, JPG, TIFF)\0*.bmp;*.png;*.jpg;*.tif\0")
+        _T("All files\0*.*\0")
         _T("\0");
 }
 
@@ -937,7 +937,7 @@ void OnSaveFile(HWND hwnd, UINT codeNotify)
     
     if (GetSaveFileName(&ofn))
     {
-        SaveBitmap(\*g_pBitmap, fileName, 75);
+        SaveBitmap(*g_pBitmap, fileName, 75);
     }
 }
 ```
@@ -967,8 +967,8 @@ std::wstring WStringToLower(std::wstring const& str)
 
 CLSID GetEncoderCLSID(std::wstring const& fileExtension)
 {
-    // Приводим разрешение к виду "\*.разрешение"
-    std::wstring extensionMask = L"\*." + WStringToLower(fileExtension) + L";";
+    // Приводим разрешение к виду "*.разрешение"
+    std::wstring extensionMask = L"*." + WStringToLower(fileExtension) + L";";
     
     // Запрашиваем у GDI+ количество кодировщиков изображений
     // и размер блока данных для хранения их описания
@@ -980,11 +980,11 @@ CLSID GetEncoderCLSID(std::wstring const& fileExtension)
     std::vector<BYTE> encodersBuffer(encodersSize);
     
     // Запрашиваем у GDI+ информацию обо всех кодировщиков
-    ImageCodecInfo\* pInstalledCodecs =
-        reinterpret_cast<ImageCodecInfo \*>(&encodersBuffer[0]);
+    ImageCodecInfo* pInstalledCodecs =
+        reinterpret_cast<ImageCodecInfo *>(&encodersBuffer[0]);
     GetImageEncoders(numEncoders, encodersSize, pInstalledCodecs);
     
-    ImageCodecInfo \* pMatchedCodec = NULL;
+    ImageCodecInfo * pMatchedCodec = NULL;
     
     // ищем подходящий кодировщик изображений
     for (unsigned i = 0; i < numEncoders; ++i)
@@ -992,7 +992,7 @@ CLSID GetEncoderCLSID(std::wstring const& fileExtension)
         ImageCodecInfo & codec = pInstalledCodecs[i];
         
         // получаем расширения файлов, поддерживаемых данным кодировщиком
-        // в формате: \*.jpg;\*.jpe;\*.jpeg;
+        // в формате: *.jpg;*.jpe;*.jpeg;
         std::wstring extensions = WStringToLower(codec.FilenameExtension) + L";";
         
         // Если в списке расширений содержится маска расширения файла
@@ -1170,7 +1170,7 @@ int MainLoop(HWND hMainWindow)
 LRESULT CMainFrame::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
     // register object for message filtering and idle updates
-    CMessageLoop\* pLoop = _Module.GetMessageLoop();
+    CMessageLoop* pLoop = _Module.GetMessageLoop();
     ATLASSERT(pLoop != NULL);
     pLoop->AddMessageFilter(this);
     pLoop->AddIdleHandler(this);
@@ -1222,7 +1222,7 @@ LRESULT CMainFrame::OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 ```cpp
 LRESULT CMainFrame::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
-    CPaintDC dc(\*this);
+    CPaintDC dc(*this);
     
     RedrawBackBuffer();
     
@@ -1268,7 +1268,7 @@ LRESULT CMainFrame::OnTimer(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOO
 void CMainFrame::Animate(void)
 {
     DWORD currentTick = GetTickCount();
-    float delta = (currentTick - m_lastTick) \* 0.001f;
+    float delta = (currentTick - m_lastTick) * 0.001f;
     m_lastTick = currentTick;
     
     CRect rc;
@@ -1282,7 +1282,7 @@ void CMainFrame::Animate(void)
     
     // рассчитываем движение шара по горизонтали
     m_ballPosition.X =
-        min(w - bw, max(0, m_ballPosition.X + m_ballSpeed.X \* delta));
+        min(w - bw, max(0, m_ballPosition.X + m_ballSpeed.X * delta));
     if (
         ((m_ballSpeed.X >= 0) && (bw + m_ballPosition.X >= w)) ||
         ((m_ballSpeed.X < 0) && (m_ballPosition.X <= 0))
@@ -1293,9 +1293,9 @@ void CMainFrame::Animate(void)
     
     // рассчитываем движение шара по вертикали
     m_ballSpeed.Y =
-        max(-MAX_SPEED, min(MAX_SPEED, m_ballSpeed.Y + ACCELERATION \* delta));
+        max(-MAX_SPEED, min(MAX_SPEED, m_ballSpeed.Y + ACCELERATION * delta));
         
-    m_ballPosition.Y = min(h - bh, m_ballPosition.Y + m_ballSpeed.Y \* delta);
+    m_ballPosition.Y = min(h - bh, m_ballPosition.Y + m_ballSpeed.Y * delta);
     if ((m_ballSpeed.Y > 0) && (m_ballPosition.Y >= h - bh))
     {
         m_ballSpeed.Y = -m_ballSpeed.Y; // отскакиваем от пола
@@ -1331,7 +1331,7 @@ public:
     CMainFrame();
     DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME)
     
-    virtual BOOL PreTranslateMessage(MSG\* pMsg);
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual BOOL OnIdle();
     
     BEGIN_UPDATE_UI_MAP(CMainFrame)

@@ -1,6 +1,7 @@
 # **Оглавление**
 
 [Лабораторная работа №5. Повышение реалистичности изображений](#_toc101941330)
+
 &emsp;[Текстурирование](#_toc101941331)
 
 &emsp;&emsp;[Наложение текстуры на плоские примитивы](#_toc101941332)
@@ -67,7 +68,7 @@ private:
 CMyApplication app("Texture mapping example", 800, 600);
 CGdiplusInitializer gdiplusInitializer;
 
-int _tmain(int /*argc*/, _TCHAR\* /*argv*/[])
+int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
     app.MainLoop();
     return 0;
@@ -200,7 +201,7 @@ GL_BGRA_EXT и GL_BGR_EXT библиотеки OpenGL. Поэтому в пер�
 class CMyApplication : public CGLApplication
 {
 public:
-    CMyApplication(const char \* title, int width, int height);
+    CMyApplication(const char * title, int width, int height);
     ~CMyApplication(void);
 protected:
     virtual void OnInit();
@@ -224,7 +225,7 @@ private:
 функции [glDeleteTextures](http://msdn.microsoft.com/en-us/library/ms537065\(v=VS.85\).aspx).
 
 ```cpp
-CMyApplication::CMyApplication(const char \* title, int width, int height)
+CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_carTexture(0)
 {
@@ -418,7 +419,7 @@ public:
     ~CTextureImpl<t_managed, TBase>()
     {
         bool m = t_managed;
-        if (m && (\*this != 0))
+        if (m && (*this != 0))
         {
             Delete();
         }
@@ -427,7 +428,7 @@ public:
     // Присоединяем текстурный объект к экземпляру класса
     void Attach(GLuint texture)
     {
-        if (t_managed && \*this != 0)
+        if (t_managed && *this != 0)
         {
             Delete();
         }
@@ -453,7 +454,7 @@ public:
         GLsizei width, GLsizei height,
         GLint border,
         GLenum format, GLenum type,
-        const GLvoid \* pixels)
+        const GLvoid * pixels)
     {
         glTexImage2D(GL_TEXTURE_2D, level, internalFormat,
             width, height, border, format, type, pixels);
@@ -478,7 +479,7 @@ public:
         GLsizei width,
         GLint border,
         GLenum format, GLenum type,
-        const GLvoid \* pixels)
+        const GLvoid * pixels)
     {
         glTexImage1D(GL_TEXTURE_1D, level, internalFormat,
             width, border, format, type, pixels);
@@ -751,29 +752,29 @@ void CSphere::DrawSphere()const
     const float stackStep = M_PI / m_stacks;
 
     // шаг по меридианам
-    const float sliceStep = 2 \* M_PI / m_slices;
+    const float sliceStep = 2 * M_PI / m_slices;
 
     // начальный угол по параллелям
     for (unsigned stack = 0; stack < m_stacks; ++stack)
     {
-        float stackAngle = M_PI \* 0.5 - stack \* stackStep;
+        float stackAngle = M_PI * 0.5 - stack * stackStep;
         float nextStackAngle = stackAngle - stackStep;
 
-        const float stackRadius = m_radius \* cosf(stackAngle);
-        const float nextStackRadius = m_radius \* cosf(nextStackAngle);
-        const float z0 = m_radius \* sinf(stackAngle);
-        const float z1 = m_radius \* sinf(nextStackAngle);
+        const float stackRadius = m_radius * cosf(stackAngle);
+        const float nextStackRadius = m_radius * cosf(nextStackAngle);
+        const float z0 = m_radius * sinf(stackAngle);
+        const float z1 = m_radius * sinf(nextStackAngle);
 
         glBegin(GL_TRIANGLE_STRIP);
         // цикл по меридианам
         for (unsigned slice = 0; slice <= m_slices; ++slice)
         {
             // вычисляем угол, текущего меридиана
-            float sliceAngle = (slice != m_slices) ? slice \* sliceStep : 0;
+            float sliceAngle = (slice != m_slices) ? slice * sliceStep : 0;
 
             // Вычисляем координаты на текущей параллели
-            float x0 = stackRadius \* cosf(sliceAngle);
-            float y0 = stackRadius \* sinf(sliceAngle);
+            float x0 = stackRadius * cosf(sliceAngle);
+            float y0 = stackRadius * sinf(sliceAngle);
             // вычисляем и задаем вектор нормали, текстурные координаты
             // и положение вершины в пространстве
             CVector3f normal0(x0, y0, z0);
@@ -782,8 +783,8 @@ void CSphere::DrawSphere()const
             glTexCoord2f(float(slice) / m_slices, float(stack) / m_stacks);
             glVertex3f(x0, y0, z0);
 
-            float x1 = nextStackRadius \* cosf(sliceAngle);
-            float y1 = nextStackRadius \* sinf(sliceAngle);
+            float x1 = nextStackRadius * cosf(sliceAngle);
+            float y1 = nextStackRadius * sinf(sliceAngle);
             CVector3f normal1(x1, y1, z1);
             normal1.Normalize();
             glNormal3fv(normal1);
@@ -878,7 +879,7 @@ CPlanet::CPlanet(std::wstring const& textureName, float radius, float slices, fl
 void CPlanet::Animate(float timeDelta)
 {
     m_rotationAngle =
-        fmodf(m_rotationAngle + m_rotationSpeed \* timeDelta, 360);
+        fmodf(m_rotationAngle + m_rotationSpeed * timeDelta, 360);
 }
 
 void CPlanet::SetInclinationAngle(float inclinationAngle)
@@ -1178,7 +1179,7 @@ void CTexturedCube::Draw(GLfloat size)const
         {0, 3, 2, 1, 0, 1, 0, 0, 1, 0, 1, 1, m_frontTexture}, // грань z<0
         {4, 5, 6, 7, 0, 0, 1, 0, 1, 1, 0, 1, m_backTexture}, // грань z>0
     };
-    static unsigned const faceCount = sizeof(faces) / sizeof(\*faces);
+    static unsigned const faceCount = sizeof(faces) / sizeof(*faces);
 
     for (unsigned faceIndex = 0; faceIndex < faceCount; ++faceIndex)
     {
@@ -1191,22 +1192,22 @@ void CTexturedCube::Draw(GLfloat size)const
         {
             glTexCoord2f(face.tex0s, face.tex0t);
             CVector3f v0(vertices[face.vertex0]);
-            v0 \*= size;
+            v0 *= size;
             glVertex3fv(v0);
 
             glTexCoord2f(face.tex1s, face.tex1t);
             CVector3f v1(vertices[face.vertex1]);
-            v1 \*= size;
+            v1 *= size;
             glVertex3fv(v1);
 
             glTexCoord2f(face.tex2s, face.tex2t);
             CVector3f v2(vertices[face.vertex2]);
-            v2 \*= size;
+            v2 *= size;
             glVertex3fv(v2);
 
             glTexCoord2f(face.tex3s, face.tex3t);
             CVector3f v3(vertices[face.vertex3]);
-            v3 \*= size;
+            v3 *= size;
             glVertex3fv(v3);
         }
         glEnd();
@@ -1429,8 +1430,8 @@ void CRotationController::OnMotion(int x, int y)
 
         // Вычисляем угол поворота вокруг осей Y и X как линейно зависящие
         // от смещения мыши по осям X и Y
-        GLfloat rotateX = GLfloat(dy) \* 180 / m_windowHeight;
-        GLfloat rotateY = GLfloat(dx) \* 180 / m_windowWidth;
+        GLfloat rotateX = GLfloat(dy) * 180 / m_windowHeight;
+        GLfloat rotateY = GLfloat(dx) * 180 / m_windowWidth;
 
         RotateCamera(rotateX, rotateY);
 
@@ -1602,7 +1603,7 @@ GLUT всякий раз, когда приложение находится в 
 void CMyApplication::OnIdle()
 {
     m_animationController.Tick();
-    m_earth.Animate(m_animationController.GetTimeDelta() \* 0.001);
+    m_earth.Animate(m_animationController.GetTimeDelta() * 0.001);
     PostRedisplay();
     Sleep(10);
 }
@@ -1616,7 +1617,7 @@ void CMyApplication::OnIdle()
 class CMyApplication : public CGLApplication
 {
 public:
-    CMyApplication(const char \* title, int width, int height);
+    CMyApplication(const char * title, int width, int height);
     ~CMyApplication(void);
 protected:
     virtual void OnInit();
@@ -1658,7 +1659,7 @@ private:
 В конструкторе класса выполним инициализацию планеты, небесного куба, источника света и других вспомогательных объектов.
 
 ```cpp
-CMyApplication::CMyApplication(const char \* title, int width, int height)
+CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_earth(L"earth.png")
 ,m_rotationController(width, height)
@@ -1798,7 +1799,7 @@ end – глубина, на которой цвет фрагмента полн
 class CMyApplication : public CGLApplication
 {
 public:
-    CMyApplication(const char \* title, int width, int height);
+    CMyApplication(const char * title, int width, int height);
     ~CMyApplication(void);
 protected:
     virtual void OnInit();
@@ -1825,7 +1826,7 @@ private:
 Конструктор и обработчик OnInit() выполняют настройку материалов и источника света
 
 ```cpp
-CMyApplication::CMyApplication(const char \* title, int width, int height)
+CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_light(CVector3f(10, 10, 10))
 ,m_rotationController(width, height)
@@ -2043,7 +2044,7 @@ medved.png (изображение с прозрачными областями)
 class CMyApplication : public CGLApplication
 {
 public:
-    CMyApplication(const char \* title, int width, int height);
+    CMyApplication(const char * title, int width, int height);
     ~CMyApplication(void);
 protected:
     virtual void OnInit();
@@ -2289,7 +2290,7 @@ void CMyApplication::OnDisplay()
 ```cpp
 const float CMyApplication::ROTATION_SPEED = 40;
 
-CMyApplication::CMyApplication(const char \* title, int width, int height)
+CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_rotationAngle(0)
 {
@@ -2300,7 +2301,7 @@ void CMyApplication::OnIdle()
     m_animationController.Tick();
 
     m_rotationAngle +=
-        m_animationController.GetTimeDelta() \* 0.001 \* ROTATION_SPEED;
+        m_animationController.GetTimeDelta() * 0.001 * ROTATION_SPEED;
     m_rotationAngle = fmodf(m_rotationAngle, 360);
 
     Sleep(10);
@@ -2442,7 +2443,7 @@ void CMyApplication::OnIdle()
 
 Разработайте игру Memory Trainer 3D. Суть игры заключается в следующем:
 
-Пользователю показывается игровое поле M \* N табличек (всего табличек четное число), повернутых к нему оборотной стороной (текстура оборотной стороны
+Пользователю показывается игровое поле M * N табличек (всего табличек четное число), повернутых к нему оборотной стороной (текстура оборотной стороны
 одинакова для всех табличек). При щелчке по плитке она плавно переворачивается (вот поэтому-то в названии игры и используется **3D**) лицевой
 стороной, на которой нарисована некоторая картинка. Если до этого была открыта плитка с тем же рисунком, то обе плитки удаляются с поля. В противном
 случае обе плитки плавно поворачиваются обратно рубашкой вверх.

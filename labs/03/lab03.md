@@ -170,7 +170,7 @@ static const int WINDOW_WIDTH = 800;
 static const int WINDOW_HEIGTH = 600;
 const char WINDOW_TITLE[] = "My first OpenGL application";
 const float M_PI = 3.14159265358979323846f;
-int main(int argc, char\* argv[])
+int main(int argc, char* argv[])
 {
     // Инициализируем библиотеку GLUT
     glutInit(&argc, argv);
@@ -254,7 +254,7 @@ OpenGL позволяет рисовать группы различных пр�
 функции [glVertex](http://msdn.microsoft.com/en-us/library/dd374200%28v=VS.85%29.aspx).
 
 Вершины нашей пятиконечной звезды располагаются на окружности в точках, соответствующих углам -90, 54, 198, 342 и 486 (126) градусов – каждая
-последующая вершина сдвинута на 360 \* 2 / 5 = 144 градуса относительно предыдущей. Оформим рисование пятиконечной звезды в виде функции
+последующая вершина сдвинута на 360 * 2 / 5 = 144 градуса относительно предыдущей. Оформим рисование пятиконечной звезды в виде функции
 Draw5PointStar:
 
 ```cpp
@@ -263,7 +263,7 @@ const float M_PI = 3.14159265358979323846f;
 // Рисуем пятиконечную звезду
 void Draw5PointStar(float xCenter, float yCenter, float radius)
 {
-    static const float STEP = M_PI \* 4 / 5;
+    static const float STEP = M_PI * 4 / 5;
 
     // Начинаем новую группу примитивов (замкнутая ломаная линия)
     glBegin(GL_LINE_LOOP);
@@ -273,8 +273,8 @@ void Draw5PointStar(float xCenter, float yCenter, float radius)
     // в точках, с углами: -90, 54, 198, 342, 486 (126) градусов
     for (int i = 0; i < 5; ++i, angle += STEP)
     {
-        float x = xCenter + radius \* cosf(angle);
-        float y = yCenter + radius \* sinf(angle);
+        float x = xCenter + radius * cosf(angle);
+        float y = yCenter + radius * sinf(angle);
         // функция glVertex2f добавляет в текущую группу примитивов
         // точку, лежащую на плоскости z = 0
         // суффикс 2f в названии функции обозначает, что задаются 2 координаты
@@ -735,15 +735,15 @@ const float M_PI = 3.14159265358979323846f;
 void DrawEllipse(
 float xCenter, float yCenter, float rx, float ry, int points = 360)
 {
-    const float step = 2 \* M_PI / points;
+    const float step = 2 * M_PI / points;
 
     // Эллипс представлен в виде замкнутой ломаной линии, соединяющей
-    // points точек на его границе с шагом 2\*PI/points
+    // points точек на его границе с шагом 2*PI/points
     glBegin(GL_LINE_LOOP);
-    for (float angle = 0; angle < 2 \* M_PI; angle += step)
+    for (float angle = 0; angle < 2 * M_PI; angle += step)
     {
-        const float dx = rx \* cosf(angle);
-        const float dy = ry \* sinf(angle);
+        const float dx = rx * cosf(angle);
+        const float dy = ry * sinf(angle);
         glVertex2f(dx + xCenter, dy + yCenter);
     }
     glEnd();
@@ -808,7 +808,7 @@ public:
     void MainLoop(void);
 protected:
     CGLApplication(
-        const char \* title,
+        const char * title,
         int width = 0,
         int height = 0,
         bool needDepth = true,
@@ -829,7 +829,7 @@ protected:
     void PostRedisplay();
 
     // Установка обарботчика таймера
-    typedef void (GLUTCALLBACK \*TimerProc)(int value);
+    typedef void (GLUTCALLBACK *TimerProc)(int value);
     void SetTimer(int milliseconds, TimerProc proc, int value);
 private:
     void InitEventHandlers();
@@ -839,7 +839,7 @@ private:
     static void MouseHandler(int button, int state, int x, int y);
     static void MotionHandler(int x, int y);
     static void IdleHandler();
-    static CGLApplication \* m_pApplication;
+    static CGLApplication * m_pApplication;
 };
 ```
 
@@ -848,9 +848,9 @@ private:
 понадобится обработчикам событий.
 
 ```cpp
-CGLApplication \* CGLApplication::m_pApplication = NULL;
+CGLApplication * CGLApplication::m_pApplication = NULL;
 CGLApplication::CGLApplication(
-    const char \* title,
+    const char * title,
     int width,
     int height,
     bool needDepth,
@@ -868,7 +868,7 @@ CGLApplication::CGLApplication(
     // Инициализируем библиотеку GLUT, подсовывая ей
     // фиктивные параметры командой строки
     int argc = 1;
-    char \*argv[] = {"", };
+    char *argv[] = {"", };
     glutInit(&argc, argv);
 
     // Задаем режим буфера кадра, запрошенный пользователем
@@ -1035,7 +1035,7 @@ class CMyApplication :
     public CGLApplication
 {
 public:
-    CMyApplication(const char \*title);
+    CMyApplication(const char *title);
     ~CMyApplication(void);
 protected:
     // Перегружаем необходимые виртуальные методы родительского класса
@@ -1047,7 +1047,7 @@ public:
         float xCenter, float yCenter, float rx, float ry, int points = 360);
 };
 
-CMyApplication::CMyApplication(const char \*title)
+CMyApplication::CMyApplication(const char *title)
 
 :CGLApplication(title)
 {
@@ -1100,7 +1100,7 @@ void CMyApplication::OnReshape(int width, int height)
 void CMyApplication::FillEllipse(
 float xCenter, float yCenter, float rx, float ry, int points)
 {
-    const float step = 2 \* M_PI / points;
+    const float step = 2 * M_PI / points;
 
     // Эллипс представлет в виде "веера" из треугольников
     glBegin(GL_TRIANGLE_FAN);
@@ -1109,11 +1109,11 @@ float xCenter, float yCenter, float rx, float ry, int points)
     glVertex2d(xCenter, yCenter);
 
     // Остальные точки - равномерно по его границе
-    for (float angle = 0; angle <= 2 \* M_PI; angle += step)
+    for (float angle = 0; angle <= 2 * M_PI; angle += step)
     {
-        float a = (fabsf(angle - 2 \* M_PI) < 1e-5) ? 0 : angle;
-        const float dx = rx \* cosf(a);
-        const float dy = ry \* sinf(a);
+        float a = (fabsf(angle - 2 * M_PI) < 1e-5) ? 0 : angle;
+        const float dx = rx * cosf(a);
+        const float dy = ry * sinf(a);
         glVertex2f(dx + xCenter, dy + yCenter);
     }
     glEnd();
@@ -1127,7 +1127,7 @@ float xCenter, float yCenter, float rx, float ry, int points)
 
 // Создаем экземпляр нашего приложения
 CMyApplication app("test");
-int _tmain(int argc, _TCHAR\* argv[])
+int _tmain(int argc, _TCHAR* argv[])
 {
     // и запускаем его
     app.MainLoop();
@@ -1311,7 +1311,7 @@ private:
     LRESULT OnPaint
         (UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
     {
-        CPaintDC dc(\*this);
+        CPaintDC dc(*this);
 
         // Если OpenGL был проинициализирован, то вызываем метод рисования сцены
         if (m_pGL.get())
@@ -1326,7 +1326,7 @@ private:
         (UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
     {
         // Инициализируем OpenGL
-        m_pGL.reset(new COpenGL(\*this, m_needDepth, m_needStencil));
+        m_pGL.reset(new COpenGL(*this, m_needDepth, m_needStencil));
         AfterCreate();
         return 0;
     }
@@ -1377,7 +1377,7 @@ class CMainView : public CGLViewImpl<CMainView>
 public:
     DECLARE_WND_CLASS(NULL)
 
-    virtual BOOL PreTranslateMessage(MSG\* pMsg);
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
 
     BEGIN_MSG_MAP(CMainView)
         MSG_WM_SIZE(OnSize)
@@ -1493,7 +1493,7 @@ void CFlower::Draw()const
 
             // угловой шаг (для рисования каждого лепестка
             // нам понадобится как минимум 20 вершин)
-            const float step = 2 \* M_PI / (m_petals \* 20);
+            const float step = 2 * M_PI / (m_petals * 20);
 
             glBegin(GL_TRIANGLE_FAN);
 
@@ -1512,21 +1512,21 @@ void CFlower::Draw()const
                     GetGValue(m_petalColor),
                     GetBValue(m_petalColor));
 
-            for (float angle = 0; angle <= 2 \* M_PI + step / 2; angle += step)
+            for (float angle = 0; angle <= 2 * M_PI + step / 2; angle += step)
             {
-                // в дискретном мире компьютеров sin(2 \* PI) может отличаться
-                // от sin(0). Поэтому если angle подошел близко к 2\*PI,
+                // в дискретном мире компьютеров sin(2 * PI) может отличаться
+                // от sin(0). Поэтому если angle подошел близко к 2*PI,
                 // считаем его равным 0
                 // это нужно для того, чтобы начало и конец веера
                 // сошлись в одной точке
-                float a = (fabsf(angle - 2 \* M_PI) < 1e-4) ? 0 : angle;
+                float a = (fabsf(angle - 2 * M_PI) < 1e-4) ? 0 : angle;
 
                 // вычисляем радиус искривленной окружности для данного угла
                 float radius =
-                    0.5f \* (m_maxRadius - m_minRadius) \* cosf(a \* m_petals) +
+                    0.5f * (m_maxRadius - m_minRadius) * cosf(a * m_petals) +
                     m_minRadius;
-                float x = radius \* cosf(a);
-                float y = radius \* sinf(a);
+                float x = radius * cosf(a);
+                float y = radius * sinf(a);
 
                 // создаем новую вершину
                 glVertex2f(x, y);
@@ -1594,7 +1594,7 @@ void CMainView::OnSize(UINT uMsg, CSize /*size*/)
     // соотношению сторон клиентской области окна
     double aspect = (double)width / height;
     double viewHeight = 2;
-    double viewWidth = aspect \* viewHeight;
+    double viewWidth = aspect * viewHeight;
 
     glOrtho(
         -viewWidth / 2, +viewWidth / 2,
@@ -1636,7 +1636,7 @@ void CMainView::DrawScene()
         {0.7f, -0.4f, 0, -42,
             CFlower(0.3f, 0.11f, 9, RGB(223, 0, 64), RGB(112, 220, 173))},
     };
-    static const size_t NUM_FLOWERS = sizeof(flowers) / sizeof(\*flowers);
+    static const size_t NUM_FLOWERS = sizeof(flowers) / sizeof(*flowers);
 ```
 
 Перед рисованием проведем расчет времени, прошедшего с предыдущего кадра, а также очистку буфера кадра и загрузку единичной матрицы в матрицу
@@ -1644,7 +1644,7 @@ void CMainView::DrawScene()
 
 ```cpp
     DWORD currentTick = GetTickCount();
-    float delta = (currentTick - m_lastTick) \* 0.001f;
+    float delta = (currentTick - m_lastTick) * 0.001f;
     m_lastTick = currentTick;
 
     // Очищаем буфер кадра
@@ -1673,7 +1673,7 @@ void CMainView::DrawScene()
 
         // выполняем изменение угла вращения
         flowerInfo.angle =
-            fmodf(flowerInfo.angle + flowerInfo.speed \* delta, 360);
+            fmodf(flowerInfo.angle + flowerInfo.speed * delta, 360);
 
         // сохраняем текущую матрицу трансформации
         glPushMatrix();
