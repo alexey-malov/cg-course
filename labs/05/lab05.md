@@ -1751,7 +1751,7 @@ void CMyApplication::OnKeyboard(unsigned char key, int /*x*/, int /*y*/)
 
 Ну вот, планета готова.
 
-![image](../../images/labs/05/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.009.png) ![image](../../images/labs/05/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.010.png)![image](../../images/labs/05/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.011.png)
+![image](../../images/labs/05/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.009.png) ![image](../../images/labs/05/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.010.png) ![image](../../images/labs/05/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.011.png)
 
 ## <a name="_toc101941334"></a>**Наложение тумана**
 

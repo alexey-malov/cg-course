@@ -2743,7 +2743,7 @@ void CMyApplication::OnDisplay()
 
 После запуска приложения в окне будет выведено анимация круга, трансформирующегося в «цветок».
 
-![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.019.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.020.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.021.png)
+![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.019.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.020.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.021.png)
 
 Благодаря использованию шейдеров мы создали анимацию превращения одной фигуры в другую без использования ресурсов центрального процессора для
 трансформации вершин, что позволило нам разместить данные о вершинах фигуры в вершинном буфере, расположенном в памяти графического ускорителя, тем
@@ -3201,7 +3201,7 @@ PowerPoint 2010, при котором из точки изображения н
 
 На следующей серии рисунков показаны фаза подобной анимации картинки 2 в картинку 1.
 
-![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.042.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.043.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.044.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.045.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.046.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.047.png)![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.048.png)
+![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.042.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.043.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.044.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.045.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.046.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.047.png) ![image](../../images/labs/06/Aspose.Words.4cae386d-1720-4ee9-815e-a876b2c77b02.048.png)
 
 Реализовывать физически точную симуляцию здесь не требуется. Главное, чтобы эффект выглядел правдоподобно.
 
