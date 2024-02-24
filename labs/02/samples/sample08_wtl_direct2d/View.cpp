@@ -47,6 +47,7 @@ void View::OnPaint([[maybe_unused]] WTL::CDCHandle unused)
 {
 	// Помечаем всю область окна как валидную (не нужно вызывать WM_PAINT)
 	ValidateRect(nullptr);
+	++m_frameCount;
 
 	try
 	{
@@ -113,10 +114,9 @@ void View::OnTimer([[maybe_unused]] UINT_PTR nIDEvent)
 		m_world.Update(delta.count(), { 0, 30.0 });
 	}
 
-	++m_frameCount;
 	if (const auto delta = currentTick - m_lastFpsTick; delta > 1s)
 	{
-		m_fps = (m_frameCount) / DoubleSeconds{delta}.count();
+		m_fps = m_frameCount / DoubleSeconds{delta}.count();
 		m_lastFpsTick = currentTick;
 		m_frameCount = 0;
 	}

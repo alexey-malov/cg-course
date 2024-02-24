@@ -38,12 +38,12 @@ private:
 	ATL::CComPtr<IDWriteFactory> m_dwriteFactory;
 	ATL::CComPtr<IWICImagingFactory> m_WICFactory;
 	ATL::CComPtr<IDWriteTextFormat> m_textFormat;
-
+	
 	ATL::CComPtr<ID2D1HwndRenderTarget> m_renderTarget;
 	ATL::CComPtr<ID2D1SolidColorBrush> m_brush;
 	ATL::CComPtr<ID2D1SolidColorBrush> m_textBrush;
 
-	World m_world{ 1000, { .width = 500, .height = 500 }, { 50, 50 } };
+	World m_world{ 1000, { .width = 800, .height = 500 }, { 150, 150 } };
 
 	Clock::time_point m_lastTick = Clock::now();
 	Clock::time_point m_lastFpsTick = m_lastTick;
