@@ -1,0 +1,11 @@
+﻿
+#if !defined(AFX_GL_H__9D9030F8_EE52_470D_9C78_4DDA11A9107B__INCLUDED_)
+#define AFX_GL_H__9D9030F8_EE52_470D_9C78_4DDA11A9107B__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include "resource.h"
+
+#endif // !defined(AFX_GL_H__9D9030F8_EE52_470D_9C78_4DDA11A9107B__INCLUDED_)

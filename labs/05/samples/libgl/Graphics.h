@@ -1,9 +1,11 @@
 //
 //////////////////////////////////////////////////////////////////////
-
+#pragma once
 
 #if !defined(AFX_GRAPHICS_H__4EF982B4_DE4E_4BCF_8CD2_080AA3646DF4__INCLUDED_)
 #define AFX_GRAPHICS_H__4EF982B4_DE4E_4BCF_8CD2_080AA3646DF4__INCLUDED_
+
+//#define DllImport __declspec(dllimport)
 
 #if _MSC_VER > 1000
 #pragma once
@@ -20,5 +22,6 @@ void ClearBuffers(float r, float g, float b, float a);
 
 void EndDrawing();
 
+extern bool multiTextureSupported;
 
 #endif // !defined(AFX_GRAPHICS_H__4EF982B4_DE4E_4BCF_8CD2_080AA3646DF4__INCLUDED_)

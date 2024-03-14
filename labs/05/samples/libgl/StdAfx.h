@@ -3,7 +3,6 @@
 //      are changed infrequently
 //
 
-
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
 
@@ -11,18 +10,21 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
+//#define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
 // Windows Header Files:
-#include <windows.h>
 #include <gl\gl.h>
+#include <gl/wglew.h>
+// #include <gl\glaux.h>
 #include <gl\glu.h>
+#include <windows.h>
 
 // C RunTime Header Files
-#include <stdlib.h>
-#include <stdio.h>
 #include <malloc.h>
 #include <memory.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <tchar.h>
 #include <vector>
 

@@ -148,13 +148,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="common_inc.h" />
     <ClInclude Include="GdiPlusInitializer.h" />
     <ClInclude Include="GLApplication.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="linear_algebra.h" />
+    <ClInclude Include="MapTile.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="OmniLight.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RotationController.h" />
     <ClInclude Include="StdAfx.h" />
@@ -165,12 +170,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GdiPlusInitializer.cpp" />
     <ClCompile Include="GLApplication.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="linear_algebra.cpp" />
+    <ClCompile Include="MapTile.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="OmniLight.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

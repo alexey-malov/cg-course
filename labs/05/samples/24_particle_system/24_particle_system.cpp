@@ -13,7 +13,7 @@
 #include "../libgl/Graphics.h"
 #include "../libgl/Utils.h"
 
-#include "ParticleSystem.h"
+#include "../libgl/ParticleSystem.h"
 
 
 #define MAX_LOADSTRING 100
