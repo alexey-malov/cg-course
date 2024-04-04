@@ -265,9 +265,6 @@ while ((res = GetMessage(&msg, NULL, 0, 0)) != 0)
 
 ![image](images/DesktopProject.png)
 
-В свойствах проекта (вкладка Properties) перейдем в Linker/System  и вкладке SUBSYSTEM выберем Windows (/SUBSYSTEM:WINDOWS).
-![image](images/SUBSYSTEM.png)
-
 #### ***Функция WinMain - точка входа в приложение***
 
 Если точкой входа в консольное приложение на C/C++ является функция **main()**, то для графических приложений Windows такой функцией является
