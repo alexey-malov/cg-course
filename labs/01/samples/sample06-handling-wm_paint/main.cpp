@@ -1,6 +1,7 @@
+#include <stdexcept>
+#include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
-#include <tchar.h>
 
 TCHAR const CLASS_NAME[] = _T("MainWndClass");
 TCHAR const WINDOW_TITLE[] = _T("My first window");
@@ -16,25 +17,25 @@ int WINAPI WinMain(
 	LPSTR /*lpCmdLine*/,
 	int nCmdShow)
 {
-	// Регистрируем класс главного окна
+	// Р РµРіРёСЃС‚СЂРёСЂСѓРµРј РєР»Р°СЃСЃ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР°
 	if (!RegisterWndClass(hInstance))
 	{
 		return 1;
 	}
 
-	// Создаем главное окно приложения
+	// РЎРѕР·РґР°РµРј РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
 	HWND hMainWindow = CreateMainWindow(hInstance);
 	if (hMainWindow == NULL)
 	{
 		return 1;
 	}
-	
-	// Показываем главное окно приложения
+
+	// РџРѕРєР°Р·С‹РІР°РµРј РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
 	ShowWindow(hMainWindow, nCmdShow);
 	UpdateWindow(hMainWindow);
 
-	// Запускаем цикл выборки сообщений, пока не получим 
-	// сигнал о завершении приложения
+	// Р—Р°РїСѓСЃРєР°РµРј С†РёРєР» РІС‹Р±РѕСЂРєРё СЃРѕРѕР±С‰РµРЅРёР№, РїРѕРєР° РЅРµ РїРѕР»СѓС‡РёРј
+	// СЃРёРіРЅР°Р» Рѕ Р·Р°РІРµСЂС€РµРЅРёРё РїСЂРёР»РѕР¶РµРЅРёСЏ
 	return MainLoop();
 }
 
@@ -63,22 +64,22 @@ int MainLoop()
 	{
 		if (res == -1)
 		{
-			// произошла ошибка - нужно обработать ее и, вероятно,
-			// завершить работу приложения
+			// РїСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° - РЅСѓР¶РЅРѕ РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РµРµ Рё, РІРµСЂРѕСЏС‚РЅРѕ,
+			// Р·Р°РІРµСЂС€РёС‚СЊ СЂР°Р±РѕС‚Сѓ РїСЂРёР»РѕР¶РµРЅРёСЏ
 		}
 		else
 		{
-			// Если это сообщение о нажатии виртуальной клавиши,
-			// то добавляем в очередь сообщений сообщения, несущие информацию о
-			// коде вводимого пользователем символа
+			// Р•СЃР»Рё СЌС‚Рѕ СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РЅР°Р¶Р°С‚РёРё РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ РєР»Р°РІРёС€Рё,
+			// С‚Рѕ РґРѕР±Р°РІР»СЏРµРј РІ РѕС‡РµСЂРµРґСЊ СЃРѕРѕР±С‰РµРЅРёР№ СЃРѕРѕР±С‰РµРЅРёСЏ, РЅРµСЃСѓС‰РёРµ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ
+			// РєРѕРґРµ РІРІРѕРґРёРјРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј СЃРёРјРІРѕР»Р°
 			TranslateMessage(&msg);
-			// передаем сообщение в соответствующую оконную процедуру
+			// РїРµСЂРµРґР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰СѓСЋ РѕРєРѕРЅРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ
 			DispatchMessage(&msg);
 		}
 	}
 
-	// сюда мы попадем только в том случае извлечения сообщения WM_QUIT
-	// msg.wParam содержит код возврата, помещенный при помощи функции PostQuitMessage()
+	// СЃСЋРґР° РјС‹ РїРѕРїР°РґРµРј С‚РѕР»СЊРєРѕ РІ С‚РѕРј СЃР»СѓС‡Р°Рµ РёР·РІР»РµС‡РµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёСЏ WM_QUIT
+	// msg.wParam СЃРѕРґРµСЂР¶РёС‚ РєРѕРґ РІРѕР·РІСЂР°С‚Р°, РїРѕРјРµС‰РµРЅРЅС‹Р№ РїСЂРё РїРѕРјРѕС‰Рё С„СѓРЅРєС†РёРё PostQuitMessage()
 	return msg.wParam;
 }
 
@@ -87,40 +88,70 @@ void OnDestroy(HWND /*hWnd*/)
 	PostQuitMessage(0);
 }
 
+// РРЅРєР°РїСЃСѓР»РёСЂСѓРµС‚ РІС‹Р·РѕРІ BeginPaint/EndPaint
+class PaintDC
+{
+public:
+	PaintDC(HWND hWnd)
+		: m_hWnd(m_hWnd)
+		, m_dc(BeginPaint(hWnd, &m_ps))
+	{
+		if (!m_dc)
+		{
+			throw std::runtime_error("BeginPaint failed");
+		}
+	}
+
+	PaintDC(const PaintDC&) = delete;
+	PaintDC& operator=(const PaintDC&) = delete;
+
+	operator HDC() const noexcept
+	{
+		return m_dc;
+	}
+
+	~PaintDC()
+	{
+		EndPaint(m_hWnd, &m_ps);
+	}
+
+private:
+	HWND m_hWnd;
+	PAINTSTRUCT m_ps;
+	HDC m_dc;
+};
+
 void OnPaint(HWND hwnd)
 {
-	PAINTSTRUCT ps;
-	HDC dc = BeginPaint(hwnd, &ps);
+	PaintDC dc(hwnd);
 
-	// создаем красное перо
+	// СЃРѕР·РґР°РµРј РєСЂР°СЃРЅРѕРµ РїРµСЂРѕ
 	HPEN pen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
 
-	// создаем желтую кисть
+	// СЃРѕР·РґР°РµРј Р¶РµР»С‚СѓСЋ РєРёСЃС‚СЊ
 	LOGBRUSH brushInfo;
 	brushInfo.lbStyle = BS_SOLID;
 	brushInfo.lbColor = RGB(255, 255, 0);
 	brushInfo.lbHatch = 0;
 	HBRUSH brush = CreateBrushIndirect(&brushInfo);
 
-	// выбираем перо и кисть в контексте устройства, запоминая ранее выбранные объекты
+	// РІС‹Р±РёСЂР°РµРј РїРµСЂРѕ Рё РєРёСЃС‚СЊ РІ РєРѕРЅС‚РµРєСЃС‚Рµ СѓСЃС‚СЂРѕР№СЃС‚РІР°, Р·Р°РїРѕРјРёРЅР°СЏ СЂР°РЅРµРµ РІС‹Р±СЂР°РЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹
 	HPEN oldPen = SelectPen(dc, pen);
 	HBRUSH oldBrush = SelectBrush(dc, brush);
 
-	Ellipse(dc,		// дескриптор контекста устройства
-		100, 50,	// x и y верхнего левого угла ограничивающего прямоугольника
-		250, 150	// x и y нижнего правого угла ограничивающего прямоугольника
-		);
+	Ellipse(dc, // РґРµСЃРєСЂРёРїС‚РѕСЂ РєРѕРЅС‚РµРєСЃС‚Р° СѓСЃС‚СЂРѕР№СЃС‚РІР°
+		100, 50, // x Рё y РІРµСЂС…РЅРµРіРѕ Р»РµРІРѕРіРѕ СѓРіР»Р° РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РµРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
+		250, 150 // x Рё y РЅРёР¶РЅРµРіРѕ РїСЂР°РІРѕРіРѕ СѓРіР»Р° РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РµРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
+	);
 
-	// выбираем ранее сохраненные объекты GDI в контексте устройства
-	// при этом pen и brush автоматически становятся в нем не выбраны
+	// РІС‹Р±РёСЂР°РµРј СЂР°РЅРµРµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹ GDI РІ РєРѕРЅС‚РµРєСЃС‚Рµ СѓСЃС‚СЂРѕР№СЃС‚РІР°
+	// РїСЂРё СЌС‚РѕРј pen Рё brush Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃС‚Р°РЅРѕРІСЏС‚СЃСЏ РІ РЅРµРј РЅРµ РІС‹Р±СЂР°РЅС‹
 	SelectPen(dc, oldPen);
 	SelectBrush(dc, oldBrush);
 
-	// объекты GDI можно удалять если они не выбраны ни в одном из контекстов
+	// РѕР±СЉРµРєС‚С‹ GDI РјРѕР¶РЅРѕ СѓРґР°Р»СЏС‚СЊ РµСЃР»Рё РѕРЅРё РЅРµ РІС‹Р±СЂР°РЅС‹ РЅРё РІ РѕРґРЅРѕРј РёР· РєРѕРЅС‚РµРєСЃС‚РѕРІ
 	DeletePen(pen);
 	DeleteBrush(brush);
-
-	EndPaint(hwnd, &ps);
 }
 
 LRESULT CALLBACK WindowProc(
@@ -131,30 +162,28 @@ LRESULT CALLBACK WindowProc(
 {
 	switch (uMsg)
 	{
-	HANDLE_MSG(hwnd, WM_DESTROY, OnDestroy);
-	HANDLE_MSG(hwnd, WM_PAINT, OnPaint);
+		HANDLE_MSG(hwnd, WM_DESTROY, OnDestroy);
+		HANDLE_MSG(hwnd, WM_PAINT, OnPaint);
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
 bool RegisterWndClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wndClass =
-	{
-		sizeof(wndClass),	//UINT cbSize;
+	WNDCLASSEX wndClass = {
+		sizeof(wndClass), //UINT cbSize;
 		CS_HREDRAW | CS_VREDRAW, //UINT style;
-		&WindowProc,		//WNDPROC lpfnWndProc;
-		0,					//int cbClsExtra;
-		0,					//int cbWndExtra;
-		hInstance,			//HINSTANCE hInstance;
-		NULL,				//HICON hIcon;
+		&WindowProc, //WNDPROC lpfnWndProc;
+		0, //int cbClsExtra;
+		0, //int cbWndExtra;
+		hInstance, //HINSTANCE hInstance;
+		NULL, //HICON hIcon;
 		LoadCursor(NULL, IDC_ARROW), //HCURSOR hCursor;
 		(HBRUSH)(COLOR_BTNFACE + 1), //HBRUSH hbrBackground;
-		NULL,				//LPCTSTR lpszMenuName;
-		CLASS_NAME,			//LPCTSTR lpszClassName;
-		NULL,				//HICON hIconSm;
+		NULL, //LPCTSTR lpszMenuName;
+		CLASS_NAME, //LPCTSTR lpszClassName;
+		NULL, //HICON hIconSm;
 	};
 
 	return RegisterClassEx(&wndClass) != FALSE;
 }
-
