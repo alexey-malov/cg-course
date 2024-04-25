@@ -11,12 +11,12 @@ public:
 			throw std::runtime_error("Failed to create shader");
 		}
 	}
-	Shader(Shader&& other)
+	Shader(Shader&& other) noexcept
 		: m_shader(other.m_shader)
 	{
 		other.m_shader = 0;
 	}
-	Shader& operator=(Shader&& rhs)
+	Shader& operator=(Shader&& rhs) noexcept
 	{
 		std::swap(m_shader, rhs.m_shader);
 		return *this;
