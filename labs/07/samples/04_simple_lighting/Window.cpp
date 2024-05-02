@@ -124,19 +124,56 @@ void Window::OnRunStart()
 		throw std::runtime_error("Shaders are not supported");
 	}
 
+	InitShaders();
+}
+
+void Window::InitShaders()
+{
 	m_glState.emplace();
 	m_glState->vertexShader.SetSource(R"(
+#version 110
+
+varying vec3 Normal;
+varying vec3 LightDir;
+varying vec4 DiffuseColor;
+
 void main()
 {
 	gl_Position = ftransform();
-	gl_FrontColor = gl_Color;
+
+	vec3 vertexPos = vec3(gl_ModelViewMatrix * gl_Vertex);
+	if (gl_LightSource[0].position.w == 0.0)
+	{
+		LightDir = gl_LightSource[0].position.xyz;
+	}
+	else
+	{
+		LightDir = gl_LightSource[0].position.xyz - vertexPos.xyz;
+	}
+	
+	DiffuseColor = gl_Color;
+	Normal = normalize(gl_NormalMatrix * gl_Normal);
 }
 )");
 	m_glState->vertexShader.Compile();
+
 	m_glState->fragmentShader.SetSource(R"(
+#version 110
+
+varying vec3 Normal;
+varying vec3 LightDir;
+varying vec4 DiffuseColor;
+
 void main()
 {
-	gl_FragColor = gl_Color;
+	vec3 n = normalize(Normal);
+	vec3 l = normalize(LightDir);
+
+	float diffFactor = max(dot(n, l), 0.0);
+	vec3 diffColor = diffFactor * gl_LightSource[0].diffuse.rgb * DiffuseColor.rgb;
+	vec4 diff = vec4(diffColor, gl_LightSource[0].diffuse.a * DiffuseColor.a);
+
+	gl_FragColor = diff;
 }
 )");
 	m_glState->fragmentShader.Compile();
@@ -162,7 +199,13 @@ void Window::Draw(int width, int height)
 	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(glm::vec4{ 0, 0, 0, 1 }));
+
 	SetupCameraMatrix();
+
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, glm::value_ptr(glm::vec4{ 1, 1, 1, 1 }));
 
 	glUseProgram(m_glState->program);
 	m_cube.Draw();

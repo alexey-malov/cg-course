@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgl", "libgl\libgl.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_framebuffer_basics", "02_framebuffer_basics\02_framebuffer_basics.vcxproj", "{A542D70C-8A55-4F77-94F5-B9C33DA00E89}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04_simple_lighting", "04_simple_lighting\04_simple_lighting.vcxproj", "{F50D85AD-3FE1-4298-A6A4-4E144055E81A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{A542D70C-8A55-4F77-94F5-B9C33DA00E89}.Release|x64.Build.0 = Release|x64
 		{A542D70C-8A55-4F77-94F5-B9C33DA00E89}.Release|x86.ActiveCfg = Release|Win32
 		{A542D70C-8A55-4F77-94F5-B9C33DA00E89}.Release|x86.Build.0 = Release|Win32
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Debug|x64.ActiveCfg = Debug|x64
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Debug|x64.Build.0 = Debug|x64
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Debug|x86.ActiveCfg = Debug|Win32
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Debug|x86.Build.0 = Debug|Win32
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Release|x64.ActiveCfg = Release|x64
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Release|x64.Build.0 = Release|x64
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Release|x86.ActiveCfg = Release|Win32
+		{F50D85AD-3FE1-4298-A6A4-4E144055E81A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
