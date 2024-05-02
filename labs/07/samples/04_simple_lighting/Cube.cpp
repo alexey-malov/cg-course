@@ -60,6 +60,8 @@ void Cube::Draw() const
 	};
 	static size_t const faceCount = sizeof(faces) / sizeof(*faces);
 
+	glMaterialf(GL_FRONT, GL_SHININESS, 20.0f);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, glm::value_ptr(glm::vec4{1.0f, 1.0f, 1.0f, 0.0f}));
 	glBegin(GL_QUADS);
 	{
 		for (size_t face = 0; face < faceCount; ++face)

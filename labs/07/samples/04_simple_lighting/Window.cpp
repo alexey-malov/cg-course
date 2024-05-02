@@ -129,69 +129,8 @@ void Window::OnRunStart()
 
 void Window::InitShaders()
 {
-	m_glState.emplace();
-	m_glState->vertexShader.SetSource(R"(
-#version 110
-
-varying vec3 Normal;
-varying vec3 LightDir;
-varying vec4 DiffuseColor;
-
-void main()
-{
-	gl_Position = ftransform();
-
-	vec3 vertexPos = vec3(gl_ModelViewMatrix * gl_Vertex);
-	if (gl_LightSource[0].position.w == 0.0)
-	{
-		LightDir = gl_LightSource[0].position.xyz;
-	}
-	else
-	{
-		LightDir = gl_LightSource[0].position.xyz - vertexPos.xyz;
-	}
-	
-	DiffuseColor = gl_Color;
-	Normal = normalize(gl_NormalMatrix * gl_Normal);
-}
-)");
-	m_glState->vertexShader.Compile();
-
-	m_glState->fragmentShader.SetSource(R"(
-#version 110
-
-varying vec3 Normal;
-varying vec3 LightDir;
-varying vec4 DiffuseColor;
-
-void main()
-{
-	vec3 n = normalize(Normal);
-	vec3 l = normalize(LightDir);
-
-	float diffFactor = max(dot(n, l), 0.0);
-	vec3 diffColor = diffFactor * gl_LightSource[0].diffuse.rgb * DiffuseColor.rgb;
-	vec4 diff = vec4(diffColor, gl_LightSource[0].diffuse.a * DiffuseColor.a);
-
-	gl_FragColor = diff;
-}
-)");
-	m_glState->fragmentShader.Compile();
-	if (!m_glState->vertexShader.IsCompiled())
-	{
-		throw std::runtime_error("Failed to compile vertex shader: " + m_glState->vertexShader.GetInfoLog());
-	}
-	if (!m_glState->fragmentShader.IsCompiled())
-	{
-		throw std::runtime_error("Failed to compile fragment shader: " + m_glState->fragmentShader.GetInfoLog());
-	}
-	m_glState->program.AttachShader(m_glState->vertexShader);
-	m_glState->program.AttachShader(m_glState->fragmentShader);
-	m_glState->program.Link();
-	if (!m_glState->program.IsLinked())
-	{
-		throw std::runtime_error("Failed to link program: " + m_glState->program.GetInfoLog());
-	}
+	m_diffuseLighting.emplace();
+	m_diffuseAndSpecularLighting.emplace();
 }
 
 void Window::Draw(int width, int height)
@@ -201,13 +140,16 @@ void Window::Draw(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(glm::vec4{ 0, 0, 0, 1 }));
+	glLightfv(GL_LIGHT0, GL_POSITION,
+		glm::value_ptr(m_usePointLight ? m_pointLightPos : m_directedLightDirection));
 
 	SetupCameraMatrix();
 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, glm::value_ptr(glm::vec4{ 1, 1, 1, 1 }));
+	glLightfv(GL_LIGHT0, GL_SPECULAR, glm::value_ptr(glm::vec4{1, 1, 1, 1 }));
 
-	glUseProgram(m_glState->program);
+	//glUseProgram(m_diffuseLighting->GetProgramId());
+	glUseProgram(m_useSpecular ? m_diffuseAndSpecularLighting->GetProgramId() : m_diffuseLighting->GetProgramId());
 	m_cube.Draw();
 }
 
@@ -215,4 +157,18 @@ void Window::SetupCameraMatrix()
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(&m_cameraMatrix[0][0]);
+}
+
+void Window::OnKey(int key, int /*scanCode*/, int action, int /*mods*/)
+{
+	if (action == GLFW_PRESS && key == ' ')
+	{
+		m_usePointLight = !m_usePointLight;
+		glfwPostEmptyEvent();
+	}
+	else if (action == GLFW_PRESS && key == 'S')
+	{
+		m_useSpecular = !m_useSpecular;
+		glfwPostEmptyEvent();
+	}
 }

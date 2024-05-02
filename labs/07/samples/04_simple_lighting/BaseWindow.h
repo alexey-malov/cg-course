@@ -29,6 +29,7 @@ private:
 	virtual void Draw(int width, int height) = 0;
 	virtual void OnRunStart() {}
 	virtual void OnRunEnd() {}
+	virtual void OnKey(int /*key*/, int /*scanCode*/, int /*action*/, int /*mods*/){}
 
 	static GLFWwindow* MakeWindow(int w, int h, const char* title);
 

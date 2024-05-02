@@ -1,9 +1,9 @@
 #pragma once
 #include "BaseWindow.h"
 #include "Cube.h"
+#include "DiffuseLighting.h"
 #include "GLEWInitializer.h"
-#include "Shader.h"
-#include "ShaderProgram.h"
+#include "DiffuseAndSpecular.h"
 
 class Window : public BaseWindow
 {
@@ -11,13 +11,6 @@ public:
 	Window(int w, int h, const char* title);
 
 private:
-	struct GLState
-	{
-		Shader vertexShader{GL_VERTEX_SHADER};
-		Shader fragmentShader{GL_FRAGMENT_SHADER};
-		ShaderProgram program;
-	};
-
 	void OnMouseButton(int button, int action, [[maybe_unused]] int mods) override;
 
 	void OnMouseMove(double x, double y) override;
@@ -35,10 +28,13 @@ private:
 
 	void SetupCameraMatrix();
 
+	void OnKey(int /*key*/, int /*scanCode*/, int /*action*/, int /*mods*/) override;
+
 	std::optional<GLEWInitializer> m_glewInitializer;
 
 	Cube m_cube;
-	std::optional<GLState> m_glState;
+	std::optional<DiffuseLighting> m_diffuseLighting;
+	std::optional<DiffuseAndSpecular> m_diffuseAndSpecularLighting;
 	// –ассто€ние от камеры до точки вращени€
 	static constexpr double DISTANCE_TO_ORIGIN = 2;
 
@@ -48,4 +44,9 @@ private:
 		glm::dvec3{ 0.0, 0.0, DISTANCE_TO_ORIGIN },
 		glm::dvec3{ 0.0, 0.0, 0.0 },
 		glm::dvec3{ 0.0, 1.0, 0.0 });
+
+	bool m_useSpecular = false;
+	bool m_usePointLight = true;
+	glm::vec4 m_pointLightPos{ 0, 0, 0, 1.0 };
+	glm::vec4 m_directedLightDirection{ 0, 0, 1.0, 0.0 };
 };

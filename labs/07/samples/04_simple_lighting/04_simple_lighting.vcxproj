@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="DiffuseAndSpecular.cpp" />
     <ClCompile Include="GLFWInitializer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
@@ -197,7 +198,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="DiffuseLighting.cpp" />
+    <ClCompile Include="Program.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +208,12 @@
   <ItemGroup>
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="DiffuseAndSpecular.h" />
     <ClInclude Include="GLEWInitializer.h" />
     <ClInclude Include="GLFWInitializer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="DiffuseLighting.h" />
+    <ClInclude Include="Program.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Window.h" />
