@@ -3,6 +3,7 @@
 #include "Cube.h"
 #include "GLEWInitializer.h"
 #include "Shader.h"
+#include "ShaderProgram.h"
 
 class Window : public BaseWindow
 {
@@ -10,6 +11,13 @@ public:
 	Window(int w, int h, const char* title);
 
 private:
+	struct GLState
+	{
+		Shader vertexShader{GL_VERTEX_SHADER};
+		Shader fragmentShader{GL_FRAGMENT_SHADER};
+		ShaderProgram program;
+	};
+
 	void OnMouseButton(int button, int action, [[maybe_unused]] int mods) override;
 
 	void OnMouseMove(double x, double y) override;
@@ -28,6 +36,7 @@ private:
 	std::optional<GLEWInitializer> m_glewInitializer;
 
 	Cube m_cube;
+	std::optional<GLState> m_glState;
 	// –ассто€ние от камеры до точки вращени€
 	static constexpr double DISTANCE_TO_ORIGIN = 2;
 

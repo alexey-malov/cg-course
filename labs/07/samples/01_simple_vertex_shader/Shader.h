@@ -1,4 +1,8 @@
 #pragma once
+#include <GL/glew.h>
+#include <cassert>
+#include <string>
+#include <utility>
 
 class Shader
 {
@@ -12,9 +16,8 @@ public:
 		}
 	}
 	Shader(Shader&& other) noexcept
-		: m_shader(other.m_shader)
+		: m_shader(std::exchange(other.m_shader, 0))
 	{
-		other.m_shader = 0;
 	}
 	Shader& operator=(Shader&& rhs) noexcept
 	{
@@ -24,6 +27,47 @@ public:
 	~Shader()
 	{
 		glDeleteShader(m_shader);
+	}
+
+	void SetSource(const char* text) noexcept
+	{
+		assert(text);
+		assert(m_shader);
+		glShaderSource(m_shader, 1, &text, nullptr);
+	}
+
+	void Compile() noexcept
+	{
+		assert(m_shader);
+		glCompileShader(m_shader);
+	}
+
+	void GetParameter(GLenum paramName, GLint* p) const noexcept
+	{
+		glGetShaderiv(m_shader, paramName, p);
+	}
+
+	std::string GetInfoLog() const
+	{
+		int infoLogLength = 0;
+		GetParameter(GL_INFO_LOG_LENGTH, &infoLogLength);
+		std::string log(static_cast<size_t>(infoLogLength), ' ');
+		GLsizei actualSize = 0;
+		glGetShaderInfoLog(m_shader, infoLogLength, &actualSize, log.data());
+		log.resize(static_cast<size_t>(actualSize));
+		return log;
+	}
+
+	bool IsCompiled() const noexcept
+	{
+		int compileStatus = GL_FALSE;
+		GetParameter(GL_COMPILE_STATUS, &compileStatus);
+		return compileStatus == GL_TRUE;
+	}
+
+	operator GLuint() const noexcept
+	{
+		return m_shader;
 	}
 
 private:

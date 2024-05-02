@@ -15,3 +15,4 @@
 #include <glm/ext.hpp>
 
 #include <stdexcept>
+#include <optional>
