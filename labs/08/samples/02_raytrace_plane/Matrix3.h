@@ -10,13 +10,13 @@ class CMatrix3
 {
 public:
 	// Конструктор по умолчанию (загрузка единичной матрицы)
-	CMatrix3() throw()
+	CMatrix3() noexcept
 	{
 		LoadIdentity();
 	}
 
 	// Инициализация матрицы значениями из массива столбцов
-	explicit CMatrix3(T const * src) throw()
+	explicit CMatrix3(T const * src) noexcept
 	{
 		memcpy(&mat[0][0], src, sizeof(mat));
 	}
@@ -26,7 +26,7 @@ public:
 		T const& v00, T const& v10, T const& v20,	// Элементы 0 столбца
 		T const& v01, T const& v11, T const& v21,	// Элементы 1 столбца 
 		T const& v02, T const& v12, T const& v22	// Элементы 2 столбца
-		) throw()
+		) noexcept
 	{
 		mat[0][0] = v00;	mat[0][1] = v10;	mat[0][2] = v20;
 		mat[1][0] = v01;	mat[1][1] = v11;	mat[1][2] = v21;
@@ -36,7 +36,7 @@ public:
 	/*
 	Вычисление определителя матрицы
 	*/
-	T GetDeterminant()const throw()
+	T GetDeterminant()const noexcept
 	{
 		return
 			mat[0][0] * (mat[1][1] * mat[2][2] - mat[2][1] * mat[1][2]) - 
@@ -47,7 +47,7 @@ public:
 	/*
 	Загрузка единичной матрицы
 	*/
-	void LoadIdentity() throw()
+	void LoadIdentity() noexcept
 	{
 		mat[0][1] = mat[0][2] = mat[1][0] = mat[1][2] = mat[2][0] = mat[2][1] = 0;
 		mat[0][0] = mat[1][1] = mat[2][2] = 1;
@@ -56,7 +56,7 @@ public:
 	/*
 	Возвращаем вектор-столбец
 	*/
-	CVector3<T> GetRow(unsigned i)const throw()
+	CVector3<T> GetRow(unsigned i)const noexcept
 	{
 		assert(i < 3);
 		return
@@ -70,14 +70,14 @@ public:
 	/*
 	Возвращаем вектор-строку
 	*/
-	CVector3<T> GetColumn(unsigned i)const throw()
+	CVector3<T> GetColumn(unsigned i)const noexcept
 	{
 		assert(i < 3);
 		return CVector3<T>(mat[i]);
 	}
 
 	// Установка значений строки матрицы
-	void SetRow(unsigned i, const CVector3<T>& v) throw()
+	void SetRow(unsigned i, const CVector3<T>& v) noexcept
 	{
 		assert(i < 3);
 		mat[0][i] = v.x;
@@ -86,7 +86,7 @@ public:
 	}
 
 	// Установка значений столбца матрицы
-	void SetColumn(unsigned i, const CVector3<T> & v) throw()
+	void SetColumn(unsigned i, const CVector3<T> & v) noexcept
 	{
 		assert(i < 3);
 		mat[i][0] = v.x;

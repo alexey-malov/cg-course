@@ -14,7 +14,7 @@ public:
 	/*
 	Конструктор по умолчанию
 	*/
-	CVector3(void) throw()
+	CVector3(void) noexcept
 		:x(0), y(0), z(0)
 	{
 	}
@@ -22,7 +22,7 @@ public:
 	/*
 	Инициализация вектора значениями из массива
 	*/
-	explicit CVector3(const T * p) throw()
+	explicit CVector3(const T * p) noexcept
 		:x(p[0]), y(p[1]), z(p[2])
 	{
 	}
@@ -30,7 +30,7 @@ public:
 	/*
 	Непосредственная инициализация элементов вектора
 	*/
-	CVector3(T const& x0, T const& y0, T const& z0) throw()
+	CVector3(T const& x0, T const& y0, T const& z0) noexcept
 		:x(x0), y(y0), z(z0)
 	{
 	}
@@ -38,7 +38,7 @@ public:
 	/*
 	Преобразование 2-х компонентного вектора в 3-х компонентный
 	*/
-	CVector3(CVector2<T> const& v, T const& z0 = 0) throw()
+	CVector3(CVector2<T> const& v, T const& z0 = 0) noexcept
 		:x(v.x), y(v.y), z(z0)
 	{
 	}
@@ -46,7 +46,7 @@ public:
 	/*
 	Получение адреса массива значений компонентов вектора
 	*/
-	operator T const*()const throw()
+	operator T const*()const noexcept
 	{
 		return &x;
 	}
@@ -54,7 +54,7 @@ public:
 	/*
 	Масштабирование вектора
 	*/
-	CVector3 & operator *= (T const& scale) throw()
+	CVector3 & operator *= (T const& scale) noexcept
 	{
 		x *= scale;
 		y *= scale;
@@ -65,7 +65,7 @@ public:
 	/*
 	Деление вектора на скаляр
 	*/
-	CVector3 & operator /= (T const& scalar) throw()
+	CVector3 & operator /= (T const& scalar) noexcept
 	{
 		return *this *= (1 / scalar);
 	}
@@ -73,7 +73,7 @@ public:
 	/*
 	Деление вектора на скаляр
 	*/
-	CVector3 const operator / (T const& scalar)const throw()
+	CVector3 const operator / (T const& scalar)const noexcept
 	{
 		return *this * (1 / scalar);
 	}
@@ -81,7 +81,7 @@ public:
 	/*
 	Разность векторов
 	*/
-	CVector3 const operator-(CVector3 const& v)const throw()
+	CVector3 const operator-(CVector3 const& v)const noexcept
 	{
 		return CVector3(x - v.x, y - v.y, z - v.z);
 	}
@@ -89,7 +89,7 @@ public:
 	/*
 	Унарный минус
 	*/
-	CVector3 const operator-()const throw()
+	CVector3 const operator-()const noexcept
 	{
 		return CVector3(-x, -y, -z);
 	}
@@ -97,7 +97,7 @@ public:
 	/*
 	Унарный плюс
 	*/
-	CVector3 const operator+()const throw()
+	CVector3 const operator+()const noexcept
 	{
 		return *this;
 	}
@@ -105,7 +105,7 @@ public:
 	/*
 	Покомпонентное произведение векторов
 	*/
-	CVector3 const operator*(CVector3 const& v)const throw()
+	CVector3 const operator*(CVector3 const& v)const noexcept
 	{
 		return CVector3(x * v.x, y * v.y, z * v.z);
 	}
@@ -113,7 +113,7 @@ public:
 	/*
 	Покомпонентное деление векторов
 	*/
-	CVector3 const operator/(CVector3 const& v)const throw()
+	CVector3 const operator/(CVector3 const& v)const noexcept
 	{
 		return CVector3(x / v.x, y / v.y, z / v.z);
 	}
@@ -121,7 +121,7 @@ public:
 	/*
 	Сумма векторов
 	*/
-	CVector3 const operator+(CVector3 const& v)const throw()
+	CVector3 const operator+(CVector3 const& v)const noexcept
 	{
 		return CVector3(x + v.x, y + v.y, z + v.z);
 	}
@@ -129,7 +129,7 @@ public:
 	/*
 	Сложение векторов
 	*/
-	CVector3 & operator+=(CVector3 const& v) throw()
+	CVector3 & operator+=(CVector3 const& v) noexcept
 	{
 		x += v.x;
 		y += v.y;
@@ -140,7 +140,7 @@ public:
 	/*
 	Покомпонентное умножение векторов
 	*/
-	CVector3 & operator*=(CVector3 const& v) throw()
+	CVector3 & operator*=(CVector3 const& v) noexcept
 	{
 		x *= v.x;
 		y *= v.y;
@@ -151,7 +151,7 @@ public:
 	/*
 	Покомпонентное деление векторов
 	*/
-	CVector3 & operator/=(CVector3 const& v) throw()
+	CVector3 & operator/=(CVector3 const& v) noexcept
 	{
 		x /= v.x;
 		y /= v.y;
@@ -162,7 +162,7 @@ public:
 	/*
 	Вычитание векторов
 	*/
-	CVector3 & operator-=(CVector3 const& v) throw()
+	CVector3 & operator-=(CVector3 const& v) noexcept
 	{
 		x -= v.x;
 		y -= v.y;
@@ -173,7 +173,7 @@ public:
 	/*
 	Умножение вектора на скаляр
 	*/
-	CVector3 const operator*(T const & scale)const throw()
+	CVector3 const operator*(T const & scale)const noexcept
 	{
 		return CVector3(x * scale, y * scale, z * scale);
 	}
@@ -181,13 +181,13 @@ public:
 	/*
 	Вычисление длины вектора
 	*/
-	T GetLength()const throw()
+	T GetLength()const noexcept
 	{
 		return static_cast<T>(sqrt(x * x + y * y + z * z));
 	}
 
 	// Нормализация вектора
-	void Normalize() throw()
+	void Normalize() noexcept
 	{
 		T invLength = 1 / GetLength();
 		x *= invLength;
@@ -197,7 +197,7 @@ public:
 };
 
 template<class T>
-CVector3<T> const operator*(T const& scalar, CVector3<T> const& v) throw()
+CVector3<T> const operator*(T const& scalar, CVector3<T> const& v) noexcept
 {
 	return v * scalar;
 }

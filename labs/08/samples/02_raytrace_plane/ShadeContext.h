@@ -21,7 +21,7 @@ public:
 		CVector3d const& sufracePointInObjectSpace,
 		CVector3d const& surfaceNormal,	// нормаль в мировой системе координат
 		CVector3d const& rayDirection	// направление трассируемого луча в мировой системе координат
-		) throw()
+		) noexcept
 		:m_sufracePoint(sufracePoint)
 		,m_surfacePointInObjectSpace(sufracePointInObjectSpace)
 		,m_surfaceNormal(surfaceNormal)
@@ -33,7 +33,7 @@ public:
 	/*
 	Возвращает координаты точки в мировой системе координат.
 	*/
-	CVector3d const& GetSurfacePoint()const throw()
+	CVector3d const& GetSurfacePoint()const noexcept
 	{
 		return m_sufracePoint;
 	}
@@ -41,7 +41,7 @@ public:
 	/*
 	Возвращает координаты точки в системе координат объекта
 	*/
-	CVector3d const& GetSurfacePointInObjectSpace()const throw()
+	CVector3d const& GetSurfacePointInObjectSpace()const noexcept
 	{
 		return m_surfacePointInObjectSpace;
 	}
@@ -49,7 +49,7 @@ public:
 	/*
 	Возвращает нормаль к поверхности в мировой системе координат
 	*/
-	CVector3d const& GetSurfaceNormal()const throw()
+	CVector3d const& GetSurfaceNormal()const noexcept
 	{
 		return m_surfaceNormal;
 	}
@@ -57,7 +57,7 @@ public:
 	/*
 	Возвращает направление луча, попавшего в данную точку
 	*/
-	CVector3d const& GetRayDirection()const throw()
+	CVector3d const& GetRayDirection()const noexcept
 	{
 		return m_rayDirection;
 	}
@@ -65,7 +65,7 @@ public:
 	/*
 	Возвращает ссылку на сцену
 	*/
-	CScene const& GetScene()const throw()
+	CScene const& GetScene()const noexcept
 	{
 		return m_scene;
 	}

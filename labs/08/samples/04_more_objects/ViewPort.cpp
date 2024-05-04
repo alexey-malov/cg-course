@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "ViewPort.h"
 
-CViewPort::CViewPort(unsigned left, unsigned top, unsigned width, unsigned height) throw()
+CViewPort::CViewPort(unsigned left, unsigned top, unsigned width, unsigned height) noexcept
 :m_left(left)
 ,m_top(top)
 ,m_width(width)
@@ -9,7 +9,7 @@ CViewPort::CViewPort(unsigned left, unsigned top, unsigned width, unsigned heigh
 {
 }
 
-CViewPort::CViewPort() throw()
+CViewPort::CViewPort() noexcept
 :m_left(0)
 ,m_top(0)
 ,m_width(0)

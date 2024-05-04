@@ -23,19 +23,19 @@ public:
 	/*
 	Возвращает ссылку на геометрический объект
 	*/
-	IGeometryObject const& GetGeometryObject()const throw()
+	IGeometryObject const& GetGeometryObject()const noexcept
 	{
 		return m_object;
 	}
 
 	// Есть ли шейдер у объекта сцены?
-	bool HasShader()const throw()
+	bool HasShader()const noexcept
 	{
 		return m_pShader != NULL;
 	}
 
 	// Возвращает связанный шейдер
-	IShader const& GetShader()const throw()
+	IShader const& GetShader()const noexcept
 	{
 		assert(HasShader());
 		return *m_pShader;

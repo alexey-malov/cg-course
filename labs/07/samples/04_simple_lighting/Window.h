@@ -47,6 +47,6 @@ private:
 
 	bool m_useSpecular = false;
 	bool m_usePointLight = true;
-	glm::vec4 m_pointLightPos{ 0, 0, 0, 1.0 };
+	glm::vec4 m_pointLightPos{ 0, 0, -8, 1.0 };
 	glm::vec4 m_directedLightDirection{ 0, 0, 1.0, 0.0 };
 };
