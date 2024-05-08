@@ -927,14 +927,13 @@ $$
 x^2+y^2-z=0
 $$
 
-![image](images/paraboloid1.png)
+<img src="images/paraboloid1.png" width="300" height="300">
 
-![image](images/paraboloid2.png)
+<img src="images/paraboloid2.png" width="300" height="300">
 
 Создать с использованием данного геометрического объекта композицию наподобие:
 
-![image](images/composition.png)
-<img src="images/composition.png" width="200" height="200">
+<img src="images/composition.png" width="300" height="300">
 
 **Указание:** для нахождения точки пересечения луча с объектом найдите аналитическим способом точки пересечения луча с эллиптическим параболоидом, а
 также с крышкой, отбрасывая решения, не удовлетворяющие ограничениям[^14].
