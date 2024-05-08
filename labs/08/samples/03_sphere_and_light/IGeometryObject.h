@@ -16,11 +16,11 @@ public:
 	/*
 	Получение и установка матрицы преобразования объекта
 	*/
-	virtual CMatrix4d const& GetTransform()const = 0;
+	virtual CMatrix4d const& GetTransform() const = 0;
 	virtual void SetTransform(CMatrix4d const& transform) = 0;
 
 	// Нахождение точек столкновения луча с объектом
-	virtual bool Hit(CRay const& ray, CIntersection & intersection)const = 0;
+	virtual bool Hit(CRay const& ray, CIntersection& intersection) const = 0;
 
-	virtual ~IGeometryObject(void){}
+	virtual ~IGeometryObject(void) = default;
 };

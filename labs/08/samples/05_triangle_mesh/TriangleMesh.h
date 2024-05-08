@@ -7,16 +7,17 @@
 struct Vertex
 {
 	// Конструктор по умолчанию
-	Vertex(){}
+	Vertex() {}
 
 	// Конструктор с заданными параметрами
 	Vertex(CVector3d const& p, CVector3d const& n = CVector3d())
-		:position(p)
-		,normal(n)
-	{}
+		: position(p)
+		, normal(n)
+	{
+	}
 
-	CVector3d position;	// Координаты вершины в пространстве
-	CVector3d normal;	// Координаты вектора нормали
+	CVector3d position; // Координаты вершины в пространстве
+	CVector3d normal; // Координаты вектора нормали
 };
 
 /*
@@ -26,11 +27,12 @@ struct Face
 {
 	// Конструктор
 	Face(unsigned i0, unsigned i1, unsigned i2, bool flat = true)
-		:vertex0(i0)
-		,vertex1(i1)
-		,vertex2(i2)
-		,isFlat(flat)
-	{}
+		: vertex0(i0)
+		, vertex1(i1)
+		, vertex2(i2)
+		, isFlat(flat)
+	{
+	}
 
 	// Индексы вершин грани
 	unsigned vertex0, vertex1, vertex2;
@@ -51,33 +53,34 @@ public:
 	CTriangle(Vertex const& vertex0, Vertex const& vertex1, Vertex const& vertex2, bool flatShaded = true);
 
 	// Ссылки на вершины треугольника
-	Vertex const& GetVertex0()const {return *m_pVertex0;}
-	Vertex const& GetVertex1()const {return *m_pVertex1;}
-	Vertex const& GetVertex2()const {return* m_pVertex2;}
+	Vertex const& GetVertex0() const { return *m_pVertex0; }
+	Vertex const& GetVertex1() const { return *m_pVertex1; }
+	Vertex const& GetVertex2() const { return *m_pVertex2; }
 
 	// Возвращает коэффициенты уравнения плоскости треугольника
-	CVector4d const& GetPlaneEquation()const
+	CVector4d const& GetPlaneEquation() const
 	{
 		return m_planeEquation;
 	}
 
 	// Использует ли треугольник "плоское" освещение или же для
 	// вычисления нормали используется интерполяция нормалей его вершин
-	bool IsFlatShaded()const {return m_flatShaded;}
+	bool IsFlatShaded() const { return m_flatShaded; }
 
 	// Проверка на столкновение луча с треугольником
 	bool HitTest(
-		CVector3d const& rayStart,		// Точка испускания луча
-		CVector3d const& rayDirection,	// Направление луча
-		double & hitTime,				// Время столкновения луча с треугольником
-		CVector3d & hitPoint,			// Точка столкновения
-		double & vertex0Weight,			// Весовой коэффициент 0 вершины в точке столкновения
-		double & vertex1Weight,			// Весовой коэффициент 1 вершины в точке столкновения
-		double & vertex2Weight,			// Весовой коэффициент 2 вершины в точке столкновения
-		double const& EPSILON = 1e-10	// Допустимая погрешность вычисления точки пересечения
-		)const;
+		CVector3d const& rayStart, // Точка испускания луча
+		CVector3d const& rayDirection, // Направление луча
+		double& hitTime, // Время столкновения луча с треугольником
+		CVector3d& hitPoint, // Точка столкновения
+		double& vertex0Weight, // Весовой коэффициент 0 вершины в точке столкновения
+		double& vertex1Weight, // Весовой коэффициент 1 вершины в точке столкновения
+		double& vertex2Weight, // Весовой коэффициент 2 вершины в точке столкновения
+		double const& EPSILON = 1e-10 // Допустимая погрешность вычисления точки пересечения
+	) const;
+
 private:
-	CVector4d m_planeEquation;	// Уравшение плоскости
+	CVector4d m_planeEquation; // Уравшение плоскости
 
 	// Перпендикуляры к ребрам треугольника
 	CVector3d m_edge01Perp;
@@ -90,9 +93,9 @@ private:
 	double m_invEdge20PerpSquare;
 
 	// Указатели на вершины треугольника (в массиве вершин)
-	Vertex const * m_pVertex0;
-	Vertex const * m_pVertex1;
-	Vertex const * m_pVertex2;
+	Vertex const* m_pVertex0;
+	Vertex const* m_pVertex1;
+	Vertex const* m_pVertex2;
 
 	// Использует ли треугольник плоское освещение
 	bool m_flatShaded;
@@ -109,23 +112,24 @@ class CTriangleMeshData
 {
 public:
 	CTriangleMeshData(
-		std::vector<Vertex> const& vertices,// Вершины
-		std::vector<Face> const& faces,		// Грани
-		bool normalize = false		// Выполнить ли нормализацию нормалей вершин?
-		);
+		std::vector<Vertex> vertices, // Вершины
+		const std::vector<Face>& faces, // Грани
+		bool normalize = false // Выполнить ли нормализацию нормалей вершин?
+	);
 
 	// Возвращает количество вершин
-	size_t GetVertexCount()const {return m_vertices.size();}
+	size_t GetVertexCount() const { return m_vertices.size(); }
 	// Адрес массива вершин
-	Vertex const * GetVertices()const {return &m_vertices[0];}
+	Vertex const* GetVertices() const { return &m_vertices[0]; }
 
 	// Количество треугольников
-	size_t GetTriangleCount()const {return m_triangles.size();}
+	size_t GetTriangleCount() const { return m_triangles.size(); }
 	// Адрес массива треугольников
-	CTriangle const * GetTriangles()const {return &m_triangles[0];}
+	CTriangle const* GetTriangles() const { return &m_triangles[0]; }
+
 private:
-	std::vector<Vertex> m_vertices;		// Вершины
-	std::vector<CTriangle> m_triangles;	// Треугольные грани
+	std::vector<Vertex> m_vertices; // Вершины
+	std::vector<CTriangle> m_triangles; // Треугольные грани
 };
 
 /*
@@ -134,11 +138,12 @@ private:
 class CTriangleMesh : public CGeometryObjectImpl
 {
 public:
-	CTriangleMesh(CTriangleMeshData const * pMeshData, CMatrix4d const& transform = CMatrix4d());
+	CTriangleMesh(std::shared_ptr<CTriangleMeshData const> pMeshData, CMatrix4d const& transform = CMatrix4d());
 
 	// Поиск пересечения луча с полигональной сеткой
-	virtual bool Hit(CRay const& ray, CIntersection & intersection)const;
+	virtual bool Hit(CRay const& ray, CIntersection& intersection) const;
+
 private:
 	// Адрес данных полигональной сетки
-	CTriangleMeshData const * m_pMeshData;
+	std::shared_ptr<CTriangleMeshData const> m_pMeshData;
 };

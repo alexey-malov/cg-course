@@ -1,16 +1,16 @@
 ﻿#include "stdafx.h"
 #include "TriangleMesh.h"
-#include "VectorMath.h"
 #include "Intersection.h"
 #include "Ray.h"
+#include "VectorMath.h"
 
 // Конструирует треугольник, вычисляет ряд вспомогательных параметров
 // для ускорения нахождения точки пересечения с лучом
 CTriangle::CTriangle(Vertex const& vertex0, Vertex const& vertex1, Vertex const& vertex2, bool flatShaded)
-:m_pVertex0(&vertex0)
-,m_pVertex1(&vertex1)
-,m_pVertex2(&vertex2)
-,m_flatShaded(flatShaded)
+	: m_pVertex0(&vertex0)
+	, m_pVertex1(&vertex1)
+	, m_pVertex2(&vertex2)
+	, m_flatShaded(flatShaded)
 {
 	const double EPSILON = 1e-10;
 
@@ -40,18 +40,15 @@ CTriangle::CTriangle(Vertex const& vertex0, Vertex const& vertex1, Vertex const&
 	double edge20Square = Dot(e20, e20);
 
 	// Квадраты длин высот, опущенных на соответствующие ребра трегольника
-	double edge01PerpSquare = 
-		(edge01Square > EPSILON) 
-			? Max(0.0, (edge01Square * edge20Square - Sqr(Dot(e01, e20))) / edge01Square)
-			: 0.0;
-	double edge12PerpSquare = 
-		(edge12Square > EPSILON) 
-			? Max(0.0, (edge12Square * edge01Square - Sqr(Dot(e12, e01))) / edge12Square)
-			: 0.0;
-	double edge20PerpSquare = 
-		(edge20Square > EPSILON) 
-			? Max(0.0, (edge20Square * edge12Square - Sqr(Dot(e20, e12))) / edge20Square)
-			: 0.0;
+	double edge01PerpSquare = (edge01Square > EPSILON)
+		? Max(0.0, (edge01Square * edge20Square - Sqr(Dot(e01, e20))) / edge01Square)
+		: 0.0;
+	double edge12PerpSquare = (edge12Square > EPSILON)
+		? Max(0.0, (edge12Square * edge01Square - Sqr(Dot(e12, e01))) / edge12Square)
+		: 0.0;
+	double edge20PerpSquare = (edge20Square > EPSILON)
+		? Max(0.0, (edge20Square * edge12Square - Sqr(Dot(e20, e12))) / edge20Square)
+		: 0.0;
 
 	// Векторы перпендикуляров (высот), направленных от ребра к противолежащей вершине треугольника
 	m_edge01Perp = edge01Normal * sqrt(edge01PerpSquare);
@@ -64,17 +61,14 @@ CTriangle::CTriangle(Vertex const& vertex0, Vertex const& vertex1, Vertex const&
 	m_invEdge20PerpSquare = (edge20PerpSquare > EPSILON) ? (1.0 / edge20PerpSquare) : 0.0;
 }
 
-bool CTriangle::HitTest(CVector3d const& rayStart, CVector3d const& rayDirection, double & hitTime, CVector3d & hitPoint, double & vertex0Weight, double & vertex1Weight, double & vertex2Weight, double const& EPSILON)const
+bool CTriangle::HitTest(CVector3d const& rayStart, CVector3d const& rayDirection, double& hitTime, CVector3d& hitPoint, double& vertex0Weight, double& vertex1Weight, double& vertex2Weight, double const& EPSILON) const
 {
 	//////////////////////////////////////////////////////////////////////////
 	// Проверка на пересечение луча с плоскостью треугольника
 	//////////////////////////////////////////////////////////////////////////
 	{
 		// Скалярное произведение вектора нормали к треугольнику и направления луча
-		double normalDotDirection = 
-			m_planeEquation.x * rayDirection.x +
-			m_planeEquation.y * rayDirection.y +
-			m_planeEquation.z * rayDirection.z;
+		double normalDotDirection = m_planeEquation.x * rayDirection.x + m_planeEquation.y * rayDirection.y + m_planeEquation.z * rayDirection.z;
 
 		// Проверка на параллельность луча и плоскости треугольника
 		if (abs(normalDotDirection) < EPSILON)
@@ -83,17 +77,13 @@ bool CTriangle::HitTest(CVector3d const& rayStart, CVector3d const& rayDirection
 		}
 
 		// Подставляем начальную точку в уравнение луча
-		double playEquationAtRayStart = 
-			m_planeEquation.x * rayStart.x + 
-			m_planeEquation.y * rayStart.y +
-			m_planeEquation.z * rayStart.z +
-			m_planeEquation.w;
+		double playEquationAtRayStart = m_planeEquation.x * rayStart.x + m_planeEquation.y * rayStart.y + m_planeEquation.z * rayStart.z + m_planeEquation.w;
 
 		// Вычисляем время соударения луча с плоскостью треугольника
 		hitTime = -playEquationAtRayStart / normalDotDirection;
 
 		// Если время соударения в прошлом, то столкновения нет
-		if (hitTime < EPSILON)	
+		if (hitTime < EPSILON)
 		{
 			return false;
 		}
@@ -149,8 +139,8 @@ bool CTriangle::HitTest(CVector3d const& rayStart, CVector3d const& rayDirection
 /*
 Конструируем данныен полигональной сетки на основе переданной информации о ее вершинах и гранях
 */
-CTriangleMeshData::CTriangleMeshData(std::vector<Vertex> const& vertices, std::vector<Face> const& faces, bool normalize)
-:m_vertices(vertices)
+CTriangleMeshData::CTriangleMeshData(std::vector<Vertex> vertices, std::vector<Face> const& faces, bool normalize)
+	: m_vertices(std::move(vertices))
 {
 	size_t const numVertices = m_vertices.size();
 	if (normalize)
@@ -174,21 +164,20 @@ CTriangleMeshData::CTriangleMeshData(std::vector<Vertex> const& vertices, std::v
 		size_t i0 = size_t(face.vertex0);
 		size_t i1 = size_t(face.vertex1);
 		size_t i2 = size_t(face.vertex2);
-		assert(i0 <numVertices && i1 < numVertices && i2 < numVertices);
+		assert(i0 < numVertices && i1 < numVertices && i2 < numVertices);
 
 		CTriangle triangle(m_vertices[i0], m_vertices[i1], m_vertices[i2], face.isFlat);
 		m_triangles.push_back(triangle);
 	}
 }
 
-
-CTriangleMesh::CTriangleMesh(CTriangleMeshData const * pMeshData, CMatrix4d const& transform)
-:CGeometryObjectImpl(transform)
-,m_pMeshData(pMeshData)
+CTriangleMesh::CTriangleMesh(std::shared_ptr<CTriangleMeshData const> pMeshData, CMatrix4d const& transform)
+	: CGeometryObjectImpl(transform)
+	, m_pMeshData(std::move(pMeshData))
 {
 }
 
-bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
+bool CTriangleMesh::Hit(CRay const& ray, CIntersection& intersection) const
 {
 	// Вычисляем обратно преобразованный луч (вместо вполнения прямого преобразования объекта)
 	CRay invRay = Transform(ray, GetInverseTransform());
@@ -203,7 +192,7 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 	// if (!ray_intesects_bounding_volume)
 	//     return false;
 	//////////////////////////////////////////////////////////////////////////
-	
+
 	// Получаем информацию о массиве треугольников сетки
 	CTriangle const* const triangles = m_pMeshData->GetTriangles();
 	const size_t numTriangles = m_pMeshData->GetTriangleCount();
@@ -211,10 +200,10 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 	// Информация о пересечении луча с гранью сетки
 	struct FaceHit
 	{
-		CVector3d hitPointInObjectSpace;// Точка пересечения
-		double w0, w1, w2;				// Весовые коэффициенты вершин в точке пересечения
-		double hitTime;					// Время пересечения
-		size_t faceIndex;				// Индекс грани
+		CVector3d hitPointInObjectSpace; // Точка пересечения
+		double w0, w1, w2; // Весовые коэффициенты вершин в точке пересечения
+		double hitTime; // Время пересечения
+		size_t faceIndex; // Индекс грани
 	};
 
 	// Массив найденных пересечений луча с гранями сетки.
@@ -222,7 +211,7 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 
 	//////////////////////////////////////////////////////////////////////////
 	// Используется поиск пересечения луча со всеми гранями сетки.
-	// Данный подход является очень неэффективным уже на полигональных сетках,
+	// Данный подход является очень неэффективным на полигональных сетках,
 	// содержащих более нескольких десятков граней, а, тем более, сотни и тысячи граней.
 	//
 	// Для эффективного поиска столкновений следует представить полигональную сетку
@@ -260,7 +249,7 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 	// Упорядочиваем найденные пересечения по возрастанию времени столкновения
 	//////////////////////////////////////////////////////////////////////////
 	size_t const numHits = faceHits.size();
-	std::vector<FaceHit const *> hitPointers(numHits);
+	std::vector<FaceHit const*> hitPointers(numHits);
 	{
 		// Инициализируем массив указателей на точки пересечения
 		for (size_t i = 0; i < numHits; ++i)
@@ -277,7 +266,7 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 		{
 			struct HitPointerComparator
 			{
-				bool operator()(FaceHit const * p0, FaceHit const * p1)const
+				bool operator()(FaceHit const* p0, FaceHit const* p1) const
 				{
 					return (p0->hitTime < p1->hitTime);
 				}
@@ -314,10 +303,7 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 			Vertex const& v2 = triangle.GetVertex2();
 
 			// Взвешенный вектор нормали
-			normalInObjectSpace = 
-				faceHit.w0 * v0.normal + 
-				faceHit.w1 * v1.normal +
-				faceHit.w2 * v2.normal;
+			normalInObjectSpace = faceHit.w0 * v0.normal + faceHit.w1 * v1.normal + faceHit.w2 * v2.normal;
 		}
 
 		// Нормаль в мировой системе координат
@@ -326,12 +312,10 @@ bool CTriangleMesh::Hit(CRay const& ray, CIntersection & intersection)const
 		// Добавляем информацию о точке пересечения в объект intersection
 		intersection.AddHit(
 			CHitInfo(
-				faceHit.hitTime, *this, 
+				faceHit.hitTime, *this,
 				hitPoint,
 				faceHit.hitPointInObjectSpace,
-				normal, normalInObjectSpace
-				)
-			);
+				normal, normalInObjectSpace));
 	}
 
 	return true;

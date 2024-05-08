@@ -23,7 +23,7 @@ bool CRenderer::IsRendering() const
 bool CRenderer::IsStopping() const
 {
 	// Считываем потокобезопасным образом значение переменной m_stopping
-	return m_stopping != 0;
+	return m_stopping;
 }
 
 bool CRenderer::SetRendering(bool rendering)

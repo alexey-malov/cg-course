@@ -4,18 +4,13 @@
 
 #pragma once
 
-#include "Renderer.h"
-#include "RenderContext.h"
-#include "Scene.h"
 #include "IGeometryObject_fwd.h"
+#include "RenderContext.h"
+#include "Renderer.h"
+#include "Scene.h"
 
 class CFrameBuffer;
 
-class CSimpleDiffuseShader;
-class CConicCylinder;
-class CSphere;
-class CCheckerShader;
-class CSimpleMaterial;
 class IShader;
 
 class CRaytraceView : public CWindowImpl<CRaytraceView>
@@ -24,6 +19,7 @@ class CRaytraceView : public CWindowImpl<CRaytraceView>
 	{
 		FRAMEBUFFER_UPDATE_TIMER = 1
 	};
+
 public:
 	CRaytraceView();
 	~CRaytraceView();
@@ -38,10 +34,10 @@ public:
 		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 	END_MSG_MAP()
 
-// Handler prototypes (uncomment arguments if needed):
-//	LRESULT MessageHandler(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
-//	LRESULT CommandHandler(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-//	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
+	// Handler prototypes (uncomment arguments if needed):
+	//	LRESULT MessageHandler(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	//	LRESULT CommandHandler(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	//	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
 private:
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -54,25 +50,19 @@ private:
 	void AddSomeConicCylinders();
 
 	// Отрисовка содержимого буфера кадра на контексте устройства
-	void DrawFrameBuffer(CDC & dc, int x, int y);
+	void DrawFrameBuffer(CDC& dc, int x, int y);
 	bool UpdateFrameBuffer();
 
-	// Методы создания и добавления шейдеров в коллекцию m_shaders
-	CSimpleDiffuseShader & CreateSimpleDiffuseShader(CSimpleMaterial const& material);
-	CCheckerShader & CreateCheckerShader(CMatrix4d const& textureTransform);
-
 	// Методы, создающие и добавляющие объекты к сцене
-	CSceneObject & AddSphere(IShader const& shader, double radius = 1, CVector3d const& center = CVector3d(), CMatrix4d const& transform = CMatrix4d());
-	CSceneObject & AddConicCylinder(IShader const& shader, double height = 1, double baseRadius = 1, double capRadius = 0, CMatrix4d const& transform = CMatrix4d());
-	CSceneObject & AddPlane(IShader const& shader, double a, double b, double c, double d, CMatrix4d const& transform = CMatrix4d());
-	CSceneObject & AddSceneObject(IGeometryObject const& object, IShader const& shader);
+	CSceneObject& AddSphere(std::shared_ptr<IShader const>, double radius = 1, CVector3d const& center = CVector3d(), CMatrix4d const& transform = {});
+	CSceneObject& AddConicCylinder(std::shared_ptr<IShader const> shader, double height = 1, double baseRadius = 1, double capRadius = 0, CMatrix4d const& transform = {});
+	CSceneObject& AddPlane(std::shared_ptr<IShader const> shader, double a, double b, double c, double d, CMatrix4d const& transform = CMatrix4d());
+	CSceneObject& AddSceneObject(std::shared_ptr<IGeometryObject const> object, std::shared_ptr<IShader const> shader);
+
 private:
 	CRenderContext m_context;
 	CRenderer m_renderer;
-	CScene	m_scene;
+	CScene m_scene;
 
 	std::unique_ptr<CFrameBuffer> m_pFrameBuffer;
-
-	std::vector<std::unique_ptr<IGeometryObject>> m_geometryObjects;
-	std::vector<std::unique_ptr<IShader>> m_shaders;
 };

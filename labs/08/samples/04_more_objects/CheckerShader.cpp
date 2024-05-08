@@ -39,11 +39,11 @@ CVector4f CCheckerShader::Shade(CShadeContext const & shadeContext)const
 	*/
 	if (int(s.x) ^ int(s.y) ^ int(s.z))
 	{
-		return CVector4f(1, 1, 1, 1);
+		return CVector4f(0.9f, 0.9f, 0.9f, 1);
 	}
 	else
 	{
-		return CVector4f(0, 0, 0, 1);
+		return CVector4f(0.1f, 0.1f, 0.1f, 1);
 	}
 
 }
