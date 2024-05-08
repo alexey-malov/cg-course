@@ -359,6 +359,7 @@ bool CRenderer::Render(CFrameBuffer & frameBuffer)
 }
 ```
 Чтобы работал std::jthread, нужно включить С++ 20, для этого нужно зайти в Properties/C/C++/Language, в поле C++ Language Standard выбрать 20 версию:
+
 ![image](images/С++20.png)
 
 Рассмотрим основные этапы работы данного метода более подробно:
