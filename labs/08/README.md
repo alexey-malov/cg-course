@@ -929,7 +929,7 @@ $$
 
 <img src="images/paraboloid1.png" width="300" height="300">
 
-<img src="images/paraboloid2.png" width="800" height="300">
+<img src="images/paraboloid2.png" width="900" height="200">
 
 Создать с использованием данного геометрического объекта композицию наподобие:
 
