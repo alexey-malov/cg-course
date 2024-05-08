@@ -377,9 +377,9 @@ bool CRenderer::Render(CFrameBuffer & frameBuffer)
     // Запускаем метод RenderFrame в параллельном потоке, передавая ему
     // необходимый набор параметров
     m_thread = std::jthread(       // (4)
-        	&CRenderer::RenderFrame, // Адрес метода RenderFrame
-		this, // Указатель this
-		std::ref(frameBuffer)); // Ссылка на frameBuffer
+	&CRenderer::RenderFrame, // Адрес метода RenderFrame
+	this, // Указатель this
+	std::ref(frameBuffer)); // Ссылка на frameBuffer
 
     // Выходим, сообщая о том, что процесс построения изображения запущен
     return true;
@@ -482,9 +482,9 @@ std::uint32_t CRenderer::CalculatePixelColor(
 
     uint8_t r = static_cast<uint8_t>((iterCount / 3) & 0xff);
     uint8_t g = static_cast<uint8_t>(iterCount & 0xff);
-	  uint8_t b = static_cast<uint8_t>((iterCount / 2) & 0xff);
-	  uint8_t a = 0xff;
-	  return (a << 24) | (r << 16) | (g << 8) | b;
+    uint8_t b = static_cast<uint8_t>((iterCount / 2) & 0xff);
+    uint8_t a = 0xff;
+    return (a << 24) | (r << 16) | (g << 8) | b;
 }
 ```
 
