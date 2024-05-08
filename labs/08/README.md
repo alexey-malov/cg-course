@@ -1,4 +1,4 @@
-﻿# **Оглавление**
+![image](https://github.com/GornikMaria/cg-course/assets/100723227/07db545f-d2f1-448b-b38c-d1842617fe2b)﻿# **Оглавление**
 
 [Основы визуализации трехмерных изображений с использованием трассировки лучей](#_toc103989483)
 
@@ -152,7 +152,7 @@ public:
     }
 
     // Очистка содержимого буфера заданным цветом
-    void Clear(boost::uint32_t color = 0);
+    void Clear(std::uint32_t color = 0);
 
     // Получение адреса начала соотв. строки пикселей (для чтения)
     const std::uint32_t * GetPixels(unsigned row = 0)const noexcept
@@ -169,7 +169,7 @@ public:
     }
 
     // Получение цвета пикселя с заданными координатами
-    boost::uint32_t GetPixel(unsigned x, unsigned y)const noexcept
+    std::uint32_t GetPixel(unsigned x, unsigned y)const noexcept
     {
         assert(x < m_width);
         assert(y < m_height);
@@ -185,7 +185,7 @@ public:
     }
 
 private:
-    std::vector<boost::uint32_t> m_pixels;
+    std::vector<std::uint32_t> m_pixels;
     unsigned m_width;
     unsigned m_height;
 };
@@ -253,7 +253,7 @@ private:
   - **bool SetStopping(stopping)**. Устанавливает или сбрасывает флаг, сигнализирующий фоновому потоку о необходимости прервать процесс построения
     изображения. Возвращает true, если произошла смена состояния данного флага, и false, если состояние не изменилось.
   - **bool IsStopping()**. Информирует о состоянии флага о необходимости прервать процесс построения изображения.
-  - **boost::uint32_t CalculatePixelColor(x, y, width, height)**. Вычисляет значение цвета пикселя с указанными координатами внутри буфера кадра с
+  - **std::uint32_t CalculatePixelColor(x, y, width, height)**. Вычисляет значение цвета пикселя с указанными координатами внутри буфера кадра с
     указанной шириной и высотой.
 - Данные
   - Объект «фоновый поток». Создается при создании фонового потока. Позволяет дождаться окончания его выполнения.
@@ -283,7 +283,7 @@ private:
 
 private:
     std::jthread m_thread;
-    mutable boost::mutex m_mutex;
+    mutable std::mutex m_mutex;
     std::atomic_bool m_rendering{ false };
     std::atomic_bool m_stopping{ false };
     std::atomic_uint32_t m_totalChunks{ 0 };
@@ -298,7 +298,7 @@ private:
 Реализация методов, позволяющих получить или изменить информацию о состоянии подсистемы визуализации:
 
 ```cpp
-using boost::mutex;
+using std::mutex;
 
 // Выполняется ли в данный момент построение изображения в буфере кадра?
 bool CRenderer::IsRendering() const
@@ -542,8 +542,6 @@ CRenderer::~CRenderer(void)
 #include "FrameBuffer.h"
 #include <SDL.h>
 
-using namespace boost::interprocess::ipcdetail;
-
 class CApplication
 {
 public:
@@ -617,7 +615,7 @@ private:
     // Идентификатор SDL-таймера
     SDL_TimerID m_timerId;
     // Обновлена ли поверхность окна приложения (1 - да, 0 - нет)
-    boost::uint32_t m_mainSurfaceUpdated;
+    std::uint32_t m_mainSurfaceUpdated;
 };
 ```
 
@@ -742,7 +740,7 @@ private:
             for (unsigned y = 0; y < h; ++y, pixels += m_pMainSurface->pitch)
             {
                                                                                   // (1.6)
-                boost::uint32_t const * srcLine = m_frameBuffer.GetPixels(y);
+                std::uint32_t const * srcLine = m_frameBuffer.GetPixels(y);
                 Uint32 * dstLine = reinterpret_cast<Uint32*>(pixels);
 
                 if (bShift == 0 && gShift == 8 && rShift == 16)                   // (1.7)
@@ -753,7 +751,7 @@ private:
                 {
                     for (unsigned x = 0; x < w; ++x)                              // (1.8)
                     {
-                        boost::uint32_t srcColor = srcLine[x];
+                        std::uint32_t srcColor = srcLine[x];
                         Uint32 dstColor =
                             ((srcColor & 0xff) << bShift) |
                             (((srcColor >> 8) & 0xff) << gShift) |
