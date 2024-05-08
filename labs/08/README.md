@@ -332,9 +332,9 @@ bool CRenderer::GetProgress(
     mutex::scoped_lock lock(m_mutex);
 
     // Получаем потокобезопасным образом значения переменных
-	  // m_renderedChunks и m_totalChunks
-	  renderedChunks = m_renderedChunks;
-	  totalChunks = m_totalChunks;
+    // m_renderedChunks и m_totalChunks
+    renderedChunks = m_renderedChunks;
+    totalChunks = m_totalChunks;
 
     // Сообщаем, все ли блоки изображения были обработаны
     return (totalChunks > 0) && (renderedChunks == totalChunks);
@@ -354,32 +354,32 @@ bool CRenderer::Render(CFrameBuffer & frameBuffer)
     }
 
     // Блокируем доступ к общим (для фонового и основного потока) данным класса
-	  // вплоть до завершения работа метода Render
+    // вплоть до завершения работа метода Render
     mutex::scoped_lock lock(m_mutex);          // (2)
 
     // Очищаем буфер кадра
     frameBuffer.Clear();
 
     // Сбрасываем количество обработанных и общее количество блоков изображения
-	  // сигнализируя о том, что еще ничего не сделано
-	  m_totalChunks = 0;
-	  m_renderedChunks = 0;
+    // сигнализируя о том, что еще ничего не сделано
+    m_totalChunks = 0;
+    m_renderedChunks = 0;
 
     // Сбрасываем запрос на остановку построения изображения
     if (SetStopping(false))                   // (3)
     {
         // Если еще до запуска рабочего потока пришел запрос на остановку,
-		    // выходим, сбрасывая флаг "идет построение изображения"
+        // выходим, сбрасывая флаг "идет построение изображения"
         SetRendering(false);
         return false;
     }
 
     // Запускаем метод RenderFrame в параллельном потоке, передавая ему
-	  // необходимый набор параметров
+    // необходимый набор параметров
     m_thread = std::jthread(       // (4)
-        &CRenderer::RenderFrame, // Адрес метода RenderFrame
-		    this, // Указатель this
-		    std::ref(frameBuffer)); // Ссылка на frameBuffer
+        	&CRenderer::RenderFrame, // Адрес метода RenderFrame
+		this, // Указатель this
+		std::ref(frameBuffer)); // Ссылка на frameBuffer
 
     // Выходим, сообщая о том, что процесс построения изображения запущен
     return true;
@@ -420,8 +420,8 @@ void CRenderer::RenderFrame(CFrameBuffer & frameBuffer)
 #endif
         {
             // Получаем адрес начала y-й строки в буфере кадра
-			      rowPixels = frameBuffer.GetPixels(y);
-		    }
+	    rowPixels = frameBuffer.GetPixels(y);
+	}
 
         if (!IsStopping())                                                             // (3)
         {
@@ -455,7 +455,7 @@ void CRenderer::RenderFrame(CFrameBuffer & frameBuffer)
 точки [фрактала Мандельброта](http://ru.wikipedia.org/wiki/%D0%9C%D0%BD%D0%BE%D0%B6%D0%B5%D1%81%D1%82%D0%B2%D0%BE_%D0%9C%D0%B0%D0%BD%D0%B4%D0%B5%D0%BB%D1%8C%D0%B1%D1%80%D0%BE%D1%82%D0%B0).
 
 ```cpp
-boost::uint32_t CRenderer::CalculatePixelColor(
+std::uint32_t CRenderer::CalculatePixelColor(
     int x, int y, unsigned frameWidth, unsigned frameHeight)const
 {
     double x0 = 2.0 * x / frameWidth - 1.5;
