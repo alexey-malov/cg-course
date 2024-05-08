@@ -276,11 +276,11 @@ int WINAPI WinMain(
     try
     {
         CGdiplusInitializer initializer;
-        
+
         // C++ гарантирует, что объект img будет разрушен ДО объекта initializer
         // т.к. деструкторы ранее созданных объектов всегда вызываются позже
         Gdiplus::Image img(L"car.jpg");
-        
+
         // Сохраняем указатель на изображение в глобальной переменной
         // для функции OnPaint
         g_pImage = &img;
@@ -458,7 +458,7 @@ int WINAPI _tWinMain(
         // HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
         ATLASSERT(SUCCEEDED(hRes));
 
-        // this resolves ATL window thunking problem when Microsoft Layer
+        // this resolves ATL window thinking problem when Microsoft Layer
         // for Unicode (MSLU) is used
         ::DefWindowProc(NULL, 0, 0, 0L);
 
@@ -608,7 +608,7 @@ CPaintDC dc(m_hWnd);
 	// устанавливаем режим устранения ступенчатости при рисовании текста
 	g.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-	// создаем кисть, которой будут зкрашиваться буквы
+	// создаем кисть, которой будут закрашиваться буквы
 	SolidBrush brush(Color(255, 0, 0));
 
 	// рисуем строку Hello созданным нами шрифтом
@@ -838,6 +838,7 @@ void OnOpenFile(HWND hwnd, UINT codeNotify)
             g.DrawImage(&img, 0, 0);
 
             InvalidateRect(hwnd, NULL, TRUE);
+        }
     }
 }
 ```
@@ -899,19 +900,19 @@ void OnOpenFile(HWND hwnd, UINT codeNotify)
     OPENFILENAME ofn;
     TCHAR fileName[MAX_PATH + 1] = _T("");
     InitFileNameStructure(hwnd, &ofn, fileName, MAX_PATH);
-    
+
     if (GetOpenFileName(&ofn))
     {
         Image img(ofn.lpstrFile);
-        
+
         if (img.GetLastStatus() == Ok)
         {
             g_pBitmap = auto_ptr<Bitmap>(new Bitmap(
                 img.GetWidth(), img.GetHeight(), PixelFormat32bppARGB));
-                
+
             Graphics g(g_pBitmap.get());
             g.DrawImage(&img, 0, 0);
-            
+
             InvalidateRect(hwnd, NULL, TRUE);
         }
     }
@@ -930,11 +931,11 @@ void OnSaveFile(HWND hwnd, UINT codeNotify)
     {
         return;
     }
-    
+
     OPENFILENAME ofn;
     TCHAR fileName[MAX_PATH + 1] = _T("");
     InitFileNameStructure(hwnd, &ofn, fileName, MAX_PATH);
-    
+
     if (GetSaveFileName(&ofn))
     {
         SaveBitmap(*g_pBitmap, fileName, 75);
@@ -969,30 +970,30 @@ CLSID GetEncoderCLSID(std::wstring const& fileExtension)
 {
     // Приводим разрешение к виду "*.разрешение"
     std::wstring extensionMask = L"*." + WStringToLower(fileExtension) + L";";
-    
+
     // Запрашиваем у GDI+ количество кодировщиков изображений
     // и размер блока данных для хранения их описания
     UINT numEncoders;
     UINT encodersSize;
     GetImageEncodersSize(&numEncoders, &encodersSize);
-    
+
     // Выделяем буфер для хранения информации о кодировщиках
     std::vector<BYTE> encodersBuffer(encodersSize);
-    
+
     // Запрашиваем у GDI+ информацию обо всех кодировщиков
     ImageCodecInfo* pInstalledCodecs =
         reinterpret_cast<ImageCodecInfo *>(&encodersBuffer[0]);
     GetImageEncoders(numEncoders, encodersSize, pInstalledCodecs);
-    
+
     // ищем подходящий кодировщик изображений
     for (unsigned i = 0; i < numEncoders; ++i)
     {
         ImageCodecInfo & codec = pInstalledCodecs[i];
-        
+
         // получаем расширения файлов, поддерживаемых данным кодировщиком
         // в формате: *.jpg;*.jpe;*.jpeg;
         std::wstring extensions = WStringToLower(codec.FilenameExtension) + L";";
-        
+
         // Если в списке расширений содержится маска расширения файла
         // то кодек считается найденным
         if (extensions.find(extensionMask) != wstring::npos)
@@ -1000,7 +1001,7 @@ CLSID GetEncoderCLSID(std::wstring const& fileExtension)
             return codec.Clsid;
         }
     }
-    
+
     // не нашли подходящий кодировщик, возвращаем нулевой идентификатор
     return CLSID_NULL;
 }
@@ -1033,30 +1034,30 @@ void SaveBitmap(
 {
     // получаем расширение выходного файла
     std::wstring fileExtension = GetFileExtension(fileName);
-    
+
     // Получаем идентификатор по расширению файла
     CLSID codecId = GetEncoderCLSID(fileExtension);
-    
+
     // Если вернули CLSID_NULL (кодек не найден), то выходим
     if (IsEqualCLSID(codecId, CLSID_NULL))
     {
         return;
     }
-    
+
     // заполняем параметры кодировщика
     EncoderParameters params;
-    params.Count = 1;// у нас только один параметр (степень компресии 0-100)
-    
+    params.Count = 1;// у нас только один параметр (степень компрессии 0-100)
+
     // заполняем характеристики параметра качество сжатия
     EncoderParameter & param0 = params.Parameter[0];
-    
+
     LONG qualityParam = quality;
-    
+
     param0.Guid = EncoderCompression; // идентификатор параметра "компрессия"
     param0.NumberOfValues = 1; // в массиве параметров содержится одно значение
     param0.Type = EncoderParameterValueTypeLong; // тип значений LONG
     param0.Value = &qualityParam; // адрес массива параметров
-    
+
     // сохраняем изображение с использованием подобранного кодировщика
     // и параметра Quality (на практике используется только в JPEG-е)
     bitmap.Save(fileName.c_str(), &codecId, &params);
@@ -1096,7 +1097,7 @@ int MainLoop(HWND hMainWindow)
 {
     HACCEL accel = LoadAccelerators(g_hInstance,
         MAKEINTRESOURCE(IDR_MAIN_MENU));
-        
+
     MSG msg;
     BOOL res;
     while ((res = GetMessage(&msg, NULL, 0, 0)) != 0)
@@ -1114,7 +1115,7 @@ int MainLoop(HWND hMainWindow)
             {
                 // Это не сообщение о нажатии клавиш быстрого доступа
                 // обрабатываем сообщение стандартным образом
-        
+
                 // Если это сообщение о нажатии виртуальной клавиши,
                 // то добавляем в очередь сообщений сообщения, несущие информацию о
                 // коде вводимого пользователем символа
@@ -1124,7 +1125,7 @@ int MainLoop(HWND hMainWindow)
             }
         }
     }
-    
+
     // сюда мы попадем только в том случае извлечения сообщения WM_QUIT
     // msg.wParam содержит код возврата, помещенный при
     // помощи функции PostQuitMessage()
@@ -1171,20 +1172,20 @@ LRESULT CMainFrame::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/
     ATLASSERT(pLoop != NULL);
     pLoop->AddMessageFilter(this);
     pLoop->AddIdleHandler(this);
-    
+
     // Создаем внеэкранный буфер
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
     m_pBackBuffer.reset(
         new Bitmap(screenWidth, screenHeight, PixelFormat32bppARGB));
-        
+
     // Загружаем изображение мячика
     LoadBall();
-    
+
     // Инициализируем таймер
     SetTimer(ANIMATION_TIMER, 20);
     m_lastTick = GetTickCount();
-    
+
     return 0;
 }
 ```
@@ -1199,7 +1200,7 @@ LRESULT CMainFrame::OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
     GetClientRect(&rcClient);
     unsigned clientWidth = rcClient.Width();
     unsigned clientHeight = rcClient.Height();
-    
+
     if (!m_pBackBuffer.get() ||
         (clientWidth > m_pBackBuffer->GetWidth()) ||
         (clientHeight > m_pBackBuffer->GetHeight())
@@ -1208,7 +1209,7 @@ LRESULT CMainFrame::OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
         m_pBackBuffer.reset(
             new Bitmap(clientWidth, clientHeight, PixelFormat32bppARGB));
     }
-    
+
     return 0;
 }
 ```
@@ -1220,27 +1221,27 @@ LRESULT CMainFrame::OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 LRESULT CMainFrame::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
     CPaintDC dc(*this);
-    
+
     RedrawBackBuffer();
-    
+
     Graphics g(dc);
-    
+
     if (m_pBackBuffer.get())
     {
         // перекидываем внеэкранный буфер на экран
         g.DrawImage(m_pBackBuffer.get(), 0, 0);
     }
-    
+
     return 0;
 }
 
 void CMainFrame::RedrawBackBuffer(void)
 {
     Graphics g(m_pBackBuffer.get());
-    
+
     // очищаем внеэкранный буфер
     g.Clear(Color(0xdd, 0xdd, 0xdd));
-    
+
     g.DrawImage(m_pBall.get(), m_ballPosition);
 }
 ```
@@ -1258,7 +1259,7 @@ LRESULT CMainFrame::OnTimer(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOO
         Animate();
         break;
     }
-    
+
     return 0;
 }
 
@@ -1267,16 +1268,16 @@ void CMainFrame::Animate(void)
     DWORD currentTick = GetTickCount();
     float delta = (currentTick - m_lastTick) * 0.001f;
     m_lastTick = currentTick;
-    
+
     CRect rc;
     GetClientRect(&rc);
     int w = rc.Width();
     int h = rc.Height();
-    
+
     // размеры шара
     int bw = m_pBall->GetWidth();
     int bh = m_pBall->GetHeight();
-    
+
     // рассчитываем движение шара по горизонтали
     m_ballPosition.X =
         min(w - bw, max(0, m_ballPosition.X + m_ballSpeed.X * delta));
@@ -1287,17 +1288,17 @@ void CMainFrame::Animate(void)
     {
         m_ballSpeed.X = -m_ballSpeed.X; // отскакиваем от боков
     }
-    
+
     // рассчитываем движение шара по вертикали
     m_ballSpeed.Y =
         max(-MAX_SPEED, min(MAX_SPEED, m_ballSpeed.Y + ACCELERATION * delta));
-        
+
     m_ballPosition.Y = min(h - bh, m_ballPosition.Y + m_ballSpeed.Y * delta);
     if ((m_ballSpeed.Y > 0) && (m_ballPosition.Y >= h - bh))
     {
         m_ballSpeed.Y = -m_ballSpeed.Y; // отскакиваем от пола
     }
-    
+
     InvalidateRect(NULL);
 }
 ```
@@ -1327,13 +1328,13 @@ class CMainFrame : public CFrameWindowImpl<CMainFrame>, public CUpdateUI<CMainFr
 public:
     CMainFrame();
     DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME)
-    
+
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual BOOL OnIdle();
-    
+
     BEGIN_UPDATE_UI_MAP(CMainFrame)
     END_UPDATE_UI_MAP()
-    
+
     BEGIN_MSG_MAP(CMainFrame)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -1347,7 +1348,7 @@ public:
         CHAIN_MSG_MAP(CUpdateUI<CMainFrame>)
         CHAIN_MSG_MAP(CFrameWindowImpl<CMainFrame>)
     END_MSG_MAP()
-    
+
 private:
     LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
     LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
@@ -1364,7 +1365,7 @@ private:
 private:
     std::auto_ptr<Gdiplus::Bitmap> m_pBackBuffer;
     std::auto_ptr<Gdiplus::Bitmap> m_pBall;
-    
+
     Gdiplus::PointF m_ballPosition;
     Gdiplus::PointF m_ballSpeed;
     DWORD m_lastTick;
