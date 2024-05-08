@@ -1225,10 +1225,10 @@ $(x^{2}+y^{2}+z^{2}+R^{2}-r^{2})^{2}-4R^{2}(x^{2}+y^{2})=0$, где **R** – р
 1. [Ф. Хилл. OpenGL. Программирование трехмерной графики](http://www.ozon.ru/context/detail/id/1217778/) (есть также на rutracker.org).
 2. [Depth of Field, Fresnel, Blobs](http://www.codermind.com/articles/Raytracer-in-C++-Depth-of-field-Fresnel-blobs.html)
 3. [Global Illumination](http://en.wikipedia.org/wiki/Global_illumination) (Wiki)
-    1. [Path tracing](http://en.wikipedia.org/wiki/Path_tracing)
-    2. [Photon mapping](http://en.wikipedia.org/wiki/Photon_mapping)
-    3. [Metropolis light transport](http://en.wikipedia.org/wiki/Metropolis_light_transport)
-    4. [SmallPT. Простой трассировщик лучей на C, учитывающий глобальное освещение (алгоритм path tracing), в 99 строк кода.](http://www.kevinbeason.com/smallpt/)
+    - [Path tracing](http://en.wikipedia.org/wiki/Path_tracing)
+    - [Photon mapping](http://en.wikipedia.org/wiki/Photon_mapping)
+    - [Metropolis light transport](http://en.wikipedia.org/wiki/Metropolis_light_transport)
+    - [SmallPT. Простой трассировщик лучей на C, учитывающий глобальное освещение (алгоритм path tracing), в 99 строк кода.](http://www.kevinbeason.com/smallpt/)
 
 [^1]: Строго говоря, можно было бы обойтись традиционными механизмами синхронизации вроде мьютексов, однако в ряде случаев для уменьшения накладных
 расходов можно пользоваться неблокирующими атомарными операциями, чем мы и воспользуемся.
