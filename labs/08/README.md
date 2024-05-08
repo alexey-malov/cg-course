@@ -140,13 +140,13 @@ public:
     CFrameBuffer(unsigned width, unsigned height);
 
     // Ширина буфера в пикселях
-    unsigned GetWidth()const throw()
+    unsigned GetWidth()const noexcept
     {
         return m_width;
     }
 
     // Высота буфера в пикселях
-    unsigned GetHeight()const throw()
+    unsigned GetHeight()const noexcept
     {
         return m_height;
     }
@@ -155,21 +155,21 @@ public:
     void Clear(boost::uint32_t color = 0);
 
     // Получение адреса начала соотв. строки пикселей (для чтения)
-    const boost::uint32_t * GetPixels(unsigned row = 0)const throw()
+    const std::uint32_t * GetPixels(unsigned row = 0)const noexcept
     {
         assert(row < m_height);
         return &m_pixels[size_t(row * m_width)];
     }
 
     // Получение адреса начала соотв. строки пикселей (для записи)
-    boost::uint32_t * GetPixels(unsigned row = 0)throw()
+    std::uint32_t * GetPixels(unsigned row = 0) noexcept
     {
         assert(row < m_height);
         return &m_pixels[size_t(row * m_width)];
     }
 
     // Получение цвета пикселя с заданными координатами
-    boost::uint32_t GetPixel(unsigned x, unsigned y)const throw()
+    boost::uint32_t GetPixel(unsigned x, unsigned y)const noexcept
     {
         assert(x < m_width);
         assert(y < m_height);
@@ -177,7 +177,7 @@ public:
     }
 
     // Установка цвета пикселя с заданными координатами
-    void SetPixel(unsigned x, unsigned y, boost::uint32_t color) throw()
+    void SetPixel(unsigned x, unsigned y, std::uint32_t color) noexcept
     {
         assert(x < m_width);
         assert(y < m_height);
@@ -200,9 +200,7 @@ CFrameBuffer::CFrameBuffer(unsigned width, unsigned height)
 ,m_height(height)
 {
 }
-
-
-void CFrameBuffer::Clear(boost::uint32_t color)
+void CFrameBuffer::Clear(std::uint32_t color)
 {
     std::fill(m_pixels.begin(), m_pixels.end(), color);
 }
@@ -280,16 +278,16 @@ private:
 
     bool IsStopping()const;
 
-    boost::uint32_t CalculatePixelColor(int x, int y,
+    uint32_t CalculatePixelColor(int x, int y,
         unsigned frameWidth, unsigned frameHeight)const;
 
 private:
-    boost::thread m_thread;
+    std::jthread m_thread;
     mutable boost::mutex m_mutex;
-    volatile boost::uint32_t m_rendering;
-    volatile boost::uint32_t m_stopping;
-    volatile boost::uint32_t m_totalChunks;
-    volatile boost::uint32_t m_renderedChunks;
+    std::atomic_bool m_rendering{ false };
+    std::atomic_bool m_stopping{ false };
+    std::atomic_uint32_t m_totalChunks{ 0 };
+    std::atomic_uint32_t m_renderedChunks{ 0 };
 };
 ```
 
@@ -300,36 +298,31 @@ private:
 Реализация методов, позволяющих получить или изменить информацию о состоянии подсистемы визуализации:
 
 ```cpp
-using namespace boost::interprocess::ipcdetail;
 using boost::mutex;
 
-bool CRenderer::IsRendering()const
+// Выполняется ли в данный момент построение изображения в буфере кадра?
+bool CRenderer::IsRendering() const
 {
-    return atomic_read32(
-        const_cast<volatile boost::uint32_t*>(&m_rendering)) != 0;
+	return m_rendering;
 }
 
-bool CRenderer::IsStopping()const
+// Установлен ли флаг, сообщающий о необходимости завершения работы
+bool CRenderer::IsStopping() const
 {
-    return atomic_read32(
-        const_cast<volatile boost::uint32_t *>(&m_stopping)) != 0;
+	// Считываем потокобезопасным образом значение переменной m_stopping
+	return m_stopping;
 }
 
 bool CRenderer::SetRendering(bool rendering)
 {
-    bool wasRendering =
-        atomic_cas32(&m_rendering, rendering, !rendering) != 0;
-
-
-    return wasRendering != rendering;
+	bool expected = !rendering;
+	return m_rendering.compare_exchange_strong(expected, rendering);
 }
 
 bool CRenderer::SetStopping(bool stopping)
 {
-    bool wasStopping =
-        atomic_cas32(&m_stopping, stopping, !stopping) != 0;
-
-    return wasStopping != stopping;
+	bool expected = !stopping;
+	return m_stopping.compare_exchange_strong(expected, stopping);
 }
 
 bool CRenderer::GetProgress(
@@ -338,59 +331,57 @@ bool CRenderer::GetProgress(
     // Захватываем мьютекс на время работы данного метода
     mutex::scoped_lock lock(m_mutex);
 
-    renderedChunks = atomic_read32(
-        const_cast<volatile boost::uint32_t*>(&m_renderedChunks));
-
-    totalChunks = atomic_read32(
-        const_cast<volatile boost::uint32_t*>(&m_totalChunks));;
+    // Получаем потокобезопасным образом значения переменных
+	  // m_renderedChunks и m_totalChunks
+	  renderedChunks = m_renderedChunks;
+	  totalChunks = m_totalChunks;
 
     // Сообщаем, все ли блоки изображения были обработаны
     return (totalChunks > 0) && (renderedChunks == totalChunks);
 }
 ```
 
-Обратим внимание на использование следующих функций библиотеки boost пространства имен boost::interprocess::ipcdetail:
-
-- **uin32_t atomic_read32(adr)**. Выполняет атомарное считывание значения 32-битного целого числа из указанного адреса памяти.
-- **void atomic_write32(adr, value)**. Выполняет атомарную запись 32-битного целого числа по указанному адресу памяти.
-- **uint32_t atomic_cas32(*X, Z, Y)**. Выполняет атомарное сравнение значения 32-битного целого числа, расположенного по адресу X с заданным
-  значением Y. В случае равенства происходит замена содержимого ячейки памяти на значение Z. Функция возвращает значение, находившееся по адресу X до
-  выполнения данной операции.
-- **uin32_t atomic_inc32(adr)**. Выполняет атомарный инкремент значения 32-битного целого числа по указанному адресу и возвращает содержимое данной
-  ячейки памяти до выполнения операции инкремента.
-
-Данные атомарные функции вызывают соответствующие функции операционной системы для данной программно-аппаратной платформы. Использование данных
-функций позволяет
-избежать [состояния гонки](http://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%B3%D0%BE%D0%BD%D0%BA%D0%B8)[^4] при
-параллельно происходящих операциях чтения и записи одних и тех же 32-битных областей памяти без введения тяжеловесных (для данного случая) механизмов
-синхронизации, вроде мьютексов.
-
 Реализация метода Render приведена ниже:
 
 ```cpp
 bool CRenderer::Render(CFrameBuffer & frameBuffer)
 {
+    // Пытаемся перейти в режим рендеринга
     if (!SetRendering(true))                   // (1)
     {
+        // В данный момент еще идет построение изображения в параллельном потоке
         return false;
     }
 
+    // Блокируем доступ к общим (для фонового и основного потока) данным класса
+	  // вплоть до завершения работа метода Render
     mutex::scoped_lock lock(m_mutex);          // (2)
 
+    // Очищаем буфер кадра
     frameBuffer.Clear();
 
-    atomic_write32(&m_totalChunks, 0);
-    atomic_write32(&m_renderedChunks, 0);
+    // Сбрасываем количество обработанных и общее количество блоков изображения
+	  // сигнализируя о том, что еще ничего не сделано
+	  m_totalChunks = 0;
+	  m_renderedChunks = 0;
 
+    // Сбрасываем запрос на остановку построения изображения
     if (SetStopping(false))                   // (3)
     {
+        // Если еще до запуска рабочего потока пришел запрос на остановку,
+		    // выходим, сбрасывая флаг "идет построение изображения"
         SetRendering(false);
         return false;
     }
 
-    m_thread = boost::thread(                  // (4)
-        &CRenderer::RenderFrame, this, boost::ref(frameBuffer));
+    // Запускаем метод RenderFrame в параллельном потоке, передавая ему
+	  // необходимый набор параметров
+    m_thread = std::jthread(       // (4)
+        &CRenderer::RenderFrame, // Адрес метода RenderFrame
+		    this, // Указатель this
+		    std::ref(frameBuffer)); // Ссылка на frameBuffer
 
+    // Выходим, сообщая о том, что процесс построения изображения запущен
     return true;
 }
 ```
@@ -404,7 +395,7 @@ bool CRenderer::Render(CFrameBuffer & frameBuffer)
 3) Сбрасываем флаг остановки. В случае, если он был ранее установлен (это может произойти, если был вызван метод Stop() из другого потока в процессе
    работы метода Render), сбрасываем флаг «Идет построение изображения» и выходим.
 4) Создаем новый поток, запускающий при старте метод RenderFrame. В качестве дополнительных параметров передаются указатель this, который необходим
-   для вызова методов класса, а также ссылка на буфер кадра. Использование boost::ref необходимо для того, чтобы произошла передача буфера кадра по
+   для вызова методов класса, а также ссылка на буфер кадра. Использование ref необходимо для того, чтобы произошла передача буфера кадра по
    ссылке, а не по значению. Затем происходит выход из метода Render, в то время как построение изображения будет происходить в методе **RenderFrame()
    **.
 
@@ -413,24 +404,32 @@ bool CRenderer::Render(CFrameBuffer & frameBuffer)
 ```cpp
 void CRenderer::RenderFrame(CFrameBuffer & frameBuffer)
 {
-    const int width = frameBuffer.GetWidth();                                          // (1)
+    const int width = frameBuffer.GetWidth();                                            // (1)
     const int height = frameBuffer.GetHeight();
 
-    atomic_write32(&m_totalChunks, height);
+    m_totalChunks = height;
 
 #ifdef _OPENMP                                                                           // (2)
     #pragma omp parallel for schedule(dynamic)
 #endif
     for (int y = 0; y < height; ++y)
     {
-        boost::uint32_t * rowPixels = frameBuffer.GetPixels(y);
+        std::uint32_t* rowPixels = nullptr;
+#ifdef _OPENMP
+#pragma omp critical
+#endif
+        {
+            // Получаем адрес начала y-й строки в буфере кадра
+			      rowPixels = frameBuffer.GetPixels(y);
+		    }
+
         if (!IsStopping())                                                             // (3)
         {
             for (int x = 0; x < width; ++x)                                            // (4)
             {
                 rowPixels[size_t(x)] = CalculatePixelColor(x, y, width, height);
             }
-            atomic_inc32(&m_renderedChunks);                                           // (5)
+            ++m_renderedChunks;                                                        // (5)
         }
     }
 
@@ -481,12 +480,11 @@ boost::uint32_t CRenderer::CalculatePixelColor(
         --iterCount;
     }
 
-
-    boost::uint8_t r = static_cast<boost::uint8_t>((iterCount / 3) & 0xff);
-    boost::uint8_t g = static_cast<boost::uint8_t>(iterCount & 0xff);
-    boost::uint8_t b = static_cast<boost::uint8_t>((iterCount / 2) & 0xff);
-    boost::uint8_t a = 0xff;
-    return (a << 24) | (r << 16) | (g << 8) | b;
+    uint8_t r = static_cast<uint8_t>((iterCount / 3) & 0xff);
+    uint8_t g = static_cast<uint8_t>(iterCount & 0xff);
+	  uint8_t b = static_cast<uint8_t>((iterCount / 2) & 0xff);
+	  uint8_t a = 0xff;
+	  return (a << 24) | (r << 16) | (g << 8) | b;
 }
 ```
 
@@ -502,8 +500,11 @@ void CRenderer::Stop()
         // о необходимости завершить работу
         SetStopping(true);
 
-        // Дожидаемся окончания работы рабочего потока
-        m_thread.join();
+        // Дожидаемся окончания работы рабочего потока, если он не закончил работу
+		    if (m_thread.joinable())
+		    {
+			      m_thread.join();
+		    }
 
         // Сбрасываем флаг остановки, если поток завершил свою
         // работу до вызова SetStopping(true)
@@ -517,10 +518,10 @@ void CRenderer::Stop()
 
 ```cpp
 CRenderer::CRenderer(void)
-:m_rendering(0)    // Изначальное состояние: "не рисуем"
-,m_stopping(0)    // Не останавливаемся
-,m_totalChunks(0)    // Общее количество обрабатываемых блоков изображения
-,m_renderedChunks(0)    // Количество обработанных блоков изображения
+:m_rendering(0)        // Изначальное состояние: "не рисуем"
+,m_stopping(0)         // Не останавливаемся
+,m_totalChunks(0)      // Общее количество обрабатываемых блоков изображения
+,m_renderedChunks(0)   // Количество обработанных блоков изображения
 {
 }
 
