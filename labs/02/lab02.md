@@ -322,7 +322,7 @@ void OnPaint(HWND hwnd)
 
 Ссылка на источник:
 
-<http://support.microsoft.com/?scid=kb%3Ben-us%3B814675&x=9&y=11>
+<https://rsdn.org/article/gdi/gdiplus2mag.xml>
 
 Самым лучшим решением в данном случае будет создание нового
 объекта [Gdiplus::Bitmap](http://msdn.microsoft.com/en-us/library/ms534420\(v=VS.85\).aspx) (растровое изображение) нужного размера и формата пикселей
