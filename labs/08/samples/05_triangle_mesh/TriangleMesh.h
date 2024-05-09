@@ -80,7 +80,7 @@ public:
 	) const;
 
 private:
-	CVector4d m_planeEquation; // Уравшение плоскости
+	CVector4d m_planeEquation; // Уравнение плоскости
 
 	// Перпендикуляры к ребрам треугольника
 	CVector3d m_edge01Perp;
