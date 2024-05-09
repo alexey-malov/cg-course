@@ -89,9 +89,10 @@ GLuint CMyApplication::LoadTexture(std::wstring const& fileName)
     {
         throw std::runtime_error("Error loading texture file");
     }
+}
 ```
 
-После того, как изображение было загружено, необходимо получить доступ к его пикселям. Поскольку загруженное изображение может иметь или не иметь
+После того как изображение было загружено, необходимо получить доступ к его пикселям. Поскольку загруженное изображение может иметь или не иметь
 альфа-канал, необходимо учесть это при создании текстурного объекта, загружая в него данные в формате RGBA либо RGB. Соответственно, это нужно учесть
 и при получении прямого доступа к данным растрового изображения.
 
@@ -141,7 +142,7 @@ GL_BGRA_EXT и GL_BGR_EXT библиотеки OpenGL. Поэтому в пер�
         pixelFormat, &bitmapData);
 ```
 
-После того, как доступ к данным изображения получен, при помощи
+После того как доступ к данным изображения получен, при помощи
 функции [glGenTextures](http://msdn.microsoft.com/en-us/library/dd373539%28VS.85%29.aspx) сгенерируем уникальный идентификатор для текстурного объекта
 и сделаем этот объект текущим при помощи функции [glBindTexture](http://msdn.microsoft.com/en-us/library/ms537030%28VS.85%29.aspx).
 
@@ -155,7 +156,7 @@ GL_BGRA_EXT и GL_BGR_EXT библиотеки OpenGL. Поэтому в пер�
     glBindTexture(GL_TEXTURE_2D, textureName);
 ```
 
-С каждым текстурным объектом может быть связано несколько изображений (mip-maps), соответствующих разным уровням детализации. Для того, чтобы задать
+С каждым текстурным объектом может быть связано несколько изображений (mip-maps), соответствующих разным уровням детализации. Для того чтобы задать
 двухмерное текстурное изображение для текстурного объекта, воспользуемся
 функцией [glTexImage2D](http://msdn.microsoft.com/en-us/library/dd368638\(v=VS.85\).aspx). Поскольку мы пока для простоты не хотим задавать
 дополнительные уровни детализации для текстуры, зададим при помощи
@@ -179,7 +180,7 @@ GL_BGRA_EXT и GL_BGR_EXT библиотеки OpenGL. Поэтому в пер�
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 ```
 
-После того, как текстурное изображение было передано в OpenGL, при помощи
+После того как текстурное изображение было передано в OpenGL, при помощи
 метода [Bitmap::UnlockBits](http://msdn.microsoft.com/en-us/library/ms536301%28v=VS.85%29.aspx) освобождаем полученные данные о пикселях изображения и
 возвращаем идентификатор созданной текстуры.
 
@@ -191,7 +192,6 @@ GL_BGRA_EXT и GL_BGR_EXT библиотеки OpenGL. Поэтому в пер�
     return textureName;
 ```
 
-}
 
 #### ***Управление текстурным объектом***
 
@@ -202,7 +202,7 @@ class CMyApplication : public CGLApplication
 {
 public:
     CMyApplication(const char * title, int width, int height);
-    ~CMyApplication(void);
+    ~CMyApplication();
 protected:
     virtual void OnInit();
     virtual void OnDisplay();
@@ -225,13 +225,13 @@ private:
 функции [glDeleteTextures](http://msdn.microsoft.com/en-us/library/ms537065\(v=VS.85\).aspx).
 
 ```cpp
-CMyApplication::CMyApplication(const char * title, int width, int height)
-:CGLApplication(title, width, height)
-,m_carTexture(0)
+CMyApplication::CMyApplication(const char* title, int width, int height)
+    : CGLApplication(title, width, height)
+    , m_carTexture(0)
 {
 }
 
-CMyApplication::~CMyApplication(void)
+CMyApplication::~CMyApplication()
 {
     // Удаляем текстурный объект
     if (m_carTexture)
@@ -252,14 +252,14 @@ void CMyApplication::OnInit()
 
 #### ***Наложение текстуры***
 
-Для того, чтобы нарисовать прямоугольник с наложенной на него текстурой необходимо включить режим наложения двухмерной текстуры при помощи вызова
+Для того чтобы нарисовать прямоугольник с наложенной на него текстурой необходимо включить режим наложения двухмерной текстуры при помощи вызова
 функции glEnable с параметром GL_TEXTURE_2D, выбрать нужный текстурный объект при помощи glBindTexure, а затем указать текстурные координаты каждой
 вершины примитива, вызывая одну из функций [glTexCoord](http://msdn.microsoft.com/en-us/library/dd368624\(VS.85\).aspx) перед соответствующим вызовом
 glVertex.
 
 Текстурные координаты задаются в текстурном пространстве, задающем отображение текстурного изображения на диапазон координат от 0 до 1.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.001.png)
+![image](images/texture-in-space.png)
 
 Исходный код метода OnDisplay, выполняющий визуализацию квадрата, расположенного в плоскости XOY в диапазоне координат от -1 до +1 по осям X и Y,
 представлен ниже:
@@ -314,12 +314,12 @@ void CMyApplication::OnDisplay()
 
 Результат работы программы представлен на следующем рисунке.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.002.png)
+![image](images/simple-texturing-car.png)
 
 ### <a name="_toc101941333"></a>**Наложение текстуры на объемные объекты**
 
 Поскольку визуализация объемного объекта в OpenGL сводится в визуализации плоских граней, аппроксимирующих поверхность данного объекта, принципиальных
-различий от наложения текстуры на плоские объекты нет. Основная наша задача – задать текстурные координаты вершин граней, чтобы получить желаемый
+отличий от наложения текстуры на плоские объекты нет. Основная наша задача – задать текстурные координаты вершин граней, чтобы получить желаемый
 результат.
 
 Рассмотрим в данном примере расчет текстурных координат для сферы и куба, поскольку для таких фигур расчет текстурных координат выполняется достаточно
@@ -327,13 +327,12 @@ void CMyApplication::OnDisplay()
 результатов. Поэтому дизайнеры трехмерных моделей выполняют наложение текстуры вручную при помощи специальных программ. Данная технология получила
 название UV mapping (U и V – распространенное имя для координатных осей в двухмерном текстурном пространстве):
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.003.png)
+![image](images/uv-mapping.png)
 
 В качестве иллюстрации разработаем приложение, визуализирующее планету в космическом пространстве. Планета будет представлена в виде сферы, с
-нанесенной на нее текстурой земной поверхности, а изображение окружающего планету пространство будет визуализировано с использованием [**Sky box
-**](http://en.wikipedia.org/wiki/Skybox_%28video_games%29), на грани которого нанесено изображение звезд и галактик.
+нанесенной на нее текстурой земной поверхности, а изображение окружающего планету пространство будет визуализировано с использованием [Sky box](http://en.wikipedia.org/wiki/Skybox_%28video_games%29), на грани которого нанесено изображение звезд и галактик.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.004.png)
+![image](images/skybox.png)
 
 Положение Skybox будет всегда привязано к положению наблюдателя, что создаст иллюзию того, что звезды и галактики бесконечно удалены от наблюдателя,
 т.к. при любом изменении позиции камеры будут равномерно удалены от него.
@@ -372,13 +371,13 @@ public:
     }
 
     // Получаем идентификатор текстурного объекта
-    operator GLuint()const
+    operator GLuint() const
     {
         return m_texture;
     }
 
     // Делаем объект активным
-    void BindTo(GLenum target)const
+    void BindTo(GLenum target) const
     {
         assert(m_texture != 0);
         glBindTexture(target, m_texture);
@@ -386,7 +385,7 @@ public:
 
 protected:
     CBaseTexture(GLuint texture)
-        :m_texture(texture)
+        : m_texture(texture)
     {
     }
 
@@ -411,28 +410,28 @@ template <bool t_managed, class TBase>
 class CTextureImpl : public TBase
 {
 public:
-    CTextureImpl<t_managed, TBase>(GLuint texture = 0)
+    CTextureImpl(GLuint texture = 0)
         :TBase(texture)
     {
     }
 
-    ~CTextureImpl<t_managed, TBase>()
+    ~CTextureImpl()
     {
         bool m = t_managed;
         if (m && (*this != 0))
         {
-            Delete();
+            TBase::Delete();
         }
     }
 
     // Присоединяем текстурный объект к экземпляру класса
     void Attach(GLuint texture)
     {
-        if (t_managed && *this != 0)
+        if (t_managed && (*this != 0) && (texture != *this))
         {
-            Delete();
+            TBase::Delete();
         }
-        SetTexture(texture);
+        TBase::SetTexture(texture);
     }
 };
 
@@ -443,7 +442,7 @@ public:
     CTexture2DImpl(GLuint texture = 0)
         :CBaseTexture(texture){}
 
-    void Bind()const
+    void Bind() const
     {
         BindTo(GL_TEXTURE_2D);
     }
@@ -454,7 +453,7 @@ public:
         GLsizei width, GLsizei height,
         GLint border,
         GLenum format, GLenum type,
-        const GLvoid * pixels)
+        const GLvoid* pixels)
     {
         glTexImage2D(GL_TEXTURE_2D, level, internalFormat,
             width, height, border, format, type, pixels);
@@ -466,9 +465,11 @@ class CTexture1DImpl : public CBaseTexture
 {
 public:
     CTexture1DImpl(GLuint texture = 0)
-        :CBaseTexture(texture){}
+        :CBaseTexture(texture)
+    {
+    }
 
-    virtual void Bind()const
+    virtual void Bind() const
     {
         BindTo(GL_TEXTURE_1D);
     }
@@ -508,15 +509,14 @@ typedef CTextureImpl<false, CTexture1DImpl> CTexture1DHandle;
 class CTextureLoader
 {
 public:
-    CTextureLoader(void);
-    ~CTextureLoader(void);
+    CTextureLoader();
 
     // Выполняем загрузку двухмерной текстуры из файла
     // Если параметр textureName равен 0, то текстура будет загружена в
     // новый текстурный объект. В противном случае - в существующий
     GLuint LoadTexture2D(
         std::wstring const& fileName,
-        GLuint textureName = 0, GLint level = 0)const;
+        GLuint textureName = 0, GLint level = 0) const;
 
     // Задаем параметры фильтрации при увеличении и уменьшении текстуры,
     // задаваемые сразу после загрузки
@@ -541,16 +541,12 @@ private:
 Код конструктора класса и методов, конфигурирующих его поведение, представлен ниже и в особых пояснениях не нуждается.
 
 ```cpp
-CTextureLoader::CTextureLoader(void)
-:m_buildMipmaps(true)
-,m_minFilter(GL_LINEAR_MIPMAP_LINEAR)
-,m_magFilter(GL_LINEAR)
-,m_wrapS(GL_REPEAT)
-,m_wrapT(GL_REPEAT)
-{
-}
-
-CTextureLoader::~CTextureLoader(void)
+CTextureLoader::CTextureLoader()
+    : m_buildMipmaps(true)
+    , m_minFilter(GL_LINEAR_MIPMAP_LINEAR)
+    , m_magFilter(GL_LINEAR)
+    , m_wrapS(GL_REPEAT)
+    , m_wrapT(GL_REPEAT)
 {
 }
 
@@ -580,7 +576,7 @@ void CTextureLoader::SetWrapMode(GLenum wrapS, GLenum wrapT)
 Изменения выделены темно синим цветом.
 
 ```cpp
-GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textureName, GLint level)const
+GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textureName, GLint level) const
 {
     // Загружаем изображение при помощи GDI+
     Gdiplus::Bitmap bmp(fileName.c_str());
@@ -633,7 +629,7 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
     if (m_buildMipmaps)
     {
         // Строим семейство мип-уровней для загруженного изображения
-        // и присоединям их к выбранному текстурному объекту
+        // и присоединяем их к выбранному текстурному объекту
         gluBuild2DMipmaps(
             GL_TEXTURE_2D,
             colorComponents,
@@ -675,27 +671,27 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 Рассмотрим процесс наложения текстуры на сферу. Сама сфера представлена в виде многогранника, вершины которого находятся в точках пересечения
 параллелей и меридианов (см. рисунок).
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.005.png)
+![image](images/earth-sphere.png)
 
 В полярной системе координат каждая точка на сфере радиуса R может быть вычислена по двум углам α и φ следующим образом.
 
 Зная угол φ можно вычислить координату z и радиус окружности, расположенной на -ой параллели:
 
-z=Rsin(φ)
+$$ z=R\sin(φ) $$
 
-r=Rcos(φ)
+$$ r=R\cos(φ) $$
 
 Координаты x и y можно вычислить, зная радиус соответствующей параллели, а также угол α.
 
-x=rcos(α)
+$$ x=r\cos(α) $$
 
-y=rsin(α)
+$$ y=r\sin(α) $$
 
 Текстурные координаты вычисляются еще проще:
 
-s=α/(2π)
+$$ s=\frac{α}{2π} $$
 
-t=φ/(2π)
+$$ t=\frac{φ}{2π} $$
 
 Разработаем класс **CSphere**, выполняющий построение сферы с использованием данных формул.
 
@@ -704,10 +700,11 @@ class CSphere
 {
 public:
     CSphere(float radius, unsigned slices, unsigned stacks);
-    void Draw()const;
-    ~CSphere(void);
+    ~CSphere();
+    
+    void Draw() const;
 private:
-    void DrawSphere()const;
+    void DrawSphere() const;
 
     // Идентификатор дисплейного списка, выполняющего рисование сферы
     mutable GLuint m_displayList;
@@ -720,16 +717,14 @@ private:
 Конструктор класса не делает ничего особенного – только инициализирует переменные.
 
 ```cpp
-#define M_PI 3.14159265358979323846
-
 CSphere::CSphere(
     float radius,
     unsigned slices,
     unsigned stacks)
-:m_radius(radius)
-,m_slices(slices)
-,m_stacks(stacks)
-,m_displayList(0)
+    : m_radius(radius)
+    , m_slices(slices)
+    , m_stacks(stacks)
+    , m_displayList(0)
 {
 }
 ```
@@ -743,21 +738,21 @@ CSphere::CSphere(
 #define M_PI 3.14159265358979323846
 
 /*
-Рисуем сфеу при помощи последовательности triangle strip-ов
+Рисуем сферу при помощи последовательности triangle strip-ов
 Каждая лента соответствует линии параллелей
 */
-void CSphere::DrawSphere()const
+void CSphere::DrawSphere() const
 {
     // шаг по параллелям
-    const float stackStep = M_PI / m_stacks;
+    const float stackStep = static_cast<float>(std::numbers::pi / m_stacks);
 
     // шаг по меридианам
-    const float sliceStep = 2 * M_PI / m_slices;
+    const float sliceStep = static_cast<float>(2 * std::numbers::pi / m_slices);
 
     // начальный угол по параллелям
     for (unsigned stack = 0; stack < m_stacks; ++stack)
     {
-        float stackAngle = M_PI * 0.5 - stack * stackStep;
+        float stackAngle = static_cast<float>(std::numbers::pi * 0.5 - stack * stackStep);
         float nextStackAngle = stackAngle - stackStep;
 
         const float stackRadius = m_radius * cosf(stackAngle);
@@ -792,9 +787,18 @@ void CSphere::DrawSphere()const
             glVertex3f(x1, y1, z1);
         }
         glEnd();
+    }
 }
 
-void CSphere::Draw()const
+CSphere::~CSphere()
+{
+    if (m_displayList)
+    {
+        glDeleteLists(m_displayList, 1);
+    }
+}
+
+void CSphere::Draw() const
 {
     if (!m_displayList)
     {
@@ -807,19 +811,11 @@ void CSphere::Draw()const
     }
     glCallList(m_displayList);
 }
-
-CSphere::~CSphere(void)
-{
-    if (m_displayList)
-    {
-        glDeleteLists(m_displayList, 1);
-    }
-}
 ```
 
 Пример сферы, построенной при помощи данного класса (в режиме визуализации полигонов GL_LINE) представлен на следующем рисунке.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.006.png)
+![image](images/sphere.png)
 
 Далее разработаем класс CPlanet, выполняющий визуализацию планеты. Данный класс будет использовать класс CSphere для построения сферы, а также классы
 CMaterial и CTexture2D для задания свойств материала и текстуры планеты.
@@ -839,19 +835,20 @@ public:
     void Animate(float timeDelta);
 
     // рисуем планету
-    void Draw()const;
+    void Draw() const;
 
     // Угол наклона оси вращения
     void SetInclinationAngle(float inclinationAngle);
 
     // Скорость вращения вокруг своей оси
     void SetRotationSpeed(float rotationSpeed);
+
 private:
     CSphere m_sphere; // сфера, аппроксимирующая поверхность планеты
     CMaterial m_material; // материал планеты
-    float m_rotationAngle; // угол поворота вокруг своекй оси
+    float m_rotationAngle; // угол поворота вокруг своей оси
     float m_inclinationAngle; // угол наклона оси вращения
-    float m_rotationSpeed; // Скорость вращения вокруг собсвтенной оси
+    float m_rotationSpeed; // Скорость вращения вокруг собственной оси
     mutable CTexture2D m_texture; // текстура планеты
     std::wstring m_textureName; // имя файла с текстурой
 };
@@ -863,12 +860,12 @@ private:
 #include "Planet.h"
 #include "TextureLoader.h"
 
-CPlanet::CPlanet(std::wstring const& textureName, float radius, float slices, float stacks)
-:m_sphere(radius, slices, stacks)
-,m_textureName(textureName)
-,m_rotationAngle(0)
-,m_inclinationAngle(0)
-,m_rotationSpeed(0)
+CPlanet::CPlanet(std::wstring const& textureName, float radius, unsigned slices, unsigned stacks)
+    : m_sphere(radius, slices, stacks)
+    , m_textureName(textureName)
+    , m_rotationAngle(0)
+    , m_inclinationAngle(0)
+    , m_rotationSpeed(0)
 {
     m_material.SetDiffuse(1, 1, 1);
     m_material.SetShininess(50);
@@ -891,7 +888,7 @@ void CPlanet::SetRotationSpeed(float rotationSpeed)
 {
     m_rotationSpeed = rotationSpeed;
 }
-void CPlanet::Draw()const
+void CPlanet::Draw() const
 {
     if (!m_texture)
     {
@@ -921,7 +918,7 @@ void CPlanet::Draw()const
 
 Всего лишь благодаря текстуре наша сфера превратится в планету Земля:
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.007.png)
+![image](images/textured-sphere.png)
 
 #### ***Добавляем освещение от точечного источника света.***
 
@@ -929,38 +926,36 @@ void CPlanet::Draw()const
 направленным источником света. Он, скорее, точечный, равномерно излучающий свет во всех направлениях. Для работы с точечным источником света
 разработаем класс **COmniLight**[^1]. Точечный источник света характеризуется своим положением в пространстве (четвертая координата параметра
 GL_POSITION равна 1, а не 0, в отличие от направленного), кроме того, для точечного источника можно задать параметры ослабления интенсивности света с
-расстоянием. Других различий от направленного источника света нет. Чтобы устранить дублирование кода между классами COmniLight и CDirectLight вынесем
+расстоянием. Других отличий от направленного источника света нет. Чтобы устранить дублирование кода между классами COmniLight и CDirectLight вынесем
 общий для точечного и направленного источников света код в класс CLight и унаследуем COmniLight и CDirectLight от него.
 
 ```cpp
 class CLight
 {
 public:
-    virtual ~CLight(void);
-    virtual void SetLight(GLenum light)const;
+    virtual void SetLight(GLenum light) const;
+
     void SetDiffuseIntensity(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1);
     void SetAmbientIntensity(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1);
     void SetSpecularIntensity(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1);
+
 protected:
-    CLight(void);
+    CLight();
+
 private:
     GLfloat m_diffuse[4];
     GLfloat m_ambient[4];
     GLfloat m_specular[4];
 };
 
-CLight::CLight(void)
+CLight::CLight()
 {
-    SetDiffuseIntensity(0.8, 0.8, 0.8, 1);
-    SetAmbientIntensity(0.2, 0.2, 0.2, 1);
-    SetSpecularIntensity(0.5, 0.5, 0.5, 1);
+    SetDiffuseIntensity(0.8f, 0.8f, 0.8f, 1);
+    SetAmbientIntensity(0.2f, 0.2f, 0.2f, 1);
+    SetSpecularIntensity(0.5f, 0.5f, 0.5f, 1);
 }
 
-CLight::~CLight(void)
-{
-}
-
-void CLight::SetLight(GLenum light)const
+void CLight::SetLight(GLenum light) const
 {
     glLightfv(light, GL_DIFFUSE, m_diffuse);
     glLightfv(light, GL_AMBIENT, m_ambient);
@@ -983,7 +978,7 @@ void CLight::SetAmbientIntensity(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     m_ambient[3] = a;
 }
 
-void CLight::SetSpecularIntensity(GLfloat r, GLfloat g, GLfloat b, GLfloat a
+void CLight::SetSpecularIntensity(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
     m_specular[0] = r;
     m_specular[1] = g;
@@ -1002,17 +997,17 @@ public:
 
     void SetDirection(CVector3f const& direction);
 
-    void SetLight(GLenum light)const;
+    void SetLight(GLenum light) const;
 private:
     CVector3f m_direction;
 };
 
 CDirectLight::CDirectLight(CVector3f const& lightDirection)
-:m_direction(lightDirection)
+    : m_direction(lightDirection)
 {
 }
 
-void CDirectLight::SetLight(GLenum light)const
+void CDirectLight::SetLight(GLenum light) const
 {
     GLfloat lightDirection[4] =
     {
@@ -1035,14 +1030,14 @@ void CDirectLight::SetDirection(CVector3f const& direction)
 
 ```cpp
 COmniLight::COmniLight(CVector3f const& position)
-:m_position(position)
-,m_quadraticAttenuation(0)
-,m_linearAttenuation(0)
-,m_constantAttenuation(1)
+    : m_position(position)
+    , m_quadraticAttenuation(0)
+    , m_linearAttenuation(0)
+    , m_constantAttenuation(1)
 {
 }
 
-void COmniLight::SetLight(GLenum light)const
+void COmniLight::SetLight(GLenum light) const
 {
     GLfloat lightPosition[4] =
     {
@@ -1083,7 +1078,7 @@ void COmniLight::SetConstantAttenuation(GLfloat constantAttenuation)
 
 Результат работы программы представлен на рисунке.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.008.png)
+![image](images/textured-sphere-with-light.png)
 
 #### ***Наложение текстуры на грани куба***
 
@@ -1099,13 +1094,11 @@ void COmniLight::SetConstantAttenuation(GLfloat constantAttenuation)
 class CTexturedCube
 {
 public:
-    CTexturedCube();
-    void Draw(GLfloat size = 1)const;
+    void Draw(GLfloat size = 1) const;
     void SetTextures(
         GLuint leftTexture, GLuint rightTexture,
         GLuint bottomTexture, GLuint topTexture,
-        GLuint backTexture, GLuint frontTexture
-        );
+        GLuint backTexture, GLuint frontTexture);
 private:
     CTexture2D m_backTexture;
     CTexture2D m_frontTexture;
@@ -1115,11 +1108,7 @@ private:
     CTexture2D m_topTexture;
 };
 
-CTexturedCube::CTexturedCube(void)
-{
-}
-
-void CTexturedCube::Draw(GLfloat size)const
+void CTexturedCube::Draw(GLfloat size) const
 {
     /*
         Y
@@ -1163,7 +1152,7 @@ void CTexturedCube::Draw(GLfloat size)const
         GLfloat tex1s, tex1t;
         GLfloat tex2s, tex2t;
         GLfloat tex3s, tex3t;
-        CTexture2D const & texture;
+        CTexture2D const& texture;
     };
 
     // Массив координат граней (в порядке, совпадающем с
@@ -1183,7 +1172,7 @@ void CTexturedCube::Draw(GLfloat size)const
 
     for (unsigned faceIndex = 0; faceIndex < faceCount; ++faceIndex)
     {
-        CubeFace const & face = faces[faceIndex];
+        CubeFace const& face = faces[faceIndex];
 
         face.texture.Bind();
 
@@ -1217,10 +1206,9 @@ void CTexturedCube::Draw(GLfloat size)const
 void CTexturedCube::SetTextures(
     GLuint leftTexture, GLuint rightTexture,
     GLuint bottomTexture, GLuint topTexture,
-    GLuint backTexture, GLuint frontTexture
-   )
+    GLuint backTexture, GLuint frontTexture)
 {
-    // илициализируем текстурные объекты, соответствующие 6 сторонам куба
+    // инициализируем текстурные объекты, соответствующие 6 сторонам куба
     m_leftTexture.Attach(leftTexture);
     m_rightTexture.Attach(rightTexture);
     m_bottomTexture.Attach(bottomTexture);
@@ -1243,9 +1231,9 @@ public:
         std::wstring const& downTexture,
         std::wstring const& upTexture,
         std::wstring const& backTexture,
-        std::wstring const& frontTexture
-        );
-    void Draw()const;
+        std::wstring const& frontTexture);
+    void Draw() const;
+
 private:
     mutable bool m_initialized;
     mutable CTexturedCube m_cube;
@@ -1262,20 +1250,19 @@ private:
 
 ```cpp
 CSkyBox::CSkyBox(
-       std::wstring const& leftTexture,
-       std::wstring const& rightTexture,
-       std::wstring const& downTexture,
-       std::wstring const& upTexture,
-       std::wstring const& backTexture,
-       std::wstring const& frontTexture
-)
-:m_initialized(false)
-,m_leftTexture(leftTexture)
-,m_rightTexture(rightTexture)
-,m_downTexture(downTexture)
-,m_upTexture(upTexture)
-,m_backTexture(backTexture)
-,m_frontTexture(frontTexture)
+    std::wstring const& leftTexture,
+    std::wstring const& rightTexture,
+    std::wstring const& downTexture,
+    std::wstring const& upTexture,
+    std::wstring const& backTexture,
+    std::wstring const& frontTexture)
+    : m_initialized(false)
+    , m_leftTexture(leftTexture)
+    , m_rightTexture(rightTexture)
+    , m_downTexture(downTexture)
+    , m_upTexture(upTexture)
+    , m_backTexture(backTexture)
+    , m_frontTexture(frontTexture)
 {
 }
 ```
@@ -1288,7 +1275,7 @@ CSkyBox::CSkyBox(
 должен быть нарисован первым, чтобы не стереть нарисованные до него объекты.
 
 Во-вторых, центр куба привязан к точке наблюдателя. Это значит, что какой бы мы размер стороны куба ни выбрали, картинка не будет зависеть от длины
-стороны куба. Для того, чтобы привязать точку наблюдения к точке наблюдателя, необходимо заполнить нулями первые три элемента в четвертом столбце
+стороны куба. Для того чтобы привязать точку наблюдения к точке наблюдателя, необходимо заполнить нулями первые три элемента в четвертом столбце
 матрицы моделирования-вида.
 
 В-третьих, здесь мы используем режим оборачивания текстурных координат **GL_CLAMP_TO_EDGE_EXT**, который благодаря стараниям[^3] Microsoft
@@ -1307,12 +1294,12 @@ Visual Studio, но доступен в виде расширения и под�
 #define GL_CLAMP_TO_EDGE_EXT 0x812F
 #endif
 
-void CSkyBox::Draw()const
+void CSkyBox::Draw() const
 {
     if (!m_initialized)
     {
         CTextureLoader loader;
-        // Устанавливаем режим "заворачиваиия" текстурных координат,
+        // Устанавливаем режим "заворачивания" текстурных координат,
         // обеспечивающие минимальную видимость стыков на гранях куба
         loader.SetWrapMode(GL_CLAMP_TO_EDGE_EXT, GL_CLAMP_TO_EDGE_EXT);
 
@@ -1322,8 +1309,7 @@ void CSkyBox::Draw()const
             loader.LoadTexture2D(m_downTexture),
             loader.LoadTexture2D(m_upTexture),
             loader.LoadTexture2D(m_backTexture),
-            loader.LoadTexture2D(m_frontTexture)
-            );
+            loader.LoadTexture2D(m_frontTexture));
         m_initialized = true;
     }
     // Устанавливаем необходимые режимы визуализации куба
@@ -1334,7 +1320,7 @@ void CSkyBox::Draw()const
     // сохраняем текущую матрицу
     glPushMatrix();
 
-    // Положение камеры располаагется в 4 столбце матрицы (элементы 12-14)
+    // Положение камеры располагается в 4 столбце матрицы (элементы 12-14)
     // Если занести туда 0, то матрица станет матрицей вращения.
     GLfloat modelView[16];
     glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
@@ -1369,16 +1355,16 @@ class CRotationController
 {
 public:
     CRotationController(int windowWidth, int windowHeight);
-    ~CRotationController(void);
 
     // Возвращает состояние левой кнопки мыши
-    bool LeftButtonIsPressed()const;
+    bool LeftButtonIsPressed() const;
     // Данный метод нужно вызывать при изменении размеров окна
     void ResizeWindow(int windowWidth, int windowHeight);
     // Данный метод нужно вызывать при нажатии/отпускании кнопки мыши
     void OnMouse(int button, int state, int x, int y);
     // Данный метод нужно вызывать при перемещении мыши
     void OnMotion(int x, int y);
+
 private:
     static void NormalizeModelViewMatrix(void);
     static void RotateCamera(GLfloat rotateX, GLfloat rotateY);
@@ -1390,13 +1376,9 @@ private:
 };
 
 CRotationController::CRotationController(int windowWidth, int windowHeight)
-:m_leftButtonPressed(false)
-,m_windowWidth(windowWidth)
-,m_windowHeight(windowHeight)
-{
-}
-
-CRotationController::~CRotationController(void)
+    : m_leftButtonPressed(false)
+    , m_windowWidth(windowWidth)
+    , m_windowHeight(windowHeight)
 {
 }
 
@@ -1441,7 +1423,7 @@ void CRotationController::OnMotion(int x, int y)
     }
 }
 
-// Вращаем камеру вокруг начала кординат на заданный угол
+// Вращаем камеру вокруг начала координат на заданный угол
 void CRotationController::RotateCamera(GLfloat rotateX, GLfloat rotateY)
 {
     // Извлекаем текущее значение матрицы моделирования-вида
@@ -1498,11 +1480,11 @@ void CRotationController::NormalizeModelViewMatrix(void)
     modelView[1] = yAxis.x; modelView[5] = yAxis.y, modelView[9] = yAxis.z;
     modelView[2] = zAxis.x; modelView[6] = zAxis.y, modelView[10] = zAxis.z;
 
-    // И загружаем матрицу моделирвания-вида
+    // И загружаем матрицу моделирования-вида
     glLoadMatrixf(modelView);
 }
 
-bool CRotationController::LeftButtonIsPressed()const
+bool CRotationController::LeftButtonIsPressed() const
 {
     return m_leftButtonPressed;
 }
@@ -1552,44 +1534,40 @@ void CMyApplication::OnMotion(int x, int y)
 class CAnimationController
 {
 public:
-    CAnimationController(void);
-    ~CAnimationController(void);
+    CAnimationController();
+
     // Выполняет сброс контроллера
     void Reset();
     // Данный метод следует вызывать в начале каждого кадра
     void Tick();
     // Возвращает промежуток времени (в мс), прошедший с момента
     // предыдущего кадра
-    DWORD GetTimeDelta()const;
+    DWORD GetTimeDelta() const;
 
 private:
     DWORD m_lastTick;
     DWORD m_delta;
 };
 
-CAnimationController::CAnimationController(void)
+CAnimationController::CAnimationController()
 {
     Reset();
 }
 
-CAnimationController::~CAnimationController(void)
-{
-}
-
 void CAnimationController::Reset()
 {
-    m_lastTick = GetTickCount();
+    m_lastTick = GetTickCount64();
     m_delta = 0;
 }
 
 void CAnimationController::Tick()
 {
-    DWORD currentTick = GetTickCount();
+    DWORD currentTick = GetTickCount64();
     m_delta = currentTick - m_lastTick;
     m_lastTick = currentTick;
 }
 
-DWORD CAnimationController::GetTimeDelta()const
+DWORD CAnimationController::GetTimeDelta() const
 {
     return m_delta;
 }
@@ -1603,7 +1581,7 @@ GLUT всякий раз, когда приложение находится в 
 void CMyApplication::OnIdle()
 {
     m_animationController.Tick();
-    m_earth.Animate(m_animationController.GetTimeDelta() * 0.001);
+    m_earth.Animate(static_cast<float>(m_animationController.GetTimeDelta() * 0.001));
     PostRedisplay();
     Sleep(10);
 }
@@ -1618,7 +1596,7 @@ class CMyApplication : public CGLApplication
 {
 public:
     CMyApplication(const char * title, int width, int height);
-    ~CMyApplication(void);
+
 protected:
     virtual void OnInit();
     virtual void OnDisplay();
@@ -1627,11 +1605,12 @@ protected:
     virtual void OnMouse(int button, int state, int x, int y);
     virtual void OnMotion(int x, int y);
     virtual void OnKeyboard(unsigned char key, int x, int y);
+
 private:
     // Рисуем космос
-    void DrawSkyBox()const;
+    void DrawSkyBox() const;
     // Рисуем землю
-    void DrawEarth()const;
+    void DrawEarth() const;
     // Угол обзора по вертикали
     static const double FIELD_OF_VIEW;
 
@@ -1659,21 +1638,19 @@ private:
 В конструкторе класса выполним инициализацию планеты, небесного куба, источника света и других вспомогательных объектов.
 
 ```cpp
-CMyApplication::CMyApplication(const char * title, int width, int height)
-:CGLApplication(title, width, height)
-,m_earth(L"earth.png")
-,m_rotationController(width, height)
-,m_light(CVector3f(0, 10, 0))
-,m_skyBox(
-    L"Galaxy_LT.png",
-    L"Galaxy_RT.png",
-    L"Galaxy_DN.png",
-    L"Galaxy_UP.png",
-    L"Galaxy_BK.png",
-    L"Galaxy_FT.png"
-    )
-
-,m_polygonMode(GL_FILL)
+CMyApplication::CMyApplication(const char* title, int width, int height)
+    : CGLApplication(title, width, height)
+    , m_earth(L"earth.png")
+    , m_rotationController(width, height)
+    , m_light(CVector3f(0, 10, 0))
+    , m_skyBox(
+        L"Galaxy_LT.png",
+        L"Galaxy_RT.png",
+        L"Galaxy_DN.png",
+        L"Galaxy_UP.png",
+        L"Galaxy_BK.png",
+        L"Galaxy_FT.png")
+    , m_polygonMode(GL_FILL)
 {
     m_light.SetDiffuseIntensity(1, 1, 1);
     m_light.SetSpecularIntensity(1, 1, 1);
@@ -1705,7 +1682,7 @@ void CMyApplication::OnDisplay()
     DrawEarth();
 }
 
-void CMyApplication::DrawEarth()const
+void CMyApplication::DrawEarth() const
 {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -1714,7 +1691,7 @@ void CMyApplication::DrawEarth()const
     m_earth.Draw();
 }
 
-void CMyApplication::DrawSkyBox()const
+void CMyApplication::DrawSkyBox() const
 {
     glDisable(GL_LIGHTING);
     // Отключим режим отбраковки граней, т.к.
@@ -1751,7 +1728,7 @@ void CMyApplication::OnKeyboard(unsigned char key, int /*x*/, int /*y*/)
 
 Ну вот, планета готова.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.009.png) ![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.010.png) ![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.011.png)
+![image](images/earth-sphere-layout-1.png) ![image](images/earth-sphere-layout-2.png) ![image](images/textured-sphere-with-light-and-background.png)
 
 ## <a name="_toc101941334"></a>**Наложение тумана**
 
@@ -1761,24 +1738,28 @@ OpenGL позволяет накладывать туман на выводим�
 В OpenGL коэффициент смешивания может быть рассчитан одним из следующих образов:
 
 Линейный:
-f=(end-z)/(end-start)
+
+$$ f=\frac{end-z}{end-start} $$
 
 Экспоненциальный:
-f=e^(-dz)
+
+$$ f=e^{(-dz)} $$
 
 Квадратичный экспоненциальный:
-f=e^(-dz)^2
+
+
+$$ f={e^{(-dz)}}^{2} $$
 
 Здесь d – коэффициент плотности тумана, z – глубина фрагмента, start – глубина, начиная с которой туман начинает примешиваться к цвету фрагмента,
 end – глубина, на которой цвет фрагмента полностью равен цвету тумана.
 
 Коэффициент f приводится к диапазону от 0 до 1. На его основе результирующий цвет фрагмента вычисляется по следующей формуле:
 
-Сr'=fСr+(1-f)Сf
+$$ Сr'=fС_r+(1-f)С_f $$
 
-Сr – цвет фрагмента, Сf – цвет тумана
+$С_r$ – цвет фрагмента, $С_f$ – цвет тумана
 
-Для того, чтобы включить наложение тумана, необходимо вызвать функцию glEnable с параметром GL_FOG.
+Для того чтобы включить наложение тумана, необходимо вызвать функцию glEnable с параметром GL_FOG.
 
 Для управления параметрами тумана служит семейство функций [glFog](http://msdn.microsoft.com/en-us/library/dd373535\(v=VS.85\).aspx), позволяющих
 задать цвет тумана, плотность, начальную и конечную дистанцию для линейного тумана.
@@ -1800,7 +1781,7 @@ class CMyApplication : public CGLApplication
 {
 public:
     CMyApplication(const char * title, int width, int height);
-    ~CMyApplication(void);
+
 protected:
     virtual void OnInit();
     virtual void OnDisplay();
@@ -1826,11 +1807,11 @@ private:
 Конструктор и обработчик OnInit() выполняют настройку материалов и источника света
 
 ```cpp
-CMyApplication::CMyApplication(const char * title, int width, int height)
-:CGLApplication(title, width, height)
-,m_light(CVector3f(10, 10, 10))
-,m_rotationController(width, height)
-,m_fogEnabled(true)
+CMyApplication::CMyApplication(const char* title, int width, int height)
+    : CGLApplication(title, width, height)
+    , m_light(CVector3f(10, 10, 10))
+    , m_rotationController(width, height)
+    , m_fogEnabled(true)
 {
     m_light.SetDiffuseIntensity(1, 1, 1, 1);
     m_light.SetAmbientIntensity(0.2f, 0.2f, 0.2f, 1);
@@ -1840,10 +1821,6 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
     m_teapotMaterial.SetAmbient(0.4f, 0.3f, 0.4f);
     m_teapotMaterial.SetSpecular(1, 1, 1);
     m_teapotMaterial.SetShininess(30);
-}
-
-CMyApplication::~CMyApplication(void)
-{
 }
 
 void CMyApplication::OnInit()
@@ -1881,7 +1858,7 @@ void CMyApplication::OnDisplay()
     glFogfv(GL_FOG_COLOR, fogColor);
 
     // и его плотность
-    glFogf(GL_FOG_DENSITY, 0.4);
+    glFogf(GL_FOG_DENSITY, 0.4f);
 
     // Включаем освещение и рисуем чайник
     glEnable(GL_LIGHTING);
@@ -1905,7 +1882,7 @@ void CMyApplication::OnKeyboard(unsigned char key, int /*x*/, int /*y*/)
 
 Результат работы программы представлен на следующем рисунке:
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.012.png) ![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.013.png)
+![image](images/kettle-without-fog.png) ![image](images/kettle-with-fog.png)
 
 Сравнение изображений чайника с туманом (справа) и без.
 
@@ -1920,8 +1897,8 @@ textures[^7], [Environment mapping](http://en.wikipedia.org/wiki/Environment_map
 может быть выбран свой текстурный объект, включено или выключено наложение текстуры, а также установлен режим наложения текстуры (texture environment
 mode). Кроме того, текстурные координаты вершины указываются для каждого текстурного модуля отдельно.
 
-Для того, чтобы изменить параметры текстурного модуля, приложение должно сделать его активным при помощи
-функции [glActiveTexture](http://www.opengl.org/sdk/docs/man/xhtml/glActiveTexture.xml)[^9]. Последующие функции, управляющие наложением текстуры
+Для того чтобы изменить параметры текстурного модуля, приложение должно сделать его активным при помощи
+функции [glActiveTexture](https://registry.khronos.org/OpenGL-Refpages/gl4/html/glActiveTexture.xhtml)[^9]. Последующие функции, управляющие наложением текстуры
 будут производиться для активного текстурного модуля.
 
 После определения цвета фрагмента путем интерполяции цветов вершин примитива OpenGL выполняет наложение текстуры на фрагмент из каждого текстурного
@@ -1929,10 +1906,10 @@ mode). Кроме того, текстурные координаты верши
 При этом цвет, полученный на выходе текстурного модуля №0, является исходным цветом для наложения текстуры в текстурном модуле №1, и т.д.
 
 Режим наложения текстуры устанавливается в текущем текстурном модуле при помощи
-функций [glTexEnv](http://www.opengl.org/sdk/docs/man/xhtml/glTexEnv.xml). Последние версии OpenGL поддерживают довольно большое количество режимов
+функций [glTexEnv](https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/glTexEnv.xml). Последние версии OpenGL поддерживают довольно большое количество режимов
 наложения текстуры. На рисунке представлено лишь несколько часто используемых режимов.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.014.png)
+![image](images/texture-overlay-mode.png)
 
 С использованием фрагментных шейдеров программист может еще более гибко управлять формированием цвета отдельных фрагментов с использованием языка
 программирования шейдеров GLSL. Но об этом мы поговорим в одной из ближайших лабораторных работ.
@@ -1959,34 +1936,25 @@ OpenGL последних версий доступны при помощи **м
 
 #### ***Установка библиотеки GLEW***
 
-Прежде всего, нужно скачать свежую версию библиотеки GLEW с сайта авторов. Распакуем содержимое архива в каталог C:\SDK. В каталоге с библиотекой GLEW
-будет содержимое, подобное представленному ниже[^10]:
+Для того, чтобы установить библиотеку glew, нужен NuGet. NuGet - это бесплатный пакетный менеджер с открытым исходным кодом, служащий для .NET и .NET Core механизмом совместного использования кода, поддерживаемым Microsoft. NuGet – это замечательный инструмент, позволяющий разработчику легко управлять библиотеками в проектах любого типа.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.015.png)
+Для добавления NuGet необходимо в Visual Studio Installer добавить пакет "ASP.NET и разработка веб-приложений", либо выбрать его на вкладке "Отдельные компоненты".
 
-Следующим нашим шагом будет конфигурирование Visual Studio 2008, а именно, указание путей к каталогам с заголовочными и библиотечными файлами GLEW.
+![image](images/download-nuget.png)
 
-В список Include files необходимо добавим путь[^11] C:\sdk\glew-1.5.6\include.
+После того, как необходимые добавления скачаются, установите в свой проект пакеты NuGet - nupengl.core
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.016.png)
+![image](images/glew-connection-step-1.png)
 
-В списке Library files укажем путь C:\sdk\glew-1.5.6\lib
+![image](images/glew-connection-step-2.png)
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.017.png)
+После этого NuGet сам подгрузит нужную нам библиотеку в проект.
+
 
 #### ***Подключаем библиотеку GLEW к проекту***
 
-Для использования библиотеки GLEW необходимо подключить заголовочный файл **GL/glew.h**, причем, до подключения заголовочного файла GL/gl.h. В нашем
+Для использования библиотеки GLEW необходимо подключить заголовочный файл **GL/glew.h**, причем до подключения заголовочного файла GL/gl.h. В нашем
 примере мы используем библиотеку GLUT, заголовочный файл GL/glut.h которой подключает GL/gl.h. Поэтому GL/glew.h необходимо подключить до GL/glut.h.
-
-Кроме этого, нужно определиться с тем, какую версию библиотеки GLEW мы будем использовать – статически компонуемую библиотеку (.lib), или динамически
-компонуемую (.dll). В первом случае код библиотеки GLEW будет внедрен внутрь исполняемого файла нашего приложения. Во втором случае для запуска
-приложения понадобится динамическая библиотека glew32.dll.
-
-Мы остановимся на первом случае, как на более удобном (не нужно таскать со своим приложением дополнительную библиотеку), пусть даже ценой некоторого
-увеличения размеров исполняемого файла приложения.
-
-В этом случае перед подключением заголовочного файла необходимо определить макрос GLEW_STATIC[^12].
 
 ```cpp
 #define GLEW_STATIC
@@ -1996,18 +1964,13 @@ OpenGL последних версий доступны при помощи **м
 #include <gdiplus.h>
 ```
 
-Затем необходимо добавить библиотеку[^13] **glew32s.lib** в список входных файлов компоновщика. Кроме того, из-за технических особенностей библиотеки
-GLEW может понадобиться добавить в список игнорируемых библиотек файлы libc.lib и libcmt.lib. Сделать это нужно во всех конфигурациях проекта.
-
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.018.png)
-
 #### ***Инициализация библиотеки GLEW***
 
 Прежде чем использовать библиотеку GLEW, нужно выполнить ее инициализацию, при которой библиотека выполняет поиск доступных обновлений и настройку на
 работу с ними.
 
 Инициализация выполняется при помощи функции **glewInit**, которую нужно вызвать после того, как был инициализирован и сделан активным контекст
-рендеринга OpenGL[^14].
+рендеринга OpenGL[^10].
 
 После инициализации библиотеки GLEW можно узнать о поддержке того или иного расширения при помощи макроса **GLEW_<имя расширения>**. Например,
 узнать, поддерживается ли реализацией расширение GL_ARB_multitexture, можно при помощи макроса **GLEW_ARB_multitexture**.
@@ -2026,16 +1989,16 @@ GLEW может понадобиться добавить в список игн
 
 Для нашего приложения нам понадобятся четыре файла с текстурами. Например, такие:
 
-![D:\teaching\2010\cg\labs\05\samples\04_multi_texturing\car.jpg](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.019.jpeg)
+![D:\teaching\2010\cg\labs\05\samples\04_multi_texturing\car.jpg](images/car.jpeg)
 car.jpg
 
-![D:\teaching\2010\cg\labs\05\samples\04_multi_texturing\smile.png](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.020.png)
+![D:\teaching\2010\cg\labs\05\samples\04_multi_texturing\smile.png](images/smile.png)
 smile.png
 
-![sun.png](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.021.png)
+![sun.png](images/sun.png)
 Sun.jpg
 
-![medved-alpha.png](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.022.png)
+![medved-alpha.png](images/medved.png)
 medved.png (изображение с прозрачными областями)
 
 Для их хранения создадим 3 переменные в классе CMyApplication.
@@ -2045,14 +2008,15 @@ class CMyApplication : public CGLApplication
 {
 public:
     CMyApplication(const char * title, int width, int height);
-    ~CMyApplication(void);
+
 protected:
     virtual void OnInit();
     virtual void OnDisplay();
     virtual void OnReshape(int width, int height);
     virtual void OnIdle();
+
 private:
-    void DrawRectangle()const;
+    void DrawRectangle() const;
     // Угол обзора по вертикали
     static const double FIELD_OF_VIEW;
 
@@ -2072,7 +2036,7 @@ private:
 ```
 
 Загрузку текстур выполним при помощи класса CTextureLoader. Перед загрузкой текстур **sun.png** и **medved.png** установим режим заворачивания
-текстурных координат в режим GL_CLAMP_TO_BORDER. При этом, за пределами диапазана [0;1) цвет текстуры будет равен цвету рамки.
+текстурных координат в режим GL_CLAMP_TO_BORDER. При этом, за пределами диапазона [0;1) цвет текстуры будет равен цвету рамки.
 
 ```cpp
 void CMyApplication::OnInit()
@@ -2101,7 +2065,7 @@ void CMyApplication::OnInit()
 #### ***Используем различные режим наложения текстуры***
 
 Код рисования прямоугольника (а точнее, квадрата), претерпел некоторые изменения. Теперь для указания текстурных координат используются
-функции [glMultiTexCoord](http://www.opengl.org/sdk/docs/man/xhtml/glMultiTexCoord.xml), с помощью которых мы будем задавать текстурные координаты
+функции [glMultiTexCoord](https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/glMultiTexCoord.xml), с помощью которых мы будем задавать текстурные координаты
 вершины для текстурных блоков №0 и №1.
 
 Внимание, как уже говорилось, официальная реализация OpenGL в системе Windows остановилась в своем развитии на версии 1.1, поэтому функции, работающие
@@ -2115,7 +2079,7 @@ void CMyApplication::OnInit()
 использования.
 
 ```cpp
-void CMyApplication::DrawRectangle()const
+void CMyApplication::DrawRectangle() const
 {
     /*
     Рисуем прямоугольник, указывая для каждой из его вершин
@@ -2198,7 +2162,7 @@ void CMyApplication::OnDisplay()
 
 Результат работы программы показан на рисунке:
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.023.png)
+![image](images/multi-texturing-1.png)
 
 Следующий прямоугольник будет нарисован с использованием двух текстурных модулей. Для второго текстурного модуля будет установлен режим наложения
 цвета GL_DECAL, а в качестве второй текстуры будет выступать medved.png.
@@ -2221,7 +2185,7 @@ void CMyApplication::OnDisplay()
 
 Как видно, в данном режиме произошло наложение цвета второй текстуры только в тех областях, где прозрачность пикселей текстуры отлична от нуля.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.024.png)
+![image](images/multi-texturing-2.png)
 
 Третий прямоугольник будет нарисован нами с режимом наложения текстуры GL_MODULATE во втором текстурном модуле.
 
@@ -2230,12 +2194,14 @@ void CMyApplication::OnDisplay()
     // и рисуем прямоугольник
     // Второй текстурный блок работает в режиме GL_DECAL
     {
-        glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-        m_medved.Bind();
+        glActiveTexture(GL_TEXTURE1);
+        m_smile.Bind();
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glEnable(GL_TEXTURE_2D);
         glPushMatrix();
-        glTranslatef(+1.5f, 1.5f, 0);
+        glTranslatef(-1.5f, -1.0f, 0);
         DrawRectangle();
         glPopMatrix();
     }
@@ -2243,7 +2209,7 @@ void CMyApplication::OnDisplay()
 
 Как видно, цвет второй текстуры промодулировал цвет, который был получен на выходе первого текстурного блока.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.025.png)
+![image](images/multi-texturing-3.png)
 
 Для рисования четвертого прямоугольника придется немного потрудиться. Проиллюстрируем независимое использование матрицы преобразования текстурных
 координат в текстурном модуле №1, а также режим наложения текстуры GL_ADD.
@@ -2284,15 +2250,15 @@ void CMyApplication::OnDisplay()
 }
 ```
 
-В конструкторе класса выполним инициализацию переменной m_rotationAngle, хранящей угол поворота текстуры sun.png. Обработчки OnInit будет
+В конструкторе класса выполним инициализацию переменной m_rotationAngle, хранящей угол поворота текстуры sun.png. Обработчики OnInit будет
 осуществлять изменение угла вращения в зависимости от времени с момента прошедшего кадра и скорость вращения.
 
 ```cpp
 const float CMyApplication::ROTATION_SPEED = 40;
 
-CMyApplication::CMyApplication(const char * title, int width, int height)
-:CGLApplication(title, width, height)
-,m_rotationAngle(0)
+CMyApplication::CMyApplication(const char* title, int width, int height)
+    : CGLApplication(title, width, height)
+    , m_rotationAngle(0)
 {
 }
 
@@ -2301,17 +2267,17 @@ void CMyApplication::OnIdle()
     m_animationController.Tick();
 
     m_rotationAngle +=
-        m_animationController.GetTimeDelta() * 0.001 * ROTATION_SPEED;
+        static_cast<float>(m_animationController.GetTimeDelta() * 0.001 * ROTATION_SPEED);
     m_rotationAngle = fmodf(m_rotationAngle, 360);
 
     Sleep(10);
-        PostRedisplay();
+    PostRedisplay();
 }
 ```
 
 Результат представлен на следующем рисунке.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.026.png)
+![image](images/multi-texturing-4.png)
 
 ## <a name="_toc101941339"></a>**Практические задания**
 
@@ -2330,12 +2296,12 @@ void CMyApplication::OnIdle()
 ##### Вариант 1 – Земля + Солнце + Луна – 50 баллов
 
 Программа визуализирует [Землю](http://ru.wikipedia.org/wiki/%D0%97%D0%B5%D0%BC%D0%BB%D1%8F), вращающуюся
-вокруг [Солнца](http://ru.wikipedia.org/wiki/%D0%97%D0%B5%D0%BC%D0%BB%D1%8F), а также [Луну](http://ru.wikipedia.org/wiki/%D0%9B%D1%83%D0%BD%D0%B0),
+вокруг [Солнца](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D0%BB%D0%BD%D1%86%D0%B5), а также [Луну](http://ru.wikipedia.org/wiki/%D0%9B%D1%83%D0%BD%D0%B0),
 вращающуюся вокруг Земли. Ось вращения Земли наклонена под углом 23,43 градуса. Луна вращается вокруг Земли и **всегда повернута к ней одной своей
 стороной**. Для простоты расчетов считать орбиты планет окружностями. Расстояния и относительные размеры планет и Солнца можно в точности не
 соблюдать, чтобы не потерять наглядность.
 
-Текстуры планет и Солнца можно взять, например, в программе [Celestia](http://www.shatters.net/celestia/).
+Текстуры планет и Солнца можно взять, например, в программе [Celestia](https://celestiaproject.space/).
 
 Солнце должно быть точечным источником света и освещать Луну и Землю.
 
@@ -2358,7 +2324,7 @@ void CMyApplication::OnIdle()
 
 В сцене должен присутствовать хотя бы один источник света.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.027.png)
+![image](images/house.png)
 
 ###### *Бонус в 10 баллов за управление мышью*
 
@@ -2388,7 +2354,7 @@ void CMyApplication::OnIdle()
 Программа визуализирует компьютерный стол, содержащий несколько ящиков. Столешница должна быть непрямоугольной формы (можно аппроксимировать ее при
 помощи веера из треугольников). На поверхность стола должна быть нанесена текстура. Стол должен освещаться одним или несколькими источниками света.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.028.png)
+![image](images/desktop.png)
 
 ###### *Бонус в 10 баллов за управление мышью*
 
@@ -2401,7 +2367,7 @@ void CMyApplication::OnIdle()
 
 Ракета должна освещаться одним или несколькими источниками света.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.029.png)
+![image](images/rocket.png)
 
 ###### *Бонус в 10 баллов за управление мышью*
 
@@ -2411,7 +2377,7 @@ void CMyApplication::OnIdle()
 
 Программа визуализирует кеглю для игры в боулинг. На поверхность кегли нанесена текстура, а сама она освещается.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.030.png)
+![image](images/bowling.png)
 
 ###### *Бонус в 10 баллов за управление мышью*
 
@@ -2452,7 +2418,7 @@ void CMyApplication::OnIdle()
 
 Цель игры – убрать все плитки с игрового поля.
 
-![image](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.031.png)
+![image](images/memory-trainer-3D.png)
 
 Само игровое поле отображается пользователю в перспективе. Плитки должны освещаться и выглядеть объемными.
 
@@ -2477,13 +2443,13 @@ void CMyApplication::OnIdle()
 используя клавиши управления курсором, подставляя ее под шарик, не давая шарику упасть вниз. На игровом поле находятся разноцветные кирпичики. Удар
 шарика по кирпичику приводит к разрушению последнего. Некоторые кирпичики разрушаются только после нескольких попаданий.
 
-После того, как все кирпичики будут разрушены происходит переход на следующий уровень с новым набором кирпичиков.
+После того как все кирпичики будут разрушены происходит переход на следующий уровень с новым набором кирпичиков.
 
 Трехмерный вариант игры отличается от классической версии перспективной проекцией игрового поля, а также трехмерными кирпичиками, битой и шариком. На
 кирпичики, шарик, биту и задний фон игрового поля должны быть наложены текстуры, а сами объекты (возможно, кроме заднего фона), освещены одним или
 несколькими источниками света.
 
-![http://smallgames.ws/uploads/posts/1195038746_arkahoid.jpg](images/Aspose.Words.220e5891-123e-486d-94ec-99496ff36ffb.032.jpeg)
+![http://smallgames.ws/uploads/posts/1195038746_arkahoid.jpg](images/arcanoid.jpeg)
 
 **Рисунок 1 Один из 3D вариантов игры Arcanoid**
 
@@ -2531,16 +2497,4 @@ void CMyApplication::OnIdle()
 
 [^9]: Или функции glActiveTextureARB расширения GL_ARB_multitexture.
 
-[^10]: Содержимое каталога установки, приведенное на иллюстрациях, соответствует версии 1.5.6 библиотеки GLEW и может отличаться в других версиях
-данной библиотеки.
-
-[^11]: При установке библиотеки в другой каталог, в разделе Include files необходимо указать путь к каталогу include библиотеки GLEW.
-
-[^12]: Если данный макрос определен не будет, то приложение будет скомпилировано для использования динамической библиотеки GLEW и придется
-распространять glew32.dll вместе со своим приложением. Использование .dll версии, впрочем, имеет в ряде случае свои преимущества – пользователь может
-заменить библиотеку GLEW более новой. Кроме того, если несколько приложений используют библиотеку GLEW, то хранение кода библиотеки в одной совместно
-используемой DLL может немного сэкономить дисковое пространство
-
-[^13]: Если бы мы использовали GLEW в виде динамической библиотеки, то следовало бы добавить библиотеку **glew32.lib** вместо glew32s.lib.
-
-[^14]: При использовании библиотеки GLUT контекст рендеринга создается после создания окна при помощи glutCreateWindow.
+[^10]: При использовании библиотеки GLUT контекст рендеринга создается после создания окна при помощи glutCreateWindow.
