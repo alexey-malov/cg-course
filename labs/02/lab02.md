@@ -602,20 +602,20 @@ LRESULT CApplicationView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPa
 {
 CPaintDC dc(m_hWnd);
 
-	// создаем Graphics для рисования в контексте устройства
-	Graphics g(dc);
+    // создаем Graphics для рисования в контексте устройства
+    Graphics g(dc);
 
-	// устанавливаем режим устранения ступенчатости при рисовании текста
-	g.SetTextRenderingHint(TextRenderingHintAntiAlias);
+    // устанавливаем режим устранения ступенчатости при рисовании текста
+    g.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-	// создаем кисть, которой будут закрашиваться буквы
-	SolidBrush brush(Color(255, 0, 0));
+    // создаем кисть, которой будут закрашиваться буквы
+    SolidBrush brush(Color(255, 0, 0));
 
-	// рисуем строку Hello созданным нами шрифтом
-	// -1 означает, что выводимая строка заканчивается нулевым символом
-	g.DrawString(L"Hello", -1, &m_font, PointF(30, 40), &brush);
+    // рисуем строку Hello созданным нами шрифтом
+    // -1 означает, что выводимая строка заканчивается нулевым символом
+    g.DrawString(L"Hello", -1, &m_font, PointF(30, 40), &brush);
 
-	return 0;
+    return 0;
 }
 ```
 
@@ -683,21 +683,21 @@ CPaintDC dc(m_hWnd);
 ```cpp
 HWND CreateMainWindow(HINSTANCE hInstance)
 {
-	HMENU hMainMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MAIN_MENU));
+    HMENU hMainMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MAIN_MENU));
 
-	HWND hMainWindow = CreateWindowEx(
-		0,
-		CLASS_NAME,
-		WINDOW_TITLE,
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT,
-		CW_USEDEFAULT, CW_USEDEFAULT,
-		NULL,
-		hMainMenu,
-		hInstance,
-		NULL);
+    HWND hMainWindow = CreateWindowEx(
+        0,
+        CLASS_NAME,
+        WINDOW_TITLE,
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT,
+        CW_USEDEFAULT, CW_USEDEFAULT,
+        NULL,
+        hMainMenu,
+        hInstance,
+        NULL);
 
-	return hMainWindow;
+    return hMainWindow;
 }
 ```
 
@@ -1372,7 +1372,7 @@ private:
     static const float ACCELERATION;
     static const float MAX_SPEED;
 public:
-	LRESULT OnTimer(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+    LRESULT OnTimer(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 const float CMainFrame::ACCELERATION = 100; // ускорение свободного падения
