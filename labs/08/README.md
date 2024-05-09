@@ -415,8 +415,8 @@ void CRenderer::RenderFrame(CFrameBuffer & frameBuffer)
 #endif
         {
             // Получаем адрес начала y-й строки в буфере кадра
-	    rowPixels = frameBuffer.GetPixels(y);
-	}
+            rowPixels = frameBuffer.GetPixels(y);
+        }
 
         if (!IsStopping())                                                             // (3)
         {
