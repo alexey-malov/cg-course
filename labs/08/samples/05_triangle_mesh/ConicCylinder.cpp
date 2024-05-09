@@ -1,14 +1,14 @@
 ﻿#include "stdafx.h"
 #include "ConicCylinder.h"
-#include "Ray.h"
 #include "Intersection.h"
+#include "Ray.h"
 
 CConicCylinder::CConicCylinder(
-	double const & height,		// Высота цилиндра (>0)
-	double const& baseRadius,	// Радиус основания (>0)
-	double const& capRadius,	// Радиус крышки (>=0, но не превышает радиуса основания)
+	double const& height, // Высота цилиндра (>0)
+	double const& baseRadius, // Радиус основания (>0)
+	double const& capRadius, // Радиус крышки (>=0, но не превышает радиуса основания)
 	CMatrix4d const& tranform)
-:CGeometryObjectWithInitialTransformImpl(tranform)
+	: CGeometryObjectWithInitialTransformImpl(tranform)
 {
 	assert(height >= 0);
 	assert(baseRadius >= 0);
@@ -42,14 +42,14 @@ CConicCylinder::CConicCylinder(
 	SetInitialTransform(initialTransform);
 }
 
-bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
+bool CConicCylinder::Hit(CRay const& ray, CIntersection& intersection) const
 {
 	// Вычисляем обратно преобразованный луч (вместо вполнения прямого преобразования объекта)
 	CRay invRay = Transform(ray, GetInverseTransform());
 
 	/*
 	Уравнение боковой стенки базового конического цилиндра имеет вид:
-	G(x, y, z) = x^2 + y^2 - (1 + (s - 1)*z)^2 = 0, 
+	G(x, y, z) = x^2 + y^2 - (1 + (s - 1)*z)^2 = 0,
 	где:
 		0 <= z <= 1,
 		r(0) = 1:	радиус основания
@@ -67,14 +67,13 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 	Если дискриминант не отрицателен, то нужно проверить, что координата z точки соударения находится в диапазоне от 0 до 1
 
 	Столкновение с основанием требует нахождения точки пересечения с плоскостью z=0.
-	Столкновение луча с основанием происходит при 
+	Столкновение луча с основанием происходит при
 		x^2 + y^2 <= 1
 
 	Столкновение с крышкой конического цилиндра - 'nj столковение с плоскостью z=1
 	Столкновение луча с крышкой происходит при выполнении условия
 		x^2 + y^2 < s^2
 	*/
-
 
 	/*
 	Идентификаторы поверхностей конического цилиндра
@@ -95,8 +94,8 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 		HitSurface hitSurface;
 	};
 
-	unsigned numHits = 0;		// Количество точек пересечения
-	HitPoint hitPoints[2];		// С выпуклым объектом максимально возможны 2 точки пересечения луча
+	unsigned numHits = 0; // Количество точек пересечения
+	HitPoint hitPoints[2]; // С выпуклым объектом максимально возможны 2 точки пересечения луча
 
 	/*
 	Начало и направление луча
@@ -123,7 +122,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 
 	// Время, которое луч проходит из точки испускания, не испытывая столкновения
 	// Нужно для того, чтобы отраженный/преломленный луч мог оторваться от границы объекта после столкновения
-	static const double HIT_TIME_EPSILON = 1e-6;
+	static constexpr double HIT_TIME_EPSILON = 1e-6;
 
 	/*
 	Если дискриминант неотрицательный, то есть точки пересечения луча с боковой стенкой
@@ -133,34 +132,24 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 		double invA = 1.0 / a;
 		double discRoot = sqrt(discr);
 
-		// Первый корень квадратного уравнения - время столкновения с боковой стенкой
-		double t = (-b - discRoot) * invA;
-		// Нас не интересуют пересечения, происходящие "в прошлом" луча
-		if (t > HIT_TIME_EPSILON)				
-		{
-			// Проверяем координату z точки пересечения. Она не должна выходить за пределы
-			// диапазона 0..1
-			double hitZ = start.z + dir.z * t;
-			if (hitZ >= 0 && hitZ <= 1)
+		auto addHit = [&start, &dir, &numHits, &hitPoints](double t) {
+			// Нас не интересуют пересечения, происходящие "в прошлом" луча
+			if (t > HIT_TIME_EPSILON)
 			{
-				// Добавляем краткую информацию о точке пересечения
-				HitPoint hit = {t, HIT_SIDE};
-				hitPoints[numHits++] = hit;
+				// Проверяем координату z точки пересечения. Она не должна выходить за пределы
+				// диапазона 0..1
+				double hitZ = start.z + dir.z * t;
+				if (hitZ >= 0 && hitZ <= 1)
+				{
+					// Добавляем краткую информацию о точке пересечения
+					HitPoint hit = { t, HIT_SIDE };
+					hitPoints[numHits++] = hit;
+				}
 			}
-		}
+		};
 
-		// Первый корень квадратного уравнения - время столкновения с боковой стенкой
-		t = (-b + discRoot) * invA;
-		// Выполняем аналогичные проверки
-		if (t > HIT_TIME_EPSILON)
-		{
-			double hitZ = start.z + dir.z * t;
-			if (hitZ >= 0 && hitZ <= 1)
-			{
-				HitPoint hit = {t, HIT_SIDE};
-				hitPoints[numHits++] = hit;
-			}
-		}
+		addHit((-b - discRoot) * invA);
+		addHit((-b + discRoot) * invA);
 	}
 
 	// Длина проекции луча на ось z, меньше которой считается, что пересечений с основанием и крышкой нет
@@ -169,8 +158,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 	/*
 	Если два возможных столкновения луча с объектом уже были найдены, нет смысла искать третье
 	*/
-	if ((numHits < 2) && 
-		(std::abs(dir.z) > EPSILON))
+	if ((numHits < 2) && (std::abs(dir.z) > EPSILON))
 	{
 		double invDirZ = 1.0 / dir.z;
 
@@ -178,7 +166,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 		double t = -start.z * invDirZ;
 
 		/*
-		Игнорируем пересечения, произошедшие в отрицательное время, вычисляем точку 
+		Игнорируем пересечения, произошедшие в отрицательное время, вычисляем точку
 		пересечения с плоскостью z=0 и проверяем, находится ли точка внутри основания
 		*/
 		if (t >= HIT_TIME_EPSILON)
@@ -187,7 +175,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 			double hitY = start.y + dir.y * t;
 			if (Sqr(hitX) + Sqr(hitY) < 1)
 			{
-				HitPoint hit = {t, HIT_BASE};
+				HitPoint hit = { t, HIT_BASE };
 				hitPoints[numHits++] = hit;
 			}
 		}
@@ -197,7 +185,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 			// ищем время точки пересечения луча с крышкой
 			t = (1 - start.z) * invDirZ;
 
-			// Игнорируем пересечения, произошедшие в отрицательное время, вычисляем точку 
+			// Игнорируем пересечения, произошедшие в отрицательное время, вычисляем точку
 			// пересечения с плоскостью z=1 и проверяем, находится ли точка внутри основания
 			if (t > HIT_TIME_EPSILON)
 			{
@@ -205,7 +193,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 				double hitY = start.y + dir.y * t;
 				if (Sqr(hitX) + Sqr(hitY) < Sqr(m_smallRadius))
 				{
-					HitPoint hit = {t, HIT_CAP};
+					HitPoint hit = { t, HIT_CAP };
 					hitPoints[numHits++] = hit;
 				}
 			}
@@ -219,7 +207,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 	}
 
 	/*
-	Упорядочиваем события столкновения в порядке возрастания времени столкновения 
+	Упорядочиваем события столкновения в порядке возрастания времени столкновения
 	*/
 	if (numHits == 2)
 	{
@@ -233,7 +221,7 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 		}
 	}
 
-	// Для всех найденных точек пересечения собираем полную информацию и 
+	// Для всех найденных точек пересечения собираем полную информацию и
 	// добавляем ее в объект intersection
 	for (unsigned i = 0; i < numHits; ++i)
 	{
@@ -268,12 +256,11 @@ bool CConicCylinder::Hit(CRay const& ray, CIntersection & intersection)const
 		Собираем информацию о точке столкновения
 		*/
 		CVector3d hitNormal = GetNormalMatrix() * hitNormalInObjectSpace;
-		
+
 		CHitInfo hit(
 			hitTime, *this,
 			hitPoint, hitPointInObjectSpace,
-			hitNormal, hitNormalInObjectSpace
-			);
+			hitNormal, hitNormalInObjectSpace);
 
 		// Добавляем точку столкновения в список
 		intersection.AddHit(hit);

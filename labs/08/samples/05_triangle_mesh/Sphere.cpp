@@ -24,24 +24,25 @@ bool CSphere::Hit(CRay const& ray, CIntersection & intersection)const
 
 	/*
 	Базовая сфера (сфера радиуса 1 с центром в начале координат) имеет уравнение:
-	x^2 + y^2 + z^2 - 1^2 = 0
-	Для вычисления точки пересечения луча с данной сферой необходимо подставить 
+	  x^2 + y^2 + z^2 - 1^2 = 0
+	Для вычисления точки пересечения луча с данной сферой необходимо подставить
 	точку, лежащую на луче (P=S+c*t) в уравнение сферы
 	и решить его относительно t:
-	|c|^2*t^2 + 2(S*c)*t + (|S|^2 - 1) = 0
+	  |c|^2*t^2 + 2(S*c)*t + (|S|^2 - 1) = 0
 	То же самое, но в классическом виде:
-	At^2 + 2Bt + C = 0, где:
-	A=|c|^2
-	B=S*c
-	C=|S|^2 - 1
+	  At^2 + 2Bt + C = 0, где:
+	  A=|c|^2
+	  B=S*c
+	  C=|S|^2 - 1
 
 	Решение имеет следующие корни
-	     -B - sqrt(B^2 - AC)
+		 -B - sqrt(B^2 - AC)
 	t0 = -------------------
-	             A          
+				 A
+
 		 -B + sqrt(B^2 - AC)
 	t1 = -------------------
-	             A          
+				 A
 	*/
 
 	/*
@@ -51,18 +52,17 @@ bool CSphere::Hit(CRay const& ray, CIntersection & intersection)const
 	double b = Dot(invRay.GetStart(), invRay.GetDirection());
 	double c = Dot(invRay.GetStart(), invRay.GetStart()) - 1;
 	// Вычисляем дискриминант (для случая четного коэффициента при x)
-	double d = b * b - a * c;
+	double disc = b * b - a * c;
 
-	if (d < 0)
+	if (disc < 0)
 	{
 		// нет корней - нет и точек пересечения (луч не проходит сквозь сферу)
 		return false;
 	}
 
-
 	// Время, которое луч проходит из точки испускания, не испытывая столкновения
 	// Нужно для того, чтобы отраженный/преломленный луч мог оторваться от границы объекта после столкновения
-	static const double HIT_TIME_EPSILON = 1e-8;
+	static constexpr double HIT_TIME_EPSILON = 1e-8;
 
 	/*
 	т.к. коэффициент A=|c|^2 положителен и sqrt(B^2 - AC) тоже положителен, то
@@ -71,17 +71,14 @@ bool CSphere::Hit(CRay const& ray, CIntersection & intersection)const
 	поэтому сначала будет добавлена точке в момент времени t0, а потом - в момент времени t1
 	*/
 	double invA = 1 / a;
-	double discRoot = sqrt(d);
-	{
-		// Первый корень уравнения
-		double t0 = (-b - discRoot) * invA;
+	double discRoot = sqrt(disc);
 
-		// Добавляем информацию о первом столкновении луча со сферой, если оно произошло впереди луча
-		if (t0 > HIT_TIME_EPSILON)
+	auto addHit = [&ray, &invRay, this, &intersection](double t) {
+		if (t > HIT_TIME_EPSILON)
 		{
-			// Вычисляем координаты точки столкновекния в мировой системе координат и системе координат объекта
-			CVector3d hitPoint0 = ray.GetPointAtTime(t0);
-			CVector3d hitPoint0InObjectSpace = invRay.GetPointAtTime(t0);
+			// Вычисляем координаты точки столкновения в мировой системе координат и системе координат объекта
+			CVector3d hitPoint0 = ray.GetPointAtTime(t);
+			CVector3d hitPoint0InObjectSpace = invRay.GetPointAtTime(t);
 			// Координаты нормали к точке единичной сферы с центром в начале координат
 			// совпадают с координатами данной точки, поэтому просто используем ссылку
 			CVector3d const& hitNormal0InObjectSpace = hitPoint0InObjectSpace;
@@ -90,40 +87,16 @@ bool CSphere::Hit(CRay const& ray, CIntersection & intersection)const
 
 			// Создаем и добавляем новую точку пересечения
 			CHitInfo hit0(
-				t0, *this,
+				t, *this,
 				hitPoint0, hitPoint0InObjectSpace,
-				hitNormal0, hitNormal0InObjectSpace
-				);
+				hitNormal0, hitNormal0InObjectSpace);
 
 			intersection.AddHit(hit0);
 		}
-	}
+	};
 
-	{
-		// Второй корень уравнения
-		double t1 = (-b + discRoot) * invA;
-		// Добавляем информацию о втором столкновении, если оно произошло впереди глаза
-		if (t1 > HIT_TIME_EPSILON)
-		{
-			// Вычисляем координаты точки столкновекния в мировой системе координат и системе координат объекта
-			CVector3d hitPoint1 = ray.GetPointAtTime(t1);
-			CVector3d hitPoint1InObjectSpace = invRay.GetPointAtTime(t1);
-			// Координаты нормали к точке единичной сферы с центром в начале координат
-			// совпадают с координатами данной точки, поэтому просто используем ссылку
-			CVector3d const& hitNormal1InObjectSpace = hitPoint1InObjectSpace;
-			// Вычисляем нормаль в точке соударения
-			CVector3d hitNormal1 = GetNormalMatrix() * hitNormal1InObjectSpace;
-
-			// Создаем и добавляем новую точку пересечения
-			CHitInfo hit1(
-				t1, *this,
-				hitPoint1, hitPoint1InObjectSpace,
-				hitNormal1, hitNormal1InObjectSpace
-				);
-
-			intersection.AddHit(hit1);
-		}
-	}
+	addHit((-b - discRoot) * invA);
+	addHit((-b + discRoot) * invA);
 
 	// Было ли хотя бы одно столкновение луча со сферой в положительном времени?
 	return intersection.GetHitsCount() > 0;
