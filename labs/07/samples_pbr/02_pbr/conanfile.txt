@@ -1,6 +1,6 @@
 [requires]
 glm/cci.20230113
-sdl/2.26.5
+sdl/2.24.0
 
 [generators]
 CMakeDeps

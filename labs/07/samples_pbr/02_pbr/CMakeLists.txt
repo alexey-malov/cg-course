@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22c)
 
 project(pbr CXX)
 
 find_package(glm)
+find_package(sdl)
 
 set(CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED true)
@@ -29,3 +30,4 @@ add_executable(raytracer
 )
 
 target_link_libraries(raytracer PRIVATE glm::glm)
+target_link_libraries(raytracer PRIVATE sdl::sdl)

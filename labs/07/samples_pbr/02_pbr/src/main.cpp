@@ -3,6 +3,7 @@
 #include "core/ray_io.hpp"
 #include "core/vector2.hpp"
 #include <iostream>
+#include <SDL.h>
 
 int main()
 {
