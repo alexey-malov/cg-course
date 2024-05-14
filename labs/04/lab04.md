@@ -588,12 +588,7 @@ $$
 пирамиды видового объема, параметры left, right, top и bottom можно вычислить по следующим формулам:
 
 $$
-T = 
-\begin{pmatrix}
-\frac{2N}{?-??}0 & ? + \left( \frac{?}{?-??}0?0 \right) & \frac{2N}{\text{top-bottom}} & \frac{\text{top}+\text{bottom}}{\text{top-bottom}} & 0 \\
- & & & \frac{0?-1?0?}{2} & \\
-0 & 0 & \frac{\text{-F}+N}{\text{F}-N} & ? & ? 
-\end{pmatrix}
+\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}, \quad \text{aspect} = \frac{\text{top}}{\text{bottom}} = \text{top} \cdot \text{aspect} - ?
 $$
 
 ![img_29.png](images/img_29.png)
