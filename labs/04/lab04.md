@@ -380,6 +380,14 @@ $$
 
 $$
 R_{x}(\alpha)
+\=
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & \cos \alpha & - \sin \alpha & 0 \\
+    0 & \sin \alpha & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+R_{x}(\alpha) * P
 $$
 
 ![img_12.png](images/img_12.png)
