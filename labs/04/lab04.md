@@ -176,6 +176,22 @@ I =
     0 & 0 & 1 & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\P
 $$
 
 ![img_2.png](images/img_2.png)
