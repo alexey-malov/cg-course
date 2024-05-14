@@ -105,7 +105,7 @@ T \cdot V =
     i & j & k & l \\
     m & n & o & p \\
 \end{pmatrix}
-\cdot
+\*
 \begin{pmatrix}
     x \\
     y \\
@@ -145,7 +145,7 @@ T =
         O_{y} \\
         O_{z} \\
         1 \\
-    \end{array} \right) &
+    \end{array} \right)
 \end{pmatrix}
 \=
 \begin{pmatrix}
