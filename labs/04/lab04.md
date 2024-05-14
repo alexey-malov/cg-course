@@ -2927,10 +2927,14 @@ $$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$$
 
 $$
 \begin{align*}
-При 0 \leq u \leq \pi \\
+При \quad 0 \leq u \leq \pi \\
 x &= 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v)
 \end{align*}
 $$
+
+$$ y = 16 \sin(u)+4r(1 -\frac{\cos(u)}{2})*sin(u)cos(v)$$
+
+$$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
 При ![img_62.png](images/img_62.png)
 
