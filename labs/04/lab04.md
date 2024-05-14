@@ -2917,9 +2917,9 @@ $$z = x^3 - 3xy^2$$
 
 $$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\cos(u)$$
 
-![img_60.png](images/img_60.png)
+$$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\sin(u)$$
 
-![img_61.png](images/img_61.png)
+$$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$$
 
 ![273px-MobiusStrip-01.svg.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.084.jpeg)
 
