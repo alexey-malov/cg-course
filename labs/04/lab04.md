@@ -387,11 +387,33 @@ R_{x}(\alpha)
     0 & \sin \alpha & \cos \alpha & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-R_{x}(\alpha) * P
 $$
 
-![img_12.png](images/img_12.png)
-![img_13.png](images/img_13.png)
+$$
+R_{x}(\alpha) * P
+\=
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & \cos \alpha & - \sin \alpha & 0 \\
+    0 & \sin \alpha & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x \\
+    y \cos \alpha \- z \sin \alpha \\
+     y \sin \alpha \+ z \cos \alpha \\
+    1 \\
+\end{pmatrix}
+$$
+
 
 Матрица поворота вокруг оси y:
 
