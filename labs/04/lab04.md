@@ -304,20 +304,6 @@ S * P
     0 & 0 & sz & dz \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-\*
-\begin{pmatrix}
-    x \\
-    y \\
-    z \\
-    1 \\
-\end{pmatrix}
-\=
-\begin{pmatrix}
-    sx*x \\
-    sy*y \\
-    sz*z \\
-    1 \\
-\end{pmatrix}
 $$
 
 ![img_8.png](images/img_8.png)
