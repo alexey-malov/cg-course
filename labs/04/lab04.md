@@ -129,7 +129,7 @@ T =
 \end{pmatrix}
 =
 \begin{pmatrix}
-    \overline{v_{1}}, & \overline{v_{2}}, & \overline{v_{3}}, & O \\
+    \overline{v_{1}} & \overline{v_{2}} & \overline{v_{3}} & O \\
 \end{pmatrix}
 $$
 
