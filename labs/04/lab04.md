@@ -191,10 +191,9 @@ I =
     1 \\
 \end{pmatrix}
 \=
-\P
+P
 $$
 
-![img_2.png](images/img_2.png)
 ![img_3.png](images/img_3.png)
 
 Для загрузки единичной матрицы в OpenGL используется
