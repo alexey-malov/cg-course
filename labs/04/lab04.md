@@ -701,6 +701,10 @@ $$
 
 Сами векторы u, v и n можно вычислить по формулам, зная положение точки взгляда look и направление вектора «вверх».
 
+$$
+frac{\{eye-look}{|\{eye-look}|}
+$$
+
 ![img_37.png](images/img_37.png)
 ![img_38.png](images/img_38.png)
 ![img_39.png](images/img_39.png)
