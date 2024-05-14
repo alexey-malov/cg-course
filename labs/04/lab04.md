@@ -122,10 +122,10 @@ $$
 $$
 T = 
 \begin{pmatrix}
-    \left( a \right) & b & c & d \\
-    \left( e \right) & f & g & h \\
-    \left( i \right) & j & k & l \\
-    \left( m \right) & n & o & p \\
+    \left( \begin{array}{c} a \\ e \\ i \\ m \end{array} \right) & b & c & d \\
+    \left( \begin{array}{c} b \\ f \\ j \\ n \end{array} \right) & f & g & h \\
+    \left( \begin{array}{c} c \\ g \\ k \\ o \end{array} \right) & j & k & l \\
+    \left( \begin{array}{c} d \\ h \\ l \\ p \end{array} \right) & n & o & p \\
 \end{pmatrix}
 $$
 
