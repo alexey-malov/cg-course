@@ -2965,7 +2965,7 @@ $$ z = hv$$
 
 $$ x = \cos(h) u \cos(v)$$
 
-$$ y = \cos(h) u \cos(v)$$
+$$ y = \cos(h) u \sin(v)$$
 
 $$ z = u$$
 
@@ -2980,13 +2980,17 @@ $$
 
 ##### Вариант 8 – [Тор](http://ru.wikipedia.org/wiki/Тор_\(поверхность\)) – 80 баллов
 
-![img_77.png](images/img_77.png)
+$$x(\alpha, \beta) = (R + r \cos \alpha) \cos \beta$$
 
-![img_78.png](images/img_78.png)
+$$y(\alpha, \beta) = (R + r \cos \alpha) \sin \beta$$
 
-![img_79.png](images/img_79.png)
+$$z(\alpha, \beta) = r \sin \alpha$$
 
-![img_80.png](images/img_80.png)
+$$
+\begin{align*}
+\alpha, \beta &\in [0, 2\pi].
+\end{align*}
+$$
 
 ![Torus.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.088.jpeg)
 
