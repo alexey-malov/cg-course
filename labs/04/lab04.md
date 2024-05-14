@@ -516,11 +516,6 @@ $$
 \end{equation}
 $$
 
-![img_18.png](images/img_18.png)
-
-![img_19.png](images/img_19.png), ![img_20.png](images/img_20.png)
-![img_21.png](images/img_21.png), ![img_22.png](images/img_22.png)
-
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.006.png)
 
 В OpenGL функции [glRotate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml) служат для умножения текущей матрицы на
