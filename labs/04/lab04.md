@@ -319,7 +319,6 @@ S * P
     1 \\
 \end{pmatrix}
 $$
-$$
 
 ![img_8.png](images/img_8.png)
 ![img_9.png](images/img_9.png)
