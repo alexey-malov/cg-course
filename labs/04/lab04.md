@@ -539,7 +539,7 @@ $$
 $$
 где
 \begin{equation}
-\ \pi = \frac{\mathbf{u}}{|\mathbf{u}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
+\ \pi = \frac{\mathbf{U}}{|\mathbf{U}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
 \end{equation}
 $$
 
@@ -557,8 +557,29 @@ T =
 \
 $$
 
-![img_27.png](images/img_27.png)
-![img_28.png](images/img_28.png)
+$$
+T * P = 
+\begin{pmatrix}
+\frac{2N}{?-??}0 & ? + \(\frac{?}{?-??}0?0) & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+& & & & &0?-1?0? & \\
+0 & 0 & \frac{\-F+N}{F-N} & ? & ? \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x' \\
+    y' \\
+    z' \\
+    1 \\
+\end{pmatrix}
+$$
+$$
 
 Параметры (left, bottom, N), (right, bottom, N) – задают координаты на ближней плоскости отсечения видимого объема, отображающиеся после
 преобразования в порт просмотра, соответственно, в левый нижний и правый верхний углы видового порта. Параметр F задает координату Z дальней плоскости
