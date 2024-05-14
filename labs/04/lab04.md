@@ -296,27 +296,7 @@ S =
     0 & 0 & sz & dz \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-S * P =
-\begin{pmatrix}
-    sx & 0 & 0 & dx \\
-    0 & sy & 0 & dy \\
-    0 & 0 & sz & dz \\
-    0 & 0 & 0 & 1 \\
-\end{pmatrix}
-\*
-\begin{pmatrix}
-    x \\
-    y \\
-    z \\
-    1 \\
-\end{pmatrix}
-\=
-\begin{pmatrix}
-    sx*x \\
-    sy*y \\
-    sz*z \\
-    1 \\
-\end{pmatrix}
+S * P
 $$
 
 ![img_8.png](images/img_8.png)
