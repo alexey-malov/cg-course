@@ -332,6 +332,30 @@ $$
 В OpenGL для умножения текущей матрицы на матрицу масштабирования служат
 функции [glScale\[f, d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml):
 
+$$
+S * P =
+\begin{pmatrix}
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    sx \cdot x \\
+    sy \cdot y \\
+    sz \cdot z \\
+    0 \\
+\end{pmatrix}
+$$
+
 ![img_11.png](images/img_11.png)
 
 #### ***Матрицы поворота***
