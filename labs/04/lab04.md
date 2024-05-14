@@ -303,7 +303,7 @@ S * P =
     0 & 0 & sz & dz \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-/*
+\*
 \begin{pmatrix}
     x \\
     y \\
