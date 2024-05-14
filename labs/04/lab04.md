@@ -554,7 +554,6 @@ T =
 & & & & &0?-1?0? & \\
 0 & 0 & \frac{\-F+N}{F-N} & ? & ? \\
 \end{pmatrix}
-\
 $$
 
 $$
@@ -600,12 +599,12 @@ $$
 функция [glFrustum](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml).
 
 $$
-M = M \cdot P \quad \text{buttom, top, N, F, ??} \div = \\
+M = M \cdot P?\text{buttom, top, N, F, ??} = \\
 M \cdot
 \begin{pmatrix}
-\frac{2N}{?-??}0 & ? + \frac{?}{?-??}0?0 & \frac{2N}{\text{top-bottom}} & \frac{\text{top}+\text{bottom}}{\text{top-bottom}} & 0 \\
-& & & & 0?-1?0? & \\
-0 & 0 & \frac{-F+N}{F-N} & ? & ?
+\frac{2N}{?-??}0 & ? + \\frac{?}{?-??}0?0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+& & & & &0?-1?0? & \\
+0 & 0 & \frac{\-F+N}{F-N} & ? & ? \\
 \end{pmatrix}
 $$
 
