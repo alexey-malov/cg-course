@@ -3,42 +3,41 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "resource.h"
-#include "FrameBuffer.h"
-
 #include "RaytraceView.h"
+#include "CheckerShader.h"
+#include "FrameBuffer.h"
+#include "Plane.h"
 #include "SceneObject.h"
 
 CRaytraceView::CRaytraceView()
 	: m_pFrameBuffer(std::make_unique<CFrameBuffer>(800, 600))
-	,m_plane(0, 0, 1, 1)	// Уравнение плоскости z = -1
 {
 	/*
 	Задаем цвет заднего фона сцены
 	*/
 	m_scene.SetBackdropColor(CVector4f(1, 0, 1, 1));
 
+	auto plane = std::make_shared<CPlane>(0, 0, 1, 1); // Уравнение плоскости z = -1
+
 	/*
 	Задаем матрицу преобразования плоскости
 	*/
 	CMatrix4d planeTransform;
-	planeTransform.Rotate(-65, 1, 0, 0);	// Поворачиваем плоскость вокруг оси X -65 градусов
-	m_plane.SetTransform(planeTransform);
-
-
+	planeTransform.Rotate(-65, 1, 0, 0); // Поворачиваем плоскость вокруг оси X -65 градусов
+	plane->SetTransform(planeTransform);
+	auto checkerShader = std::make_shared<CCheckerShader>();
 	{
 		// Задаем смещение текстурных координат в 1/2 размера шахматного кубика для того чтобы избежать
 		// визуальных артефактов при определении цвета клетки, связанных с погрешностями вычислений
 		CMatrix4d checkerShaderTransform;
 		checkerShaderTransform.Translate(0.25, 0.25, 0.25);
-		m_shader.SetTextureTransform(checkerShaderTransform);
+		checkerShader->SetTextureTransform(checkerShaderTransform);
 	}
 
 	/*
 	Создаем объект сцены и добавляем его к сцене
 	*/
-	m_scene.AddObject(CSceneObjectPtr(new CSceneObject(m_plane, m_shader)));
-
+	m_scene.AddObject(std::make_shared<CSceneObject>(std::move(plane), std::move(checkerShader)));
 
 	/*
 	Задаем параметры видового порта и матрицы проецирования в контексте визуализации

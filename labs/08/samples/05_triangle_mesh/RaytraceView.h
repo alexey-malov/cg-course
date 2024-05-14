@@ -11,15 +11,8 @@
 
 class CFrameBuffer;
 
-class CSimpleDiffuseShader;
-class CConicCylinder;
-class CSphere;
-class CCheckerShader;
-class CSimpleMaterial;
 class IShader;
 class CTriangleMeshData;
-struct Vertex;
-struct Face;
 
 class CRaytraceView : public CWindowImpl<CRaytraceView>
 {
@@ -60,29 +53,21 @@ private:
 	void AddSomeTetrahedron();
 
 	// Отрисовка содержимого буфера кадра на контексте устройства
-	void DrawFrameBuffer(CDC & dc, int x, int y);
+	void DrawFrameBuffer(CDC& dc, int x, int y);
 	bool UpdateFrameBuffer();
 
-	// Методы создания и добавления шейдеров в коллекцию m_shaders
-	CSimpleDiffuseShader & CreateSimpleDiffuseShader(CSimpleMaterial const& material);
-	CCheckerShader & CreateCheckerShader(CMatrix4d const& textureTransform);
-
 	// Методы, создающие и добавляющие объекты к сцене
-	CSceneObject & AddSphere(IShader const& shader, double radius = 1, CVector3d const& center = CVector3d(), CMatrix4d const& transform = CMatrix4d());
-	CSceneObject & AddConicCylinder(IShader const& shader, double height = 1, double baseRadius = 1, double capRadius = 0, CMatrix4d const& transform = CMatrix4d());
-	CSceneObject & AddPlane(IShader const& shader, double a, double b, double c, double d, CMatrix4d const& transform = CMatrix4d());
-	CSceneObject & AddSceneObject(IGeometryObject const& object, IShader const& shader);
-	CSceneObject & AddTriangleMesh(IShader const& shader, CTriangleMeshData const* pMeshData, CMatrix4d const& transform = CMatrix4d());
-	CTriangleMeshData * CreateTriangleMeshData(std::vector<Vertex> const& vertices, std::vector<Face> const& faces);
+	CSceneObject& AddSphere(std::shared_ptr<IShader const>, double radius = 1, CVector3d const& center = CVector3d(), CMatrix4d const& transform = {});
+	CSceneObject& AddConicCylinder(std::shared_ptr<IShader const> shader, double height = 1, double baseRadius = 1, double capRadius = 0, CMatrix4d const& transform = {});
+	CSceneObject& AddPlane(std::shared_ptr<IShader const> shader, double a, double b, double c, double d, CMatrix4d const& transform = {});
+	CSceneObject& AddSceneObject(std::shared_ptr<IGeometryObject const> object, std::shared_ptr<IShader const> shader);
+	CSceneObject& AddTriangleMesh(std::shared_ptr<IShader const> shader, std::shared_ptr<CTriangleMeshData const> pMeshData, CMatrix4d const& transform = {});
+
 private:
 	CStatusBarCtrl m_statusBar;
 	CRenderContext m_context;
 	CRenderer m_renderer;
-	CScene	m_scene;
+	CScene m_scene;
 
 	std::unique_ptr<CFrameBuffer> m_pFrameBuffer;
-
-	std::vector<std::unique_ptr<CTriangleMeshData>> m_triangleMeshDataObjects;
-	std::vector<std::unique_ptr<IGeometryObject>> m_geometryObjects;
-	std::vector<std::unique_ptr<IShader>> m_shaders;
 };

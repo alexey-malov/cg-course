@@ -33,10 +33,12 @@ public:
 
 		// Также вычисляем матрицу обратного преобразования
 		m_invTransform = transform.GetInverseMatrix();
-		// и матрицу нормали
-		m_normalMatrix.SetColumn(0, m_transform.GetColumn(0));
-		m_normalMatrix.SetColumn(1, m_transform.GetColumn(1));
-		m_normalMatrix.SetColumn(2, m_transform.GetColumn(2));
+
+		// Матрица нормали - обратная транспонированная матрица моделирования-вида
+		m_normalMatrix.SetColumn(0, m_invTransform.GetRow(0));
+		m_normalMatrix.SetColumn(1, m_invTransform.GetRow(1));
+		m_normalMatrix.SetColumn(2, m_invTransform.GetRow(2));
+		
 	}
 
 	/*

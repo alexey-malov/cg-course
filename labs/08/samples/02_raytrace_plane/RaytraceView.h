@@ -4,11 +4,9 @@
 
 #pragma once
 
-#include "Renderer.h"
 #include "RenderContext.h"
+#include "Renderer.h"
 #include "Scene.h"
-#include "Plane.h"
-#include "CheckerShader.h"
 
 class CFrameBuffer;
 
@@ -18,6 +16,7 @@ class CRaytraceView : public CWindowImpl<CRaytraceView>
 	{
 		FRAMEBUFFER_UPDATE_TIMER = 1
 	};
+
 public:
 	CRaytraceView();
 	~CRaytraceView();
@@ -32,10 +31,10 @@ public:
 		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 	END_MSG_MAP()
 
-// Handler prototypes (uncomment arguments if needed):
-//	LRESULT MessageHandler(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
-//	LRESULT CommandHandler(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-//	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
+	// Handler prototypes (uncomment arguments if needed):
+	//	LRESULT MessageHandler(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	//	LRESULT CommandHandler(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	//	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
 private:
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -43,13 +42,12 @@ private:
 	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 
 	// Отрисовка содержимого буфера кадра на контексте устройства
-	void DrawFrameBuffer(CDC & dc, int x, int y);
+	void DrawFrameBuffer(CDC& dc, int x, int y);
 	bool UpdateFrameBuffer();
+
 private:
 	CRenderContext m_context;
 	CRenderer m_renderer;
-	CScene	m_scene;
-	CCheckerShader m_shader;
-	CPlane m_plane;
+	CScene m_scene;
 	std::unique_ptr<CFrameBuffer> m_pFrameBuffer;
 };

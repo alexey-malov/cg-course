@@ -7,10 +7,6 @@
 #include "Renderer.h"
 #include "RenderContext.h"
 #include "Scene.h"
-#include "Plane.h"
-#include "CheckerShader.h"
-#include "Sphere.h"
-#include "SimpleDiffuseShader.h"
 
 class CFrameBuffer;
 
@@ -51,16 +47,5 @@ private:
 	CRenderContext m_context;
 	CRenderer m_renderer;
 	CScene	m_scene;
-
 	std::unique_ptr<CFrameBuffer> m_pFrameBuffer;
-
-	// Геометрические объекты, присутствующие в сцене
-	CPlane m_plane;
-	CSphere m_sphere1;
-	CSphere m_sphere2;
-
-	// Шейдеры
-	CSimpleDiffuseShader m_simpleDiffuseShader1;
-	CSimpleDiffuseShader m_simpleDiffuseShader2;
-	CCheckerShader m_checkerShader;
 };

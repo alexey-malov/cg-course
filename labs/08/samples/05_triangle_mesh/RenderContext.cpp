@@ -63,7 +63,7 @@ void CRenderContext::RenderRectangle(CScene const& scene, int left, int top, uns
 			start += rayStartHorizontalStep;
 			direction += rayDirectionHorizontalStep;
 		}
-		// Вычислем точку начала и направление трассировки луча для следующей рисуемой строки
+		// Вычисляем точку начала и направление трассировки луча для следующей рисуемой строки
 		start0 += rayStartVerticalStep;
 		direction0 += rayDirectionVerticalStep;
 	}
@@ -96,7 +96,7 @@ std::uint32_t CRenderContext::CalculatePixelColor(CScene const& scene, int x, in
 	double pixelCenterX = x + 0.5;
 	double pixelCenterY = y + 0.5;
 
-	// Трассируем луч вглубь сцены, получая цвет объекта, с которым произошло столкновеине
+	// Трассируем луч вглубь сцены, получая цвет объекта, с которым произошло столкновение
 	CVector4f color = scene.Shade(CalculateRay(pixelCenterX, pixelCenterY));
 	
 	return QuantizeColor(color);
