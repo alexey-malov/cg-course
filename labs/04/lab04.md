@@ -2915,7 +2915,7 @@ $$z = x^3 - 3xy^2$$
 
 ##### Вариант 4 – [Лента Мёбиуса](http://ru.wikipedia.org/wiki/%D0%9B%D0%B8%D1%81%D1%82_%D0%9C%D1%91%D0%B1%D0%B8%D1%83%D1%81%D0%B0) – 120 баллов
 
-![img_59.png](images/img_59.png)
+$$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\cos(u)$$
 
 ![img_60.png](images/img_60.png)
 
