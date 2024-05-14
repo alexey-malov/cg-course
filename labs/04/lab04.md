@@ -496,12 +496,18 @@ $$
 R_{\pi}(\alpha)
 \=
 \begin{pmatrix}
-    c\+ (1\-c)u_{x}^2 & (1\-c)u_{y}u_{x}\-su_{z} & (1\-c)u_{z}u_{y}+su_{y} & 0\\
-    \cos \alpha & - \sin \alpha & 0 & 0 \\
-    \sin \alpha & \cos \alpha & 0 & 0 \\
-    0 & 0 & 1 & 0 \\
+    c\+ (1\-c)u_{x}^2 & (1\-c)u_{y}u_{x}\-su_{z} & (1\-c)u_{z}u_{x}+su_{y} & 0\\
+    (1\-c)u_{x}u_{y}+su_{z} & c\+ (1\-c)u_{y}^2 & (1\-c)u_{z}u_{y}+su_{x} & 0 \\
+    (1\-c)u_{x}u_{z}+su_{y} & (1\-c)u_{y}u_{z}+su_{x} & c\+ (1\-c)u_{x}^2 & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
+$$
+
+$$
+\pi = 
+\begin{pmatrix}
+    u_{x}, & u_{y}, & u_{z} \\
+\end{pmatrix},
 $$
 
 ![img_18.png](images/img_18.png)
