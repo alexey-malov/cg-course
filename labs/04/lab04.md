@@ -1766,7 +1766,7 @@ $$\text{phong} = \max(0, \frac{h \cdot m}{\|h\| \|m\|})$$
 В случае цветных источников света приемлемое приближение дает вычисление интенсивностей красной, зеленой и синей составляющих по вышеуказанным
 формулам
 
-$$I_r=I_ar \rho_ar + I_dr \rho_dr \cdot \text{lambert} + I_sr \rho_sr \cdot \text{phong'}$$
+$$I_r=I_{ar} \rho_{ar} + I_{dr} \rho_{dr} \cdot \text{lambert} + I_{sr} \rho_{sr} \cdot \text{phong}'$$
 
 ![img_51.png](images/img_51.png)
 ![img_52.png](images/img_52.png)
