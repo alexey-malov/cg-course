@@ -521,6 +521,28 @@ $$
 В OpenGL функции [glRotate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml) служат для умножения текущей матрицы на
 матрицу поворота вокруг произвольной оси.
 
+$$
+M = M*R
+\begin{pmatrix}
+    \alpha, & U_{x}, & U_{y}, & U_{z} \\
+\end{pmatrix}
+\= 
+M *
+\begin{pmatrix}
+    c\+ (1\-c)u_{x}^2 & (1\-c)u_{y}u_{x}\-su_{z} & (1\-c)u_{z}u_{x}+su_{y} & 0\\
+    (1\-c)u_{x}u_{y}+su_{z} & c\+ (1\-c)u_{y}^2 & (1\-c)u_{z}u_{y}+su_{x} & 0 \\
+    (1\-c)u_{x}u_{z}-su_{y} & (1\-c)u_{y}u_{z}+su_{x} & c\+ (1\-c)u_{x}^2 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix},
+$$
+
+$$
+где
+\begin{equation}
+\pi = \frac{\mathbf{u}}{|\mathbf{u}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
+\end{equation}
+$$
+
 ![img_23.png](images/img_23.png),
 где ![img_24.png](images/img_24.png), ![img_25.png](images/img_25.png), ![img_26.png](images/img_26.png)
 
