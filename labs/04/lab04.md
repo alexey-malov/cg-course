@@ -296,6 +296,9 @@ S =
     0 & 0 & sz & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
+$$
+
+$$
 S * P
 \=
 \begin{pmatrix}
@@ -319,9 +322,6 @@ S * P
     1 \\
 \end{pmatrix}
 $$
-
-![img_8.png](images/img_8.png)
-![img_9.png](images/img_9.png)
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.004.png)
 
