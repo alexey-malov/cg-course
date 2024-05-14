@@ -98,12 +98,20 @@
 координатах**[^4]:
 
 $$
-\begin{bmatrix}
-    a_{11} & a_{12} & \ldots & a_{1n} \\
-    a_{21} & a_{22} & \ldots & a_{2n} \\
-    \vdots & \vdots & \ddots & \vdots \\
-    a_{m1} & a_{m2} & \ldots & a_{mn}
-\end{bmatrix}
+T \cdot V = 
+\begin{pmatrix}
+    a & b & c & d \\
+    e & f & g & h \\
+    i & j & k & l \\
+    m & n & o & p \\
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    w \\
+\end{pmatrix}
 $$
 
 ![img.png](images/img.png), где T – матрица преобразования, а V – это вектор или точка
