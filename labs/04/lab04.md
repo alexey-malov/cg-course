@@ -539,7 +539,7 @@ $$
 $$
 где
 \begin{equation}
-\ \pi = \frac{\mathbf{U}}{|\mathbf{U}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
+\ \pi = \frac{\{U}}{|\{U}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
 \end{equation}
 $$
 
@@ -588,7 +588,7 @@ $$
 пирамиды видового объема, параметры left, right, top и bottom можно вычислить по следующим формулам:
 
 $$
-\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}, \quad \text{?} = \frac{\text{top}}*{\text{aspect}} ?-?
+\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top} \text{?} = {\text{top}}*{\text{aspect}} ?-?
 $$
 
 ![img_29.png](images/img_29.png)
