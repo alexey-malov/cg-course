@@ -299,10 +299,17 @@ S =
 S * P
 \=
 \begin{pmatrix}
-    sx & 0 & 0 & dx \\
-    0 & sy & 0 & dy \\
-    0 & 0 & sz & dz \\
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
     0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
 \end{pmatrix}
 $$
 
