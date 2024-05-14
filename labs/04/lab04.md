@@ -1766,11 +1766,11 @@ $$\text{phong} = \max(0, \frac{h \cdot m}{\|h\| \|m\|})$$
 В случае цветных источников света приемлемое приближение дает вычисление интенсивностей красной, зеленой и синей составляющих по вышеуказанным
 формулам
 
-$$I_r=I_{ar} \rho_{ar} + I_{dr} \rho_{dr} \cdot \text{lambert} + I_{sr} \rho_{sr} \cdot \text{phong}'$$
+$$I_r=I_{ar} \rho_{ar} + I_{dr} \rho_{dr} \cdot \text{lambert} + I_{sr} \rho_{sr} \cdot \text{phong}^f$$
 
-![img_51.png](images/img_51.png)
-![img_52.png](images/img_52.png)
-![img_53.png](images/img_53.png)
+$$I_g=I_{ag} \rho_{ag} + I_{dg} \rho_{dg} \cdot \text{lambert} + I_{sg} \rho_{sg} \cdot \text{phong}^f$$
+
+$$I_b=I_{ab} \rho_{ab} + I_{db} \rho_{db} \cdot \text{lambert} + I_{sb} \rho_{sb} \cdot \text{phong}^f$$
 
 Параметры источника света в OpenGL задаются при помощи семейства
 функций [glLight](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glLight.xml). К параметрам источника света относятся интенсивности
