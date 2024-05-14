@@ -270,10 +270,13 @@ $$
 переноса и заменяют результатом текущую матрицу:
 
 $$
-M = M * T  = 
-\dx, & \dy, & \dz \\
-\= M
-$$
+M =
+\begin{align*}
+\M \cdot T \\&= 
+\begin{pmatrix}
+    \dx & \dy & \dz \\
+\end{pmatrix}
+\end{align*}
 
 ![img_7.png](images/img_7.png)
 
