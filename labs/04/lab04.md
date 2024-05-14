@@ -127,10 +127,13 @@ T =
         e \\
         I \\
         m \\
-    \end{array} \right) & b & c & d \\
-    f & g & h \\
-    j & k & l \\
-    n & o & p \\
+    \end{array} \right) &
+    \left( \begin{array}{c}
+        a \\
+        e \\
+        I \\
+        m \\
+    \end{array} \right)
 \end{pmatrix}
 $$
 
