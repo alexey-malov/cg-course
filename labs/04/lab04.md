@@ -537,14 +537,11 @@ M *
 $$
 
 $$
-где
+где &
 \begin{equation}
 \pi = \frac{\mathbf{u}}{|\mathbf{u}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
 \end{equation}
 $$
-
-![img_23.png](images/img_23.png),
-где ![img_24.png](images/img_24.png), ![img_25.png](images/img_25.png), ![img_26.png](images/img_26.png)
 
 #### ***Матрица перспективного преобразования***
 
