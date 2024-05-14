@@ -268,10 +268,11 @@ $$
 
 Функции [glTranslate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml) OpenGL умножают текущую матрицу на матрицу
 переноса и заменяют результатом текущую матрицу:
+
 $$
 M = M * T  = 
 \dx, & \dy, & \dz \\
-\= M *
+\= M
 $$
 
 ![img_7.png](images/img_7.png)
