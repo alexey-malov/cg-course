@@ -2963,9 +2963,9 @@ $$ z = hv$$
 
 ##### Вариант 7 – [Катеноид](http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%BD%D0%BE%D0%B8%D0%B4) – 80 баллов
 
-$$ x = \cosh u\cosv$$
+$$ x = \cos(h) u \cos(v)$$
 
-$$ y = \cosh u\cosv$$
+$$ y = \cos(h) u \cos(v)$$
 
 $$ z = u$$
 
