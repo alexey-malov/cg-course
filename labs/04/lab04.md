@@ -655,7 +655,15 @@ $$
 Функция [glOrtho](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml) осуществляет умножение текущей матрицы на матрицу
 ортографического преобразования:
 
-![img_36.png](images/img_36.png)
+$$
+M = M \cdot O?\text{buttom, top, N, F, ??} = \\
+M \cdot
+\begin{pmatrix}
+\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
+& & & & &0?0?-1? & \\
+0 & 0 & \frac{\-2}{F-N} & ? & ? \\
+\end{pmatrix}
+$$
 
 Для частного случая zNear=-1, zFar = +1 можно воспользоваться
 функцией [gluOrtho2D](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluOrtho2D.xml), умножающей текущую матрицу на матрицу
