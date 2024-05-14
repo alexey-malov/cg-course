@@ -2307,9 +2307,7 @@ GL_LINE установить режим визуализации граней в
 
 Теперь создадим класс CSincSurface, унаследовав его от класса CSurface. Данный класс будет визуализировать трехмерный вариант функции sinc:
 
-![img_54.png](images/img_54.png)
-где
-![img_55.png](images/img_55.png)
+$$\text{sinc}(r) = \frac{\sin(r)}{r}, \quad \text{где } r = \sqrt{x^2 + y^2}$$
 
 ```cpp
 class CSincSurface :
