@@ -539,7 +539,7 @@ $$
 $$
 где
 \begin{equation}
-\ pi = \frac{\mathbf{u}}{|\mathbf{u}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
+\ \pi = \frac{\mathbf{u}}{|\mathbf{u}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
 \end{equation}
 $$
 
