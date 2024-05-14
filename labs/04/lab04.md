@@ -2897,19 +2897,19 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 1 –[ Эллиптический параболоид](http://ru.wikipedia.org/wiki/%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D0%B0%D1%80%D0%B0%D0%B1%D0%BE%D0%BB%D0%BE%D0%B8%D0%B4) – 50 баллов
 
-![img_56.png](images/img_56.png)
+$$2z = \frac{x^2}{a^2} + \frac{y^2}{b^2}$$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.081.jpeg)
 
 ##### Вариант 2 – [Гиперболический параболоид](http://ru.wikipedia.org/wiki/%D0%9F%D0%B0%D1%80%D0%B0%D0%B1%D0%BE%D0%BB%D0%BE%D0%B8%D0%B4) – 50 баллов
 
-![img_57.png](images/img_57.png)
+$$2z = \frac{x^2}{a^2} - \frac{y^2}{b^2}$$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.082.jpeg)
 
 ##### Вариант 3 – [Обезьянье седло](http://ru.wikipedia.org/wiki/%D0%9E%D0%B1%D0%B5%D0%B7%D1%8C%D1%8F%D0%BD%D1%8C%D0%B5_%D1%81%D0%B5%D0%B4%D0%BB%D0%BE) – 50 баллов
 
-![img_58.png](images/img_58.png)
+$$z = x^3 - 3xy^2$$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.083.jpeg)
 
