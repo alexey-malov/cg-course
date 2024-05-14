@@ -311,6 +311,13 @@ S * P
     z \\
     1 \\
 \end{pmatrix}
+\=
+\begin{pmatrix}
+    sx \cdot x \\
+    sy \cdot y \\
+    sz \cdot z \\
+    1 \\
+\end{pmatrix}
 $$
 
 ![img_8.png](images/img_8.png)
