@@ -1757,12 +1757,11 @@ $$I_{\text{sp}} = I_s \rho_s \max\left(\left(\frac{h}{|h|} \cdot \frac{m}{|m|}\r
 
 Нахождение результирующей интенсивности света находится как сумма интенсивностей фоновой, диффузной и зеркальной составляющих отраженного света:
 
-![img_48.png](images/img_48.png)
-
 $$I = I_a \rho_a + I_d \rho_d \cdot \text{lambert} + I_s P_\rho \cdot \text{phong}^f$$
 
-![img_49.png](images/img_49.png)
-![img_50.png](images/img_50.png)
+$$\text{lambert} = \max(0, \frac{s \cdot m}{\|s\| \|m\|})$$
+
+$$\text{phong} = \max(0, \frac{h \cdot m}{\|h\| \|m\|})$$
 
 В случае цветных источников света приемлемое приближение дает вычисление интенсивностей красной, зеленой и синей составляющих по вышеуказанным
 формулам
