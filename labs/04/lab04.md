@@ -677,29 +677,27 @@ $$
 $$
 R
 \begin{pmatrix}
-    \u, & v, & n, & d \\
+    u, & v, & n, & d \\
 \end{pmatrix}
 \begin{pmatrix}
     u_{x} & u_{y} & u_{z} & d_{x} \\
     v_{x} & v_{y} & v_{z} & d_{y} \\
     n_{x} & n_{y} & n_{z} & d_{z} \\
     0 & 0 & 0 & 1 \\
-\end{pmatrix}, где
+\end{pmatrix},\quad где
 d =
 \begin{pmatrix}
     d_{x} \\
     d_{y} \\
     d_{z} \\
 \end{pmatrix}
-/=
+\=
 \begin{pmatrix}
     - eye * u \\
     - eye * v \\
     - eye * n \\
 \end{pmatrix}
 $$
-
-![image](images/img03.png), где ![image](images/img04.png)
 
 Сами векторы u, v и n можно вычислить по формулам, зная положение точки взгляда look и направление вектора «вверх».
 
