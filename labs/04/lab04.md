@@ -547,6 +547,15 @@ $$
 
 **Матрица перспективного преобразования** осуществляет перспективное преобразование.
 
+$$
+T = 
+\begin{pmatrix}
+\frac{2N}{?-??} \cdot 0 & ? + \left( \frac{?}{?-??} \cdot 0 \right) & 0 \\
+0 & 0 & 0
+\end{pmatrix}
+\]
+$$
+
 ![img_27.png](images/img_27.png)
 ![img_28.png](images/img_28.png)
 
