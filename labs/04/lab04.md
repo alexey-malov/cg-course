@@ -378,6 +378,10 @@ $$
 
 **Матрица поворота** вокруг оси x:
 
+$$
+R_{x}(\alpha)
+$$
+
 ![img_12.png](images/img_12.png)
 ![img_13.png](images/img_13.png)
 
