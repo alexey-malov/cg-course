@@ -238,9 +238,6 @@ T * P =
 \end{pmatrix}
 $$
 
-![img_4.png](images/img_4.png)
-![img_5.png](images/img_5.png)
-
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.003.png)
 
 Матрица переноса, примененная к вектору, оставляет вектор без изменения (вектор не имеет положения в пространстве):
@@ -250,7 +247,29 @@ $$
 Функции [glTranslate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml) OpenGL умножают текущую матрицу на матрицу
 переноса и заменяют результатом текущую матрицу:
 
-![img_7.png](images/img_7.png)
+$$
+T * V =
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix}
+$$
 
 #### ***Матрица масштабирования***
 
