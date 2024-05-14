@@ -498,7 +498,7 @@ R_{\pi}(\alpha)
 \begin{pmatrix}
     c\+ (1\-c)u_{x}^2 & (1\-c)u_{y}u_{x}\-su_{z} & (1\-c)u_{z}u_{x}+su_{y} & 0\\
     (1\-c)u_{x}u_{y}+su_{z} & c\+ (1\-c)u_{y}^2 & (1\-c)u_{z}u_{y}+su_{x} & 0 \\
-    (1\-c)u_{x}u_{z}+su_{y} & (1\-c)u_{y}u_{z}+su_{x} & c\+ (1\-c)u_{x}^2 & 0 \\
+    (1\-c)u_{x}u_{z}-su_{y} & (1\-c)u_{y}u_{z}+su_{x} & c\+ (1\-c)u_{x}^2 & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
 $$
@@ -508,6 +508,12 @@ $$
 \begin{pmatrix}
     u_{x}, & u_{y}, & u_{z} \\
 \end{pmatrix},
+$$
+
+$$
+\begin{equation}
+|\pi| = 1, \quad s = \sin \alpha, \quad c = \cos \alpha
+\end{equation}
 $$
 
 ![img_18.png](images/img_18.png)
