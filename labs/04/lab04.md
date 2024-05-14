@@ -203,6 +203,41 @@ $$
 #### ***Матрица переноса***
 
 **Матрица переноса**. Выполняет перенос точки вдоль вектора dx, dy, dz:
+
+$$
+I =
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+T * P =
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x+dx \\
+    y+dy \\
+    z+dz \\
+    1 \\
+\end{pmatrix}
+$$
+
 ![img_4.png](images/img_4.png)
 ![img_5.png](images/img_5.png)
 
