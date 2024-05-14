@@ -2931,7 +2931,7 @@ $$
 \end{align*}
 $$
 
-$$ x &= 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v) $$
+$$ x = 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v) $$
 
 $$ y = 16 \sin(u)+4r(1 -\frac{\cos(u)}{2})*sin(u)cos(v)$$
 
@@ -2939,11 +2939,11 @@ $$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
 $$
 \begin{align*}
-При \quad \pi \leq u \leq \2pi \\
+При \quad \pi \leq u \leq 2\pi \\
 \end{align*}
 $$
 
-$$ x &= 6 \cos(u)(1 + \sin(u)) - 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u) $$
+$$ x = 6 \cos(u)(1 + \sin(u)) - 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u) $$
 
 $$ y = 16 \sin(u)$$
 
