@@ -417,7 +417,7 @@ $$
 Матрица поворота вокруг оси y:
 
 $$
-R_{x}(\alpha)
+R_{y}(\alpha)
 \=
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
@@ -452,13 +452,43 @@ R_{y}(\alpha) * P
 \end{pmatrix}
 $$
 
-![img_14.png](images/img_14.png)
-![img_15.png](images/img_15.png)
-
 Матрица поворота вокруг оси z:
 
-![img_16.png](images/img_16.png)
-![img_17.png](images/img_17.png)
+$$
+R_{z}(\alpha)
+\=
+\begin{pmatrix}
+    \cos \alpha & - \sin \alpha & 0 & 0 \\
+    \sin \alpha & \cos \alpha & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+R_{z}(\alpha) * P
+\=
+\begin{pmatrix}
+    \cos \alpha & - \sin \alpha & 0 & 0 \\
+    \sin \alpha & \cos \alpha & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x \cos \alpha \- y \sin \alpha\\
+    x \sin \alpha \+ y \cos \alpha \\
+    z \\
+    1 \\
+\end{pmatrix}
+$$
 
 Матрица поворота вокруг произвольного единичного вектора u:
 
