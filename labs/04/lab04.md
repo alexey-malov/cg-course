@@ -242,11 +242,6 @@ $$
 
 Матрица переноса, примененная к вектору, оставляет вектор без изменения (вектор не имеет положения в пространстве):
 
-![img_6.png](images/img_6.png)
-
-Функции [glTranslate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml) OpenGL умножают текущую матрицу на матрицу
-переноса и заменяют результатом текущую матрицу:
-
 $$
 T * V =
 \begin{pmatrix}
@@ -270,6 +265,13 @@ T * V =
     0 \\
 \end{pmatrix}
 $$
+
+![img_6.png](images/img_6.png)
+
+Функции [glTranslate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml) OpenGL умножают текущую матрицу на матрицу
+переноса и заменяют результатом текущую матрицу:
+
+![img_7.png](images/img_7.png)
 
 #### ***Матрица масштабирования***
 
