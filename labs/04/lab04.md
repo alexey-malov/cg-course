@@ -619,13 +619,12 @@ $$
 $$
 O = 
 \begin{pmatrix}
-\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom} & 0\\
+\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
 & & & & &0?-1?0? & \\
 0 & 0 & \frac{\-2}{F-N} & ? & ? \\
 \end{pmatrix}
 $$
 
-![img_34.png](images/img_34.png)
 ![img_35.png](images/img_35.png)
 
 Как и в случае с матрицей перспективного преобразования, после применения ортографического преобразования осуществляют перспективное деление.
