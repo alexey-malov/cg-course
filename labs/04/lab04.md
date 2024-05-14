@@ -2925,6 +2925,13 @@ $$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$$
 
 ##### Вариант 5 – [Бутылка Клейна](http://ru.wikipedia.org/wiki/%D0%91%D1%83%D1%82%D1%8B%D0%BB%D0%BA%D0%B0_%D0%9A%D0%BB%D0%B5%D0%B9%D0%BD%D0%B0) – 120 балов
 
+$$
+\begin{align*}
+При 0 \leq u \leq \pi \\
+x &= 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v)
+\end{align*}
+$$
+
 При ![img_62.png](images/img_62.png)
 
 ![img_63.png](images/img_63.png)
