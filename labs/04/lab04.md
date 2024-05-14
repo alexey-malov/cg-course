@@ -169,7 +169,10 @@ I =
     0 & 0 & 1 & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-\ I * P =
+$$
+
+$$
+I * P =
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & 1 & 0 & 0 \\
@@ -193,8 +196,6 @@ I =
 \=
 P
 $$
-
-![img_3.png](images/img_3.png)
 
 Для загрузки единичной матрицы в OpenGL используется
 функция [glLoadIdentity](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glLoadIdentity.xml).
