@@ -2953,23 +2953,28 @@ $$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
 ##### Вариант 6 - [Геликоид](http://ru.wikipedia.org/wiki/%D0%93%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B8%D0%B4) – 80 баллов
 
-![img_70.png](images/img_70.png)
+$$ x = u \cos(v)$$
 
-![img_71.png](images/img_71.png)
+$$ y = u \sin(v)$$
 
-![img_72.png](images/img_72.png)
+$$ z = hv$$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.086.jpeg)
 
 ##### Вариант 7 – [Катеноид](http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%BD%D0%BE%D0%B8%D0%B4) – 80 баллов
 
-![img_73.png](images/img_73.png)
+$$ x = \cosh \quad u\cosv$$
 
-![img_74.png](images/img_74.png)
+$$ y = \cosh \quad u\cosv$$
 
-![img_75.png](images/img_75.png)
+$$ z = u$$
 
-![img_76.png](images/img_76.png)
+$$
+\begin{align*}
+u &\in \mathbb{R}, \\
+v &\in [0, 2\pi].
+\end{align*}
+$$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.087.jpeg)
 
