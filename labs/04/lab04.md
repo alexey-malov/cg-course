@@ -272,10 +272,10 @@ $$
 $$
 M = M*T
 \begin{pmatrix}
-    dx & dy & dz \\
+    dx, & dy, & dz, \\
 \end{pmatrix}
 \= 
-\M *
+M *
 \begin{pmatrix}
     1 & 0 & 0 & dx \\
     0 & 1 & 0 & dy \\
@@ -283,8 +283,6 @@ M = M*T
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
 $$
-
-![img_7.png](images/img_7.png)
 
 #### ***Матрица масштабирования***
 
