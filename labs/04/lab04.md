@@ -120,6 +120,14 @@ $$
 1</sub>, v<sub>2</sub>, v<sub>3</sub> и началом координат O.
 
 $$
+T =
+\begin{pmatrix}
+    \left( x_{1} \right)  & b & c & d \\
+    \left( y_{1} \right) & f & g & h \\
+    \left( z_{1} \right) & j & k & l \\
+    0 & n & o & p \\
+\end{pmatrix}
+=
 \begin{pmatrix}
     \overline{v_{1}}, & \overline{v_{2}}, & \overline{v_{3}}, & O \\
 \end{pmatrix}
