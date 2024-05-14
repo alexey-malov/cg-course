@@ -96,7 +96,15 @@
 и [перспективные](http://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BF%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
 преобразования координат вершин и нормалей. Для этого необходимо умножить матрицу соответствующего преобразования на вектор, заданный в **однородных
 координатах**[^4]:
-\vec{v} = \begin{bmatrix} X \\\ Y \end{bmatrix}
+
+$$
+\begin{bmatrix}
+    a_{11} & a_{12} & \ldots & a_{1n} \\
+    a_{21} & a_{22} & \ldots & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & \ldots & a_{mn}
+\end{bmatrix}
+$$
 
 ![img.png](images/img.png), где T – матрица преобразования, а V – это вектор или точка
 
