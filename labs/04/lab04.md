@@ -327,11 +327,6 @@ $$
 
 Матрица масштабирования, примененная к вектору, масштабирует его координаты вдоль координатных осей:
 
-![img_10.png](images/img_10.png)
-
-В OpenGL для умножения текущей матрицы на матрицу масштабирования служат
-функции [glScale\[f, d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml):
-
 $$
 S * P =
 \begin{pmatrix}
@@ -356,7 +351,23 @@ S * P =
 \end{pmatrix}
 $$
 
-![img_11.png](images/img_11.png)
+В OpenGL для умножения текущей матрицы на матрицу масштабирования служат
+функции [glScale\[f, d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml):
+
+$$
+M = M*S
+\begin{pmatrix}
+    sx, & sy, & sz \\
+\end{pmatrix}
+\= 
+M *
+\begin{pmatrix}
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
 
 #### ***Матрицы поворота***
 
