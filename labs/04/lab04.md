@@ -492,6 +492,18 @@ $$
 
 Матрица поворота вокруг произвольного единичного вектора u:
 
+$$
+R_{\pi}(\alpha)
+\=
+\begin{pmatrix}
+    c\+ (1\-c)u_{x}^2 \\
+    \cos \alpha & - \sin \alpha & 0 & 0 \\
+    \sin \alpha & \cos \alpha & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
 ![img_18.png](images/img_18.png)
 
 ![img_19.png](images/img_19.png), ![img_20.png](images/img_20.png)
