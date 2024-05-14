@@ -684,7 +684,7 @@ R
     v_{x} & v_{y} & v_{z} & d_{y} \\
     n_{x} & n_{y} & n_{z} & d_{z} \\
     0 & 0 & 0 & 1 \\
-\end{pmatrix},\quad где
+\end{pmatrix},\quad где \quad
 d =
 \begin{pmatrix}
     d_{x} \\
@@ -713,12 +713,23 @@ $$
 v = n * u
 $$
 
-![img_37.png](images/img_37.png)
-![img_38.png](images/img_38.png)
-![img_39.png](images/img_39.png)
-
 При помощи функции [gluLookAt](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml) библиотеки GLU можно умножить текущую
 матрицу на матрицу камеры:
+
+$$
+M = M * C
+\begin{pmatrix}
+    u, & v, & n, & d \\
+\end{pmatrix}
+\=M*
+\begin{pmatrix}
+    u_{x} & u_{y} & u_{z} & d_{x} \\
+    v_{x} & v_{y} & v_{z} & d_{y} \\
+    n_{x} & n_{y} & n_{z} & d_{z} \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
 ![image](images/img02.png)
 
 ### <a name="_toc100093339"></a>**Композиция матричных преобразований**
