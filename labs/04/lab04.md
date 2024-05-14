@@ -274,7 +274,8 @@ M = M*T
 \begin{pmatrix}
     dx & dy & dz \\
 \end{pmatrix}
-\= M*
+\= 
+\M *
 \begin{pmatrix}
     1 & 0 & 0 & dx \\
     0 & 1 & 0 & dy \\
