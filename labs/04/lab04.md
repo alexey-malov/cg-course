@@ -496,7 +496,7 @@ $$
 R_{\pi}(\alpha)
 \=
 \begin{pmatrix}
-    c\+ (1\-c)u_{x}^2 \\
+    c\+ (1\-c)u_{x}^2 & (1\-c)u_{y}u_{x}\-su_{z} & (1\-c)u_{z}u_{y}+su_{y} & 0\\
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
     0 & 0 & 1 & 0 \\
