@@ -588,7 +588,7 @@ $$
 пирамиды видового объема, параметры left, right, top и bottom можно вычислить по следующим формулам:
 
 $$
-\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}, \quad \text{aspect} = \frac{\text{top}}{\text{bottom}} = \text{top} \cdot \text{aspect} - ?
+\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}, \quad \text{?} = \frac{\text{top}}*{\text{aspect}} ?-?
 $$
 
 ![img_29.png](images/img_29.png)
