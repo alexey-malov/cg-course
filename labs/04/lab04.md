@@ -903,8 +903,8 @@ $$P' = M \cdot P = I \cdot \text{View} \cdot P$$
 
 Обратите внимание на порядок применения трансформаций. При трансформации вершин матрицы преобразований следует применять в порядке, обратном порядку
 применения трансформаций:
-
-$$M'' = M'*T*R = I*\text{View}*T*R$$
+P' = M \cdot P = I \cdot \text{View} \cdot P
+$$M'' = M' \cdot T \cdot R = I \cdot \text{View}\cdot T \cdot R$$
 
 ![img_44.png](images/img_44.png)
 
