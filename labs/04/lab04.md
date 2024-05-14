@@ -599,6 +599,17 @@ $$
 Для умножения текущей матрицы на матрицу перспективного преобразования в OpenGL используется
 функция [glFrustum](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml).
 
+$$
+M = M * P & buttom, top, N, F, ??
+/=
+/M *
+\begin{pmatrix}
+\frac{2N}{?-??}0 & ? + \\frac{?}{?-??}0?0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+& & & & &0?-1?0? & \\
+0 & 0 & \frac{\-F+N}{F-N} & ? & ? \\
+\end{pmatrix}
+$$
+
 ![img_33.png](images/img_33.png)
 
 Фунция [gluPerspective](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml) библиотеки GLU выполняет построение матрицы
