@@ -270,9 +270,16 @@ $$
 переноса и заменяют результатом текущую матрицу:
 
 $$
-M = M*T =
+M = M*T
 \begin{pmatrix}
-    \dx & \dy & \dz \\
+    dx & dy & dz \\
+\end{pmatrix}
+\= M*
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
 \end{pmatrix}
 $$
 
