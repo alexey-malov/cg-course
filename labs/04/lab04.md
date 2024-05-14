@@ -2928,29 +2928,26 @@ $$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$$
 $$
 \begin{align*}
 При \quad 0 \leq u \leq \pi \\
-x &= 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v)
 \end{align*}
 $$
+
+$$ x &= 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v) $$
 
 $$ y = 16 \sin(u)+4r(1 -\frac{\cos(u)}{2})*sin(u)cos(v)$$
 
 $$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
-При ![img_62.png](images/img_62.png)
+$$
+\begin{align*}
+При \quad \pi \leq u \leq \2pi \\
+\end{align*}
+$$
 
-![img_63.png](images/img_63.png)
+$$ x &= 6 \cos(u)(1 + \sin(u)) - 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u) $$
 
-![img_64.png](images/img_64.png)
+$$ y = 16 \sin(u)$$
 
-![img_65.png](images/img_65.png)
-
-При ![img_66.png](images/img_66.png)
-
-![img_67.png](images/img_67.png)
-
-![img_68.png](images/img_68.png)
-
-![img_69.png](images/img_69.png)
+$$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.085.jpeg)
 
