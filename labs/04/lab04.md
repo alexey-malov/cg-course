@@ -620,12 +620,33 @@ $$
 O = 
 \begin{pmatrix}
 \frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
-& & & & &0?-1?0? & \\
+& & & & &0?0?-1? & \\
 0 & 0 & \frac{\-2}{F-N} & ? & ? \\
 \end{pmatrix}
 $$
 
-![img_35.png](images/img_35.png)
+$$
+O * P = 
+\begin{pmatrix}
+\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
+& & & & &0?0?-1? & \\
+0 & 0 & \frac{\-2}{F-N} & ? & ? \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x' \\
+    y' \\
+    z' \\
+    1 \\
+\end{pmatrix}
+$$
 
 Как и в случае с матрицей перспективного преобразования, после применения ортографического преобразования осуществляют перспективное деление.
 
