@@ -127,7 +127,7 @@ T =
     \left( z_{1} \right) & j & k & l \\
     0 & n & o & p \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     \overline{v_{1}} & \overline{v_{2}} & \overline{v_{3}} & O \\
 \end{pmatrix}
