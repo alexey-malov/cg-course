@@ -588,13 +588,8 @@ $$
 пирамиды видового объема, параметры left, right, top и bottom можно вычислить по следующим формулам:
 
 $$
-\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}\quad\text{?} = {\text{top}}*{\text{aspect}}\quad?-?
+\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}\quad\text{?} = {\text{top}}*{\text{aspect}}?-?
 $$
-
-![img_29.png](images/img_29.png)
-![img_30.png](images/img_30.png)
-![img_31.png](images/img_31.png)
-![img_32.png](images/img_32.png)
 
 После применения перспективного преобразования к точке необходимо выполнить **перспективное деление**, разделив координаты x’, y’ и z’ на четвертый
 параметр w.
