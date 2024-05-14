@@ -403,19 +403,54 @@ R_{x}(\alpha) * P
     x \\
     y \\
     z \\
-    0 \\
+    1 \\
 \end{pmatrix}
 \=
 \begin{pmatrix}
     x \\
     y \cos \alpha \- z \sin \alpha \\
-     y \sin \alpha \+ z \cos \alpha \\
+    y \sin \alpha \+ z \cos \alpha \\
     1 \\
 \end{pmatrix}
 $$
 
-
 Матрица поворота вокруг оси y:
+
+$$
+R_{x}(\alpha)
+\=
+\begin{pmatrix}
+    \cos \alpha & 0 & \sin \alpha & 0 \\
+    0 & 1 & 0 & 0 \\
+    - \sin \alpha & 0 & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+R_{y}(\alpha) * P
+\=
+\begin{pmatrix}
+    \cos \alpha & 0 & \sin \alpha & 0 \\
+    0 & 1 & 0 & 0 \\
+    - \sin \alpha & 0 & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}
+\=
+\begin{pmatrix}
+    x \cos \alpha \+ z \sin \alpha\\
+    y \\
+    - x \sin \alpha \+ z \cos \alpha \\
+    1 \\
+\end{pmatrix}
+$$
 
 ![img_14.png](images/img_14.png)
 ![img_15.png](images/img_15.png)
