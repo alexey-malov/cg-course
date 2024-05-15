@@ -1184,7 +1184,7 @@ void CMyApplication::OnDisplay()
 Итак, приступим. Прежде всего, нам понадобятся обработчики сообщений о нажатии/отпускании кнопки мыши (поворот будем осуществлять только при нажатой
 левой кнопке мыши), а также обработчик события о перемещении курсора.
 
-Класс CGLApplication предоставляет виртуальные методы **OnMouse** и **OnMotion**, вызываемые им при получении от библиотеки GLUT соответствующих
+Класс CGLApplication предоставляет методы **OnMouseButton** и **OnMouseMove**, вызываемые им при получении от библиотеки GLUT соответствующих
 уведомлений. Данные методы мы перегрузим в классе CMyApplication.
 
 Для вычисления смещения курсора мыши нам понадобятся переменные для хранения прежней позиции курсора. Кроме того, заведем переменную, хранящую
@@ -1197,18 +1197,15 @@ public:
     …
 protected:
     …
-    virtual void OnMouse(int button, int state, int x, int y);
-    virtual void OnMotion(int x, int y);
 private:
     …
-    // Вращаем камеру вокруг начала кординат на заданный угол
-    static void RotateCamera(GLfloat rotateX, GLfloat rotateY);
+    void OnMouseButton(int button, int action, [[maybe_unused]] int mods) override;
+    void OnMouseMove(double x, double y) override;
+    // Вращаем камеру вокруг начала координат
+    void RotateCamera(GLfloat rotateX, GLfloat rotateY);
     // Флаг, свидетельствующий о состоянии левой кнопки мыши
     bool m_leftButtonPressed;
-
-    // Старые координаты курсора мыши
-    int m_mouseX;
-    int m_mouseY;
+    glm::dvec2 m_mousePos;
 };
 
 ```
@@ -1221,57 +1218,40 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 ,m_windowWidth(width)
 ,m_windowHeight(height)
 ,**m_leftButtonPressed(false)**
-,m_mouseX(0)
-,m_mouseY(0)
+,m_mousePos(0.0, 0.0)
 {
 }
 ```
 
-В обработчике OnMouse выполним инициализацию переменных m_leftButtonPressed, m_mouseX и m_mouseY в зависимости от состояния кнопок мыши и положения
-курсора.
+В обработчике OnMouse выполним инициализацию переменных m_leftButtonPressed в зависимости от состояния кнопок мыши.
 
 ```cpp
-void CMyApplication::OnMouse(int button, int state, int x, int y)
+void CMyApplication::OnMouseButton(int button, int action, int mods)
 {
-    // Событие от левой кнопки мыши
-    if (button == GLUT_LEFT_BUTTON)
+    if (button == GLFW_MOUSE_BUTTON_1)
     {
-        // Сохраняем состояние левой кнопки мыши
-        m_leftButtonPressed = (state == GLUT_DOWN);
-        // Сохраняем координаты мыши
-        m_mouseX = x;
-        m_mouseY = y;
+        m_leftButtonPressed = (action & GLFW_PRESS) != 0;
     }
 }
 ```
 
 В обработчике OnMotion в том случае, если перемещение мыши происходит при нажатой левой кнопке мыши, вычислим углы поворота вокруг осей X и Y и
-осуществим поворот камеры. Поскольку результат поворота камеры должен увидеть пользователь, при помощи метода PostRedisplay сообщим библиотеке GLUT о
-необходимости перерисовать окно.
+осуществим поворот камеры.
 
 ```cpp
-void CMyApplication::OnMotion(int x, int y)
+void CMyApplication::OnMouseMove(double x, double y)
 {
-    // Если нажата левая кнопка мыши
+    const glm::dvec2 mousePos{ x, y };
     if (m_leftButtonPressed)
     {
-        // Вычисляем смещение курсора мыши
-        int dx = x - m_mouseX;
-        int dy = y - m_mouseY;
+        const auto windowSize = GetFramebufferSize();
 
-        // Вычисляем угол поворота вокруг осей Y и X как линейно зависящие
-        // от смещения мыши по осям X и Y
-        GLfloat rotateX = GLfloat(dy) * 180 / m_windowHeight;
-        GLfloat rotateY = GLfloat(dx) * 180 / m_windowWidth;
-        RotateCamera(rotateX, rotateY);
-
-        // Сохраняем текущие координаты мыши
-        m_mouseX = x;
-        m_mouseY = y;
-
-        // Инициируем перерисовку окна
-        PostRedisplay();
+	      const auto mouseDelta = mousePos - m_mousePos;
+	      const double xAngle = mouseDelta.y * M_PI / windowSize.y;
+	      const double yAngle = mouseDelta.x * M_PI / windowSize.x;
+	      RotateCamera(xAngle, yAngle);
     }
+    m_mousePos = mousePos;
 }
 ```
 
