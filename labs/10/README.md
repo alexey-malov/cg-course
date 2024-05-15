@@ -2575,10 +2575,6 @@ void CMyApplication::OnDisplay()
 1. Расширение GL_EXT_framebuffer_object
    <http://www.opengl.org/wiki/GL_EXT_framebuffer_object>
    <http://www.opengl.org/registry/specs/EXT/framebuffer_object.txt>
-2. БИТАЯ ССЫЛКА!!!  Framebuffer Object или скажем «нет» оконным системам
-   <http://www.gamedev.ru/community/opengl/articles/framebuffer_object>
-3. БИТАЯ ССЫЛКА!!! Real Time Glow
-   <http://www.gamasutra.com/view/feature/2107/realtime_glow.php>
 
 [^1]: Драйвер используемой автором видеокарты GeForce 7600, поддерживает лишь расширение GL_EXT_framebuffer_object.
 [^2]: Под специальной клавишей понимается клавиша, которой не соответствует какой-либо символ, например, одна из клавиш управления курсором, функциональная клавиша.
