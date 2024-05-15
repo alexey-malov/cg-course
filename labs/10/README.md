@@ -1767,10 +1767,10 @@ public:
     // Идентификатор текстуры, возвращаемый в качестве результата,
     // хранится внутри данного класса
     GLuint Blur(
-        GLuint texture,       // Текстурный объект
-        GLfloat sigma,        // Среднеквадратическое отклонение
-        int width, int height,      // Размеры текстуры
-        bool generateMipmaps = true)const;// Генерировать ли mip-уровни?
+        GLuint texture,                        // Текстурный объект
+        GLfloat sigma,                         // Среднеквадратическое отклонение
+        int width, int height,                 // Размеры текстуры
+        bool generateMipmaps = true)const;     // Необходимость генерирования mip-уровней
 private:
     // Вычисляем коэффициенты размытия фильтра
     static std::vector<float> CalcGauss(size_t size, float sigma);
@@ -1791,7 +1791,7 @@ private:
     // Восстанавливаем параметры видового порта и матрицы
     void RestoreViewportAndMatrices()const;
 
-    // Активизируем программу и конфигцрируем ее uniform-переменные
+    // Активизируем программу и конфигурируем ее uniform-переменные
     void ActivateProgram(float sigma)const;
 
     // Выполняем размытие по горизонтали
@@ -2293,7 +2293,7 @@ private:
 ```cpp
 // Радиус фильтра (должен совпадать с радиусом фильтра в шейдере)
 const int CMyApplication::BLUR_RADIUS = 10;
-CMyApplication::CMyApplication(const char \* title, int width, int height)
+CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_blur(true)
 ,m_sigma(3)
@@ -2492,7 +2492,7 @@ void CMyApplication::OnDisplay()
 
 Размытые версии изображения со среднеквадратическим отклонением, равным 3 (слева) и 10 (справа).
 
-![image](Aspose.Words.e6d2c9e4-cf67-44a9-af41-02ebbee9ba2c.007.png)![image](Aspose.Words.e6d2c9e4-cf67-44a9-af41-02ebbee9ba2c.008.png)
+![image](images/Blur_filter_example_3.png) ![image](images/Blur_filter_example_10.png)
 
 Основным достоинством программы является ее быстродействие. Применение фильтра гауссова размытия радиусом 10 (19x19) к изображению размером 4000x3000 занимает менее 200 миллисекунд на достаточно старом (2006 года) графическом ускорителе nVidia GeForce 7600 GS, что соответствует скорости обработки порядка 70-75 миллионов пикселей в секунду[^10]. На более современном графическом железе скорость будет в несколько раз больше.
 
