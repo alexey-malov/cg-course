@@ -1246,10 +1246,10 @@ void CMyApplication::OnMouseMove(double x, double y)
     {
         const auto windowSize = GetFramebufferSize();
 
-	      const auto mouseDelta = mousePos - m_mousePos;
-	      const double xAngle = mouseDelta.y * M_PI / windowSize.y;
-	      const double yAngle = mouseDelta.x * M_PI / windowSize.x;
-	      RotateCamera(xAngle, yAngle);
+        const auto mouseDelta = mousePos - m_mousePos;
+        const double xAngle = mouseDelta.y * M_PI / windowSize.y;
+        const double yAngle = mouseDelta.x * M_PI / windowSize.x;
+        RotateCamera(xAngle, yAngle);
     }
     m_mousePos = mousePos;
 }
