@@ -18,8 +18,13 @@ Program::Program(const char* vertexShaderSource, const char* fragmentShaderSourc
 	m_program.AttachShader(m_vertexShader);
 	m_program.AttachShader(m_fragmentShader);
 	m_program.Link();
+	m_program.Validate();
 	if (!m_program.IsLinked())
 	{
 		throw std::runtime_error("Failed to link program: " + m_program.GetInfoLog());
+	}
+	if (!m_program.IsValid())
+	{
+		throw std::runtime_error("Program is not valid");
 	}
 }

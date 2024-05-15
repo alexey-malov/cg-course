@@ -46,9 +46,22 @@ public:
 		glLinkProgram(m_program);
 	}
 
+	void Validate() noexcept
+	{
+		assert(m_program);
+		glValidateProgram(m_program);
+	}
+
+	bool IsValid() const noexcept
+	{
+		GLint status = GL_FALSE;
+		GetParameter(GL_VALIDATE_STATUS, &status);
+		return status == GL_TRUE;
+	}
+
 	bool IsLinked() const noexcept
 	{
-		int linkStatus = GL_FALSE;
+		GLint linkStatus = GL_FALSE;
 		GetParameter(GL_LINK_STATUS, &linkStatus);
 		return linkStatus == GL_TRUE;
 	}
@@ -71,6 +84,11 @@ public:
 		log.resize(static_cast<size_t>(actualLength));
 
 		return log;
+	}
+
+	[[nodiscard]] GLint GetUniformLocation(const GLchar* name) const
+	{
+		return glGetUniformLocation(m_program, name);
 	}
 
 	operator GLuint() const noexcept

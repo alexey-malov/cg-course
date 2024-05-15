@@ -140,6 +140,7 @@ void Window::Draw(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	
 	glLightfv(GL_LIGHT0, GL_POSITION,
 		glm::value_ptr(m_usePointLight ? m_pointLightPos : m_directedLightDirection));
 
