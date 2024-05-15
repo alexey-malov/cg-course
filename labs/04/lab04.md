@@ -1370,83 +1370,51 @@ typedef CVector3<float> CVector3f;
 typedef CVector3<double> CVector3d;
 ```
 
-Метод вращения матрицы моделирования-вида будет выглядеть следующим образом. Для получения коэффициентов матрицы моделирования-вида в виде массива
-чисел с плавающей запятой воспользуемся функцией [glGetFloatv](http://msdn.microsoft.com/en-us/library/ee872026\(v=VS.85\).aspx) с параметром
-GL_MODELVIEW_MATRIX.
+Метод вращения матрицы моделирования-вида будет выглядеть следующим образом.
 
 ```cpp
 // Вращаем камеру вокруг начала кординат на заданный угол
-void CMyApplication::RotateCamera(GLfloat rotateX, GLfloat rotateY)
+void CMyApplication::RotateCamera(double xAngleRadians, double yAngleRadians)
 {
-    // Извлекаем текущее значение матрицы моделирования-вида
-    GLfloat modelView[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, &modelView[0]);
+    // Извлекаем из 1 и 2 строки матрицы камеры направления осей вращения,
+    // совпадающих с экранными осями X и Y.
+    // Строго говоря, для этого надо извлекать столбцы их обратной матрицы камеры, но так как
+    // матрица камеры ортонормированная, достаточно транспонировать её подматрицу 3*3
+    const glm::dvec3 xAxis{
+	      m_cameraMatrix[0][0], m_cameraMatrix[1][0], m_cameraMatrix[2][0]
+    };
+    const glm::dvec3 yAxis{
+	      m_cameraMatrix[0][1], m_cameraMatrix[1][1], m_cameraMatrix[2][1]
+    };
+    m_cameraMatrix = glm::rotate(m_cameraMatrix, xAngleRadians, xAxis);
+    m_cameraMatrix = glm::rotate(m_cameraMatrix, yAngleRadians, yAxis);
 
-    // Извлекаем направления координатных осей камеры в 3д пространстве
-    // как коэффициенты строк матрицы моделирования-вида
-    CVector3f xAxis(modelView[0], modelView[4], modelView[8]);
-    CVector3f yAxis(modelView[1], modelView[5], modelView[9]);
-
-    // Поворачиваем вокруг осей x и y камеры
-    glRotatef(rotateX, xAxis.x, xAxis.y, xAxis.z);
-    glRotatef(rotateY, yAxis.x, yAxis.y, yAxis.z);
-
-    // В ходе умножения матриц могут возникать погрешности, которые,
-    // накапливаясь могут сильно искажать картинку
-    // Для их компенсации после каждой модификации матрицы моделирования-вида
-    // проводим ее ортонормирование
-    NormalizeModelViewMatrix();
+    m_cameraMatrix = Orthonormalize(m_cameraMatrix);
 }
 ```
 
 ##### Приводим матрицу моделирования вида к ортонормированному виду
 
-Добавим в класс CMyApplication статический метод NormalizeModelViewMatrix для нормализации матрицы моделирования вида:
+Добавим функцию Orthonormalize для нормализации матрицы моделирования вида:
 
 ```cpp
-class CMyApplication : public CGLApplication
+namespace
 {
-…
-private:
-    …
-    // Производим ортонормирование матрицы моделирования-вида
-    static void NormalizeModelViewMatrix(void);
-};
 
-// Производим ортонормирование матрицы моделирования-вида
-void CMyApplication::NormalizeModelViewMatrix(void)
+// Ортонормируем матрицу 4*4 (это должна быть аффинная матрица)
+glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m)
 {
-    GLfloat modelView[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
-    /*
-    Ортонормирование - приведение координатных осей к единичной длине (нормирование)
-    и взаимной перпендикулярности (ортогонализация)
-    Достичь этого можно при помощи нормализации координатных осей
-    и векторного произведения
-    */
-    CVector3f xAxis(modelView[0], modelView[4], modelView[8]);
-    xAxis.Normalize();
-    CVector3f yAxis(modelView[1], modelView[5], modelView[9]);
-    yAxis.Normalize();
+	// Извлекаем подматрицу 3*3 из матрицы m и ортонормируем её
+	const auto normalizedMatrix = glm::orthonormalize(glm::dmat3x3{ m });
+	// Заменяем 3 столбца исходной матрицы
+	return {
+		glm::dvec4{ normalizedMatrix[0], 0.0 },
+		glm::dvec4{ normalizedMatrix[1], 0.0 },
+		glm::dvec4{ normalizedMatrix[2], 0.0 },
+		m[3]
+	};
+}
 
-    // Ось Z вычисляем через векторное произведение X и Y
-    // Z будет перпендикулярна плоскости векторов X и Y
-    CVector3f zAxis = Cross(xAxis, yAxis);
-    // И иметь единичную длину
-    zAxis.Normalize();
-    // То же самое проделываем с осями x и y
-    xAxis = Cross(yAxis, zAxis);
-    xAxis.Normalize();
-    yAxis = Cross(zAxis, xAxis);
-    yAxis.Normalize();
-
-    // Сохраняем вектора координатных осей обратно в массив
-    modelView[0] = xAxis.x; modelView[4] = xAxis.y, modelView[8] = xAxis.z;
-    modelView[1] = yAxis.x; modelView[5] = yAxis.y, modelView[9] = yAxis.z;
-    modelView[2] = zAxis.x; modelView[6] = zAxis.y, modelView[10] = zAxis.z;
-
-    // И загружаем матрицу моделирвания-вида
-    glLoadMatrixf(modelView);
 }
 ```
 
