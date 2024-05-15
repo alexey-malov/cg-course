@@ -1138,10 +1138,6 @@ void CMyApplication::OnReshape(int width, int height)
 ```cpp
 void CMyApplication::OnInit()
 {
-    // Переносим точку камеры на заданное расстояние от начала координат
-    // вдоль оси Z
-    glTranslatef(0, 0, -DISTANCE_TO_ORIGIN);
-
     // Задаем ширину линий
     glLineWidth(2);
     // И цвет очистки буфера цвета
@@ -1154,7 +1150,7 @@ void CMyApplication::OnInit()
 void CMyApplication::OnDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    SetupCameraMatrix();
     // Создаем координатный фрейм и рисуем его
     CFrame frame;
     frame.Draw();
