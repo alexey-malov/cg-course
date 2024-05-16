@@ -147,7 +147,7 @@ T =
         1 \\
     \end{array} \right)
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     \overline{v_{1}} & \overline{v_{2}} & \overline{v_{3}} & O \\
 \end{pmatrix}
@@ -179,21 +179,21 @@ I * P =
     0 & 0 & 1 & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-*
+\*
 \begin{pmatrix}
     x \\
     y \\
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     x \\
     y \\
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 P
 $$
 
@@ -229,7 +229,7 @@ T * P =
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     x+dx \\
     y+dy \\
@@ -257,7 +257,7 @@ T * V =
     z \\
     0 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     x \\
     y \\
@@ -274,7 +274,7 @@ M = M*T
 \begin{pmatrix}
     dx, & dy, & dz \\
 \end{pmatrix}
-= 
+\= 
 M *
 \begin{pmatrix}
     1 & 0 & 0 & dx \\
@@ -300,7 +300,7 @@ $$
 
 $$
 S * P
-=
+\=
 \begin{pmatrix}
     sx & 0 & 0 & 0 \\
     0 & sy & 0 & 0 \\
@@ -314,7 +314,7 @@ S * P
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     sx \cdot x \\
     sy \cdot y \\
@@ -335,14 +335,14 @@ S * P =
     0 & 0 & sz & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-*
+\*
 \begin{pmatrix}
     x \\
     y \\
     z \\
     0 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     sx \cdot x \\
     sy \cdot y \\
@@ -359,7 +359,7 @@ M = M*S
 \begin{pmatrix}
     sx, & sy, & sz \\
 \end{pmatrix}
-= 
+\= 
 M *
 \begin{pmatrix}
     sx & 0 & 0 & 0 \\
@@ -380,7 +380,7 @@ $$
 
 $$
 R_{x}(\alpha)
-=
+\=
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & \cos \alpha & - \sin \alpha & 0 \\
@@ -391,7 +391,7 @@ $$
 
 $$
 R_{x}(\alpha) * P
-=
+\=
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & \cos \alpha & - \sin \alpha & 0 \\
@@ -405,7 +405,7 @@ R_{x}(\alpha) * P
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     x \\
     y \cos \alpha - z \sin \alpha \\
@@ -418,7 +418,7 @@ $$
 
 $$
 R_{y}(\alpha)
-=
+\=
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
     0 & 1 & 0 & 0 \\
@@ -429,7 +429,7 @@ $$
 
 $$
 R_{y}(\alpha) * P
-=
+\=
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
     0 & 1 & 0 & 0 \\
@@ -443,7 +443,7 @@ R_{y}(\alpha) * P
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     x \cos \alpha + z \sin \alpha\\
     y \\
@@ -456,7 +456,7 @@ $$
 
 $$
 R_{z}(\alpha)
-=
+\=
 \begin{pmatrix}
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
@@ -467,7 +467,7 @@ $$
 
 $$
 R_{z}(\alpha) * P
-=
+\=
 \begin{pmatrix}
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
@@ -481,7 +481,7 @@ R_{z}(\alpha) * P
     z \\
     1 \\
 \end{pmatrix}
-=
+\=
 \begin{pmatrix}
     x \cos \alpha - y \sin \alpha\\
     x \sin \alpha + y \cos \alpha \\
@@ -494,7 +494,7 @@ $$
 
 $$
 R_{\pi}(\alpha)
-=
+\=
 \begin{pmatrix}
     c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
     (1-c)u_{x}u_{y}+su_{z} & c+ (1-c)u_{y}^2 & (1-c)u_{z}u_{y}+su_{x} & 0 \\
@@ -526,7 +526,7 @@ M = M*R
 \begin{pmatrix}
     \alpha, & U_{x}, & U_{y}, & U_{z} \\
 \end{pmatrix}
-= 
+\= 
 M *
 \begin{pmatrix}
     c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
