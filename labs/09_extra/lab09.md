@@ -807,13 +807,10 @@ $$ L^{-1} =
 
 
 
-
-
-
 $$ = \begin{pmatrix}
-    a_x & a_y & a_z & -d*a\\
-    b_x & b_y & b_z & -d*b\\
-    c_x & c_y & c_z & -d*c\\
+    a_x & a_y & a_z & -da\\
+    b_x & b_y & b_z & -db\\
+    c_x & c_y & c_z & -dc\\
     0 & 0 & 0 & 1
 \end{pmatrix} = $$
 
