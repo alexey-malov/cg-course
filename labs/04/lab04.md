@@ -2680,7 +2680,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 9 – [Триакисоктаэдр](http://en.wikipedia.org/wiki/Triakis_octahedron) – 100 баллов
 
-![image](images/Триакисоктаэдр.png)
+![image](images/Триакисоктаэдр.jpeg)
 
 ##### Вариант 10 - [Триакисгексаэдр](http://en.wikipedia.org/wiki/Tetrakis_hexahedron) – 70 баллов
 
