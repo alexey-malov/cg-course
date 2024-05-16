@@ -955,7 +955,7 @@ private:
 
 Реализация данного класса будет рисовать координатные оси при помощи отрезков прямых линий. Каждая ось имеет длину и размер наконечника.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.017.png)
+![image](images/координатныеоси.png)
 
 ```cpp
 CFrame::CFrame(float size, float endSize)
