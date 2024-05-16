@@ -64,7 +64,7 @@ private:
     void DrawShadowVolumeCaps(
         CVector3f const& lightPosition, float extrusionFactor)const;
 
-    // выполняем инициализицию информации о ребрах
+    // выполняем инициализацию информации о ребрах
     static void InitEdges();
 
     // Размер куба
@@ -483,8 +483,6 @@ $$ P_{inf} = \lim\limits_{F\to\infty} P =
 const double CMyApplication::FOV = 60;
 const double CMyApplication::ZNEAR = 1;
 
-...
-
 void CMyApplication::OnReshape(int width, int height)
 {
     // Задаем порт просмотра размером с клиентскую область окна
@@ -569,7 +567,7 @@ void CMyApplication::OnDisplay()
     
     glLoadMatrixd(m_rotationController.GetModelViewMatrix());
 
-    // Рисуем источик света в виде сферы
+    // Рисуем источник света в виде сферы
     DrawLightSource();
 
     // Рисуем сцену без источников света
@@ -803,14 +801,11 @@ $$ L^{-1} =
     a_y & b_y & c_y & d_y\\
     a_z & b_z & c_z & d_z\\
     0 & 0 & 0 & 1
-\end{pmatrix}^{-1} = $$
-
-
-
-$$ = \begin{pmatrix}
-    a_x & a_y & a_z & -da\\
-    b_x & b_y & b_z & -db\\
-    c_x & c_y & c_z & -dc\\
+\end{pmatrix}^{-1}
+= \begin{pmatrix}
+    a_x & a_y & a_z & -d\cdot a\\
+    b_x & b_y & b_z & -d\cdot b\\
+    c_x & c_y & c_z & -d\cdot c\\
     0 & 0 & 0 & 1
 \end{pmatrix} = $$
 
