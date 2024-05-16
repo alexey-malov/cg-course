@@ -23,14 +23,14 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 	m_light.SetPosition(CVector3f(3, 3, 2));
 
 	m_material.SetShininess(30);
-	m_material.SetAmbient(0.2, 0.1, 0.3);
-	m_material.SetDiffuse(0.5, 0.6, 0.7);
-	m_material.SetSpecular(0.3, 0.3, 0.3);
+	m_material.SetAmbient(static_cast<GLfloat>(0.2), static_cast<GLfloat>(0.1), static_cast<GLfloat>(0.3));
+	m_material.SetDiffuse(static_cast<GLfloat >(0.5), static_cast<GLfloat>(0.6), static_cast<GLfloat>(0.7));
+	m_material.SetSpecular(static_cast<GLfloat>(0.3), static_cast<GLfloat>(0.3), static_cast<GLfloat>(0.3));
 }
 
 void CMyApplication::OnInit()
 {
-	glClearColor(0.3, 0.3, 0.3, 1);
+	glClearColor(static_cast<GLclampf>(0.3), static_cast<GLclampf>(0.3), static_cast<GLclampf>(0.3), static_cast<GLclampf>(1));
 	glLoadIdentity();
 	CMatrix4d modelView;
 	modelView.LoadLookAtRH(
@@ -47,12 +47,12 @@ void CMyApplication::OnIdle()
 {
 	m_animationController.Tick();
 
-	static const float LIGHT_ANIMATION_SPEED = 40.0f * M_PI / 180.0f;
+	static const float LIGHT_ANIMATION_SPEED = 40.0f * static_cast<float>(M_PI) / 180.0f;
 
 	m_lightAnimationPhase = fmodf(
-		m_lightAnimationPhase + 
-		LIGHT_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001, 
-		2 * M_PI);
+		static_cast<float>(m_lightAnimationPhase + 
+		LIGHT_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001), 
+		static_cast<float>(2 * M_PI));
 
 	static const float LIGHT_ROTATION_RADIUS = 3;
 	m_lightPosition.x = cosf(m_lightAnimationPhase) * LIGHT_ROTATION_RADIUS + 2;
@@ -61,9 +61,9 @@ void CMyApplication::OnIdle()
 
 	static const float TORUS_ANIMATION_SPEED = 56;
 	m_torusAnimationPhase = fmodf(
-		m_torusAnimationPhase + 
-		TORUS_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001, 
-		360);
+		static_cast<float>(m_torusAnimationPhase + 
+		TORUS_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001), 
+		static_cast<float>(360));
 
 	PostRedisplay();
 }

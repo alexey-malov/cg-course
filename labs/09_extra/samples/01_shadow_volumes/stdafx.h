@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <stdlib.h>
-
 #include <GL/glew.h>
 #include <gl/glut.h>
 #define _USE_MATH_DEFINES

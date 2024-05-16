@@ -3,9 +3,9 @@
 
 CLight::CLight(void)
 {
-	SetDiffuseIntensity(0.8, 0.8, 0.8, 1);
-	SetAmbientIntensity(0.2, 0.2, 0.2, 1);
-	SetSpecularIntensity(0.5, 0.5, 0.5, 1);
+	SetDiffuseIntensity(static_cast<GLfloat>(0.8), static_cast<GLfloat>(0.8), static_cast<GLfloat>(0.8), static_cast<GLfloat>(1));
+	SetAmbientIntensity(static_cast<GLfloat>(0.2), static_cast<GLfloat>(0.2), static_cast<GLfloat>(0.2), static_cast<GLfloat>(1));
+	SetSpecularIntensity(static_cast<GLfloat>(0.5), static_cast<GLfloat>(0.5), static_cast<GLfloat>(0.5), static_cast<GLfloat>(1));
 }
 
 CLight::~CLight(void)
