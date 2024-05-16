@@ -793,6 +793,7 @@ $$ K = ML^{-1}$$
 
 
 
+
 $$ L^{-1} = 
 \begin{pmatrix}
 	a & b & c& D
@@ -803,6 +804,10 @@ $$ L^{-1} =
 	a_z & b_z & c_z & d_z\\
 	0 & 0 & 0 & 1
 \end{pmatrix}^{-1} = $$
+
+
+
+
 $$ = \begin{pmatrix}
 	a_x & a_y & a_z & -d*a\\
 	b_x & b_y & b_z & -d*b\\
