@@ -803,12 +803,12 @@ $$ L^{-1} =
 	a_y & b_y & c_y & d_y\\
 	a_z & b_z & c_z & d_z\\
 	0 & 0 & 0 & 1
-\end{pmatrix}^{-1} = $$
+\end{pmatrix}^{-1} = 
 
 
 
 
-$$ = \begin{pmatrix}
+\begin{pmatrix}
 	a_x & a_y & a_z & -d*a\\
 	b_x & b_y & b_z & -d*b\\
 	c_x & c_y & c_z & -d*c\\
