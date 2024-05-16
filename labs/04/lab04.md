@@ -1353,10 +1353,10 @@ void CMyApplication::RotateCamera(double xAngleRadians, double yAngleRadians)
     // Строго говоря, для этого надо извлекать столбцы их обратной матрицы камеры, но так как
     // матрица камеры ортонормированная, достаточно транспонировать её подматрицу 3*3
     const glm::dvec3 xAxis{
-	      m_cameraMatrix[0][0], m_cameraMatrix[1][0], m_cameraMatrix[2][0]
+        m_cameraMatrix[0][0], m_cameraMatrix[1][0], m_cameraMatrix[2][0]
     };
     const glm::dvec3 yAxis{
-	      m_cameraMatrix[0][1], m_cameraMatrix[1][1], m_cameraMatrix[2][1]
+        m_cameraMatrix[0][1], m_cameraMatrix[1][1], m_cameraMatrix[2][1]
     };
     m_cameraMatrix = glm::rotate(m_cameraMatrix, xAngleRadians, xAxis);
     m_cameraMatrix = glm::rotate(m_cameraMatrix, yAngleRadians, yAxis);
@@ -1376,15 +1376,15 @@ namespace
 // Ортонормируем матрицу 4*4 (это должна быть аффинная матрица)
 glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m)
 {
-	// Извлекаем подматрицу 3*3 из матрицы m и ортонормируем её
-	const auto normalizedMatrix = glm::orthonormalize(glm::dmat3x3{ m });
-	// Заменяем 3 столбца исходной матрицы
-	return {
-		glm::dvec4{ normalizedMatrix[0], 0.0 },
-		glm::dvec4{ normalizedMatrix[1], 0.0 },
-		glm::dvec4{ normalizedMatrix[2], 0.0 },
-		m[3]
-	};
+    // Извлекаем подматрицу 3*3 из матрицы m и ортонормируем её
+    const auto normalizedMatrix = glm::orthonormalize(glm::dmat3x3{ m });
+    // Заменяем 3 столбца исходной матрицы
+    return {
+        glm::dvec4{ normalizedMatrix[0], 0.0 },
+        glm::dvec4{ normalizedMatrix[1], 0.0 },
+        glm::dvec4{ normalizedMatrix[2], 0.0 },
+        m[3]
+        };
 }
 
 }
