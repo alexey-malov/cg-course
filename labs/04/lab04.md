@@ -2840,7 +2840,7 @@ $z = x^3 - 3xy^2$
 
 $x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\cos(u)$
 
-$$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\sin(u)$$
+$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\sin(u)$
 
 $z(u, v) = \frac{v}{2}\sin\frac{u}{2}$
 
