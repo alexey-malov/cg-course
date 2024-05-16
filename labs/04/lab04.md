@@ -369,8 +369,7 @@ $$
 **Матрица поворота** вокруг оси x:
 
 $$
-R_{x}(\alpha)
-=
+R_{x}(\alpha) =
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & \cos \alpha & - \sin \alpha & 0 \\
@@ -415,8 +414,7 @@ R_{y}(\alpha) =
 $$
 
 $$
-R_{y}(\alpha) * P
-=
+R_{y}(\alpha) * P =
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
     0 & 1 & 0 & 0 \\
