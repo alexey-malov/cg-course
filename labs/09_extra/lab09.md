@@ -36,71 +36,71 @@
 class CCube
 {
 public:
-	enum CubeSide
-	{
-		CS_NEGATIVE_X,
-		CS_POSITIVE_X,
-		CS_NEGATIVE_Y,
-		CS_POSITIVE_Y,
-		CS_NEGATIVE_Z,
-		CS_POSITIVE_Z,
+    enum CubeSide
+    {
+        CS_NEGATIVE_X,
+        CS_POSITIVE_X,
+        CS_NEGATIVE_Y,
+        CS_POSITIVE_Y,
+        CS_NEGATIVE_Z,
+        CS_POSITIVE_Z,
 
-		CS_MIN_CUBE_SIDE_INDEX = CS_NEGATIVE_X,
-		CS_MAX_CUBE_SIDE_INDEX = CS_POSITIVE_Z,
-	};
+        CS_MIN_CUBE_SIDE_INDEX = CS_NEGATIVE_X,
+        CS_MAX_CUBE_SIDE_INDEX = CS_POSITIVE_Z,
+    };
 public:
-	CCube(float size = 1);
-	void Draw()const;
-	void DrawShadowVolume(
-		CVector3f const& lightPosition, float extrusionFactor)const;
-	void SetSideColor(
-		CubeSide side, GLubyte r, GLubyte g, GLubyte b, GLubyte a = 255);
+    CCube(float size = 1);
+    void Draw()const;
+    void DrawShadowVolume(
+        CVector3f const& lightPosition, float extrusionFactor)const;
+    void SetSideColor(
+        CubeSide side, GLubyte r, GLubyte g, GLubyte b, GLubyte a = 255);
 private:
-	// Рисуем боковые стороны теневого объема
-	void DrawShadowVolumeSides(
-		CVector3f const& lightPosition, float extrusionFactor)const;
+    // Рисуем боковые стороны теневого объема
+    void DrawShadowVolumeSides(
+        CVector3f const& lightPosition, float extrusionFactor)const;
 
-	// Рисуем верх и низ теневого объема
-	void DrawShadowVolumeCaps(
-		CVector3f const& lightPosition, float extrusionFactor)const;
+    // Рисуем верх и низ теневого объема
+    void DrawShadowVolumeCaps(
+        CVector3f const& lightPosition, float extrusionFactor)const;
 
-	// выполняем инициализицию информации о ребрах
-	static void InitEdges();
+    // выполняем инициализицию информации о ребрах
+    static void InitEdges();
 
-	// Размер куба
-	float m_size;
+    // Размер куба
+    float m_size;
 
-	// Цвета сторон куба
-	GLubyte m_sideColors[6][4];
+    // Цвета сторон куба
+    GLubyte m_sideColors[6][4];
 
-	// Массив вершин куба
-	static const float m_vertices[8][3];
+    // Массив вершин куба
+    static const float m_vertices[8][3];
 
-	// Массив граней губа
-	static const unsigned short m_faces[6][4];
-	static const size_t m_faceCount;
+    // Массив граней губа
+    static const unsigned short m_faces[6][4];
+    static const size_t m_faceCount;
 
-	// Информация о ребре полигональной сетки
-	struct Edge
-	{
-		// индексы вершин, составляющих ребро
-		short vStart, vEnd;
+    // Информация о ребре полигональной сетки
+    struct Edge
+    {
+        // индексы вершин, составляющих ребро
+        short vStart, vEnd;
 
-		// нормали прилегающих к ребру граней
-		// frontFaceNormal - нормаль грани, в состав которой вершины 
-		// ребра входят в последовательности vStart, vEnd
-		// backFaceNormal - нормаль грани, в состав которой вершины
-		// ребра входя в последовательности vEnd, vStart
-		CVector3f frontFaceNormal;
-		CVector3f backFaceNormal;
+        // нормали прилегающих к ребру граней
+        // frontFaceNormal - нормаль грани, в состав которой вершины 
+        // ребра входят в последовательности vStart, vEnd
+        // backFaceNormal - нормаль грани, в состав которой вершины
+        // ребра входя в последовательности vEnd, vStart
+        CVector3f frontFaceNormal;
+        CVector3f backFaceNormal;
 
-		// была ли задана нелицевая нормаль прилегающей грани
-		// (используется при сборе информации о ребрах)
-		bool backFaceNormalIsDefined;
-	};
+        // была ли задана нелицевая нормаль прилегающей грани
+        // (используется при сборе информации о ребрах)
+        bool backFaceNormalIsDefined;
+    };
 
-	// Массив ребер куба
-	static std::vector<Edge> m_edges;
+    // Массив ребер куба
+    static std::vector<Edge> m_edges;
 };
 ```
 
@@ -121,46 +121,46 @@ private:
 1. Для всех граней полигональной сетки
    
     a. Для каждой вершины грани
-	
-	- Текущая и следующая вершины грани могут сформировать новое ребро, либо дополнить уже существующее
-	
-	- Ищем среди ранее найденных ребер ребро, содержащее пару обрабатываемых вершин
-		
-	- Если ребро не нашли, то добавляем новое ребро, установив в качестве нормали лицевой грани нормаль текущей грани
-	
-	- Если же ребро нашли, то убеждаемся, что вершины ребра в него входят в обратном порядке (т.е. грань является по отношению к текущему ребру нелицевой) и задаем в качестве нормали нелицевой грани ребра нормаль текущей грани
+    
+    - Текущая и следующая вершины грани могут сформировать новое ребро, либо дополнить уже существующее
+    
+    - Ищем среди ранее найденных ребер ребро, содержащее пару обрабатываемых вершин
+        
+    - Если ребро не нашли, то добавляем новое ребро, установив в качестве нормали лицевой грани нормаль текущей грани
+    
+    - Если же ребро нашли, то убеждаемся, что вершины ребра в него входят в обратном порядке (т.е. грань является по отношению к текущему ребру нелицевой) и задаем в качестве нормали нелицевой грани ребра нормаль текущей грани
 2. Поскольку среди найденных ребер могут оказаться те, для которых нормаль нелицевой грани не задана (это произойдет в том случае, если сетка не удовлетворяет необходимым требованиям), удаляем данные не полностью заданные ребра из массива ребер.
 
 ```cpp
-	/*
-	   Y
-	   |
-	   |
-	   |
-	   +---X
-	  /
-	 /
-	Z
-	   3----2
-	  /    /|
-	 /    / |
-	7----6  |
-	|  0 |  1
-	|    | /
-	|    |/
-	4----5
+    /*
+       Y
+       |
+       |
+       |
+       +---X
+      /
+     /
+    Z
+       3----2
+      /    /|
+     /    / |
+    7----6  |
+    |  0 |  1
+    |    | /
+    |    |/
+    4----5
 */
 // Массив координат вершин
 const float CCube::m_vertices[8][3] = 
 {
-	{-1, -1, -1},	// 0
-	{+1, -1, -1},	// 1
-	{+1, +1, -1},	// 2
-	{-1, +1, -1},	// 3
-	{-1, -1, +1},	// 4
-	{+1, -1, +1},	// 5
-	{+1, +1, +1},	// 6
-	{-1, +1, +1},	// 7
+    {-1, -1, -1},    // 0
+    {+1, -1, -1},    // 1
+    {+1, +1, -1},    // 2
+    {-1, +1, -1},    // 3
+    {-1, -1, +1},    // 4
+    {+1, -1, +1},    // 5
+    {+1, +1, +1},    // 6
+    {-1, +1, +1},    // 7
 };
 
 // Массив координат граней (в порядке, совпадающем с 
@@ -169,12 +169,12 @@ const float CCube::m_vertices[8][3] =
 // против часовой стрелки (если смотреть на грань снаружи)
 const unsigned short CCube::m_faces[6][4] = 
 {
-	{4, 7, 3, 0},	// грань x<0
-	{5, 1, 2, 6},	// грань x>0
-	{4, 0, 1, 5},	// грань y<0
-	{7, 6, 2, 3},	// грань y>0
-	{0, 3, 2, 1},	// грань z<0
-	{4, 5, 6, 7},	// грань z>0
+    {4, 7, 3, 0},    // грань x<0
+    {5, 1, 2, 6},    // грань x>0
+    {4, 0, 1, 5},    // грань y<0
+    {7, 6, 2, 3},    // грань y>0
+    {0, 3, 2, 1},    // грань z<0
+    {4, 5, 6, 7},    // грань z>0
 };
 const size_t CCube::m_faceCount = sizeof(m_faces) / sizeof(*m_faces);
 
@@ -182,70 +182,70 @@ std::vector<CCube::Edge> CCube::m_edges;
 
 void CCube::InitEdges()
 {
-	// пробегаем по всем граням
-	for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
-	{
-		const unsigned short * face = m_faces[faceIndex];
+    // пробегаем по всем граням
+    for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
+    {
+        const unsigned short * face = m_faces[faceIndex];
 
-		// Вычисляем нормаль к грани
-		CVector3f v0 = CVector3f(m_vertices[face[0]]);
-		CVector3f v1 = CVector3f(m_vertices[face[1]]);
-		CVector3f v2 = CVector3f(m_vertices[face[2]]);
-		CVector3f normal = Cross(v1 - v0, v2 - v0);
+        // Вычисляем нормаль к грани
+        CVector3f v0 = CVector3f(m_vertices[face[0]]);
+        CVector3f v1 = CVector3f(m_vertices[face[1]]);
+        CVector3f v2 = CVector3f(m_vertices[face[2]]);
+        CVector3f normal = Cross(v1 - v0, v2 - v0);
 
-		// пробегаем по всем вершинам грани
-		for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex)
-		{
-			const unsigned short startVertex = face[vertexIndex];
-			const unsigned short endVertex = face[(vertexIndex + 1) % 4];
+        // пробегаем по всем вершинам грани
+        for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex)
+        {
+            const unsigned short startVertex = face[vertexIndex];
+            const unsigned short endVertex = face[(vertexIndex + 1) % 4];
 
-			// Ищем среди существующих ребер ребро, 
-			// содержащее вершины startVertex и endVertex
-			size_t edgeIndex;
-			for (edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
-			{
-				Edge & edge = m_edges[edgeIndex];
-				if (
-					(edge.vStart == startVertex && edge.vEnd == endVertex) ||
-					(edge.vStart == endVertex && edge.vEnd == startVertex)				
-					)
-				{
-					break;
-				}
-			}
-			if (edgeIndex == m_edges.size()) // такого ребра нет
-			{
-				// добавляем новое ребро
-				Edge newEdge;
-				newEdge.vStart = startVertex;
-				newEdge.vEnd = endVertex;
-				newEdge.frontFaceNormal = normal;
-				newEdge.backFaceNormalIsDefined = false;
-				m_edges.push_back(newEdge);
-			}
-			else
-			{
-				// такое ребро уже есть
-				Edge & edge = m_edges[edgeIndex];
-				if (!edge.backFaceNormalIsDefined &&
-					(edge.vStart == endVertex && edge.vEnd == startVertex)
-					)
-				{
-					// Добавляем нормаль нелицевой грани ребра
-					edge.backFaceNormalIsDefined = true;
-					edge.backFaceNormal = normal;
-				}
-			}
-		}
-	}
-	// Удаляем ребра, для которых не задана нормаль нелицевой грани
-	for (int edgeIndex = m_edges.size() - 1; edgeIndex >=0; --edgeIndex)
-	{
-		if (!m_edges[edgeIndex].backFaceNormalIsDefined)
-		{
-			m_edges.erase(m_edges.begin() + edgeIndex);
-		}
-	}
+            // Ищем среди существующих ребер ребро, 
+            // содержащее вершины startVertex и endVertex
+            size_t edgeIndex;
+            for (edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
+            {
+                Edge & edge = m_edges[edgeIndex];
+                if (
+                    (edge.vStart == startVertex && edge.vEnd == endVertex) ||
+                    (edge.vStart == endVertex && edge.vEnd == startVertex)                
+                    )
+                {
+                    break;
+                }
+            }
+            if (edgeIndex == m_edges.size()) // такого ребра нет
+            {
+                // добавляем новое ребро
+                Edge newEdge;
+                newEdge.vStart = startVertex;
+                newEdge.vEnd = endVertex;
+                newEdge.frontFaceNormal = normal;
+                newEdge.backFaceNormalIsDefined = false;
+                m_edges.push_back(newEdge);
+            }
+            else
+            {
+                // такое ребро уже есть
+                Edge & edge = m_edges[edgeIndex];
+                if (!edge.backFaceNormalIsDefined &&
+                    (edge.vStart == endVertex && edge.vEnd == startVertex)
+                    )
+                {
+                    // Добавляем нормаль нелицевой грани ребра
+                    edge.backFaceNormalIsDefined = true;
+                    edge.backFaceNormal = normal;
+                }
+            }
+        }
+    }
+    // Удаляем ребра, для которых не задана нормаль нелицевой грани
+    for (int edgeIndex = m_edges.size() - 1; edgeIndex >=0; --edgeIndex)
+    {
+        if (!m_edges[edgeIndex].backFaceNormalIsDefined)
+        {
+            m_edges.erase(m_edges.begin() + edgeIndex);
+        }
+    }
 }
 ```
 
@@ -256,56 +256,56 @@ void CCube::InitEdges()
 
 ```cpp
 void CCube::DrawShadowVolumeSides(
-	CVector3f const& lightPosition, float extrusionFactor)const
+    CVector3f const& lightPosition, float extrusionFactor)const
 {
-	// Среди всех ребер ищем те, которые являются силуэтными
-	for (size_t edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
-	{
-		Edge const& edge = m_edges[edgeIndex];
+    // Среди всех ребер ищем те, которые являются силуэтными
+    for (size_t edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
+    {
+        Edge const& edge = m_edges[edgeIndex];
 
-		// Вектор направления на источник света
-		CVector3f lightDirection = 
-			lightPosition - CVector3f(m_vertices[edge.vStart]) * m_size;
+        // Вектор направления на источник света
+        CVector3f lightDirection = 
+            lightPosition - CVector3f(m_vertices[edge.vStart]) * m_size;
 
-		// Определяем освещенность прилегающих к ребру граней
-		bool frontFaceIsLit = Dot(edge.frontFaceNormal, lightDirection) > 0;
+        // Определяем освещенность прилегающих к ребру граней
+        bool frontFaceIsLit = Dot(edge.frontFaceNormal, lightDirection) > 0;
 
-		bool backFaceIsLit = Dot(edge.backFaceNormal, lightDirection) > 0;
+        bool backFaceIsLit = Dot(edge.backFaceNormal, lightDirection) > 0;
 
-		if (frontFaceIsLit != backFaceIsLit) // Это силуэтное ребро?
-		{
-			// Вытягиваем вершину от источника света через ребро
-			// на заданный фактор вытягивания
-			CVector3f v0 = CVector3f(m_vertices[edge.vStart]) * m_size;
-			CVector3f v0e = 
-				v0 + (v0 - lightPosition) * extrusionFactor;
+        if (frontFaceIsLit != backFaceIsLit) // Это силуэтное ребро?
+        {
+            // Вытягиваем вершину от источника света через ребро
+            // на заданный фактор вытягивания
+            CVector3f v0 = CVector3f(m_vertices[edge.vStart]) * m_size;
+            CVector3f v0e = 
+                v0 + (v0 - lightPosition) * extrusionFactor;
 
-			CVector3f v1 = CVector3f(m_vertices[edge.vEnd]) * m_size;
-			CVector3f v1e = 
-				v1 + (v1 - lightPosition) * extrusionFactor;
+            CVector3f v1 = CVector3f(m_vertices[edge.vEnd]) * m_size;
+            CVector3f v1e = 
+                v1 + (v1 - lightPosition) * extrusionFactor;
 
-			// Задаем вершины четырехугольника в зависимости от того,
-			// какая из прилегающих граней освещена
-			if (frontFaceIsLit)
-			{
-				glVertex3fv(v1);
-				glVertex3fv(v0);
-				// четвертая координата, равная 0, вытягивает вершину
-				// в бесконечность
-				glVertex4f(v0e.x, v0e.y, v0e.z, 0);
-				glVertex4f(v1e.x, v1e.y, v1e.z, 0);
-			}
-			else
-			{
-				glVertex3fv(v0);
-				glVertex3fv(v1);
-				// четвертая координата, равная 0, вытягивает вершину
-				// в бесконечность
-				glVertex4f(v1e.x, v1e.y, v1e.z, 0);
-				glVertex4f(v0e.x, v0e.y, v0e.z, 0);
-			}
-		}	
-	}
+            // Задаем вершины четырехугольника в зависимости от того,
+            // какая из прилегающих граней освещена
+            if (frontFaceIsLit)
+            {
+                glVertex3fv(v1);
+                glVertex3fv(v0);
+                // четвертая координата, равная 0, вытягивает вершину
+                // в бесконечность
+                glVertex4f(v0e.x, v0e.y, v0e.z, 0);
+                glVertex4f(v1e.x, v1e.y, v1e.z, 0);
+            }
+            else
+            {
+                glVertex3fv(v0);
+                glVertex3fv(v1);
+                // четвертая координата, равная 0, вытягивает вершину
+                // в бесконечность
+                glVertex4f(v1e.x, v1e.y, v1e.z, 0);
+                glVertex4f(v0e.x, v0e.y, v0e.z, 0);
+            }
+        }    
+    }
 }
 ```
 
@@ -318,40 +318,40 @@ Depth-fail алгоритм (алгоритм Кармака) требует р�
 
 ```cpp
 void CCube::DrawShadowVolumeCaps(
-	CVector3f const& lightPosition, float extrusionFactor)const
+    CVector3f const& lightPosition, float extrusionFactor)const
 {
-	for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
-	{
-		const unsigned short * face = m_faces[faceIndex];
+    for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
+    {
+        const unsigned short * face = m_faces[faceIndex];
 
-		CVector3f v0 = CVector3f(m_vertices[face[0]]) * m_size;
-		CVector3f v1 = CVector3f(m_vertices[face[1]]) * m_size;
-		CVector3f v2 = CVector3f(m_vertices[face[2]]) * m_size;
-		CVector3f v3 = CVector3f(m_vertices[face[3]]) * m_size;
+        CVector3f v0 = CVector3f(m_vertices[face[0]]) * m_size;
+        CVector3f v1 = CVector3f(m_vertices[face[1]]) * m_size;
+        CVector3f v2 = CVector3f(m_vertices[face[2]]) * m_size;
+        CVector3f v3 = CVector3f(m_vertices[face[3]]) * m_size;
 
-		// нормаль к грани
-		CVector3f faceNormal = Cross(v1 - v0, v2 - v0);
+        // нормаль к грани
+        CVector3f faceNormal = Cross(v1 - v0, v2 - v0);
 
-		// Вычисляем направление на источник света
-		CVector3f lightDirection = lightPosition - v0;
+        // Вычисляем направление на источник света
+        CVector3f lightDirection = lightPosition - v0;
 
-		bool faceIsLit = Dot(faceNormal, lightDirection) > 0;
+        bool faceIsLit = Dot(faceNormal, lightDirection) > 0;
 
-		float w = 1;
-		if (!faceIsLit)	// Освещенная грань?
-		{
-			w = 0;	// вершины будут "вытягиваться" в бесконечность
-			v0 += (v0 - lightPosition) * extrusionFactor;
-			v1 += (v1 - lightPosition) * extrusionFactor;
-			v2 += (v2 - lightPosition) * extrusionFactor;
-			v3 += (v3 - lightPosition) * extrusionFactor;
-		}
+        float w = 1;
+        if (!faceIsLit)    // Освещенная грань?
+        {
+            w = 0;    // вершины будут "вытягиваться" в бесконечность
+            v0 += (v0 - lightPosition) * extrusionFactor;
+            v1 += (v1 - lightPosition) * extrusionFactor;
+            v2 += (v2 - lightPosition) * extrusionFactor;
+            v3 += (v3 - lightPosition) * extrusionFactor;
+        }
 
-		glVertex4f(v0.x, v0.y, v0.z, w);
-		glVertex4f(v1.x, v1.y, v1.z, w);
-		glVertex4f(v2.x, v2.y, v2.z, w);
-		glVertex4f(v3.x, v3.y, v3.z, w);
-	}
+        glVertex4f(v0.x, v0.y, v0.z, w);
+        glVertex4f(v1.x, v1.y, v1.z, w);
+        glVertex4f(v2.x, v2.y, v2.z, w);
+        glVertex4f(v3.x, v3.y, v3.z, w);
+    }
 }
 ```
 
@@ -362,16 +362,16 @@ template <class T>
 class CVector3
 {
 public:
-	…
+    …
 
-	CVector3 & operator+=(CVector3 const& v)
-	{
-		x += v.x;
-		y += v.y;
-		z += v.z;
-		return *this;
-	}
-	…
+    CVector3 & operator+=(CVector3 const& v)
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return *this;
+    }
+    …
 };
 ```
 
@@ -379,21 +379,21 @@ public:
 
 ```cpp
 void CCube::DrawShadowVolume(
-	CVector3f const& lightPosition, float extrusionFactor)const
+    CVector3f const& lightPosition, float extrusionFactor)const
 {
-	// Инициализируем информацию о ребрах при первом вызове
-	if (m_edges.empty())
-	{
-		InitEdges();
-	}
-	glBegin(GL_QUADS);
-	// Рисуем боковые грани теневого объема, вытягивая силуэтные ребра
-	DrawShadowVolumeSides(lightPosition, extrusionFactor);
+    // Инициализируем информацию о ребрах при первом вызове
+    if (m_edges.empty())
+    {
+        InitEdges();
+    }
+    glBegin(GL_QUADS);
+    // Рисуем боковые грани теневого объема, вытягивая силуэтные ребра
+    DrawShadowVolumeSides(lightPosition, extrusionFactor);
 
-	// Рисуем "верхнюю" и "нижнюю" части теневого объема,
-	// вытягивая неосвещенные грани объекта в бесконечность
-	DrawShadowVolumeCaps(lightPosition, extrusionFactor);
-	glEnd();
+    // Рисуем "верхнюю" и "нижнюю" части теневого объема,
+    // вытягивая неосвещенные грани объекта в бесконечность
+    DrawShadowVolumeCaps(lightPosition, extrusionFactor);
+    glEnd();
 }
 ```
 
@@ -403,52 +403,52 @@ void CCube::DrawShadowVolume(
 
 ```cpp
 class CMyApplication 
-	: public CGLApplication
-	, private IRotationControllerListener
+    : public CGLApplication
+    , private IRotationControllerListener
 {
 public:
-	CMyApplication(const char * title, int width, int height);
+    CMyApplication(const char * title, int width, int height);
 private:
-	virtual void OnIdle();
-	virtual void OnInit();
-	virtual void OnDisplay();
-	virtual void OnReshape(int width, int height);
-	virtual void OnRotationControllerUpdate();
+    virtual void OnIdle();
+    virtual void OnInit();
+    virtual void OnDisplay();
+    virtual void OnReshape(int width, int height);
+    virtual void OnRotationControllerUpdate();
 private:
-	// Рисуем источник света в виде сферы
-	void DrawLightSource()const;
-	// Рисуем освещенную, либо неосвещенную сцену
-	void DrawScene(bool enableLighting)const;
-	// Рисуем теневой объем куба
-	void DrawShadowVolume()const;
-	// Рисуем ребра теневого объема куба
-	void DrawShadowVolumeEdges	()const;
+    // Рисуем источник света в виде сферы
+    void DrawLightSource()const;
+    // Рисуем освещенную, либо неосвещенную сцену
+    void DrawScene(bool enableLighting)const;
+    // Рисуем теневой объем куба
+    void DrawShadowVolume()const;
+    // Рисуем ребра теневого объема куба
+    void DrawShadowVolumeEdges    ()const;
 private:
-	CCube m_cube;
+    CCube m_cube;
 
-	// Параметры камеры (ZFAR = +бесконечность)
-	static const double FOV;
-	static const double ZNEAR;
+    // Параметры камеры (ZFAR = +бесконечность)
+    static const double FOV;
+    static const double ZNEAR;
 
-	// Коэффициент вытягивания силуэтных граней
-	static const float EXTRUSION_FACTOR;
+    // Коэффициент вытягивания силуэтных граней
+    static const float EXTRUSION_FACTOR;
 
-	// Контроллеры вращения и анимации
-	CRotationController m_rotationController;
-	CAnimationController m_animationController;
+    // Контроллеры вращения и анимации
+    CRotationController m_rotationController;
+    CAnimationController m_animationController;
 
-	// Точечный источник света и его положение в пространстве
-	COmniLight m_light;
-	CVector3f m_lightPosition;
+    // Точечный источник света и его положение в пространстве
+    COmniLight m_light;
+    CVector3f m_lightPosition;
 
-	// Материал объектов сцены
-	CMaterial m_material;
+    // Материал объектов сцены
+    CMaterial m_material;
 
-	// Фаза анимации источника света (0..2pi)
-	float m_lightAnimationPhase;
+    // Фаза анимации источника света (0..2pi)
+    float m_lightAnimationPhase;
 
-	// Фаза анимации (угол вращения) торов
-	float m_torusAnimationPhase;
+    // Фаза анимации (угол вращения) торов
+    float m_torusAnimationPhase;
 };
 ```
 #### ***Установка матрицы проецирования***
@@ -463,18 +463,18 @@ $z_{far}\to\infty$.
 
 $$ P = 
 \begin{pmatrix}
-	\frac{2N}{right - left} & 0 & \frac{right+left}{right-left} & 0\\
-	0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
-	0 & 0 & -\frac{F+N}{F-N} & \frac{-2FN}{F-N}\\
-	0 & 0 & -1 & 0
+    \frac{2N}{right - left} & 0 & \frac{right+left}{right-left} & 0\\
+    0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+    0 & 0 & -\frac{F+N}{F-N} & \frac{-2FN}{F-N}\\
+    0 & 0 & -1 & 0
 \end{pmatrix}$$
 
 $$ P_{inf} = \lim\limits_{F\to\infty} P = 
 \begin{pmatrix}
-	\frac{2N}{right - left} & 0 & \frac{right+left}{right-left} & 0\\
-	0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
-	0 & 0 & -1 & -2N\\
-	0 & 0 & -1 & 0
+    \frac{2N}{right - left} & 0 & \frac{right+left}{right-left} & 0\\
+    0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+    0 & 0 & -1 & -2N\\
+    0 & 0 & -1 & 0
 \end{pmatrix} $$
 
 Проделаем данные действия в обработчике события OnReshape.
@@ -487,30 +487,30 @@ const double CMyApplication::ZNEAR = 1;
 
 void CMyApplication::OnReshape(int width, int height)
 {
-	// Задаем порт просмотра размером с клиентскую область окна
-	glViewport(0, 0, width, height);
+    // Задаем порт просмотра размером с клиентскую область окна
+    glViewport(0, 0, width, height);
 
-	// Вычисляем соотношение сторон окна
-	double aspect = double(width) / height;
+    // Вычисляем соотношение сторон окна
+    double aspect = double(width) / height;
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	// Устанавливаем матрицу проецирования
-	gluPerspective(FOV, aspect, ZNEAR, ZNEAR + 1);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    // Устанавливаем матрицу проецирования
+    gluPerspective(FOV, aspect, ZNEAR, ZNEAR + 1);
 
-	// Получаем коэффициенты матрицы проецирования
-	double projectionMatrix[4][4];
-	glGetDoublev(GL_PROJECTION_MATRIX, &projectionMatrix[0][0]);
+    // Получаем коэффициенты матрицы проецирования
+    double projectionMatrix[4][4];
+    glGetDoublev(GL_PROJECTION_MATRIX, &projectionMatrix[0][0]);
 
-	// И корректируем их для случая бесконечно удаленной дальней
-	// плоскости отсечения
-	projectionMatrix[2][2] = -1;
-	projectionMatrix[3][2] = -2 * ZNEAR;
+    // И корректируем их для случая бесконечно удаленной дальней
+    // плоскости отсечения
+    projectionMatrix[2][2] = -1;
+    projectionMatrix[3][2] = -2 * ZNEAR;
 
-	// Загружаем модифицированную матрицу проецирования
-	glLoadMatrixd(&projectionMatrix[0][0]);
+    // Загружаем модифицированную матрицу проецирования
+    glLoadMatrixd(&projectionMatrix[0][0]);
 
-	glMatrixMode(GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
 }
 ```
 
@@ -525,31 +525,31 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 ,m_lightAnimationPhase(0)
 ,m_torusAnimationPhase(0)
 {
-	AddEventListener(&m_rotationController);
-	m_rotationController.AddEventListener(this);
+    AddEventListener(&m_rotationController);
+    m_rotationController.AddEventListener(this);
 
-	m_light.SetAmbientIntensity(0.2f, 0.2f, 0.2f);	m_light.SetPosition(CVector3f(3, 3, 2));
+    m_light.SetAmbientIntensity(0.2f, 0.2f, 0.2f);    m_light.SetPosition(CVector3f(3, 3, 2));
 
-	m_material.SetShininess(30);
-	m_material.SetAmbient(0.2, 0.1, 0.3);
-	m_material.SetDiffuse(0.5, 0.6, 0.7);
-	m_material.SetSpecular(0.3, 0.3, 0.3);
+    m_material.SetShininess(30);
+    m_material.SetAmbient(0.2, 0.1, 0.3);
+    m_material.SetDiffuse(0.5, 0.6, 0.7);
+    m_material.SetSpecular(0.3, 0.3, 0.3);
 }
 
 void CMyApplication::OnInit()
 {
-	glClearColor(0.3, 0.3, 0.3, 1);
-	glLoadIdentity();
-	CMatrix4d modelView;
-	modelView.LoadLookAtRH(
-		0, 0, 10, 
-		0, 0, 0, 
-		0, 1, 0);
-	m_rotationController.SetModelViewMatrix(modelView);
+    glClearColor(0.3, 0.3, 0.3, 1);
+    glLoadIdentity();
+    CMatrix4d modelView;
+    modelView.LoadLookAtRH(
+        0, 0, 10, 
+        0, 0, 0, 
+        0, 1, 0);
+    m_rotationController.SetModelViewMatrix(modelView);
 
-	glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
-	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 }
 ```
 
@@ -565,34 +565,34 @@ void CMyApplication::OnInit()
 ```cpp
 void CMyApplication::OnDisplay()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
-	glLoadMatrixd(m_rotationController.GetModelViewMatrix());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    
+    glLoadMatrixd(m_rotationController.GetModelViewMatrix());
 
-	// Рисуем источик света в виде сферы
-	DrawLightSource();
+    // Рисуем источик света в виде сферы
+    DrawLightSource();
 
-	// Рисуем сцену без источников света
-	DrawScene(false);
+    // Рисуем сцену без источников света
+    DrawScene(false);
 
-	// Рисуем теневой объем
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glDepthMask(GL_FALSE);
-	glDisable(GL_LIGHTING);
-	DrawShadowVolume();
+    // Рисуем теневой объем
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glDepthMask(GL_FALSE);
+    glDisable(GL_LIGHTING);
+    DrawShadowVolume();
 
-	// Рисуем сцену со включенным источником света
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glDepthMask(GL_TRUE);
-	glStencilFunc(GL_EQUAL, 0, ~0);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-	glDepthFunc(GL_EQUAL);
-	DrawScene(true);
-	glDepthFunc(GL_LESS);
-	glDisable(GL_STENCIL_TEST);
-	
-	// Рисуем ребра граней теневого объема
-	DrawShadowVolumeEdges();
+    // Рисуем сцену со включенным источником света
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDepthMask(GL_TRUE);
+    glStencilFunc(GL_EQUAL, 0, ~0);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glDepthFunc(GL_EQUAL);
+    DrawScene(true);
+    glDepthFunc(GL_LESS);
+    glDisable(GL_STENCIL_TEST);
+    
+    // Рисуем ребра граней теневого объема
+    DrawShadowVolumeEdges();
 }
 ```
 
@@ -603,36 +603,36 @@ void CMyApplication::OnDisplay()
 ```cpp
 void CMyApplication::DrawScene(bool enableLighting)const
 {
-	// Активизируем материал
-	m_material.Activate(GL_FRONT);
+    // Активизируем материал
+    m_material.Activate(GL_FRONT);
 
-	// Задаем параметры источника света
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+    // Задаем параметры источника света
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
-	COmniLight light(m_light);
-	light.SetPosition(m_lightPosition);
-	if (!enableLighting)
-	{
-		// При выключенном освещении источник света 
-		// испускает только фоновый свет
-		light.SetDiffuseIntensity(0, 0, 0);
-		light.SetSpecularIntensity(0, 0, 0);
-	}
-	light.SetLight(GL_LIGHT0);
+    COmniLight light(m_light);
+    light.SetPosition(m_lightPosition);
+    if (!enableLighting)
+    {
+        // При выключенном освещении источник света 
+        // испускает только фоновый свет
+        light.SetDiffuseIntensity(0, 0, 0);
+        light.SetSpecularIntensity(0, 0, 0);
+    }
+    light.SetLight(GL_LIGHT0);
 
-	// Рисуем куб
-	m_cube.Draw();
+    // Рисуем куб
+    m_cube.Draw();
 
-	// Рисуем пару сцепленных торов
-	glPushMatrix();
-	glTranslatef(-2, -8, -2);
-	glRotatef(m_torusAnimationPhase, 1, 0, 0);
-	glutSolidTorus(1.5, 4, 30, 60);
-	glTranslatef(-4, 0, 0);
-	glRotatef(90, 1, 0, 0);
-	glutSolidTorus(1.5, 4, 30, 60);
-	glPopMatrix();
+    // Рисуем пару сцепленных торов
+    glPushMatrix();
+    glTranslatef(-2, -8, -2);
+    glRotatef(m_torusAnimationPhase, 1, 0, 0);
+    glutSolidTorus(1.5, 4, 30, 60);
+    glTranslatef(-4, 0, 0);
+    glRotatef(90, 1, 0, 0);
+    glutSolidTorus(1.5, 4, 30, 60);
+    glPopMatrix();
 }
 ```
 
@@ -652,61 +652,61 @@ const float CMyApplication::EXTRUSION_FACTOR = 100;
 
 void CMyApplication::DrawShadowVolume()const
 {
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_ALWAYS, 0, 0);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 0, 0);
 
-	// Задаем операции циклического либо нециклического инкремента
-	// и декремента в зависимости от наличия расширения GL_EXT_stencil_wrap
-	GLenum incrOp = GLEW_EXT_stencil_wrap ? GL_INCR_WRAP_EXT : GL_INCR;
-	GLenum decrOp = GLEW_EXT_stencil_wrap ? GL_DECR_WRAP_EXT : GL_DECR;
+    // Задаем операции циклического либо нециклического инкремента
+    // и декремента в зависимости от наличия расширения GL_EXT_stencil_wrap
+    GLenum incrOp = GLEW_EXT_stencil_wrap ? GL_INCR_WRAP_EXT : GL_INCR;
+    GLenum decrOp = GLEW_EXT_stencil_wrap ? GL_DECR_WRAP_EXT : GL_DECR;
 
-	// Есть ли поддержка раздельных операций над буфером трафарета
-	// для лицевых и нелицевых граней, а также оборачивания при
-	// инкременте/декременте?
-	if (GLEW_EXT_stencil_two_side && GL_EXT_stencil_wrap)
-	{
-		// Теневой объем будет нарисован за один этап
+    // Есть ли поддержка раздельных операций над буфером трафарета
+    // для лицевых и нелицевых граней, а также оборачивания при
+    // инкременте/декременте?
+    if (GLEW_EXT_stencil_two_side && GL_EXT_stencil_wrap)
+    {
+        // Теневой объем будет нарисован за один этап
 
-		// Включаем двусторонний тест трафарета
-		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+        // Включаем двусторонний тест трафарета
+        glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 
-		// Фрагменты нелицевых граней, не прошедшие тест глубины,
-		// будут увеличивать значения в буфере трафарета
-		glActiveStencilFaceEXT(GL_BACK);
-		glStencilOp(GL_KEEP, GL_INCR_WRAP_EXT, GL_KEEP);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
+        // Фрагменты нелицевых граней, не прошедшие тест глубины,
+        // будут увеличивать значения в буфере трафарета
+        glActiveStencilFaceEXT(GL_BACK);
+        glStencilOp(GL_KEEP, GL_INCR_WRAP_EXT, GL_KEEP);
+        glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		// Фрагменты лицевых граней, не прошедшие тест глубины,
-		// будут уменьшать значения в буфере трафарета
-		glActiveStencilFaceEXT(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_DECR_WRAP_EXT, GL_KEEP);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
+        // Фрагменты лицевых граней, не прошедшие тест глубины,
+        // будут уменьшать значения в буфере трафарета
+        glActiveStencilFaceEXT(GL_FRONT);
+        glStencilOp(GL_KEEP, GL_DECR_WRAP_EXT, GL_KEEP);
+        glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		// Рисуем теневой объем, выключив режим отбраковки граней
-		glDisable(GL_CULL_FACE);
-		m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
+        // Рисуем теневой объем, выключив режим отбраковки граней
+        glDisable(GL_CULL_FACE);
+        m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
 
-		// Включаем режим отбраковки граней
-		glEnable(GL_CULL_FACE);
-		// Выключаем двусторонний тест трафарета
-		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-	}
-	else	// Требуемые расширения не поддерживаются
-	{
-		// Теневой объем будет нарисован в два этапа
+        // Включаем режим отбраковки граней
+        glEnable(GL_CULL_FACE);
+        // Выключаем двусторонний тест трафарета
+        glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+    }
+    else    // Требуемые расширения не поддерживаются
+    {
+        // Теневой объем будет нарисован в два этапа
 
-		// Рисуем нелицевые грани, увеличивая значения в буфере трафарета
-		// при непрохождении теста глубины
-		glCullFace(GL_FRONT);
-		glStencilOp(GL_KEEP, incrOp, GL_KEEP);
-		m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
+        // Рисуем нелицевые грани, увеличивая значения в буфере трафарета
+        // при непрохождении теста глубины
+        glCullFace(GL_FRONT);
+        glStencilOp(GL_KEEP, incrOp, GL_KEEP);
+        m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
 
-		// Рисуем лицевые грани, уменьшая значения в буфере трафарета
-		// при непрохождении теста глубины
-		glCullFace(GL_BACK);
-		glStencilOp(GL_KEEP, decrOp, GL_KEEP);
-		m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
-	}
+        // Рисуем лицевые грани, уменьшая значения в буфере трафарета
+        // при непрохождении теста глубины
+        glCullFace(GL_BACK);
+        glStencilOp(GL_KEEP, decrOp, GL_KEEP);
+        m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
+    }
 }
 ```
 
@@ -715,13 +715,13 @@ void CMyApplication::DrawShadowVolume()const
 ```cpp
 void CMyApplication::DrawShadowVolumeEdges()const
 {
-	glDisable(GL_LIGHTING);
-	glColor3f(1, 0, 0);
-	glDisable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_CULL_FACE);	
+    glDisable(GL_LIGHTING);
+    glColor3f(1, 0, 0);
+    glDisable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glEnable(GL_CULL_FACE);    
 }
 ```
 
@@ -732,13 +732,13 @@ void CMyApplication::DrawShadowVolumeEdges()const
 ```cpp
 void CMyApplication::DrawLightSource()const
 {
-	// Рисуем источник света
-	glDisable(GL_LIGHTING);
-	glColor3f(1, 1, 1);
-	glPushMatrix();
-	glTranslatef(m_lightPosition.x, m_lightPosition.y, m_lightPosition.z);
-	glutSolidSphere(0.1, 15, 10);
-	glPopMatrix();
+    // Рисуем источник света
+    glDisable(GL_LIGHTING);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glTranslatef(m_lightPosition.x, m_lightPosition.y, m_lightPosition.z);
+    glutSolidSphere(0.1, 15, 10);
+    glPopMatrix();
 }
 ```
 
@@ -749,30 +749,30 @@ void CMyApplication::DrawLightSource()const
 ```cpp
 void CMyApplication::OnIdle()
 {
-	m_animationController.Tick();
+    m_animationController.Tick();
 
-	static const float LIGHT_ANIMATION_SPEED = 40.0f * M_PI / 180.0f;
+    static const float LIGHT_ANIMATION_SPEED = 40.0f * M_PI / 180.0f;
 
-	m_lightAnimationPhase = fmodf(
-		m_lightAnimationPhase + 
-		LIGHT_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001, 
-		2 * M_PI);
+    m_lightAnimationPhase = fmodf(
+        m_lightAnimationPhase + 
+        LIGHT_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001, 
+        2 * M_PI);
 
-	static const float LIGHT_ROTATION_RADIUS = 3;
-	m_lightPosition.x = 
-		cosf(m_lightAnimationPhase) * LIGHT_ROTATION_RADIUS + 2;
-	m_lightPosition.y = 
-		sinf(m_lightAnimationPhase) * LIGHT_ROTATION_RADIUS + 2;
-	m_lightPosition.z = 
-		sin(m_lightAnimationPhase * 2) * LIGHT_ROTATION_RADIUS + 1;
+    static const float LIGHT_ROTATION_RADIUS = 3;
+    m_lightPosition.x = 
+        cosf(m_lightAnimationPhase) * LIGHT_ROTATION_RADIUS + 2;
+    m_lightPosition.y = 
+        sinf(m_lightAnimationPhase) * LIGHT_ROTATION_RADIUS + 2;
+    m_lightPosition.z = 
+        sin(m_lightAnimationPhase * 2) * LIGHT_ROTATION_RADIUS + 1;
 
-	static const float TORUS_ANIMATION_SPEED = 56;
-	m_torusAnimationPhase = fmodf(
-		m_torusAnimationPhase + 
-		TORUS_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001, 
-		360);
+    static const float TORUS_ANIMATION_SPEED = 56;
+    m_torusAnimationPhase = fmodf(
+        m_torusAnimationPhase + 
+        TORUS_ANIMATION_SPEED * m_animationController.GetTimeDelta() * 0.001, 
+        360);
 
-	PostRedisplay();
+    PostRedisplay();
 }
 ```
 
@@ -796,32 +796,34 @@ $$ K = ML^{-1}$$
 
 $$ L^{-1} = 
 \begin{pmatrix}
-	a & b & c& D
+    a & b & c& D
 \end{pmatrix}^{-1} = 
 \begin{pmatrix}
-	a_x & b_x & c_x & d_x\\
-	a_y & b_y & c_y & d_y\\
-	a_z & b_z & c_z & d_z\\
-	0 & 0 & 0 & 1
-\end{pmatrix}^{-1} = 
+    a_x & b_x & c_x & d_x\\
+    a_y & b_y & c_y & d_y\\
+    a_z & b_z & c_z & d_z\\
+    0 & 0 & 0 & 1
+\end{pmatrix}^{-1} = $$
 
 
 
 
-\begin{pmatrix}
-	a_x & a_y & a_z & -d*a\\
-	b_x & b_y & b_z & -d*b\\
-	c_x & c_y & c_z & -d*c\\
-	0 & 0 & 0 & 1
+
+
+$$ = \begin{pmatrix}
+    a_x & a_y & a_z & -d*a\\
+    b_x & b_y & b_z & -d*b\\
+    c_x & c_y & c_z & -d*c\\
+    0 & 0 & 0 & 1
 \end{pmatrix} = $$
 
 
 
 $$=\begin{pmatrix}
-	a_x & a_y & a_z & -(a_xd_x + a_yd_y + a_zd_z)\\
-	b_x & b_y & b_z & -(b_xd_x + b_yd_y + b_zd_z)\\
-	c_x & c_y & c_z & -(c_xd_x + c_yd_y + c_zd_z)\\
-	0 & 0 & 0 & 1
+    a_x & a_y & a_z & -(a_xd_x + a_yd_y + a_zd_z)\\
+    b_x & b_y & b_z & -(b_xd_x + b_yd_y + b_zd_z)\\
+    c_x & c_y & c_z & -(c_xd_x + c_yd_y + c_zd_z)\\
+    0 & 0 & 0 & 1
 \end{pmatrix}$$
 
 ### <a name="_toc101941336"></a>**Визуализация теней от нескольких источников света**
