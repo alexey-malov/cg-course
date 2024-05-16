@@ -626,27 +626,28 @@ $$
 $$
 O = 
 \begin{pmatrix}
-\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
-& & & & &0?0?-1? & \\
-0 & 0 & \frac{\-2}{F-N} & ? & ? \\
+\frac{2}{right-left} & 0 & 0 & -\frac{right+left}{right-left}\\
+0 & \frac{2}{top-botoom} & 0 & -\frac{top+botoom}{top-botoom}\\
+0 & 0 & -\frac{2N}{F-N} & -\frac{far+near}{far-near}\\
+0 & 0 & 0 & -1
 \end{pmatrix}
 $$
 
 $$
 O * P = 
 \begin{pmatrix}
-\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
-& & & & &0?0?-1? & \\
-0 & 0 & \frac{\-2}{F-N} & ? & ? \\
+\frac{2}{right-left} & 0 & 0 & -\frac{right+left}{right-left}\\
+0 & \frac{2}{top-botoom} & 0 & -\frac{top+botoom}{top-botoom}\\
+0 & 0 & -\frac{2N}{F-N} & -\frac{far+near}{far-near}\\
+0 & 0 & 0 & -1
 \end{pmatrix}
-\*
+*
 \begin{pmatrix}
     x \\
     y \\
     z \\
     1 \\
-\end{pmatrix}
-\=
+\end{pmatrix}=
 \begin{pmatrix}
     x' \\
     y' \\
