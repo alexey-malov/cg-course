@@ -588,9 +588,13 @@ $$
 В частном случае, при left=-right, top=-bottom, при известных угле обзора α по оси Y и соотношении сторон **aspect** ближней стороны усеченной
 пирамиды видового объема, параметры left, right, top и bottom можно вычислить по следующим формулам:
 
-$$
-\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right), \quad \text{bottom} = -\text{top}\quad\text{?} = {\text{top}}*{\text{aspect}}?-?
-$$
+$$\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right)$$
+
+$$\text{bottom} = -\text{top}$$
+
+$$text{right} = {\text{top}}*{\text{aspect}}$$
+
+$$\text{left} = -\text{right}$$
 
 После применения перспективного преобразования к точке необходимо выполнить **перспективное деление**, разделив координаты x’, y’ и z’ на четвертый
 параметр w.
