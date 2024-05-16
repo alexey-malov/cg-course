@@ -1189,7 +1189,7 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_windowWidth(width)
 ,m_windowHeight(height)
-,**m_leftButtonPressed(false)**
+,m_leftButtonPressed(false)
 ,m_mousePos(0.0, 0.0)
 {
 }
