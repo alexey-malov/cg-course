@@ -234,7 +234,7 @@ void CMyApplication::OnReshape(int width, int height)
 	gluPerspective(FOV, aspect, ZNEAR, ZNEAR + 1);
 
 	// Получаем коэффициенты матрицы проецирования
-	double projectionMatrix[4][4];
+	double projectionMatrix[4][4]{};
 	glGetDoublev(GL_PROJECTION_MATRIX, &projectionMatrix[0][0]);
 
 	// И корректируем их для случая бесконечно удаленной дальней

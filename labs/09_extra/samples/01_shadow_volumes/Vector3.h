@@ -65,7 +65,7 @@ public:
 	// Нормализуем
 	void Normalize()
 	{
-		float invLength = 1 / GetLength();
+		T invLength = 1 / GetLength();
 		x *= invLength;
 		y *= invLength;
 		z *= invLength;
