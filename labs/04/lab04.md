@@ -147,7 +147,7 @@ T =
         1 \\
     \end{array} \right)
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     \overline{v_{1}} & \overline{v_{2}} & \overline{v_{3}} & O \\
 \end{pmatrix}
@@ -179,21 +179,21 @@ I * P =
     0 & 0 & 1 & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-\*
+*
 \begin{pmatrix}
     x \\
     y \\
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x \\
     y \\
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 P
 $$
 
@@ -229,7 +229,7 @@ T * P =
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x+dx \\
     y+dy \\
@@ -257,7 +257,7 @@ T * V =
     z \\
     0 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x \\
     y \\
@@ -274,7 +274,7 @@ M = M*T
 \begin{pmatrix}
     dx, & dy, & dz \\
 \end{pmatrix}
-\= 
+= 
 M *
 \begin{pmatrix}
     1 & 0 & 0 & dx \\
@@ -300,7 +300,7 @@ $$
 
 $$
 S * P
-\=
+=
 \begin{pmatrix}
     sx & 0 & 0 & 0 \\
     0 & sy & 0 & 0 \\
@@ -314,7 +314,7 @@ S * P
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     sx \cdot x \\
     sy \cdot y \\
@@ -335,14 +335,14 @@ S * P =
     0 & 0 & sz & 0 \\
     0 & 0 & 0 & 1 \\
 \end{pmatrix}
-\*
+*
 \begin{pmatrix}
     x \\
     y \\
     z \\
     0 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     sx \cdot x \\
     sy \cdot y \\
@@ -359,7 +359,7 @@ M = M*S
 \begin{pmatrix}
     sx, & sy, & sz \\
 \end{pmatrix}
-\= 
+= 
 M *
 \begin{pmatrix}
     sx & 0 & 0 & 0 \\
@@ -380,7 +380,7 @@ $$
 
 $$
 R_{x}(\alpha)
-\=
+=
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & \cos \alpha & - \sin \alpha & 0 \\
@@ -391,7 +391,7 @@ $$
 
 $$
 R_{x}(\alpha) * P
-\=
+=
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & \cos \alpha & - \sin \alpha & 0 \\
@@ -405,7 +405,7 @@ R_{x}(\alpha) * P
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x \\
     y \cos \alpha - z \sin \alpha \\
@@ -418,7 +418,7 @@ $$
 
 $$
 R_{y}(\alpha)
-\=
+=
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
     0 & 1 & 0 & 0 \\
@@ -429,7 +429,7 @@ $$
 
 $$
 R_{y}(\alpha) * P
-\=
+=
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
     0 & 1 & 0 & 0 \\
@@ -443,7 +443,7 @@ R_{y}(\alpha) * P
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x \cos \alpha + z \sin \alpha\\
     y \\
@@ -456,7 +456,7 @@ $$
 
 $$
 R_{z}(\alpha)
-\=
+=
 \begin{pmatrix}
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
@@ -467,7 +467,7 @@ $$
 
 $$
 R_{z}(\alpha) * P
-\=
+=
 \begin{pmatrix}
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
@@ -481,7 +481,7 @@ R_{z}(\alpha) * P
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x \cos \alpha - y \sin \alpha\\
     x \sin \alpha + y \cos \alpha \\
@@ -494,7 +494,7 @@ $$
 
 $$
 R_{\pi}(\alpha)
-\=
+=
 \begin{pmatrix}
     c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
     (1-c)u_{x}u_{y}+su_{z} & c+ (1-c)u_{y}^2 & (1-c)u_{z}u_{y}+su_{x} & 0 \\
@@ -526,7 +526,7 @@ M = M*R
 \begin{pmatrix}
     \alpha, & U_{x}, & U_{y}, & U_{z} \\
 \end{pmatrix}
-\= 
+= 
 M *
 \begin{pmatrix}
     c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
@@ -572,7 +572,7 @@ T * P =
     z \\
     1 \\
 \end{pmatrix}
-\=
+=
 \begin{pmatrix}
     x' \\
     y' \\
@@ -664,12 +664,12 @@ $$
 ортографического преобразования:
 
 $$
-M = M \cdot O?\text{buttom, top, N, F, ??} = \\
-M \cdot
+M = M \cdot O(\text{left, right, buttom, top, near, far}) = M *
 \begin{pmatrix}
-\frac{2}{?-??}0 & 0 & -? + \\frac{?}{?-??}0?\frac{2}{top-bottom} & 0 & \frac{-top+bottom}{top-bottom}\\
-& & & & &0?0?-1? & \\
-0 & 0 & \frac{\-2}{F-N} & ? & ? \\
+\frac{2}{right-left} & 0 & 0 & -\frac{right+left}{right-left}\\
+0 & \frac{2}{top-botoom} & 0 & -\frac{top+botoom}{top-botoom}\\
+0 & 0 & -\frac{2N}{F-N} & -\frac{far+near}{far-near}\\
+0 & 0 & 0 & -1
 \end{pmatrix}
 $$
 
@@ -683,7 +683,7 @@ $$
 взаимно перпендикулярным единичным векторам u,v и n, задающих, соответственно, направления координатных осей «вправо», «вверх» и «назад».
 
 $$
-R
+C
 \begin{pmatrix}
     u, & v, & n, & d \\
 \end{pmatrix}
@@ -698,8 +698,7 @@ d =
     d_{x} \\
     d_{y} \\
     d_{z} \\
-\end{pmatrix}
-\=
+\end{pmatrix} =
 \begin{pmatrix}
     - eye * u \\
     - eye * v \\
@@ -709,17 +708,11 @@ $$
 
 Сами векторы u, v и n можно вычислить по формулам, зная положение точки взгляда look и направление вектора «вверх».
 
-$$
-n = \frac{\text{eye-look}}{|\text{eye-look}|}
-$$
+$ n = \frac{\text{eye-look}}{|\text{eye-look}|}$
 
-$$
-u = \frac{\text{up}}{|\text{up}|} * n
-$$
+$u = \frac{\text{up}}{|\text{up}|} * n$
 
-$$
-v = n * u
-$$
+$v = n * u$
 
 При помощи функции [gluLookAt](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml) библиотеки GLU можно умножить текущую
 матрицу на матрицу камеры:
@@ -728,8 +721,7 @@ $$
 M = M * C
 \begin{pmatrix}
     u, & v, & n, & d \\
-\end{pmatrix}
-\=M*
+\end{pmatrix}= M*
 \begin{pmatrix}
     u_{x} & u_{y} & u_{z} & d_{x} \\
     v_{x} & v_{y} & v_{z} & d_{y} \\
@@ -746,9 +738,7 @@ $$
 В виду некоммутативности операции умножения матриц, имеет значение порядок умножения матриц. В общем случае следует считать, что для произвольных
 матриц P и Q имеет место неравенство:
 
-$$
-P \cdot Q \neq Q \cdot P
-$$
+$P \cdot Q \neq Q \cdot P$
 
 Это полностью согласуется с наблюдаемыми эффектами. Например, если повернуть объект из начального положения на 90 градусов вокруг оси X, а затем на 90
 градусов вокруг оси Y, то получится один результат. Если же сначала осуществить поворот на 90 градусов вокруг оси Y, а потом на 90 градусов вокруг оси
@@ -828,7 +818,7 @@ void CMyApplication::OnReshape(int width, int height)
 
 Внимание, от значений zFar и zNear зависит точность представления значений в буфере глубины. **Чем больше отношение** 
 
-**$$\frac{zFar}{zNear},$$**
+$\frac{zFar}{zNear},$
 
 **тем ниже точность**. Поэтому zNear рекомендуется устанавливать как можно дальше от наблюдателя, но так, чтобы ближней плоскостью отсечения не отсекло
 интересующие нас объекты.
@@ -871,7 +861,7 @@ void CMyApplication::OnDisplay()
 Результирующему преобразованию соответствует матрица M, равная произведению единичной матрицы на видовую матрицу View. Матрица View выполняет
 преобразование из мировой системы координат в систему координат наблюдателя.
 
-$$M=I*View$$
+$M=I*View$
 
 Нарисуем для начала первый квадрат (красного цвета). Квадрат можно было бы задать при помощи примитивов GL_QUADS, однако в OpenGL есть
 функция [glRect](http://msdn.microsoft.com/en-us/library/dd374025%28VS.85%29.aspx), облегчающая рисование прямоугольников в плоскости z = 0.
@@ -886,7 +876,7 @@ $$M=I*View$$
 Каждая вершина P квадрата будет преобразована OpenGL в вершину P’ системы координат наблюдателя при помощи умножения матрицы моделирования вида на
 координаты вершины:
 
-$$P' = M \cdot P = I \cdot \text{View} \cdot P$$
+$P' = M \cdot P = I \cdot \text{View} \cdot P$
 
 Результат работы программы представлен на следующем рисунке. Так выглядит наш прямоугольник с точки зрения камеры.
 
@@ -913,11 +903,11 @@ $$P' = M \cdot P = I \cdot \text{View} \cdot P$$
 Обратите внимание на порядок применения трансформаций. При трансформации вершин матрицы преобразований следует применять в порядке, обратном порядку
 применения трансформаций:
 
-$$M'' = M' \cdot T \cdot R = I \cdot \text{View}\cdot T \cdot R$$
+$M'' = M' \cdot T \cdot R = I \cdot \text{View}\cdot T \cdot R$
 
 Вершины при этом подвергаются следующим пребразованиям:
 
-$$P'' = M'' \cdot P = I \cdot \text{View}\cdot T \cdot R \cdot P$$
+$P'' = M'' \cdot P = I \cdot \text{View}\cdot T \cdot R \cdot P$
 
 Если рассматривать данную цепочку преобразований справа налево, получится следующая последовательность преобразований объекта:
 
@@ -1298,7 +1288,7 @@ T \cdot V =
     i & j & k & l \\
     m & n & o & p \\
 \end{pmatrix}
-\*
+*
 \begin{pmatrix}
     x \\
     y \\
@@ -1710,20 +1700,20 @@ $$I_{\text{sp}} = I_s \rho_s \max\left(\left(\frac{h}{|h|} \cdot \frac{m}{|m|}\r
 
 Нахождение результирующей интенсивности света находится как сумма интенсивностей фоновой, диффузной и зеркальной составляющих отраженного света:
 
-$$I = I_a \rho_a + I_d \rho_d \cdot \text{lambert} + I_s P_\rho \cdot \text{phong}^f$$
+$I = I_a \rho_a + I_d \rho_d \cdot \text{lambert} + I_s P_\rho \cdot \text{phong}^f$
 
-$$\text{lambert} = \max(0, \frac{s \cdot m}{\|s\| \|m\|})$$
+$\text{lambert} = \max(0, \frac{s \cdot m}{\|s\| \|m\|})$
 
-$$\text{phong} = \max(0, \frac{h \cdot m}{\|h\| \|m\|})$$
+$\text{phong} = \max(0, \frac{h \cdot m}{\|h\| \|m\|})$
 
 В случае цветных источников света приемлемое приближение дает вычисление интенсивностей красной, зеленой и синей составляющих по вышеуказанным
 формулам
 
-$$I_r=I_{ar} \rho_{ar} + I_{dr} \rho_{dr} \cdot \text{lambert} + I_{sr} \rho_{sr} \cdot \text{phong}^f$$
+$I_r=I_{ar} \rho_{ar} + I_{dr} \rho_{dr} \cdot \text{lambert} + I_{sr} \rho_{sr} \cdot \text{phong}^f$
 
-$$I_g=I_{ag} \rho_{ag} + I_{dg} \rho_{dg} \cdot \text{lambert} + I_{sg} \rho_{sg} \cdot \text{phong}^f$$
+$I_g=I_{ag} \rho_{ag} + I_{dg} \rho_{dg} \cdot \text{lambert} + I_{sg} \rho_{sg} \cdot \text{phong}^f$
 
-$$I_b=I_{ab} \rho_{ab} + I_{db} \rho_{db} \cdot \text{lambert} + I_{sb} \rho_{sb} \cdot \text{phong}^f$$
+$I_b=I_{ab} \rho_{ab} + I_{db} \rho_{db} \cdot \text{lambert} + I_{sb} \rho_{sb} \cdot \text{phong}^f$
 
 Параметры источника света в OpenGL задаются при помощи семейства
 функций [glLight](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glLight.xml). К параметрам источника света относятся интенсивности
@@ -2850,51 +2840,43 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 1 –[ Эллиптический параболоид](http://ru.wikipedia.org/wiki/%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D0%B0%D1%80%D0%B0%D0%B1%D0%BE%D0%BB%D0%BE%D0%B8%D0%B4) – 50 баллов
 
-$$2z = \frac{x^2}{a^2} + \frac{y^2}{b^2}$$
+$2z = \frac{x^2}{a^2} + \frac{y^2}{b^2}$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.081.jpeg)
 
 ##### Вариант 2 – [Гиперболический параболоид](http://ru.wikipedia.org/wiki/%D0%9F%D0%B0%D1%80%D0%B0%D0%B1%D0%BE%D0%BB%D0%BE%D0%B8%D0%B4) – 50 баллов
 
-$$2z = \frac{x^2}{a^2} - \frac{y^2}{b^2}$$
+$z = \frac{x^2}{a^2} - \frac{y^2}{b^2}$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.082.jpeg)
 
 ##### Вариант 3 – [Обезьянье седло](http://ru.wikipedia.org/wiki/%D0%9E%D0%B1%D0%B5%D0%B7%D1%8C%D1%8F%D0%BD%D1%8C%D0%B5_%D1%81%D0%B5%D0%B4%D0%BB%D0%BE) – 50 баллов
 
-$$z = x^3 - 3xy^2$$
+$z = x^3 - 3xy^2$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.083.jpeg)
 
 ##### Вариант 4 – [Лента Мёбиуса](http://ru.wikipedia.org/wiki/%D0%9B%D0%B8%D1%81%D1%82_%D0%9C%D1%91%D0%B1%D0%B8%D1%83%D1%81%D0%B0) – 120 баллов
 
-$$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\cos(u)$$
+$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\cos(u)$
 
 $$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\sin(u)$$
 
-$$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$$
+$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$
 
 ![273px-MobiusStrip-01.svg.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.084.jpeg)
 
 ##### Вариант 5 – [Бутылка Клейна](http://ru.wikipedia.org/wiki/%D0%91%D1%83%D1%82%D1%8B%D0%BB%D0%BA%D0%B0_%D0%9A%D0%BB%D0%B5%D0%B9%D0%BD%D0%B0) – 120 балов
 
-$$
-\begin{align*}
-При \quad 0 \leq u \leq \pi \\
-\end{align*}
-$$
+$При \quad 0 \leq u \leq \pi$
 
-$$ x = 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v) $$
+$ x = 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v) $
 
 $$ y = 16 \sin(u)+4r(1 -\frac{\cos(u)}{2})*sin(u)cos(v)$$
 
 $$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
-$$
-\begin{align*}
-При \quad \pi \leq u \leq 2\pi \\
-\end{align*}
-$$
+$При \quad \pi \leq u \leq 2\pi$
 
 $$ x = 6 \cos(u)(1 + \sin(u)) - 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u) $$
 
@@ -2923,10 +2905,9 @@ $$ y = \cos(h) u \sin(v)$$
 $$ z = u$$
 
 $$
-\begin{align*}
-u &\in \mathbb{R}, \\
-v &\in [0, 2\pi].
-\end{align*}
+\begin{align}
+u &\in \mathbb{R}, v&\in [0, 2\pi]
+\end{align}
 $$
 
 ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.087.jpeg)
@@ -2940,9 +2921,9 @@ $$y(\alpha, \beta) = (R + r \cos \alpha) \sin \beta$$
 $$z(\alpha, \beta) = r \sin \alpha$$
 
 $$
-\begin{align*}
+\begin{align}
 \alpha, \beta &\in [0, 2\pi].
-\end{align*}
+\end{align}
 $$
 
 ![Torus.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.088.jpeg)
