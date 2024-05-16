@@ -605,12 +605,13 @@ $$\text{left} = -\text{right}$$
 функция [glFrustum](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml).
 
 $$
-M = M \cdot P?\text{buttom, top, N, F, ??} = \\
+M = M \cdot P(\text{left. right, buttom, top, N, F}) = \\
 M \cdot
 \begin{pmatrix}
-\frac{2N}{?-??}0 & ? + \\frac{?}{?-??}0?0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
-& & & & &0?-1?0? & \\
-0 & 0 & \frac{\-F+N}{F-N} & ? & ? \\
+\frac{2N}{right-left} & 0 & \frac{right+left}{right-left} & 0\\
+0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+0 & 0 & -\frac{F+N}{F-N} & \frac{-2FN}{F-N}\\
+0 & 0 & -1 & 0\\
 \end{pmatrix}
 $$
 
