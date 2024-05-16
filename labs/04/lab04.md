@@ -105,7 +105,7 @@ T \cdot V =
     i & j & k & l \\
     m & n & o & p \\
 \end{pmatrix}
-\*
+*
 \begin{pmatrix}
     x \\
     y \\
