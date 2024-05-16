@@ -146,8 +146,7 @@ T =
         O_{z} \\
         1 \\
     \end{array} \right)
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     \overline{v_{1}} & \overline{v_{2}} & \overline{v_{3}} & O \\
 \end{pmatrix}
@@ -185,15 +184,13 @@ I * P =
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x \\
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 P
 $$
 
@@ -228,8 +225,7 @@ T * P =
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x+dx \\
     y+dy \\
@@ -256,8 +252,7 @@ T * V =
     y \\
     z \\
     0 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x \\
     y \\
@@ -273,8 +268,7 @@ $$
 M = M*T
 \begin{pmatrix}
     dx, & dy, & dz \\
-\end{pmatrix}
-= 
+\end{pmatrix} = 
 M *
 \begin{pmatrix}
     1 & 0 & 0 & dx \\
@@ -299,8 +293,7 @@ S =
 $$
 
 $$
-S * P
-=
+S * P =
 \begin{pmatrix}
     sx & 0 & 0 & 0 \\
     0 & sy & 0 & 0 \\
@@ -313,8 +306,7 @@ S * P
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     sx \cdot x \\
     sy \cdot y \\
@@ -341,8 +333,7 @@ S * P =
     y \\
     z \\
     0 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     sx \cdot x \\
     sy \cdot y \\
@@ -358,8 +349,7 @@ $$
 M = M*S
 \begin{pmatrix}
     sx, & sy, & sz \\
-\end{pmatrix}
-= 
+\end{pmatrix} = 
 M *
 \begin{pmatrix}
     sx & 0 & 0 & 0 \\
@@ -390,8 +380,7 @@ R_{x}(\alpha)
 $$
 
 $$
-R_{x}(\alpha) * P
-=
+R_{x}(\alpha) * P =
 \begin{pmatrix}
     1 & 0 & 0 & 0 \\
     0 & \cos \alpha & - \sin \alpha & 0 \\
@@ -404,8 +393,7 @@ R_{x}(\alpha) * P
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x \\
     y \cos \alpha - z \sin \alpha \\
@@ -417,8 +405,7 @@ $$
 Матрица поворота вокруг оси y:
 
 $$
-R_{y}(\alpha)
-=
+R_{y}(\alpha) =
 \begin{pmatrix}
     \cos \alpha & 0 & \sin \alpha & 0 \\
     0 & 1 & 0 & 0 \\
@@ -442,8 +429,7 @@ R_{y}(\alpha) * P
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x \cos \alpha + z \sin \alpha\\
     y \\
@@ -455,8 +441,7 @@ $$
 Матрица поворота вокруг оси z:
 
 $$
-R_{z}(\alpha)
-=
+R_{z}(\alpha) =
 \begin{pmatrix}
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
@@ -466,8 +451,7 @@ R_{z}(\alpha)
 $$
 
 $$
-R_{z}(\alpha) * P
-=
+R_{z}(\alpha) * P =
 \begin{pmatrix}
     \cos \alpha & - \sin \alpha & 0 & 0 \\
     \sin \alpha & \cos \alpha & 0 & 0 \\
@@ -480,8 +464,7 @@ R_{z}(\alpha) * P
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x \cos \alpha - y \sin \alpha\\
     x \sin \alpha + y \cos \alpha \\
@@ -493,8 +476,7 @@ $$
 Матрица поворота вокруг произвольного единичного вектора u:
 
 $$
-R_{\pi}(\alpha)
-=
+R_{\pi}(\alpha) =
 \begin{pmatrix}
     c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
     (1-c)u_{x}u_{y}+su_{z} & c+ (1-c)u_{y}^2 & (1-c)u_{z}u_{y}+su_{x} & 0 \\
@@ -525,8 +507,7 @@ $$
 M = M*R
 \begin{pmatrix}
     \alpha, & U_{x}, & U_{y}, & U_{z} \\
-\end{pmatrix}
-= 
+\end{pmatrix} = 
 M *
 \begin{pmatrix}
     c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
@@ -571,8 +552,7 @@ T * P =
     y \\
     z \\
     1 \\
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
     x' \\
     y' \\
