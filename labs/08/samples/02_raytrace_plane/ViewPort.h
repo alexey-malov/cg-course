@@ -6,15 +6,15 @@ public:
 	/*
 	Инициализация видового порта нулевых размеров в координатами верхнего левого угла (0, 0)
 	*/
-	CViewPort() throw();
+	CViewPort() noexcept;
 
 	/*
 	Инициализация видового порта с заданными размерами и положением
 	*/
-	CViewPort(unsigned left, unsigned top, unsigned width, unsigned height) throw();
+	CViewPort(unsigned left, unsigned top, unsigned width, unsigned height) noexcept;
 
 	// Проверяем, находится ли точка внутри видового порта
-	bool TestPoint(int x, int y)const throw()
+	bool TestPoint(int x, int y)const noexcept
 	{
 		unsigned ux = x;
 		unsigned uy = y;
@@ -25,32 +25,32 @@ public:
 
 	}
 
-	unsigned GetLeft()const throw()
+	unsigned GetLeft()const noexcept
 	{
 		return m_left;
 	}
 
-	unsigned GetTop()const throw()
+	unsigned GetTop()const noexcept
 	{
 		return m_top;
 	}
 
-	unsigned GetBottom()const throw()
+	unsigned GetBottom()const noexcept
 	{
 		return m_top + m_height;
 	}
 
-	unsigned GetRight()const throw()
+	unsigned GetRight()const noexcept
 	{
 		return m_left + m_width;
 	}
 
-	unsigned GetWidth()const throw()
+	unsigned GetWidth()const noexcept
 	{
 		return m_width;
 	}
 
-	unsigned GetHeight()const throw()
+	unsigned GetHeight()const noexcept
 	{
 		return m_height;
 	}

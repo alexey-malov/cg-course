@@ -14,7 +14,7 @@ public:
 	// Конструктор по умолчанию - пересечения нет
 	CHitInfo()
 		:m_hitTime(-1)
-		,m_pHitObject(0)
+		,m_pHitObject(nullptr)
 	{
 	}
 
@@ -44,7 +44,7 @@ public:
 	// Инициализирована ли точка пересечения
 	bool IsInitialized()const
 	{
-		return m_pHitObject != 0;
+		return m_pHitObject != nullptr;
 	}
 
 	// Возвращает время столкновения луча с объектом

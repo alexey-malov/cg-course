@@ -1,15 +1,15 @@
 ﻿#include "stdafx.h"
 #include "SceneObject.h"
 
-CSceneObject::CSceneObject(IGeometryObject const & obj)
-:m_object(obj)
-,m_pShader(NULL)
+CSceneObject::CSceneObject(std::shared_ptr<IGeometryObject const> obj)
+	: m_object(obj)
+	, m_shader(NULL)
 {
 }
 
-CSceneObject::CSceneObject(IGeometryObject const & obj, IShader const& shader)
-:m_object(obj)
-,m_pShader(&shader)
+CSceneObject::CSceneObject(std::shared_ptr<IGeometryObject const> obj, std::shared_ptr<IShader const> shader)
+	: m_object(std::move(obj))
+	, m_shader(std::move(shader))
 {
 }
 

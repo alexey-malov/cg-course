@@ -59,7 +59,7 @@
 В OpenGL используется **правосторонняя**[^1] система координат, в которой пользователь может задавать вершины примитивов, из которых состоят
 трехмерные объекты.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.001.png)
+![image](images/Правосторонняясистемакоординат.png)
 Правосторонняя система координат
 
 При отображении объектов внутри окна в OpenGL используется **преобразование в порт просмотра**[^2]. Данное преобразование выполняет отображение
@@ -70,7 +70,7 @@
 Данное отображение можно изменить с помощью функции [glDepthRange](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glDepthRange.xhtml), хотя
 в большинстве случаев в этом необходимости нет.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.002.png)
+![image](images/Видовойпорт.png)
 
 Как правило, удобным было бы задавать объекты в иной системе координат, отличной от данной, поскольку при изменении соотношения сторон видового
 порта (например, при изменении размеров окна) может произойти соответствующее изменение соотношения сторон изображения. Окружность может быть
@@ -97,12 +97,60 @@
 преобразования координат вершин и нормалей. Для этого необходимо умножить матрицу соответствующего преобразования на вектор, заданный в **однородных
 координатах**[^4]:
 
-![img.png](images/img.png), где T – матрица преобразования, а V – это вектор или точка
+$$
+T \cdot V = 
+\begin{pmatrix}
+    a & b & c & d \\
+    e & f & g & h \\
+    i & j & k & l \\
+    m & n & o & p \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    w \\
+\end{pmatrix} ,
+$$
+
+где T – матрица преобразования, а V – это вектор или точка
 
 Матрицу аффинного преобразования также можно рассматривать в виде четырех векторов-столбцов, задающих трехмерный базис с координатными осями v<sub>
 1</sub>, v<sub>2</sub>, v<sub>3</sub> и началом координат O.
 
-![img_1.png](images/img_1.png)
+$$
+T =
+\begin{pmatrix}
+    \left( \begin{array}{c}
+        x_{1} \\
+        y_{1} \\
+        z_{1} \\
+        0 \\
+    \end{array} \right) &
+    \left( \begin{array}{c}
+        x_{2} \\
+        y_{2} \\
+        z_{2} \\
+        0 \\
+    \end{array} \right) &
+    \left( \begin{array}{c}
+        x_{3} \\
+        y_{3} \\
+        z_{3} \\
+        0 \\
+    \end{array} \right) &
+    \left( \begin{array}{c}
+        O_{x} \\
+        O_{y} \\
+        O_{z} \\
+        1 \\
+    \end{array} \right)
+\end{pmatrix} =
+\begin{pmatrix}
+    \overline{v_{1}} & \overline{v_{2}} & \overline{v_{3}} & O \\
+\end{pmatrix}
+$$
 
 Операция умножения матрицы T на точку P осуществляет отображение точки P в некоторую точку Q.
 
@@ -112,8 +160,39 @@
 
 **Единичная матрица** (матрица идентичности) задает преобразование, при котором точки и векторы остаются без изменений, отображаясь сами в себя:
 
-![img_2.png](images/img_2.png)
-![img_3.png](images/img_3.png)
+$$
+I =
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+I * P =
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+P
+$$
 
 Для загрузки единичной матрицы в OpenGL используется
 функция [glLoadIdentity](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glLoadIdentity.xml).
@@ -121,81 +200,364 @@
 #### ***Матрица переноса***
 
 **Матрица переноса**. Выполняет перенос точки вдоль вектора dx, dy, dz:
-![img_4.png](images/img_4.png)
-![img_5.png](images/img_5.png)
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.003.png)
+$$
+I =
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+T * P =
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x+dx \\
+    y+dy \\
+    z+dz \\
+    1 \\
+\end{pmatrix}
+$$
+
+![image](images/Матрицапереноса.png)
 
 Матрица переноса, примененная к вектору, оставляет вектор без изменения (вектор не имеет положения в пространстве):
 
-![img_6.png](images/img_6.png)
+$$
+T * V =
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix}
+$$
 
 Функции [glTranslate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml) OpenGL умножают текущую матрицу на матрицу
 переноса и заменяют результатом текущую матрицу:
 
-![img_7.png](images/img_7.png)
+$$
+M = M*T
+\begin{pmatrix}
+    dx, & dy, & dz \\
+\end{pmatrix} = 
+M *
+\begin{pmatrix}
+    1 & 0 & 0 & dx \\
+    0 & 1 & 0 & dy \\
+    0 & 0 & 1 & dz \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
 
 #### ***Матрица масштабирования***
 
 **Матрица масштабирования.** Выполняет масштабирование точки вдоль координатных осей на коэффициенты sx, sy, sz:
 
-![img_8.png](images/img_8.png)
-![img_9.png](images/img_9.png)
+$$
+S =
+\begin{pmatrix}
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.004.png)
+$$
+S * P =
+\begin{pmatrix}
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    sx \cdot x \\
+    sy \cdot y \\
+    sz \cdot z \\
+    1 \\
+\end{pmatrix}
+$$
+
+![image](images/Матрицамасштабирования.png)
 
 Матрица масштабирования, примененная к вектору, масштабирует его координаты вдоль координатных осей:
 
-![img_10.png](images/img_10.png)
+$$
+S * P =
+\begin{pmatrix}
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    0 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    sx \cdot x \\
+    sy \cdot y \\
+    sz \cdot z \\
+    0 \\
+\end{pmatrix}
+$$
 
 В OpenGL для умножения текущей матрицы на матрицу масштабирования служат
 функции [glScale\[f, d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml):
 
-![img_11.png](images/img_11.png)
+$$
+M = M*S
+\begin{pmatrix}
+    sx, & sy, & sz \\
+\end{pmatrix} = 
+M *
+\begin{pmatrix}
+    sx & 0 & 0 & 0 \\
+    0 & sy & 0 & 0 \\
+    0 & 0 & sz & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
 
 #### ***Матрицы поворота***
 
 Матрицы поворота задают поворот вокруг координатных осей, либо поворот вокруг произвольной оси. Ось, вокруг которой осуществляется поворот, проходит
 через начало координат.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.005.png)
+![image](images/Матрицыповорота.png)
 
 **Матрица поворота** вокруг оси x:
 
-![img_12.png](images/img_12.png)
-![img_13.png](images/img_13.png)
+$$
+R_{x}(\alpha) =
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & \cos \alpha & - \sin \alpha & 0 \\
+    0 & \sin \alpha & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+R_{x}(\alpha) * P =
+\begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & \cos \alpha & - \sin \alpha & 0 \\
+    0 & \sin \alpha & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x \\
+    y \cos \alpha - z \sin \alpha \\
+    y \sin \alpha + z \cos \alpha \\
+    1 \\
+\end{pmatrix}
+$$
 
 Матрица поворота вокруг оси y:
 
-![img_14.png](images/img_14.png)
-![img_15.png](images/img_15.png)
+$$
+R_{y}(\alpha) =
+\begin{pmatrix}
+    \cos \alpha & 0 & \sin \alpha & 0 \\
+    0 & 1 & 0 & 0 \\
+    - \sin \alpha & 0 & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+R_{y}(\alpha) * P =
+\begin{pmatrix}
+    \cos \alpha & 0 & \sin \alpha & 0 \\
+    0 & 1 & 0 & 0 \\
+    - \sin \alpha & 0 & \cos \alpha & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x \cos \alpha + z \sin \alpha\\
+    y \\
+    - x \sin \alpha + z \cos \alpha \\
+    1 \\
+\end{pmatrix}
+$$
 
 Матрица поворота вокруг оси z:
 
-![img_16.png](images/img_16.png)
-![img_17.png](images/img_17.png)
+$$
+R_{z}(\alpha) =
+\begin{pmatrix}
+    \cos \alpha & - \sin \alpha & 0 & 0 \\
+    \sin \alpha & \cos \alpha & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+$$
+R_{z}(\alpha) * P =
+\begin{pmatrix}
+    \cos \alpha & - \sin \alpha & 0 & 0 \\
+    \sin \alpha & \cos \alpha & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x \cos \alpha - y \sin \alpha\\
+    x \sin \alpha + y \cos \alpha \\
+    z \\
+    1 \\
+\end{pmatrix}
+$$
 
 Матрица поворота вокруг произвольного единичного вектора u:
 
-![img_18.png](images/img_18.png)
+$$
+R_{\pi}(\alpha) =
+\begin{pmatrix}
+    c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
+    (1-c)u_{x}u_{y}+su_{z} & c+ (1-c)u_{y}^2 & (1-c)u_{z}u_{y}+su_{x} & 0 \\
+    (1-c)u_{x}u_{z}-su_{y} & (1-c)u_{y}u_{z}+su_{x} & c+ (1-c)u_{x}^2 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
 
-![img_19.png](images/img_19.png), ![img_20.png](images/img_20.png)
-![img_21.png](images/img_21.png), ![img_22.png](images/img_22.png)
+$$
+\pi = 
+\begin{pmatrix}
+    u_{x}, & u_{y}, & u_{z} \\
+\end{pmatrix},
+$$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.006.png)
+$$
+\begin{equation}
+|\pi| = 1, \quad s = \sin \alpha, \quad c = \cos \alpha
+\end{equation}
+$$
+
+![image](images/Матрицыповорота2.png)
 
 В OpenGL функции [glRotate\[f,d\]](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml) служат для умножения текущей матрицы на
 матрицу поворота вокруг произвольной оси.
 
-![img_23.png](images/img_23.png),
-где ![img_24.png](images/img_24.png), ![img_25.png](images/img_25.png), ![img_26.png](images/img_26.png)
+$$
+M = M*R
+\begin{pmatrix}
+    \alpha, & U_{x}, & U_{y}, & U_{z} \\
+\end{pmatrix} = 
+M *
+\begin{pmatrix}
+    c+ (1-c)u_{x}^2 & (1-c)u_{y}u_{x}-su_{z} & (1-c)u_{z}u_{x}+su_{y} & 0\\
+    (1-c)u_{x}u_{y}+su_{z} & c+ (1-c)u_{y}^2 & (1-c)u_{z}u_{y}+su_{x} & 0 \\
+    (1-c)u_{x}u_{z}-su_{y} & (1-c)u_{y}u_{z}+su_{x} & c+ (1-c)u_{x}^2 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix},
+$$
+
+$$
+где
+\begin{equation}
+\ \pi = \frac{{U}}{|{U}|} = (u_x, u_y, u_z), \quad s = \sin \alpha, \quad c = \cos \alpha
+\end{equation}
+$$
 
 #### ***Матрица перспективного преобразования***
 
 **Матрица перспективного преобразования** осуществляет перспективное преобразование.
 
-![img_27.png](images/img_27.png)
-![img_28.png](images/img_28.png)
+$$
+T = 
+\begin{pmatrix}
+\frac{2N}{right-left} & 0 & \frac{right+left}{right-left} & 0\\
+0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+0 & 0 & -\frac{F+N}{F-N} & \frac{-2FN}{F-N}\\
+0 & 0 & -1 & 0\\
+\end{pmatrix}
+$$
+
+$$
+T * P = 
+\begin{pmatrix}
+\frac{2N}{right-left} & 0 & \frac{right+left}{right-left} & 0\\
+0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+0 & 0 & -\frac{F+N}{F-N} & \frac{-2FN}{F-N}\\
+0 & 0 & -1 & 0\\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix} =
+\begin{pmatrix}
+    x' \\
+    y' \\
+    z' \\
+    1 \\
+\end{pmatrix}
+$$
 
 Параметры (left, bottom, N), (right, bottom, N) – задают координаты на ближней плоскости отсечения видимого объема, отображающиеся после
 преобразования в порт просмотра, соответственно, в левый нижний и правый верхний углы видового порта. Параметр F задает координату Z дальней плоскости
@@ -204,20 +566,32 @@
 В частном случае, при left=-right, top=-bottom, при известных угле обзора α по оси Y и соотношении сторон **aspect** ближней стороны усеченной
 пирамиды видового объема, параметры left, right, top и bottom можно вычислить по следующим формулам:
 
-![img_29.png](images/img_29.png)
-![img_30.png](images/img_30.png)
-![img_31.png](images/img_31.png)
-![img_32.png](images/img_32.png)
+$$\text{top} = N \cdot \tan\left(\frac{\pi}{180} \cdot \frac{\alpha}{2}\right)$$
+
+$$\text{bottom} = -\text{top}$$
+
+$$text{right} = {\text{top}}*{\text{aspect}}$$
+
+$$\text{left} = -\text{right}$$
 
 После применения перспективного преобразования к точке необходимо выполнить **перспективное деление**, разделив координаты x’, y’ и z’ на четвертый
 параметр w.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.007.png)
+![image](images/перспективноеделение.png)
 
 Для умножения текущей матрицы на матрицу перспективного преобразования в OpenGL используется
 функция [glFrustum](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml).
 
-![img_33.png](images/img_33.png)
+$$
+M = M \cdot P(\text{left. right, buttom, top, N, F}) = \\
+M \cdot
+\begin{pmatrix}
+\frac{2N}{right-left} & 0 & \frac{right+left}{right-left} & 0\\
+0 & \frac{2N}{top-bottom} & \frac{top+bottom}{top-bottom} & 0\\
+0 & 0 & -\frac{F+N}{F-N} & \frac{-2FN}{F-N}\\
+0 & 0 & -1 & 0\\
+\end{pmatrix}
+$$
 
 Фунция [gluPerspective](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml) библиотеки GLU выполняет построение матрицы
 перспективного преобразования по известому углу просмотра по вертикали, соотношении ширины и высоты, а также расстояниям до ближней и дальней
@@ -227,17 +601,55 @@
 
 **Матрица ортографического преобразования** осуществляет ортографическое преобразование.
 
-![img_34.png](images/img_34.png)
-![img_35.png](images/img_35.png)
+$$
+O = 
+\begin{pmatrix}
+\frac{2}{right-left} & 0 & 0 & -\frac{right+left}{right-left}\\
+0 & \frac{2}{top-botoom} & 0 & -\frac{top+botoom}{top-botoom}\\
+0 & 0 & -\frac{2N}{F-N} & -\frac{far+near}{far-near}\\
+0 & 0 & 0 & -1
+\end{pmatrix}
+$$
+
+$$
+O * P = 
+\begin{pmatrix}
+\frac{2}{right-left} & 0 & 0 & -\frac{right+left}{right-left}\\
+0 & \frac{2}{top-botoom} & 0 & -\frac{top+botoom}{top-botoom}\\
+0 & 0 & -\frac{2N}{F-N} & -\frac{far+near}{far-near}\\
+0 & 0 & 0 & -1
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    1 \\
+\end{pmatrix}=
+\begin{pmatrix}
+    x' \\
+    y' \\
+    z' \\
+    1 \\
+\end{pmatrix}
+$$
 
 Как и в случае с матрицей перспективного преобразования, после применения ортографического преобразования осуществляют перспективное деление.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.008.png)
+![image](images/перспективноеделение2.png)
 
 Функция [glOrtho](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml) осуществляет умножение текущей матрицы на матрицу
 ортографического преобразования:
 
-![img_36.png](images/img_36.png)
+$$
+M = M \cdot O(\text{left, right, buttom, top, near, far}) = M *
+\begin{pmatrix}
+\frac{2}{right-left} & 0 & 0 & -\frac{right+left}{right-left}\\
+0 & \frac{2}{top-botoom} & 0 & -\frac{top+botoom}{top-botoom}\\
+0 & 0 & -\frac{2N}{F-N} & -\frac{far+near}{far-near}\\
+0 & 0 & 0 & -1
+\end{pmatrix}
+$$
 
 Для частного случая zNear=-1, zFar = +1 можно воспользоваться
 функцией [gluOrtho2D](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluOrtho2D.xml), умножающей текущую матрицу на матрицу
@@ -247,17 +659,54 @@
 
 Матрица просмотра задает преобразование вершин объекта в систему координат наблюдателя по известной точке положения глаза наблюдателя **eye** и трех
 взаимно перпендикулярным единичным векторам u,v и n, задающих, соответственно, направления координатных осей «вправо», «вверх» и «назад».
-![image](images/img03.png), где ![image](images/img04.png)
+
+$$
+C
+\begin{pmatrix}
+    u, & v, & n, & d \\
+\end{pmatrix}
+\begin{pmatrix}
+    u_{x} & u_{y} & u_{z} & d_{x} \\
+    v_{x} & v_{y} & v_{z} & d_{y} \\
+    n_{x} & n_{y} & n_{z} & d_{z} \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix},\quad где \quad
+d =
+\begin{pmatrix}
+    d_{x} \\
+    d_{y} \\
+    d_{z} \\
+\end{pmatrix} =
+\begin{pmatrix}
+    - eye * u \\
+    - eye * v \\
+    - eye * n \\
+\end{pmatrix}
+$$
 
 Сами векторы u, v и n можно вычислить по формулам, зная положение точки взгляда look и направление вектора «вверх».
 
-![img_37.png](images/img_37.png)
-![img_38.png](images/img_38.png)
-![img_39.png](images/img_39.png)
+$n = \frac{eye-look}{|eye-look|}$
+
+$u = \frac{\text{up}}{|\text{up}|} * n$
+
+$v = n * u$
 
 При помощи функции [gluLookAt](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml) библиотеки GLU можно умножить текущую
 матрицу на матрицу камеры:
-![image](images/img02.png)
+
+$$
+M = M * C
+\begin{pmatrix}
+    u, & v, & n, & d \\
+\end{pmatrix}= M*
+\begin{pmatrix}
+    u_{x} & u_{y} & u_{z} & d_{x} \\
+    v_{x} & v_{y} & v_{z} & d_{y} \\
+    n_{x} & n_{y} & n_{z} & d_{z} \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
 
 ### <a name="_toc100093339"></a>**Композиция матричных преобразований**
 
@@ -267,13 +716,13 @@
 В виду некоммутативности операции умножения матриц, имеет значение порядок умножения матриц. В общем случае следует считать, что для произвольных
 матриц P и Q имеет место неравенство:
 
-![img_40.png](images/img_40.png)
+$P \cdot Q \neq Q \cdot P$
 
 Это полностью согласуется с наблюдаемыми эффектами. Например, если повернуть объект из начального положения на 90 градусов вокруг оси X, а затем на 90
 градусов вокруг оси Y, то получится один результат. Если же сначала осуществить поворот на 90 градусов вокруг оси Y, а потом на 90 градусов вокруг оси
 X, мы получим совершенно другой результат:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.009.png) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.010.png)
+![image](images/Композицияматричныхпреобразований.png) ![image](images/Композицияматричныхпреобразований2.png)
 
 С помощью матричных преобразований можно осуществлять как преобразования объектов, так и преобразования систем координат (например, системы координат
 виртуального наблюдателя), причем, преобразования матрица преобразования координат является обратной матрице соответствующего преобразования объекта.
@@ -345,10 +794,7 @@ void CMyApplication::OnReshape(int width, int height)
 }
 ```
 
-Внимание, от значений zFar и zNear зависит точность представления значений в буфере глубины. **Чем больше отношение
-** ![img_41.png](images/img_41.png), тем
-ниже
-точность**. Поэтому zNear рекомендуется устанавливать как можно дальше от наблюдателя, но так, чтобы ближней плоскостью отсечения не отсекло
+Внимание, от значений zFar и zNear зависит точность представления значений в буфере глубины. **Чем больше отношение** $\frac{zFar}{zNear},$ **тем ниже точность**. Поэтому zNear рекомендуется устанавливать как можно дальше от наблюдателя, но так, чтобы ближней плоскостью отсечения не отсекло
 интересующие нас объекты.
 
 В методе OnDisplay зададим матрицу моделирования-вида в нужную точку сцены, и направим ее в начало координат. Направление вертикальной оси разместим в
@@ -376,20 +822,20 @@ void CMyApplication::OnDisplay()
 
 Изначально матрица моделирования-вида содержит единичную матрицу, что соответствует положению глаза наблюдателя, совпадающему с началом координат.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.011.png)
+![image](images/трансформация1.png)
 
 Умножение единичной матрицы на матрицу камеры выполняет перенос системы координат наблюдателя в заданную точку и ориентирование ее заданным образом.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.012.png)
+![image](images/трансформация2.png)
 
 Данное преобразование также можно рассматривать как перенос мировой системы координат в противоположном направлении и ориентирование в пространстве:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.013.png)
+![image](images/трансформация3.png)
 
 Результирующему преобразованию соответствует матрица M, равная произведению единичной матрицы на видовую матрицу View. Матрица View выполняет
 преобразование из мировой системы координат в систему координат наблюдателя.
 
-![img_42.png](images/img_42.png)
+$M=I*View$
 
 Нарисуем для начала первый квадрат (красного цвета). Квадрат можно было бы задать при помощи примитивов GL_QUADS, однако в OpenGL есть
 функция [glRect](http://msdn.microsoft.com/en-us/library/dd374025%28VS.85%29.aspx), облегчающая рисование прямоугольников в плоскости z = 0.
@@ -404,11 +850,11 @@ void CMyApplication::OnDisplay()
 Каждая вершина P квадрата будет преобразована OpenGL в вершину P’ системы координат наблюдателя при помощи умножения матрицы моделирования вида на
 координаты вершины:
 
-![img_43.png](images/img_43.png)
+$P' = M \cdot P = I \cdot \text{View} \cdot P$
 
 Результат работы программы представлен на следующем рисунке. Так выглядит наш прямоугольник с точки зрения камеры.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.014.jpeg)
+![image](images/прямоугольник.png)
 
 Для рисования синего квадрата потребуется выполнить ряд предварительных трансформаций, а именно:
 
@@ -431,11 +877,11 @@ void CMyApplication::OnDisplay()
 Обратите внимание на порядок применения трансформаций. При трансформации вершин матрицы преобразований следует применять в порядке, обратном порядку
 применения трансформаций:
 
-![img_44.png](images/img_44.png)
+$M'' = M' \cdot T \cdot R = I \cdot \text{View}\cdot T \cdot R$
 
 Вершины при этом подвергаются следующим пребразованиям:
 
-![img_45.png](images/img_45.png)
+$P'' = M'' \cdot P = I \cdot \text{View}\cdot T \cdot R \cdot P$
 
 Если рассматривать данную цепочку преобразований справа налево, получится следующая последовательность преобразований объекта:
 
@@ -451,7 +897,7 @@ void CMyApplication::OnDisplay()
 
 Результат работы программы представлен на следующем рисунке:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.015.jpeg)
+![image](images/прямоугольники.png)
 
 По изображению видно, что квадраты нарисованы некорректно, т.к. они должны пересекаться, а, фактически, синий квадрат собой просто заслонил ранее
 нарисованный красный. Если бы мы нарисовали сперва синий квадрат, а потом красный, то результат был бы ничем не лучше – синий квадрат был бы заслонен
@@ -471,7 +917,7 @@ void CMyApplication::OnInit()
 
 Теперь картинка будет нарисована корректно, независимо от того, в каком порядке будет осуществлено рисование примитивов.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.016.jpeg)
+![image](images/прямоугольники2.png)
 
 Итак, в данной программе мы познакомились с построением перспективных проекций, установкой положения виртуальной камеры, а также научились
 комбинировать трехмерные преобразования для того, чтобы придать желаемое положение объектам сцены. Для корректного удаления скрытых линий и
@@ -509,7 +955,7 @@ private:
 
 Реализация данного класса будет рисовать координатные оси при помощи отрезков прямых линий. Каждая ось имеет длину и размер наконечника.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.017.png)
+![image](images/координатныеоси.png)
 
 ```cpp
 CFrame::CFrame(float size, float endSize)
@@ -598,13 +1044,13 @@ private:
 Реализуем метод OnReshape таким образом, чтобы при любых размерах окна ближняя плоскость видового объема вмещала в себя квадрат размером FRUSTUM_SIZE
 x FRUSTUM_SIZE:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.018.png)
+![image](images/методOnReshape.png)
 
 Этого можно достичь следующим образом. В том случае, когда ширина окна больше высоты, задать расстояние между bottom и top, равным FRUSTUM_SIZE, а
 расстояние между left и right вычислить, зная соотношение сторон окна. В случае, когда высота окна больше ширины, мы, наоборот, должны расстояние
 между левой и правой границами задать равным FRUSTUM_SIZE, а расстояние между нижней и верхней вычислить по соотношению сторон окна.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.019.png) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.020.png)
+![image](images/соотношениесторонокна.png) ![image](images/соотношениесторонокна2.png)
 
 Указанные свойства матрицы проецирования зададим в обработчике **OnReshape** с использованием функции glFrustum:
 
@@ -664,10 +1110,6 @@ void CMyApplication::OnReshape(int width, int height)
 ```cpp
 void CMyApplication::OnInit()
 {
-    // Переносим точку камеры на заданное расстояние от начала координат
-    // вдоль оси Z
-    glTranslatef(0, 0, -DISTANCE_TO_ORIGIN);
-
     // Задаем ширину линий
     glLineWidth(2);
     // И цвет очистки буфера цвета
@@ -680,7 +1122,7 @@ void CMyApplication::OnInit()
 void CMyApplication::OnDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    SetupCameraMatrix();
     // Создаем координатный фрейм и рисуем его
     CFrame frame;
     frame.Draw();
@@ -689,7 +1131,7 @@ void CMyApplication::OnDisplay()
 
 Результат работы программы будет следующим:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.021.jpeg)
+![image](images/программастрелки.png)
 
 Как видно, при единичной матрице моделирования-вида, начало координат совпадает с центром видового порта.
 
@@ -699,7 +1141,7 @@ void CMyApplication::OnDisplay()
 Движения мыши по горизонтали будут выполнять вращение камеры вокруг оси Y, а движения мыши по вертикали будут осуществлять вращение вокруг оси X.
 Величина угла вращения будет пропорциональна величине перемещения мыши.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.022.png)
+![image](images/перемещениемыши.png)
 
 Сконфигурируем коэффициенты для расчета углов вращения таким образом, чтобы перемещение мыши на ширину клиентской области окна осуществляло поворот на
 180 градусов по вертикальной оси, аналогично сделаем для поворотов вокруг горизонтальной оси.
@@ -714,7 +1156,7 @@ void CMyApplication::OnDisplay()
 Итак, приступим. Прежде всего, нам понадобятся обработчики сообщений о нажатии/отпускании кнопки мыши (поворот будем осуществлять только при нажатой
 левой кнопке мыши), а также обработчик события о перемещении курсора.
 
-Класс CGLApplication предоставляет виртуальные методы **OnMouse** и **OnMotion**, вызываемые им при получении от библиотеки GLUT соответствующих
+Класс CGLApplication предоставляет методы **OnMouseButton** и **OnMouseMove**, вызываемые им при получении от библиотеки GLUT соответствующих
 уведомлений. Данные методы мы перегрузим в классе CMyApplication.
 
 Для вычисления смещения курсора мыши нам понадобятся переменные для хранения прежней позиции курсора. Кроме того, заведем переменную, хранящую
@@ -727,18 +1169,15 @@ public:
     …
 protected:
     …
-    virtual void OnMouse(int button, int state, int x, int y);
-    virtual void OnMotion(int x, int y);
 private:
     …
-    // Вращаем камеру вокруг начала кординат на заданный угол
-    static void RotateCamera(GLfloat rotateX, GLfloat rotateY);
+    void OnMouseButton(int button, int action, [[maybe_unused]] int mods) override;
+    void OnMouseMove(double x, double y) override;
+    // Вращаем камеру вокруг начала координат
+    void RotateCamera(GLfloat rotateX, GLfloat rotateY);
     // Флаг, свидетельствующий о состоянии левой кнопки мыши
     bool m_leftButtonPressed;
-
-    // Старые координаты курсора мыши
-    int m_mouseX;
-    int m_mouseY;
+    glm::dvec2 m_mousePos;
 };
 
 ```
@@ -750,58 +1189,41 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height)
 ,m_windowWidth(width)
 ,m_windowHeight(height)
-,**m_leftButtonPressed(false)**
-,m_mouseX(0)
-,m_mouseY(0)
+,m_leftButtonPressed(false)
+,m_mousePos(0.0, 0.0)
 {
 }
 ```
 
-В обработчике OnMouse выполним инициализацию переменных m_leftButtonPressed, m_mouseX и m_mouseY в зависимости от состояния кнопок мыши и положения
-курсора.
+В обработчике OnMouse выполним инициализацию переменных m_leftButtonPressed в зависимости от состояния кнопок мыши.
 
 ```cpp
-void CMyApplication::OnMouse(int button, int state, int x, int y)
+void CMyApplication::OnMouseButton(int button, int action, int mods)
 {
-    // Событие от левой кнопки мыши
-    if (button == GLUT_LEFT_BUTTON)
+    if (button == GLFW_MOUSE_BUTTON_1)
     {
-        // Сохраняем состояние левой кнопки мыши
-        m_leftButtonPressed = (state == GLUT_DOWN);
-        // Сохраняем координаты мыши
-        m_mouseX = x;
-        m_mouseY = y;
+        m_leftButtonPressed = (action & GLFW_PRESS) != 0;
     }
 }
 ```
 
 В обработчике OnMotion в том случае, если перемещение мыши происходит при нажатой левой кнопке мыши, вычислим углы поворота вокруг осей X и Y и
-осуществим поворот камеры. Поскольку результат поворота камеры должен увидеть пользователь, при помощи метода PostRedisplay сообщим библиотеке GLUT о
-необходимости перерисовать окно.
+осуществим поворот камеры.
 
 ```cpp
-void CMyApplication::OnMotion(int x, int y)
+void CMyApplication::OnMouseMove(double x, double y)
 {
-    // Если нажата левая кнопка мыши
+    const glm::dvec2 mousePos{ x, y };
     if (m_leftButtonPressed)
     {
-        // Вычисляем смещение курсора мыши
-        int dx = x - m_mouseX;
-        int dy = y - m_mouseY;
+        const auto windowSize = GetFramebufferSize();
 
-        // Вычисляем угол поворота вокруг осей Y и X как линейно зависящие
-        // от смещения мыши по осям X и Y
-        GLfloat rotateX = GLfloat(dy) * 180 / m_windowHeight;
-        GLfloat rotateY = GLfloat(dx) * 180 / m_windowWidth;
-        RotateCamera(rotateX, rotateY);
-
-        // Сохраняем текущие координаты мыши
-        m_mouseX = x;
-        m_mouseY = y;
-
-        // Инициируем перерисовку окна
-        PostRedisplay();
+        const auto mouseDelta = mousePos - m_mousePos;
+        const double xAngle = mouseDelta.y * M_PI / windowSize.y;
+        const double yAngle = mouseDelta.x * M_PI / windowSize.x;
+        RotateCamera(xAngle, yAngle);
     }
+    m_mousePos = mousePos;
 }
 ```
 
@@ -832,7 +1254,22 @@ void CMyApplication::RotateCamera(GLfloat rotateX, GLfloat rotateY)
 последней строки матрицы моделирования-вида), а четвертый столбец вычислить путем нахождения скалярного произведения вектора четвертого столбца
 исходной матрицы и соответствующей строки транспонированной матрицы, взятого с противоположным знаком:
 
-![image](images/img.png)
+$$
+T \cdot V = 
+\begin{pmatrix}
+    a & b & c & d \\
+    e & f & g & h \\
+    i & j & k & l \\
+    m & n & o & p \\
+\end{pmatrix}
+*
+\begin{pmatrix}
+    x \\
+    y \\
+    z \\
+    w \\
+\end{pmatrix}
+$$
 
 Следует запомнить, что данный способ подходит только для быстрого инвертирования **ортонормированных матриц аффинных преобразований**. Для
 произвольной матрицы нахождение обратной матрицы осуществляется одним из [стандартных способов](http://ru.wikipedia.org/wiki/Обратная_матрица),
@@ -905,89 +1342,57 @@ typedef CVector3<float> CVector3f;
 typedef CVector3<double> CVector3d;
 ```
 
-Метод вращения матрицы моделирования-вида будет выглядеть следующим образом. Для получения коэффициентов матрицы моделирования-вида в виде массива
-чисел с плавающей запятой воспользуемся функцией [glGetFloatv](http://msdn.microsoft.com/en-us/library/ee872026\(v=VS.85\).aspx) с параметром
-GL_MODELVIEW_MATRIX.
+Метод вращения матрицы моделирования-вида будет выглядеть следующим образом.
 
 ```cpp
 // Вращаем камеру вокруг начала кординат на заданный угол
-void CMyApplication::RotateCamera(GLfloat rotateX, GLfloat rotateY)
+void CMyApplication::RotateCamera(double xAngleRadians, double yAngleRadians)
 {
-    // Извлекаем текущее значение матрицы моделирования-вида
-    GLfloat modelView[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, &modelView[0]);
+    // Извлекаем из 1 и 2 строки матрицы камеры направления осей вращения,
+    // совпадающих с экранными осями X и Y.
+    // Строго говоря, для этого надо извлекать столбцы их обратной матрицы камеры, но так как
+    // матрица камеры ортонормированная, достаточно транспонировать её подматрицу 3*3
+    const glm::dvec3 xAxis{
+        m_cameraMatrix[0][0], m_cameraMatrix[1][0], m_cameraMatrix[2][0]
+    };
+    const glm::dvec3 yAxis{
+        m_cameraMatrix[0][1], m_cameraMatrix[1][1], m_cameraMatrix[2][1]
+    };
+    m_cameraMatrix = glm::rotate(m_cameraMatrix, xAngleRadians, xAxis);
+    m_cameraMatrix = glm::rotate(m_cameraMatrix, yAngleRadians, yAxis);
 
-    // Извлекаем направления координатных осей камеры в 3д пространстве
-    // как коэффициенты строк матрицы моделирования-вида
-    CVector3f xAxis(modelView[0], modelView[4], modelView[8]);
-    CVector3f yAxis(modelView[1], modelView[5], modelView[9]);
-
-    // Поворачиваем вокруг осей x и y камеры
-    glRotatef(rotateX, xAxis.x, xAxis.y, xAxis.z);
-    glRotatef(rotateY, yAxis.x, yAxis.y, yAxis.z);
-
-    // В ходе умножения матриц могут возникать погрешности, которые,
-    // накапливаясь могут сильно искажать картинку
-    // Для их компенсации после каждой модификации матрицы моделирования-вида
-    // проводим ее ортонормирование
-    NormalizeModelViewMatrix();
+    m_cameraMatrix = Orthonormalize(m_cameraMatrix);
 }
 ```
 
 ##### Приводим матрицу моделирования вида к ортонормированному виду
 
-Добавим в класс CMyApplication статический метод NormalizeModelViewMatrix для нормализации матрицы моделирования вида:
+Добавим функцию Orthonormalize для нормализации матрицы моделирования вида:
 
 ```cpp
-class CMyApplication : public CGLApplication
+namespace
 {
-…
-private:
-    …
-    // Производим ортонормирование матрицы моделирования-вида
-    static void NormalizeModelViewMatrix(void);
-};
 
-// Производим ортонормирование матрицы моделирования-вида
-void CMyApplication::NormalizeModelViewMatrix(void)
+// Ортонормируем матрицу 4*4 (это должна быть аффинная матрица)
+glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m)
 {
-    GLfloat modelView[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
-    /*
-    Ортонормирование - приведение координатных осей к единичной длине (нормирование)
-    и взаимной перпендикулярности (ортогонализация)
-    Достичь этого можно при помощи нормализации координатных осей
-    и векторного произведения
-    */
-    CVector3f xAxis(modelView[0], modelView[4], modelView[8]);
-    xAxis.Normalize();
-    CVector3f yAxis(modelView[1], modelView[5], modelView[9]);
-    yAxis.Normalize();
+    // Извлекаем подматрицу 3*3 из матрицы m и ортонормируем её
+    const auto normalizedMatrix = glm::orthonormalize(glm::dmat3x3{ m });
+    // Заменяем 3 столбца исходной матрицы
+    return {
+        glm::dvec4{ normalizedMatrix[0], 0.0 },
+        glm::dvec4{ normalizedMatrix[1], 0.0 },
+        glm::dvec4{ normalizedMatrix[2], 0.0 },
+        m[3]
+        };
+}
 
-    // Ось Z вычисляем через векторное произведение X и Y
-    // Z будет перпендикулярна плоскости векторов X и Y
-    CVector3f zAxis = Cross(xAxis, yAxis);
-    // И иметь единичную длину
-    zAxis.Normalize();
-    // То же самое проделываем с осями x и y
-    xAxis = Cross(yAxis, zAxis);
-    xAxis.Normalize();
-    yAxis = Cross(zAxis, xAxis);
-    yAxis.Normalize();
-
-    // Сохраняем вектора координатных осей обратно в массив
-    modelView[0] = xAxis.x; modelView[4] = xAxis.y, modelView[8] = xAxis.z;
-    modelView[1] = yAxis.x; modelView[5] = yAxis.y, modelView[9] = yAxis.z;
-    modelView[2] = zAxis.x; modelView[6] = zAxis.y, modelView[10] = zAxis.z;
-
-    // И загружаем матрицу моделирвания-вида
-    glLoadMatrixf(modelView);
 }
 ```
 
 Ну вот, теперь управлять вращением объекта стало намного проще.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.023.jpeg)
+![image](images/программастрелки2.png)
 
 ## <a name="_toc100093342"></a>**Визуализация объемных объектов**
 
@@ -995,9 +1400,9 @@ void CMyApplication::NormalizeModelViewMatrix(void)
 
 Куб можно представить в виде набора 6 квадратных граней и 8 вершин:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.024.png)
+![image](images/куб.png)
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.025.png)
+![image](images/куб2.png)
 
 ### <a name="_toc100093343"></a>**Порядок обхода вершин граней**
 
@@ -1220,7 +1625,7 @@ void CMyApplication::OnDisplay()
 
 Результат визуализации куба представлен на следующем рисунке:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.026.jpeg)
+![image](images/визуализациякуба.png)
 
 ## <a name="_toc100093345"></a>**Использование материалов и освещения**
 
@@ -1231,7 +1636,7 @@ void CMyApplication::OnDisplay()
 Однако стоит лишь окрасить все грани куба в один и тот же цвет, как полученная картинка уже меньше напоминает куб, а кажется похожей на плоский
 многоугольник.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.027.jpeg)
+![image](images/визуализациякуба2.png)
 
 Происходит так потому, что изображение куба построено без учета освещенности. Именно свет от источников света, отражаясь от поверхности трехмерных
 объектов, попадает к нам в глаза и делает объекты видимыми. Интенсивность отраженного света зависит не только от интенсивности самого источника света
@@ -1253,32 +1658,36 @@ GL_LIGHT0 до GL_LIGHT1. Каждый источник света характ�
 результирующий цвет вершины как суммарный результат взаимодействия интенсивностей света от источника света с коэффициентами фонового, диффузного и
 зеркального отражения материала.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.028.png)
+![image](images/МодельосвещенияЛамберта.png)
 
 Модель освещения Ламберта для расчета интенсивности диффузной составляющей отраженного света
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.029.png)
+![image](images/МодельосвещенияЛамберта2.png)
 
 Модель Фонга для расчета интенсивности зеркальной составляющей отраженного света.
 
 Здесь f – степень зеркального отражения материала. Чем он больше, тем острее получаются блики на поверхности.
 
-![img_46.png](images/img_46.png), где ![img_47.png](images/img_47.png)
+$$I_{\text{sp}} = I_s \rho_s \max\left(\left(\frac{h}{|h|} \cdot \frac{m}{|m|}\right)^f, 0\right), \quad \text{где } h = s + v$$
 
 Альтернативное приближение модели Фонга
 
 Нахождение результирующей интенсивности света находится как сумма интенсивностей фоновой, диффузной и зеркальной составляющих отраженного света:
 
-![img_48.png](images/img_48.png)
-![img_49.png](images/img_49.png)
-![img_50.png](images/img_50.png)
+$I = I_a \rho_a + I_d \rho_d \cdot \text{lambert} + I_s P_\rho \cdot \text{phong}^f$
+
+$\text{lambert} = \max(0, \frac{s \cdot m}{\|s\| \|m\|})$
+
+$\text{phong} = \max(0, \frac{h \cdot m}{\|h\| \|m\|})$
 
 В случае цветных источников света приемлемое приближение дает вычисление интенсивностей красной, зеленой и синей составляющих по вышеуказанным
 формулам
 
-![img_51.png](images/img_51.png)
-![img_52.png](images/img_52.png)
-![img_53.png](images/img_53.png)
+$I_r=I_{ar} \rho_{ar} + I_{dr} \rho_{dr} \cdot \text{lambert} + I_{sr} \rho_{sr} \cdot \text{phong}^f$
+
+$I_g=I_{ag} \rho_{ag} + I_{dg} \rho_{dg} \cdot \text{lambert} + I_{sg} \rho_{sg} \cdot \text{phong}^f$
+
+$I_b=I_{ab} \rho_{ab} + I_{db} \rho_{db} \cdot \text{lambert} + I_{sb} \rho_{sb} \cdot \text{phong}^f$
 
 Параметры источника света в OpenGL задаются при помощи семейства
 функций [glLight](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glLight.xml). К параметрам источника света относятся интенсивности
@@ -1622,11 +2031,11 @@ void CMyApplication::OnDisplay()
 
 При включенном освещении даже монохромный куб выглядит более реалистично:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.030.jpeg)
+![image](images/визуализациикуба3.png)
 
 А в цвете и того краше:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.031.jpeg)
+![image](images/визуализациикуба4.png)
 
 ## <a name="_toc100093351"></a>**Визуализация функционально заданных поверхностей**
 
@@ -1641,21 +2050,21 @@ void CMyApplication::OnDisplay()
 Для начала, равномерно разобьем отображаемую область функции на область N*M ячеек и вычислим значение функции в узлах сетки и используем ее в качестве
 координаты z.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.032.png)
+![image](images/Аппроксимация.png)
 
 Далее соединим данные вершины при помощи лент из треугольников (GL_TRIANGLE_STRIP):
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.033.png)
+![image](images/Аппроксимация2.png)
 
 В качестве альтернативы можно было бы соединить вершины в виде набора вееров из треугольников (GL_TRIANGLE_FAN), но это потребовало бы большего
 количества групп примитивов.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.034.png)
+![image](images/Аппроксимация3.png)
 
 Для сокращения количества групп примитивов, можно «сшивать» соседние ленты треугольников, добавляя пару дополнительных вершин в конце каждой ленты для
 образования пары вырожденных треугольных граней для смены направления обхода рядов ленты:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.035.png)
+![image](images/Аппроксимация4.png)
 
 Такой прием позволит нарисовать всю сетку с помощью одной ленты из треугольников, что положительно скажется на эффективности ее обработки OpenGL.
 
@@ -1809,15 +2218,13 @@ CSurface::~CSurface(void)
 треугольников можно c помощью функции [glPolygonMode](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml) с параметром
 GL_LINE установить режим визуализации граней в виде контуров.
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.036.jpeg)
+![image](images/поверхность1.png)
 
 ### <a name="_toc100093354"></a>**Наша первая криволинейная поверхность**
 
 Теперь создадим класс CSincSurface, унаследовав его от класса CSurface. Данный класс будет визуализировать трехмерный вариант функции sinc:
 
-![img_54.png](images/img_54.png)
-где
-![img_55.png](images/img_55.png)
+$$\text{sinc}(r) = \frac{\sin(r)}{r}, \quad \text{где } r = \sqrt{x^2 + y^2}$$
 
 ```cpp
 class CSincSurface :
@@ -1921,7 +2328,7 @@ Vertex CSincSurface::CalculateVertex(double x, double y)const
 Для визуализации данной поверхности необходимо создать экземпляр класса CSincSurface и вызывать у него метод Draw (предварительно настроив камеру).
 Результат будет, примерно, таким:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.037.jpeg)
+![image](images/поверхность2.png)
 
 Осталось подключить освещенность и материалы для повышения реалистичности.
 
@@ -2175,9 +2582,9 @@ void CMyApplication::OnMouse(int button, int state, int /*x*/, int /*y*/)
 
 Собрав все воедино, мы получим анимированную визуализацию трехмерной поверхности:
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.038.jpeg)
+![image](images/поверхность3.png)
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.039.jpeg) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.040.jpeg)
+![image](images/поверхность4.png) ![image](images/поверхность5.png)
 
 ## <a name="_toc100093357"></a>**Практические задания**
 
@@ -2241,143 +2648,143 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 1 - [Октаэдр](http://ru.wikipedia.org/wiki/%D0%9E%D0%BA%D1%82%D0%B0%D1%8D%D0%B4%D1%80) – 50 баллов
 
-![605px-Octahedron.svg.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.041.jpeg)
+![605px-Octahedron.svg.png](images/Октаэдр.png)
 
 ##### Вариант 2 – [Додекаэдр](http://ru.wikipedia.org/wiki/%D0%94%D0%BE%D0%B4%D0%B5%D0%BA%D0%B0%D1%8D%D0%B4%D1%80) – 80 баллов
 
-![300px-POV-Ray-Dodecahedron.svg.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.042.jpeg)
+![300px-POV-Ray-Dodecahedron.svg.png](images/Додекаэдр.png)
 
 ##### Вариант 3 – [Икосаэдр](http://ru.wikipedia.org/wiki/%D0%98%D0%BA%D0%BE%D1%81%D0%B0%D1%8D%D0%B4%D1%80) – 80 баллов
 
-![385px-Icosahedron.svg.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.043.jpeg)
+![385px-Icosahedron.svg.png](images/Икосаэдр.png)
 
 ##### Вариант 4 – Тетраэдр – 30 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.044.jpeg)
+![image](images/Тетраэдр.png)
 
 ##### Вариант 5 - [Кубооктаэдр](http://ru.wikipedia.org/wiki/%D0%9A%D1%83%D0%B1%D0%BE%D0%BE%D0%BA%D1%82%D0%B0%D1%8D%D0%B4%D1%80) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.045.jpeg)
+![image](images/Кубооктаэдр.jpeg)
 
 ##### Вариант 6 - [Икосододекаэдр](http://ru.wikipedia.org/wiki/%D0%98%D0%BA%D0%BE%D1%81%D0%BE%D0%B4%D0%BE%D0%B4%D0%B5%D0%BA%D0%B0%D1%8D%D0%B4%D1%80) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.046.jpeg)
+![image](images/Икосододекаэдр.png)
 
 ##### Вариант 7 – [Усеченный икосаэдр](http://ru.wikipedia.org/wiki/%D0%A3%D1%81%D0%B5%D1%87%D1%91%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B8%D0%BA%D0%BE%D1%81%D0%B0%D1%8D%D0%B4%D1%80) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.047.jpeg)
+![image](images/Усеченныйикосаэдр.png)
 
 ##### Вариант 8 – [Триакистетраэдр](http://en.wikipedia.org/wiki/Triakis_tetrahedron) – 70 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.048.jpeg)
+![image](images/Триакистетраэдр.png)
 
 ##### Вариант 9 – [Триакисоктаэдр](http://en.wikipedia.org/wiki/Triakis_octahedron) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.049.jpeg)
+![image](images/Триакисоктаэдр.jpeg)
 
 ##### Вариант 10 - [Триакисгексаэдр](http://en.wikipedia.org/wiki/Tetrakis_hexahedron) – 70 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.050.jpeg)
+![image](images/Триакисгексаэдр.png)
 
 ##### Вариант 11 – [Триакисикосаэдр](http://en.wikipedia.org/wiki/Triakis_icosahedron) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.051.jpeg)
+![image](images/Триакисикосаэдр.png)
 
 ##### Вариант 12 - [Пентакисдодекаэдр](http://en.wikipedia.org/wiki/Pentakis_dodecahedron) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.052.jpeg)
+![image](images/Пентакисдодекаэдр.png)
 
 ##### Вариант 13 – [Гекзакисоктаэдр](http://en.wikipedia.org/wiki/Disdyakis_dodecahedron) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.053.jpeg)
+![image](images/Гекзакисоктаэдр.png)
 
 ##### Вариант 14 - [Гекзакисикосаэдр](http://en.wikipedia.org/wiki/Disdyakis_triacontahedron) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.054.jpeg)
+![image](images/Гекзакисикосаэдр.jpeg)
 
 ##### Вариант 15 – Усеченный тетраэдр – 70 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.055.jpeg)
+![image](images/Усеченныйтетраэдр.png)
 
 ##### Вариант 16 – Усеченный куб – 70 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.056.jpeg)
+![image](images/Усеченныйкуб.png)
 
 ##### Вариант 17 – Усеченный октаэдр – 80 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.057.jpeg)
+![image](images/Усеченныйоктаэдр.jpeg)
 
 ##### Вариант 18 – Усеченный додекаэдр – 90 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.058.jpeg)
+![image](images/Усеченныйдодекаэдр.png)
 
 ##### Вариант 19 – Ромбокубооктаэдр – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.059.jpeg)
+![image](images/Ромбокубооктаэдр.jpeg)
 
 ##### Вариант 20 – Ромбоусеченный кубоктаэдр – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.060.jpeg)
+![image](images/Ромбоусеченныйкубоктаэдр.png)
 
 ##### Вариант 21 – Ромбоикосододекаэдр – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.061.jpeg)
+![image](images/Ромбоикосододекаэдр.png)
 
 ##### Вариант 22 – Ромбоусеченный икосододекаэдр – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.062.jpeg)
+![image](images/Ромбоусеченныйикосододекаэдр.png)
 
 ##### Вариант 23 – Курносый куб – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.063.jpeg) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.064.jpeg)
+![image](images/Курносыйкуб.png) ![image](images/Курносыйкуб.png)
 
 ##### Вариант 24 – Курносый додекаэдр – 150 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.065.jpeg) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.066.jpeg)
+![image](images/Курносыйдодекаэдр.png) ![image](images/Курносыйдодекаэдр.png)
 
 ##### Вариант 25 – Ромбододекаэдр – 70 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.067.jpeg)
+![image](images/Ромбододекаэдр.png)
 
 ##### Вариант 26 – Ромботриаконтаэдр – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.068.jpeg)
+![image](images/Ромботриаконтаэдр.jpeg)
 
 ##### Вариант 27 – Дельтоидальный икоститетраэдр – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.069.jpeg)
+![image](images/Дельтоидальныйикоститетраэдр.png)
 
 ##### Вариант 28 – Дельтоидальный гексеконтаэдр – 150 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.070.jpeg)
+![image](images/Дельтоидальныйгексеконтаэдр.png)
 
 ##### Вариант 29 – Пентагональный икоситетраэдр – 150 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.071.jpeg) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.072.jpeg)
+![image](images/Пентагональныйикоситетраэдр.png) ![image](images/Пентагональныйикоситетраэдр2.jpeg)
 
 ##### Вариант 30– Пентагональный гексеконтаэдр – 150 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.073.jpeg) ![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.074.jpeg)
+![image](images/Пентагональныйгексеконтаэдр.png) ![image](images/Пентагональныйгексеконтаэдр2.png)
 
 ##### Вариант 31 – [Звездчатый октаэдр](http://ru.wikipedia.org/wiki/%D0%97%D0%B2%D1%91%D0%B7%D0%B4%D1%87%D0%B0%D1%82%D1%8B%D0%B9_%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA) (Стелла октангула) – 70 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.075.jpeg)
+![image](images/Стеллаоктангула.png)
 
 ##### Вариант 32 – [Звездчатый додекаэдр](http://ru.wikipedia.org/wiki/%D0%97%D0%B2%D1%91%D0%B7%D0%B4%D1%87%D0%B0%D1%82%D1%8B%D0%B9_%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA) – 100 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.076.jpeg)
+![image](images/Звездчатыйдодекаэдр.png)
 
 ##### Вариант 33 – [Звездчатый икосаэдр](http://ru.wikipedia.org/wiki/%D0%97%D0%B2%D1%91%D0%B7%D0%B4%D1%87%D0%B0%D1%82%D1%8B%D0%B9_%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA) – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.077.jpeg)
+![image](images/Звездчатыйикосаэдр.png)
 
 ##### Вариант 34 – [Вторая звездчатая форма додекаэдра](http://ru.wikipedia.org/wiki/%D0%97%D0%B2%D1%91%D0%B7%D0%B4%D1%87%D0%B0%D1%82%D1%8B%D0%B9_%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA) – 150 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.078.jpeg)
+![image](images/Втораязвездчатаяформадодекаэдра.png)
 
 ##### Вариант 35 – [Третья звездчатая форма додекаэдра](http://ru.wikipedia.org/wiki/%D0%97%D0%B2%D1%91%D0%B7%D0%B4%D1%87%D0%B0%D1%82%D1%8B%D0%B9_%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA) – 150 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.079.jpeg)
+![image](images/Третьязвездчатаяформадодекаэдра.png)
 
 #### ***Задание 2***
 
@@ -2403,89 +2810,97 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 образом, чтобы подчеркнуть форму и кривизну поверхности. **За качественную визуализацию сплошной поверхности, баллы, указанные в варианте задания
 будут умножены на коэффициент 1.2.**
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.080.jpeg)
+![image](images/поверхность6.png)
 
 ##### Вариант 1 –[ Эллиптический параболоид](http://ru.wikipedia.org/wiki/%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D0%B0%D1%80%D0%B0%D0%B1%D0%BE%D0%BB%D0%BE%D0%B8%D0%B4) – 50 баллов
 
-![img_56.png](images/img_56.png)
+$2z = \frac{x^2}{a^2} + \frac{y^2}{b^2}$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.081.jpeg)
+![image](images/Эллиптическийпараболоид.png)
 
 ##### Вариант 2 – [Гиперболический параболоид](http://ru.wikipedia.org/wiki/%D0%9F%D0%B0%D1%80%D0%B0%D0%B1%D0%BE%D0%BB%D0%BE%D0%B8%D0%B4) – 50 баллов
 
-![img_57.png](images/img_57.png)
+$z = \frac{x^2}{a^2} - \frac{y^2}{b^2}$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.082.jpeg)
+![image](images/Гиперболическийпараболоид.png)
 
 ##### Вариант 3 – [Обезьянье седло](http://ru.wikipedia.org/wiki/%D0%9E%D0%B1%D0%B5%D0%B7%D1%8C%D1%8F%D0%BD%D1%8C%D0%B5_%D1%81%D0%B5%D0%B4%D0%BB%D0%BE) – 50 баллов
 
-![img_58.png](images/img_58.png)
+$z = x^3 - 3xy^2$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.083.jpeg)
+![image](images/Обезьяньеседло.png)
 
 ##### Вариант 4 – [Лента Мёбиуса](http://ru.wikipedia.org/wiki/%D0%9B%D0%B8%D1%81%D1%82_%D0%9C%D1%91%D0%B1%D0%B8%D1%83%D1%81%D0%B0) – 120 баллов
 
-![img_59.png](images/img_59.png)
+$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\cos(u)$
 
-![img_60.png](images/img_60.png)
+$x(u, v) = \left(1 + \frac{v}{2}\cos\frac{u}{2}\right)\sin(u)$
 
-![img_61.png](images/img_61.png)
+$z(u, v) = \frac{v}{2}\sin\frac{u}{2}$
 
-![273px-MobiusStrip-01.svg.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.084.jpeg)
+![273px-MobiusStrip-01.svg.png](images/ЛентаМёбиуса.png)
 
 ##### Вариант 5 – [Бутылка Клейна](http://ru.wikipedia.org/wiki/%D0%91%D1%83%D1%82%D1%8B%D0%BB%D0%BA%D0%B0_%D0%9A%D0%BB%D0%B5%D0%B9%D0%BD%D0%B0) – 120 балов
 
-При ![img_62.png](images/img_62.png)
+$При \quad 0 \leq u \leq \pi$
 
-![img_63.png](images/img_63.png)
+$$ x = 6 \cos(u)(1 + \sin(u)) + 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u)\cos(v) $$
 
-![img_64.png](images/img_64.png)
+$$ y = 16 \sin(u)+4r(1 -\frac{\cos(u)}{2})*sin(u)cos(v)$$
 
-![img_65.png](images/img_65.png)
+$$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
-При ![img_66.png](images/img_66.png)
+$При \quad \pi \leq u \leq 2\pi$
 
-![img_67.png](images/img_67.png)
+$$ x = 6 \cos(u)(1 + \sin(u)) - 4r\left(1 - \frac{\cos(u)}{2}\right)\cos(u) $$
 
-![img_68.png](images/img_68.png)
+$$ y = 16 \sin(u)$$
 
-![img_69.png](images/img_69.png)
+$$ z = 4r(1 -\frac{\cos(u)}{2})*sin(v)$$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.085.jpeg)
+![image](images/БутылкаКлейна.png)
 
 ##### Вариант 6 - [Геликоид](http://ru.wikipedia.org/wiki/%D0%93%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B8%D0%B4) – 80 баллов
 
-![img_70.png](images/img_70.png)
+$$ x = u \cos(v)$$
 
-![img_71.png](images/img_71.png)
+$$ y = u \sin(v)$$
 
-![img_72.png](images/img_72.png)
+$$ z = hv$$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.086.jpeg)
+![image](images/Геликоид.png)
 
 ##### Вариант 7 – [Катеноид](http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%BD%D0%BE%D0%B8%D0%B4) – 80 баллов
 
-![img_73.png](images/img_73.png)
+$$ x = \cos(h) u \cos(v)$$
 
-![img_74.png](images/img_74.png)
+$$ y = \cos(h) u \sin(v)$$
 
-![img_75.png](images/img_75.png)
+$$ z = u$$
 
-![img_76.png](images/img_76.png)
+$$
+\begin{align}
+u &\in \mathbb{R}, v&\in [0, 2\pi]
+\end{align}
+$$
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.087.jpeg)
+![image](images/Катеноид.png)
 
 ##### Вариант 8 – [Тор](http://ru.wikipedia.org/wiki/Тор_\(поверхность\)) – 80 баллов
 
-![img_77.png](images/img_77.png)
+$$x(\alpha, \beta) = (R + r \cos \alpha) \cos \beta$$
 
-![img_78.png](images/img_78.png)
+$$y(\alpha, \beta) = (R + r \cos \alpha) \sin \beta$$
 
-![img_79.png](images/img_79.png)
+$$z(\alpha, \beta) = r \sin \alpha$$
 
-![img_80.png](images/img_80.png)
+$$
+\begin{align}
+\alpha, \beta &\in [0, 2\pi].
+\end{align}
+$$
 
-![Torus.png](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.088.jpeg)
+![Torus.png](images/Тор.png)
 
 ##### Бонус +10 баллов за возможность вращения камеры вокруг объекта
 
@@ -2497,7 +2912,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 1 – Детские качели – 80 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.089.jpeg)
+![image](images/качели.png)
 
 ###### *Бонус в 10 баллов за реализацию возможности вращения камеры вокруг качелей*
 
@@ -2505,7 +2920,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 2 – Прогулка по трехмерному лабиринту – 220 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.090.png)
+![image](images/трехмерныйлабиринт.png)
 
 Программа визуализирует трехмерный лабиринт (размером не менее 16*16 блоков) с точки зрения находящегося в нем человека. Стены, пол и потолок
 лабиринта окрашены в разные цвета. С помощью клавиатуры пользователь должен иметь возможность перемещать наблюдателя внутри лабиринта и вращать его
@@ -2517,7 +2932,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 3 – Трехмерная круговая диаграмма – 80 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.091.jpeg)
+![image](images/диаграмма.png)
 
 Программа визуализирует трехмерную диаграмму, состоящую не менее чем из 5-6 разноцветных секторов. Некоторые секторы слегка извлечены.
 
@@ -2527,7 +2942,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 4 – Стенка – 90 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.092.jpeg)
+![image](images/Стенка.png)
 
 Программа визуализирует стенку, состоящую из комода, книжного или посудного шкафа, а также полочек (телевизор и посуду визуализировать не надо).
 
@@ -2537,7 +2952,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 5 – Настольная лампа – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.093.jpeg)
+![image](images/Настольнаялампа.png)
 
 Программа визуализирует трехмерную настольную лампу.
 
@@ -2545,7 +2960,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 6 – Блюдце с чашкой – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.094.jpeg)
+![image](images/Блюдцесчашкой.png)
 
 ###### *Бонус в 10 баллов начисляется за возможность вращения камеры вокруг чашки с блюдцем*
 
@@ -2553,7 +2968,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 7 – модель города будущего – 120 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.095.jpeg)
+![image](images/модельгородабудущего.png)
 
 Программа визуализирует модель города будущего (10-15 домов различной формы).
 
@@ -2563,7 +2978,7 @@ glColor4*. Внимание, сцена, содержащая полупрозр
 
 ##### Вариант 8 – здание с колоннами – 140 баллов
 
-![image](images/Aspose.Words.6b5389ed-5ea3-4286-b267-f1bff59636a2.096.jpeg)
+![image](images/зданиесколоннами.png)
 
 Программа визуализирует модель здания с колоннами (например, театр).
 

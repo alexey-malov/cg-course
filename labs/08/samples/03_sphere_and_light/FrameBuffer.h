@@ -10,13 +10,13 @@ public:
 	CFrameBuffer(unsigned width, unsigned height);
 
 	// Ширина буфера в пикселях
-	unsigned GetWidth()const throw()
+	unsigned GetWidth()const noexcept
 	{
 		return m_width;
 	}
 
 	// Высота буфера в пикселях
-	unsigned GetHeight()const throw()
+	unsigned GetHeight()const noexcept
 	{
 		return m_height;
 	}
@@ -25,21 +25,21 @@ public:
 	void Clear(std::uint32_t color = 0);
 
 	// Получение адреса начала соотв. строки пикселей (для чтения)
-	const std::uint32_t * GetPixels(unsigned row = 0)const throw()
+	const std::uint32_t * GetPixels(unsigned row = 0)const noexcept
 	{
 		assert(row < m_height);
 		return &m_pixels[size_t(row * m_width)];
 	}
 
 	// Получение адреса начала соотв. строки пикселей (для записи)
-	std::uint32_t * GetPixels(unsigned row = 0)throw()
+	std::uint32_t * GetPixels(unsigned row = 0)noexcept
 	{
 		assert(row < m_height);
 		return &m_pixels[size_t(row * m_width)];
 	}
 
 	// Получение цвета пикселя с заданными координатами
-	std::uint32_t GetPixel(unsigned x, unsigned y)const throw()
+	std::uint32_t GetPixel(unsigned x, unsigned y)const noexcept
 	{
 		assert(x < m_width);
 		assert(y < m_height);
@@ -47,7 +47,7 @@ public:
 	}
 
 	// Установка цвета пикселя с заданными координатами
-	void SetPixel(unsigned x, unsigned y, std::uint32_t color) throw()
+	void SetPixel(unsigned x, unsigned y, std::uint32_t color) noexcept
 	{
 		assert(x < m_width);
 		assert(y < m_height);

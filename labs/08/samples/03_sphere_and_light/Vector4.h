@@ -17,7 +17,7 @@ public:
 	/*
 	Конструктор по умолчанию
 	*/
-	CVector4(void) throw()
+	CVector4(void) noexcept
 		:x(0), y(0), z(0), w(0)
 	{
 	}
@@ -25,7 +25,7 @@ public:
 	/*
 	Инициализация вектора значениями из массива
 	*/
-	explicit CVector4(const T * p) throw()
+	explicit CVector4(const T * p) noexcept
 		:x(p[0]), y(p[1]), z(p[2]), w(p[3])
 	{
 	}
@@ -33,7 +33,7 @@ public:
 	/*
 	Непосредственная инициализация элементов вектора
 	*/
-	CVector4(T const& x0, T const& y0, T const& z0, T const& w0 = 0) throw()
+	CVector4(T const& x0, T const& y0, T const& z0, T const& w0 = 0) noexcept
 		:x(x0), y(y0), z(z0), w(w0)
 	{
 	}
@@ -41,7 +41,7 @@ public:
 	/*
 	Преобразование 3-х компонентного вектора в 4-х компонентный
 	*/
-	CVector4(CVector3<T> const& v, T const& w0 = 0) throw()
+	CVector4(CVector3<T> const& v, T const& w0 = 0) noexcept
 		:x(v.x), y(v.y), z(v.z), w(w0)
 	{
 	}
@@ -49,7 +49,7 @@ public:
 	/*
 	Получение адреса массива значений компонентов вектора
 	*/
-	operator T const*()const throw()
+	operator T const*()const noexcept
 	{
 		return &x;
 	}
@@ -57,7 +57,7 @@ public:
 	/*
 	Масштабирование вектора
 	*/
-	CVector4 & operator *= (T scale) throw()
+	CVector4 & operator *= (T scale) noexcept
 	{
 		x *= scale;
 		y *= scale;
@@ -70,7 +70,7 @@ public:
 	/*
 	Деление вектора на скаляр
 	*/
-	CVector4 & operator /= (T const& scalar) throw()
+	CVector4 & operator /= (T const& scalar) noexcept
 	{
 		return *this *= (1/scalar);
 	}
@@ -78,7 +78,7 @@ public:
 	/*
 	Деление вектора на скаляр
 	*/
-	CVector4 const operator / (T const& scalar)const throw()
+	CVector4 const operator / (T const& scalar)const noexcept
 	{
 		return *this * (1/scalar);
 	}
@@ -86,7 +86,7 @@ public:
 	/*
 	Разность векторов
 	*/
-	CVector4 const operator-(CVector4 const& v)const throw()
+	CVector4 const operator-(CVector4 const& v)const noexcept
 	{
 		return CVector4(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
@@ -95,7 +95,7 @@ public:
 	/*
 	Унарный минус
 	*/
-	CVector4 const operator-()const throw()
+	CVector4 const operator-()const noexcept
 	{
 		return CVector4(-x, -y, -z, -w);
 	}
@@ -103,7 +103,7 @@ public:
 	/*
 	Унарный плюс
 	*/
-	CVector4 const operator+()const throw()
+	CVector4 const operator+()const noexcept
 	{
 		return *this;
 	}
@@ -111,7 +111,7 @@ public:
 	/*
 	Покомпонентное произведение векторов
 	*/
-	CVector4 const operator*(CVector4 const& v)const throw()
+	CVector4 const operator*(CVector4 const& v)const noexcept
 	{
 		return CVector4(x * v.x, y * v.y, z * v.z, w * v.w);
 	}
@@ -119,7 +119,7 @@ public:
 	/*
 	Покомпонентное деление векторов
 	*/
-	CVector4 const operator/(CVector4 const& v)const throw()
+	CVector4 const operator/(CVector4 const& v)const noexcept
 	{
 		return CVector4(x / v.x, y / v.y, z / v.z, w / v.w);
 	}
@@ -127,7 +127,7 @@ public:
 	/*
 	Сумма векторов
 	*/
-	CVector4 const operator+(CVector4 const& v)const throw()
+	CVector4 const operator+(CVector4 const& v)const noexcept
 	{
 		return CVector4(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
@@ -135,7 +135,7 @@ public:
 	/*
 	Сложение векторов
 	*/
-	CVector4 & operator+=(CVector4 const& v) throw()
+	CVector4 & operator+=(CVector4 const& v) noexcept
 	{
 		x += v.x;
 		y += v.y;
@@ -147,7 +147,7 @@ public:
 	/*
 	Покомпонентное умножение векторов
 	*/
-	CVector4 & operator*=(CVector4 const& v) throw()
+	CVector4 & operator*=(CVector4 const& v) noexcept
 	{
 		x *= v.x;
 		y *= v.y;
@@ -159,7 +159,7 @@ public:
 	/*
 	Покомпонентное деление векторов
 	*/
-	CVector4 & operator/=(CVector4 const& v) throw()
+	CVector4 & operator/=(CVector4 const& v) noexcept
 	{
 		x /= v.x;
 		y /= v.y;
@@ -171,7 +171,7 @@ public:
 	/*
 	Вычитание векторов
 	*/
-	CVector4 & operator-=(CVector4 const& v) throw()
+	CVector4 & operator-=(CVector4 const& v) noexcept
 	{
 		x -= v.x;
 		y -= v.y;
@@ -183,7 +183,7 @@ public:
 	/*
 	Умножение вектора на скаляр
 	*/
-	CVector4 const operator*(T scale)const throw()
+	CVector4 const operator*(T scale)const noexcept
 	{
 		return CVector4(x * scale, y * scale, z * scale, w * scale);
 	}
@@ -191,7 +191,7 @@ public:
 	/*
 	Вычисление длины вектора
 	*/
-	T GetLength()const throw()
+	T GetLength()const noexcept
 	{
 		return static_cast<T>(sqrt(x * x + y * y + z * z + w * w));
 	}
@@ -199,7 +199,7 @@ public:
 	/*
 	Преобразование к трехмерному вектору путем отбрасывания координаты w
 	*/
-	operator CVector3<T> ()const throw()
+	operator CVector3<T> ()const noexcept
 	{
 		return CVector3<T>(x, y, z);
 	}
@@ -207,14 +207,14 @@ public:
 	/*
 	Преобразование к трехмерному вектору путем выполнения перспективного деления
 	*/
-	CVector3<T> Project()const throw()
+	CVector3<T> Project()const noexcept
 	{
 		T invW = 1 / w;
 		return CVector3<T>(x * invW, y * invW, z * invW);
 	}
 
 	// Нормализация вектора
-	void Normalize() throw()
+	void Normalize() noexcept
 	{
 		T invLength = 1 / GetLength();
 		x *= invLength;
@@ -226,7 +226,7 @@ public:
 
 
 template<class T>
-CVector4<T> const operator*(T const& scalar, CVector4<T> const& v) throw()
+CVector4<T> const operator*(T const& scalar, CVector4<T> const& v) noexcept
 {
 	return v * scalar;
 }

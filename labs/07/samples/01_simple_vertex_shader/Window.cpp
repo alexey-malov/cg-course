@@ -123,6 +123,38 @@ void Window::OnRunStart()
 	{
 		throw std::runtime_error("Shaders are not supported");
 	}
+
+	m_glState.emplace();
+	m_glState->vertexShader.SetSource(R"(
+void main()
+{
+	gl_Position = ftransform();
+	gl_FrontColor = gl_Color;
+}
+)");
+	m_glState->vertexShader.Compile();
+	m_glState->fragmentShader.SetSource(R"(
+void main()
+{
+	gl_FragColor = gl_Color;
+}
+)");
+	m_glState->fragmentShader.Compile();
+	if (!m_glState->vertexShader.IsCompiled())
+	{
+		throw std::runtime_error("Failed to compile vertex shader: " + m_glState->vertexShader.GetInfoLog());
+	}
+	if (!m_glState->fragmentShader.IsCompiled())
+	{
+		throw std::runtime_error("Failed to compile fragment shader: " + m_glState->fragmentShader.GetInfoLog());
+	}
+	m_glState->program.AttachShader(m_glState->vertexShader);
+	m_glState->program.AttachShader(m_glState->fragmentShader);
+	m_glState->program.Link();
+	if (!m_glState->program.IsLinked())
+	{
+		throw std::runtime_error("Failed to link program: " + m_glState->program.GetInfoLog());
+	}
 }
 
 void Window::Draw(int width, int height)
@@ -132,6 +164,7 @@ void Window::Draw(int width, int height)
 
 	SetupCameraMatrix();
 
+	glUseProgram(m_glState->program);
 	m_cube.Draw();
 }
 

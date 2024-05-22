@@ -13,7 +13,7 @@ public:
 	/*
 	Конструктор по умолчанию - создает единичную матрицу
 	*/
-	CMatrix4(void) throw()
+	CMatrix4(void) noexcept
 	{
 		LoadIdentity();
 	}
@@ -21,7 +21,7 @@ public:
 	/*
 	Инициализация матрицы значениями из массива значений-столбцов 
 	*/
-	CMatrix4(T const * src) throw()
+	CMatrix4(T const * src) noexcept
 	{
 		memcpy(data, src, sizeof(data));
 	}
@@ -34,7 +34,7 @@ public:
 		T const& v01, T const& v11, T const& v21, T const& v31,	// Элементы 1 столбца
 		T const& v02, T const& v12, T const& v22, T const& v32,	// Элементы 2 столбца
 		T const& v03, T const& v13, T const& v23, T const& v33	// Элементы 3 столбца
-		) throw()
+		) noexcept
 	{
 		a00 = v00; a10 = v10; a20 = v20; a30 = v30;
 		a01 = v01; a11 = v11; a21 = v21; a31 = v31;
@@ -45,7 +45,7 @@ public:
 	/*
 	Доступ к массиву столбцов матрицы
 	*/
-	operator const T*()const throw()
+	operator const T*()const noexcept
 	{
 		return &data[0];
 	}
@@ -53,13 +53,13 @@ public:
 	/*
 	Доступ к массиву столбцов матрицы
 	*/
-	operator T*() throw()
+	operator T*() noexcept
 	{
 		return &data[0];
 	}
 
 	// Произведение матриц
-	CMatrix4& operator*=(CMatrix4 const& rhs) throw()
+	CMatrix4& operator*=(CMatrix4 const& rhs) noexcept
 	{
 		T result[4][4];
 
@@ -88,7 +88,7 @@ public:
 	}
 
 	// Умножение элементов матрицы на скаляр
-	CMatrix4& operator*=(T s) throw()
+	CMatrix4& operator*=(T s) noexcept
 	{
 		data[0] *= s;
 		data[1] *= s;
@@ -110,7 +110,7 @@ public:
 	}
 
 	// Произведение матриц (по правилу матричного умножения)
-	CMatrix4 const operator*(CMatrix4 const& rhs)const throw()
+	CMatrix4 const operator*(CMatrix4 const& rhs)const noexcept
 	{
 		T result[4][4];
 
@@ -138,7 +138,7 @@ public:
 	}
 
 	// Умножение элементов матрицы на скаляр
-	CMatrix4 const operator*(T s)const throw()
+	CMatrix4 const operator*(T s)const noexcept
 	{
 		return CMatrix4(
 			data[0] * s,
@@ -161,7 +161,7 @@ public:
 	}
 
 	// Загрузка матрицы переноса
-	void LoadTranslation(T dx, T dy, T dz) throw()
+	void LoadTranslation(T dx, T dy, T dz) noexcept
 	{
 		LoadIdentity();
 		x = dx;
@@ -170,7 +170,7 @@ public:
 	}
 
 	// Умножение текущей матрицы на матрицу переноса
-	void Translate(T dx, T dy, T dz) throw()
+	void Translate(T dx, T dy, T dz) noexcept
 	{
 		CMatrix4 translationMatrix;
 		translationMatrix.x = dx;
@@ -181,7 +181,7 @@ public:
 	}
 
 	// Загрузка матрицы масштабирования
-	void LoadScale(T sx0, T sy0, T sz0) throw()
+	void LoadScale(T sx0, T sy0, T sz0) noexcept
 	{
 		LoadIdentity();
 		sx = sx0;
@@ -190,7 +190,7 @@ public:
 	}
 
 	// Умножение на матрицу масштабирования
-	void Scale(T sx0, T sy0, T sz0) throw()
+	void Scale(T sx0, T sy0, T sz0) noexcept
 	{
 		CMatrix4 scaleMatrix;
 		scaleMatrix.sx = sx0;
@@ -200,7 +200,7 @@ public:
 	}
 
 	// Загрузка матрицы вращения на угол вокруг заданной оси
-	void LoadRotation(T angle, T ux, T uy, T uz) throw()
+	void LoadRotation(T angle, T ux, T uy, T uz) noexcept
 	{
 		angle = (T)(angle * 3.14159265358979323846 / 180);
 
@@ -238,7 +238,7 @@ public:
 	}
 
 	// Вращение на угол вокруг заданной оси
-	void Rotate(T angle, T ux, T uy, T uz) throw()
+	void Rotate(T angle, T ux, T uy, T uz) noexcept
 	{
 		CMatrix4 rotationMatrix;
 		rotationMatrix.LoadRotation(angle, ux, uy, uz);
@@ -248,7 +248,7 @@ public:
 	/*
 	Возвращаем вектор-столбец
 	*/
-	CVector4<T> GetRow(unsigned i)const throw()
+	CVector4<T> GetRow(unsigned i)const noexcept
 	{
 		assert(i < 4);
 		return
@@ -263,14 +263,14 @@ public:
 	/*
 	Возвращаем вектор-строку
 	*/
-	CVector4<T> GetColumn(unsigned i)const throw()
+	CVector4<T> GetColumn(unsigned i)const noexcept
 	{
 		assert(i < 4);
 		return CVector4<T>(mat[i]);
 	}
 
 	// Установка значений строки матрицы
-	void SetRow(unsigned i, const CVector4<T>& v) throw()
+	void SetRow(unsigned i, const CVector4<T>& v) noexcept
 	{
 		assert(i < 4);
 		mat[0][i] = v.x;
@@ -280,7 +280,7 @@ public:
 	}
 
 	// Установка значений столбца матрицы
-	void SetColumn(unsigned i, const CVector4<T> & v) throw()
+	void SetColumn(unsigned i, const CVector4<T> & v) noexcept
 	{
 		assert(i < 4);
 		mat[i][0] = v.x;
@@ -293,7 +293,7 @@ public:
 	/*
 	Загрузка матрицы перспективного преобразования (аналогично glFrustum)
 	*/
-	void LoadFrustum(T left, T right, T bottom, T top, T zNear, T zFar) throw()
+	void LoadFrustum(T left, T right, T bottom, T top, T zNear, T zFar) noexcept
 	{
 		const T n2 = zNear + zNear;
 		const T invRminusL = 1 / (right - left);
@@ -316,7 +316,7 @@ public:
 	/*
 	Загрузка матрицы перспективного преобразования аналогично gluPerspective
 	*/
-	void LoadPerspective(double fovY, double aspect, double zNear, double zFar) throw()
+	void LoadPerspective(double fovY, double aspect, double zNear, double zFar) noexcept
 	{
 		fovY = (T)(fovY * 3.14159265358979323846 / 180);
 		T top = zNear * tan(fovY * 0.5);
@@ -327,7 +327,7 @@ public:
 	/*
 	Вычисление определителя матрицы
 	*/
-	T GetDeterminant()const throw()
+	T GetDeterminant()const noexcept
 	{
 		// Быстрое вычисление определителя матрицы 4*4 взято отсюда:
 		// http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
@@ -367,7 +367,7 @@ public:
 	/*
 	Вычисление обратной матрицы
 	*/
-	CMatrix4<T> GetInverseMatrix()const throw()
+	CMatrix4<T> GetInverseMatrix()const noexcept
 	{
 		// Быстрое извлечение обратной матрицы 4*4. Принцип взят отсюда:
 		// http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
@@ -403,7 +403,7 @@ public:
 	}
 
 	// Загрузка правосторонней матрицы камеры (аналогично gluLookAt)
-	void LoadLookAtRH(T eyeX, T eyeY, T eyeZ, T atX, T atY, T atZ, T upX, T upY, T upZ) throw()
+	void LoadLookAtRH(T eyeX, T eyeY, T eyeZ, T atX, T atY, T atZ, T upX, T upY, T upZ) noexcept
 	{
 		CVector3<T> eye(eyeX, eyeY, eyeZ);
 		CVector3<T> at(atX, atY, atZ);
@@ -428,7 +428,7 @@ public:
 	}
 
 	// Умножение текущей матрицы на матрицу камеры
-	void LookAtRH(T eyeX, T eyeY, T eyeZ, T atX, T atY, T atZ, T upX, T upY, T upZ) throw()
+	void LookAtRH(T eyeX, T eyeY, T eyeZ, T atX, T atY, T atZ, T upX, T upY, T upZ) noexcept
 	{
 		CMatrix4 lookAtMatrix;
 		lookAtMatrix.LoadLookAtRH(eyeX, eyeY, eyeZ, atX, atY, atZ, upX, upY, upZ);
@@ -436,7 +436,7 @@ public:
 	}
 
 	// Очистка столбца
-	void ClearColumn(size_t i) throw()
+	void ClearColumn(size_t i) noexcept
 	{
 		assert(i < 4);
 		mat[i][0] = 0;
@@ -446,7 +446,7 @@ public:
 	}
 
 	// Очистка строки
-	void ClearRow(size_t i) throw()
+	void ClearRow(size_t i) noexcept
 	{
 		assert(i < 4);
 		mat[0][i] = 0;
@@ -456,7 +456,7 @@ public:
 	}
 
 	// Загрузка единичной матрицы
-	void LoadIdentity() throw()
+	void LoadIdentity() noexcept
 	{
 		static const T identityMatrix[4][4] = 
 		{
@@ -469,7 +469,7 @@ public:
 		memcpy(data, identityMatrix, sizeof(identityMatrix));
 	}
 
-	void Normalize() throw()
+	void Normalize() noexcept
 	{
 		/*
 		Ортонормирование - приведение координатных осей к единичной длине (нормирование)

@@ -5,19 +5,18 @@
 #include "stdafx.h"
 #include "FrameBuffer.h"
 #include "resource.h"
-#include "FrameBuffer.h"
 
+#include "CheckerShader.h"
+#include "ConicCylinder.h"
+#include "Intersection.h"
+#include "OmniLightSource.h"
+#include "Plane.h"
+#include "Ray.h"
 #include "RaytraceView.h"
 #include "SceneObject.h"
-#include "OmniLightSource.h"
-#include "Intersection.h"
-#include "Ray.h"
-#include "CheckerShader.h"
+#include "SimpleDiffuseShader.h"
 #include "SimpleMaterial.h"
 #include "Sphere.h"
-#include "SimpleDiffuseShader.h"
-#include "ConicCylinder.h"
-#include "Plane.h"
 
 CRaytraceView::CRaytraceView()
 	: m_pFrameBuffer(std::make_unique<CFrameBuffer>(800, 600))
@@ -34,7 +33,6 @@ CRaytraceView::CRaytraceView()
 	AddSomeConicCylinders();
 
 	AddSomeLight();
-
 
 	/*
 	Задаем параметры видового порта и матрицы проецирования в контексте визуализации
@@ -61,7 +59,7 @@ void CRaytraceView::AddSomePlane()
 	CMatrix4d checkerShaderTransform;
 	checkerShaderTransform.Scale(0.2, 0.2, 0.2);
 	checkerShaderTransform.Translate(0.25, 0.25, 0.25);
-	AddPlane(CreateCheckerShader(checkerShaderTransform), 0, 1, 0, 0);
+	AddPlane(std::make_shared<CCheckerShader>(checkerShaderTransform), 0, 1, 0, 0);
 }
 
 // Добавляем несколько сфер
@@ -69,9 +67,9 @@ void CRaytraceView::AddSomeSpheres()
 {
 	CSimpleMaterial yellow;
 	yellow.SetDiffuseColor(CVector4f(1, 1, 0, 1));
-	CSimpleDiffuseShader& shader = CreateSimpleDiffuseShader(yellow);
+	auto shader = std::make_shared<CSimpleDiffuseShader>(yellow);
 	AddSphere(shader, 1, CVector3d(0, 1, 0));
-	AddSphere(shader, 0.5, CVector3d(2, 0, 0));
+	AddSphere(std::move(shader), 0.5, CVector3d(2, 0, 0));
 }
 
 // Создаем и добавляем в сцену точечный источник света
@@ -93,7 +91,7 @@ void CRaytraceView::AddSomeConicCylinders()
 	transform.Translate(-2.5, 0, 0);
 	transform.Rotate(-90, 1, 0, 0);
 
-	AddConicCylinder(CreateSimpleDiffuseShader(white), 2, 1, 1, transform);
+	AddConicCylinder(std::make_shared<CSimpleDiffuseShader>(white), 2, 1, 1, transform);
 
 	CSimpleMaterial red;
 	red.SetDiffuseColor(CVector4f(1, 0, 0, 1));
@@ -101,14 +99,14 @@ void CRaytraceView::AddSomeConicCylinders()
 	coneTransform.Translate(0, 0, 2);
 	coneTransform.Rotate(-90, 1, 0, 0);
 
-	AddConicCylinder(CreateSimpleDiffuseShader(red), 1, 1, 0, coneTransform);
+	AddConicCylinder(std::make_shared<CSimpleDiffuseShader>(red), 1, 1, 0, coneTransform);
 
 	CMatrix4d conicFrustumTransform;
 	conicFrustumTransform.Translate(4.0, 0.0, 0.0);
 	conicFrustumTransform.Rotate(-90, 1, 0, 0);
 	CSimpleMaterial green;
 	green.SetDiffuseColor(CVector4f(0, 1, 0, 1));
-	AddConicCylinder(CreateSimpleDiffuseShader(green), 1, 0.5, 0.3, conicFrustumTransform);
+	AddConicCylinder(std::make_shared<CSimpleDiffuseShader>(green), 1, 0.5, 0.3, conicFrustumTransform);
 }
 
 CRaytraceView::~CRaytraceView()
@@ -235,49 +233,26 @@ bool CRaytraceView::UpdateFrameBuffer()
 	return m_renderer.GetProgress(renderedChunks, totalChunks);
 }
 
-CSceneObject& CRaytraceView::AddSphere(IShader const& shader, double radius, CVector3d const& center, CMatrix4d const& transform)
+CSceneObject& CRaytraceView::AddSphere(std::shared_ptr<IShader const> shader, double radius, CVector3d const& center, CMatrix4d const& transform)
 {
-	const auto& sphere = *m_geometryObjects.emplace_back(
-		std::make_unique<CSphere>(radius, center, transform));
-
-	return AddSceneObject(sphere, shader);
+	return AddSceneObject(std::make_shared<CSphere>(radius, center, transform), std::move(shader));
 }
 
-CSceneObject& CRaytraceView::AddConicCylinder(IShader const& shader, double height, double baseRadius, double capRadius, CMatrix4d const& transform)
+CSceneObject& CRaytraceView::AddConicCylinder(std::shared_ptr<IShader const> shader, double height, double baseRadius, double capRadius, CMatrix4d const& transform)
 {
-	const auto& conicCylinder = *m_geometryObjects.emplace_back(
-		std::make_unique<CConicCylinder>(height, baseRadius, capRadius, transform));
-	return AddSceneObject(conicCylinder, shader);
+	return AddSceneObject(std::make_shared<CConicCylinder>(height, baseRadius, capRadius, transform), std::move(shader));
 }
 
-CSceneObject& CRaytraceView::AddPlane(IShader const& shader, double a, double b, double c, double d, CMatrix4d const& transform)
+CSceneObject& CRaytraceView::AddPlane(std::shared_ptr<IShader const> shader, double a, double b, double c, double d, CMatrix4d const& transform)
 {
-	const auto& plane = *m_geometryObjects.emplace_back(
-		std::make_unique<CPlane>(a, b, c, d, transform));
-	return AddSceneObject(plane, shader);
+	return AddSceneObject(std::make_shared<CPlane>(a, b, c, d, transform), std::move(shader));
 }
 
-CSceneObject& CRaytraceView::AddSceneObject(IGeometryObject const& object, IShader const& shader)
+CSceneObject& CRaytraceView::AddSceneObject(std::shared_ptr<IGeometryObject const> object, std::shared_ptr<IShader const> shader)
 {
-	auto obj = std::make_shared<CSceneObject>(object, shader);
+	auto obj = std::make_shared<CSceneObject>(std::move(object), std::move(shader));
 	m_scene.AddObject(obj);
 	return *obj;
-}
-
-CSimpleDiffuseShader& CRaytraceView::CreateSimpleDiffuseShader(CSimpleMaterial const& material)
-{
-	auto shader = std::make_unique<CSimpleDiffuseShader>(material);
-	auto& shaderRef = *shader;
-	m_shaders.emplace_back(std::move(shader));
-	return shaderRef;
-}
-
-CCheckerShader& CRaytraceView::CreateCheckerShader(CMatrix4d const& textureTransform)
-{
-	auto shader = std::make_unique<CCheckerShader>(textureTransform);
-	auto& shaderRef = *shader;
-	m_shaders.emplace_back(std::move(shader));
-	return shaderRef;
 }
 
 LRESULT CRaytraceView::OnTimer(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)

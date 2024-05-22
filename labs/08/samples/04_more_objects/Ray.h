@@ -10,13 +10,13 @@
 class CRay
 {
 public:
-	CRay(CVector3d const& start, CVector3d const& direction) throw()
+	CRay(CVector3d const& start, CVector3d const& direction) noexcept
 		:m_start(start), m_direction(direction)
 	{
 	}
 
 	// Возвращает точку на луче в указанный момент времени
-	CVector3d GetPointAtTime(double time)const throw()
+	CVector3d GetPointAtTime(double time)const noexcept
 	{
 		return m_start + m_direction * time;
 	}
@@ -24,7 +24,7 @@ public:
 	/*
 	Начальная точка луча
 	*/
-	CVector3d const& GetStart()const throw()
+	CVector3d const& GetStart()const noexcept
 	{
 		return m_start;
 	}
@@ -32,7 +32,7 @@ public:
 	/*
 	Направление луча
 	*/
-	CVector3d const& GetDirection()const throw()
+	CVector3d const& GetDirection()const noexcept
 	{
 		return m_direction;
 	}
@@ -48,7 +48,7 @@ private:
 /*
 Трансформация луча с использованием заданной матрицы
 */
-inline CRay Transform(CRay const& ray, CMatrix4d const& matrix) throw()
+inline CRay Transform(CRay const& ray, CMatrix4d const& matrix) noexcept
 {
 	CVector3d start = (matrix * CVector4d(ray.GetStart(), 1)).Project();
 	CVector3d direction = (matrix * CVector4d(ray.GetDirection(), 0));

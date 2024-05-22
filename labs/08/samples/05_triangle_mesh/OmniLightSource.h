@@ -53,7 +53,7 @@ private:
 	*/
 	CVector3d m_positionInWorldSpace;
 
-	// Коэффициенты ослабления света в зависимосит от расстояния
+	// Коэффициенты ослабления света в зависимости от расстояния
 	double m_constantAttenuation;
 	double m_linearAttenuation;
 	double m_quadraticAttenuation;

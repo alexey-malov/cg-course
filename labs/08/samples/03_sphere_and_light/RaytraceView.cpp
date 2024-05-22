@@ -3,37 +3,38 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "resource.h"
-#include "FrameBuffer.h"
-
 #include "RaytraceView.h"
-#include "SceneObject.h"
+#include "CheckerShader.h"
+#include "FrameBuffer.h"
 #include "OmniLightSource.h"
+#include "Plane.h"
+#include "SceneObject.h"
+#include "SimpleDiffuseShader.h"
+#include "Sphere.h"
 
 CRaytraceView::CRaytraceView()
 	: m_pFrameBuffer(std::make_unique<CFrameBuffer>(800, 600))
-	, m_plane(0, 1, 0, 1)	// Плоскость y=-1
-	, m_sphere1(1.5)	// Создаем сферу радиуса 1.5
-	, m_sphere2(0.5)	// Создаем сферу радиуса 0.5
 {
 	/*
 	Задаем цвет заднего фона сцены
 	*/
 	m_scene.SetBackdropColor(CVector4f(1, 0, 1, 1));
 
+	auto plane = std::make_shared<CPlane>(0, 1, 0, 1); // Уравнение плоскости y = -1
 
+	auto checkerShader = std::make_shared<CCheckerShader>();
 	{
 		// Задаем смещение текстурных координат в 1/2 размера шахматного кубика для того чтобы избежать
 		// визуальных артефактов при определении цвета клетки, связанных с погрешностями вычислений
 		CMatrix4d checkerShaderTransform;
 		checkerShaderTransform.Translate(0.25, 0.25, 0.25);
-		m_checkerShader.SetTextureTransform(checkerShaderTransform);
+		checkerShader->SetTextureTransform(checkerShaderTransform);
 	}
 
 	/*
 	Добавляем бесконечную шахматную плоскость на сцену
 	*/
-	m_scene.AddObject(CSceneObjectPtr(new CSceneObject(m_plane, m_checkerShader)));
+	m_scene.AddObject(std::make_shared<CSceneObject>(std::move(plane), std::move(checkerShader)));
 
 	// Создаем и добавляем в сцену сферу, имеющую заданный материал
 	{
@@ -42,7 +43,8 @@ CRaytraceView::CRaytraceView()
 		*/
 		CMatrix4d sphereTransform;
 		sphereTransform.Translate(2, 0, -5);
-		m_sphere1.SetTransform(sphereTransform);
+		auto sphere1 = std::make_shared<CSphere>(1.5); // Создаем сферу радиуса 1.5
+		sphere1->SetTransform(sphereTransform);
 
 		/*
 		Материал сферы 1
@@ -51,8 +53,9 @@ CRaytraceView::CRaytraceView()
 		material1.SetDiffuseColor(CVector4f(1, 1, 0, 1));
 
 		// Шейдер сферы 1
-		m_simpleDiffuseShader1.SetMaterial(material1);
-		m_scene.AddObject(CSceneObjectPtr(new CSceneObject(m_sphere1, m_simpleDiffuseShader1)));
+		auto sphere1Shader = std::make_shared<CSimpleDiffuseShader>();
+		sphere1Shader->SetMaterial(material1);
+		m_scene.AddObject(std::make_shared<CSceneObject>(std::move(sphere1), std::move(sphere1Shader)));
 	}
 
 	// Создаем и добавляем в сцену сферу, имеющую заданный материал
@@ -62,7 +65,9 @@ CRaytraceView::CRaytraceView()
 		*/
 		CMatrix4d sphereTransform;
 		sphereTransform.Translate(0, -0.5, -3);
-		m_sphere2.SetTransform(sphereTransform);
+		sphereTransform.Scale(1, 0.4, 1);
+		auto sphere2 = std::make_shared<CSphere>(0.5);
+		sphere2->SetTransform(sphereTransform);
 
 		/*
 		Материал сферы 2
@@ -71,15 +76,16 @@ CRaytraceView::CRaytraceView()
 		material2.SetDiffuseColor(CVector4f(0.3f, 0.5f, 0.4f, 1));
 
 		// Шейдер сферы 2
-		m_simpleDiffuseShader2.SetMaterial(material2);
-		m_scene.AddObject(CSceneObjectPtr(new CSceneObject(m_sphere2, m_simpleDiffuseShader2)));
+		auto sphere2Shader = std::make_shared<CSimpleDiffuseShader>();
+		sphere2Shader->SetMaterial(material2);
+		m_scene.AddObject(std::make_shared<CSceneObject>(std::move(sphere2), std::move(sphere2Shader)));
 	}
 
 	// Создаем и добавляем в сцену точечный источник света
 	{
-		COmniLightPtr pLight(new COmniLightSource(CVector3d(-4.0, 4.0, 2.0)));
-		pLight->SetDiffuseIntensity(CVector4f(1, 1, 1, 1));
-		m_scene.AddLightSource(pLight);
+		auto light = std::make_shared<COmniLightSource>(CVector3d(-4.0, 4.0, 2.0));
+		light->SetDiffuseIntensity(CVector4f(1, 1, 1, 1));
+		m_scene.AddLightSource(std::move(light));
 	}
 
 	/*
