@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <cassert>
+#include <type_traits>
 #include <utility>
 
 class FrameBufferBase
@@ -43,21 +44,43 @@ public:
 		glBindFramebuffer(target, m_frameBuffer);
 	}
 
+protected:
+	FrameBufferBase() = default;
+	explicit FrameBufferBase(GLuint frameBuffer)
+		: m_frameBuffer{ frameBuffer }
+	{
+	}
+
 private:
 	GLuint m_frameBuffer = 0u;
 };
 
-using FrameBufferHandle = FrameBufferBase;
+class FrameBufferHandle : public FrameBufferBase
+{
+public:
+	FrameBufferHandle() = default;
+
+	explicit FrameBufferHandle(GLuint frameBuffer) noexcept
+		: FrameBufferBase(frameBuffer)
+	{
+	}
+};
 
 class FrameBuffer : public FrameBufferBase
 {
 public:
 	FrameBuffer() = default;
 
-	FrameBuffer(FrameBuffer&& other) noexcept
+	explicit FrameBuffer(GLuint frameBuffer) noexcept
+		: FrameBufferBase(frameBuffer)
 	{
-		Attach(other.Detach());
 	}
+
+	FrameBuffer(FrameBuffer&& other) noexcept
+		: FrameBufferBase{ other.Detach() }
+	{
+	}
+
 	FrameBuffer& operator=(FrameBuffer&& other) noexcept
 	{
 		if (this != &other)
@@ -76,3 +99,4 @@ public:
 		Delete();
 	}
 };
+

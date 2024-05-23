@@ -5,6 +5,7 @@
 #include "DiffuseLighting.h"
 #include "FrameBuffer.h"
 #include "GLEWInitializer.h"
+#include "Texture.h"
 
 class Window : public BaseWindow
 {
@@ -38,6 +39,7 @@ private:
 	std::optional<DiffuseLighting> m_diffuseLighting;
 	std::optional<DiffuseAndSpecular> m_diffuseAndSpecularLighting;
 	FrameBuffer m_shadowFrameBuffer;
+	Texture m_shadowTexture;
 
 	// –ассто€ние от камеры до точки вращени€
 	static constexpr double DISTANCE_TO_ORIGIN = 2;

@@ -137,6 +137,10 @@ void Window::InitFrameBuffer()
 {
 	m_shadowFrameBuffer.Create();
 	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFrameBuffer);
+
+	m_shadowTexture.Create();
+	glBindTexture(GL_TEXTURE_2D, m_shadowTexture);
+
 }
 
 void Window::Draw(int width, int height)
