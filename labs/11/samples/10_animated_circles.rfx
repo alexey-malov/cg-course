@@ -1054,7 +1054,7 @@ void main( void )
      <RmShaderConstant NAME="Time" API="" REGISTER="-1"/>
     </RmGLPass>
    </RmOpenGLEffect>
-   <RmModelData NAME="TexturedCube" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\TexturedCube.3ds" ORIENTATION="0"/>
+   <RmModelData NAME="TexturedCube" API="" FILE_NAME="..\Models\TexturedCube.3ds" ORIENTATION="0"/>
   </RmEffectGroup>
  </RmEffectWorkspace>
 </RENDER_MONKEY>

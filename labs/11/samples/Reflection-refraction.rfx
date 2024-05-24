@@ -1128,19 +1128,19 @@ void main(void)
   <RmVectorVariable NAME="view_position" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="ViewPosition" VALUE_0="-127.614647" VALUE_1="62.079021" VALUE_2="-140.927933" VALUE_3="1.000000" MIN="-10.000000" MAX="10.000000" CLAMP="FALSE" NORMALIZE="FALSE"/>
   <RmMatrixVariable NAME="view_proj_matrix" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="ViewProjection" VALUE_0="2.171364" VALUE_1="0.000000" VALUE_2="0.000000" VALUE_3="0.000000" VALUE_4="0.000000" VALUE_5="2.414214" VALUE_6="0.000000" VALUE_7="0.000000" VALUE_8="0.000000" VALUE_9="0.000000" VALUE_10="1.001001" VALUE_11="199.199188" VALUE_12="0.000000" VALUE_13="0.000000" VALUE_14="1.000000" VALUE_15="200.000000"/>
   <RmFloatVariable NAME="time_0_2PI" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="Time0_2PI" VALUE="1.226646" MIN="-1.000000" MAX="1.000000" CLAMP="FALSE"/>
-  <Rm2DTextureVariable NAME="Rainbow" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Rainbow.tga" ORIGIN="0"/>
-  <RmCubemapVariable NAME="Mars Environment" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Mars.dds" ORIGIN="0"/>
-  <RmCubemapVariable NAME="Snow Environment" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Snow.dds" ORIGIN="0"/>
+  <Rm2DTextureVariable NAME="Rainbow" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Rainbow.tga" ORIGIN="0"/>
+  <RmCubemapVariable NAME="Mars Environment" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Mars.dds" ORIGIN="0"/>
+  <RmCubemapVariable NAME="Snow Environment" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Snow.dds" ORIGIN="0"/>
   <RmStreamMap NAME="Stream Mapping" API="">
    <RmStream NAME="TexCoord5" API="" STRIDE="24">
     <RmStreamChannel NAME="Position_0" API="" DATA_SIZE="12" DATA_TYPE="2" REGISTER="0" USAGE="0" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_Vertex"/>
     <RmStreamChannel NAME="Normal_0" API="" DATA_SIZE="12" DATA_TYPE="2" REGISTER="1" USAGE="3" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_Normal"/>
    </RmStream>
   </RmStreamMap>
-  <RmModelData NAME="Vase" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\program files (x86)\amd\rendermonkey 1.82\Examples\Media\Models\Vase.3ds" ORIENTATION="0"/>
-  <RmModelData NAME="Teapot" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\program files (x86)\amd\rendermonkey 1.82\Examples\Media\Models\Teapot.3ds" ORIENTATION="0"/>
-  <RmModelData NAME="ninjaHead" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\program files (x86)\amd\rendermonkey 1.82\Examples\Media\Models\ninjaHead.obj" ORIENTATION="0"/>
-  <RmModelData NAME="Dino" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\program files (x86)\amd\rendermonkey 1.82\Examples\Media\Models\Dino.3ds" ORIENTATION="0"/>
-  <RmModelData NAME="Sphere" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\program files (x86)\amd\rendermonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="Vase" API="" FILE_NAME="..\Models\Vase.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="Teapot" API="" FILE_NAME="..\Models\Teapot.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="ninjaHead" API="" FILE_NAME="..\Models\ninjaHead.obj" ORIENTATION="0"/>
+  <RmModelData NAME="Dino" API="" FILE_NAME="..\Models\Dino.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="Sphere" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
  </RmEffectWorkspace>
 </RENDER_MONKEY>

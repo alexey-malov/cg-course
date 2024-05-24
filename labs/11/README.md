@@ -36,7 +36,7 @@
 ### <a name="_toc343021982"></a>**Окно программы**
 Окно программы разделено на несколько панелей.
 
-![image](images/Program_window.png)
+<img src="images/Program_window.png" width="530" height="300">
 
 Рабочая область эффектов (Effect workspace) отображает древовидную структуру объектов (моделей, эффектов, шейдеров, переменных, текстур и др.), входящих в состав рабочей области. Двойной щелчок по объекту открывает его в редакторе, либо в отдельном окне. Два одинарных щелчка позволяют изменить имя атрибута на более информативное.
 
@@ -46,19 +46,19 @@
 ### <a name="_toc343021983"></a>**Создание простейшего эффекта диффузного освещения**
 Для начала добавим пустую группу эффектов к нашей рабочей области. Внутри группы эффектов может располагаться несколько эффектов, совместно использующих объекты, входящие в состав рабочей области. Добавить пустую группу эффектов можно при помощи контекстного меню рабочей области:
 
-![image](images/empty_effect_group.png)
+<img src="images/empty_effect_group.png" width="220" height="140">
 
 К созданной группе эффектов добавим новый OpenGL-эффект на основе шаблона **Position**.
 
-![image](images/template_position.png)
+<img src="images/template_position.png" width="310" height="170">
 
 При этом в состав эффекта по умолчанию войдет несколько узлов:
 
-![image](images/effect_nodes.png)
+<img src="images/effect_nodes.png" width="340" height="220">
 
 **Stream mapping** – перечень и свойства атрибутов, передаваемых шейдеру через атрибутивные переменные. Двойной клик по данному узлу открывает окно настроек Stream mapping, в котором можно добавить, удалить или отредактировать параметры атрибутов.
 
-![image](images/Stream_mapping.png)
+<img src="images/Stream_mapping.png" width="630" height="225">
 
 **Model** – трехмерная модель в одном из поддерживаемых форматов. Двойной клик позволяет выбрать другую модель.
 
@@ -66,7 +66,7 @@
 
 Двойной клик по вершинному, либо фрагментному шейдеру открывает его исходный код в окне редактора шейдеров.
 
-![image](images/shader_editor.png)
+<img src="images/shader_editor.png" width="450" height="270">
 
 Вершинный и фрагментный шейдеры добавленного нами эффекта выполняют минимум действий, а именно – стандартную трансформацию вершины и задание константного цвета фрагмента.
 #### ***Редактирование режимов визуализации OpenGL***
@@ -74,15 +74,16 @@
 
 Для этого добавим при помощи контекстного меню узел «Render State Block» и в режиме его редактирования зададим переменной состояния GL\_PolyFrontMode режим LINES, что аналогично вызову команды glPolygonMode(GL\_FRONT, GL\_LINES).
 
-![image](images/Add_Render_State_Block.png) ![image](images/PolyFrontMode.png)
+<img src="images/Add_Render_State_Block.png" width="150" height="180"> <images src="images/PolyFrontMode.png" width="550" height="165">
 
 В результате модель сферы будет изображена при помощи линий
 
-![image](images/Sphere_of_lines.png)
+<img src="images/Sphere_of_lines.png" width="340" height="220">
+
 #### ***Добавляем Uniform-переменные, задающие параметры источника света***
 Для того, чтобы передать шейдеру координаты источника света в мировой системе координат, добавим uniform-переменную LightPosition, типа Float3, что соответствует типу vec3 языка шейдеров GLSL:
 
-![](images/Add_LightPosition.png)
+<img src="images/Add_LightPosition.png" width="350" height="260">
 
 Зададим параметры переменной LightPosition, равными (100, 100, 100) в окне редактирования свойств переменной, вызываемом по двойному щелчку:
 
@@ -90,7 +91,7 @@
 #### ***Разрабатываем шейдер простейшего диффузного освещения***
 В окне редактирования вершинного шейдера напишем следующий код:
 
-```cpp
+```glsl
 uniform vec3 LightPosition;
 varying vec3 LightDirection;
 varying vec3 Normal;
@@ -106,7 +107,7 @@ void main(void)
 
 Фрагментный шейдер будет вычислять коэффициент диффузного отражения по формуле Ламберта и задавать на его основе цвет фрагмента.
 
-```cpp
+```glsl
 varying vec3 LightDirection;
 varying vec3 Normal;
 void main(void)
@@ -126,13 +127,13 @@ void main(void)
 #### ***Задаем цвет материала и источника света***
 Цвет можно было бы передать шейдеру через uniform-переменную аналогично позиции источника света. Однако Render Monkey предоставляет более удобный способ – в качестве типа переменной выберем пункт **Color** в контекстном меню, а затем переименуем добавленную переменную в **DiffuseMaterial**.
 
-![](images/Add_color.png) ![](images/color_palette.png)
+<img src="images/Add_color.png" width="250" height="250"> ![](images/color_palette.png)
 
 Аналогичным образом зададим цвет материала **DiffuseLight**.
 
 Модифицируем код фрагментного шейдера, добавив в него формирование отраженного цвета на основе цвета источника света и материала, а также фактора диффузного отражения:
 
-```cpp
+```glsl
 uniform vec4 DiffuseMaterial;
 uniform vec4 DiffuseLight;
 varying vec3 LightDirection;
@@ -154,7 +155,7 @@ void main(void)
 #### ***Задаем параметры фоновой освещенности и фонового цвета материала***
 Добавим переменные типа Color с именами AmbientMaterial и AmbientLight, задающие фоновый цвет материала и источника света, и добавим поддержку фоновой освещенности в код фрагментного шейдера.
 
-```cpp
+```glsl
 uniform vec4 DiffuseMaterial;
 uniform vec4 DiffuseLight;
 uniform vec4 AmbientMaterial;
@@ -179,7 +180,7 @@ void main(void)
 
 Поскольку в модели Фонга для расчета зеркальной составляющей освещения используется положение наблюдателя, удобнее вычислять освещение в системе координат наблюдателя, а не в мировой системе координат. Направление видового вектора, направленного из вершины примитива в сторону наблюдателя, будет передаваться вершинному шейдеру через varying-переменную View.
 
-```cpp
+```glsl
 uniform vec3 LightPosition;
 varying vec3 LightDirection;
 varying vec3 Normal;
@@ -205,7 +206,7 @@ void main(void)
 
 Во фрагментный шейдер добавится вычисление зеркальной составляющей освещения по формуле Фонга.
 
-```cpp
+```glsl
 uniform vec4 DiffuseMaterial;
 uniform vec4 DiffuseLight;
 uniform vec4 AmbientMaterial;
@@ -244,11 +245,11 @@ void main(void)
 ## <a name="_toc343021984"></a>**Комбинирование текстуры и освещения**
 Скопируем эффект, разработанный в предыдущем разделе, в буфер обмена, воспользовавшись командой контекстного меню, и вставим копию внутрь группы эффектов. Это позволит нам сэкономить время на проделывании данных операций. Зададим скопированному эффекту осмысленное имя, и сделаем его активным при помощи клавиши F3, либо команды контекстного меню.
 
-![image](images/copying_shaders.png) ![images](images/pasting_shaders.png) ![image](images/copy_of_effect.png)![image](images/active_effect.png)
+![image](images/copying_shaders.png)   ![images](images/pasting_shaders.png) ![image](images/copy_of_effect.png)![image](images/active_effect.png)
 
 На следующем этапе добавим в состав группы эффектов текстуру Земли (Earth.jpg) из набора текстур программы Render Monkey..
 
-![image](images/Add_texture.png)
+<img src="images/Add_texture.png" width="350" height="250">
 
 Текстура поверхности планеты Земля:
 
@@ -260,11 +261,11 @@ void main(void)
 
 Для того, чтобы текстуру можно было использовать в составе созданного нами эффекта, необходимо добавить внутрь прохода рендеринга текстурный объект, ссылающийся на добавленную нами текстуру.
 
-![image](images/add_texture_object.png)
+<img src="images/add_texture_object.png" width="220" height="245">
 
 Зададим имя для добавленного текстурного объекта **EarthTexture**. Под этим именем можно будет обращаться к текстурному объекту из шейдерных программ. Доработаем вершинный шейдер таким образом, чтобы он передавал текстурные координаты вершины фрагментному шейдеру.
 
-```cpp
+```glsl
 uniform vec3 LightPosition;
 varying vec3 LightDirection;
 varying vec3 Normal;
@@ -293,7 +294,7 @@ void main(void)
 
 Фрагментный шейдер также подвергнется небольшим изменениям. Вместо диффузного цвета материала будет использоваться 2D текстура **EarthTexture**.
 
-```cpp
+```glsl
 //uniform vec4 DiffuseMaterial;
 uniform vec4 DiffuseLight;
 uniform vec4 AmbientMaterial;
@@ -343,11 +344,12 @@ void main(void)
 
 Добавим данную текстуру к рабочей области, а соответствующий ей текстурный объект **SpecularClouds** добавим в первый проход рендеринга эффекта.
 
-![](images/add_specular_clouds.png)
+<img src="images/add_specular_clouds.png" width="150" height="250">
+
 ### <a name="_toc343021986"></a>**Добавим немножко облачности**
 Фрагментный шейдер извлекает из текстуры облаков красную составляющую и использует ее для комбинирования цвета планеты с цветом облаков (в нашем случае цвет облаков будет равен фактору диффузного освещения фрагмента).
 
-```cpp
+```glsl
 uniform vec4 DiffuseLight;
 uniform vec4 AmbientMaterial;
 uniform vec4 AmbientLight;
@@ -402,7 +404,7 @@ void main(void)
 
 Обновленный код фрагментного шейдера.
 
-```cpp
+```glsl
 //uniform vec4 DiffuseMaterial;
 uniform vec4 DiffuseLight;
 uniform vec4 AmbientMaterial;
@@ -481,7 +483,7 @@ void main(void)
 
 Благодаря использованию ночной текстуры Земли, нет необходимости в использовании интенсивности фоновой интенсивности источника света и фонового цвета материала.
 
-```cpp
+```glsl
 uniform vec4 DiffuseLight;
 uniform vec4 SpecularMaterial;
 uniform vec4 SpecularLight;
@@ -558,7 +560,7 @@ void main(void)
 
 В задачи вершинного шейдера входит вычисление бинормали и трансформация видового вектора и вектора направления на источник света в касательное пространство.
 
-```cpp
+```glsl
 uniform vec3 LightPosition;
 varying vec3 LightDirection;
 varying vec3 View;
@@ -593,7 +595,7 @@ void main(void)
 
 Фрагментный шейдер извлекает из карты нормалей направление вектора нормали и распаковывает его. Вычисление освещенности планеты выполняется с использованием данного вектора нормали. Для вычисления освещенности облаков используется неискаженный вектор нормали[^3].
 
-```cpp
+```glsl
 uniform vec4 DiffuseLight;
 uniform vec4 SpecularMaterial;
 uniform vec4 SpecularLight;
@@ -680,6 +682,7 @@ void main(void)
 Разработайте OpenGL приложение, выполняющее визуализацию трехмерной модели, загружаемой из .3DS файла и выполненной из материала, частично отражающего и частично преломляющего свет (используйте кубические карты текстур).
 
 Пользователь должен иметь возможность вращения камеры вокруг объекта при помощи мыши.
+
 ![image](images/refraction_of_rays.png)
 
 ##### Бонус в 30 баллов за имитацию эффекта дисперсии

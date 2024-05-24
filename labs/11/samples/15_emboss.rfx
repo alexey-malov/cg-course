@@ -1058,8 +1058,8 @@ void main(void)
      <RmDynamicVariableValue ROW_INDEX="0" COLUMN_INDEX="0" VALUE="512"/>
     </RmDynamicVariableValueContainer>
    </RmDynamicVariable>
-   <Rm2DTextureVariable NAME="BrickTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Fieldstone.tga" ORIGIN="0"/>
-   <RmModelData NAME="Sphere" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+   <Rm2DTextureVariable NAME="BrickTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Fieldstone.tga" ORIGIN="0"/>
+   <RmModelData NAME="Sphere" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
   </RmEffectGroup>
  </RmEffectWorkspace>
 </RENDER_MONKEY>

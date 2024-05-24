@@ -1128,9 +1128,9 @@ void main(void)
      <RmShaderConstant NAME="LightSpecularPower" API="" REGISTER="-1"/>
     </RmGLPass>
    </RmOpenGLEffect>
-   <Rm2DTextureVariable NAME="CloudsTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\EarthClouds.jpg" ORIGIN="0"/>
-   <Rm2DTextureVariable NAME="EarthTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Earth.jpg" ORIGIN="0"/>
-   <RmModelData NAME="Sphere" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+   <Rm2DTextureVariable NAME="CloudsTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\EarthClouds.jpg" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="EarthTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Earth.jpg" ORIGIN="0"/>
+   <RmModelData NAME="Sphere" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
   </RmEffectGroup>
  </RmEffectWorkspace>
 </RENDER_MONKEY>

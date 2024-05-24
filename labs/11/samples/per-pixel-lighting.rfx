@@ -1124,7 +1124,7 @@ C:\Users\dvnt\OneDrive\Документы\ВУЗ\3_курс\2_семестр\К�
       <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="0" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Model" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Model" API=""/>
      <RmRenderStateBlock NAME="Render State" API="OpenGL"/>
@@ -1221,7 +1221,7 @@ void main(void)
       <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="0" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Model" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Model" API=""/>
      <RmRenderStateBlock NAME="Render State" API="OpenGL"/>
@@ -1330,7 +1330,7 @@ void main(void)
       <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="0" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Model" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Model" API=""/>
      <RmRenderStateBlock NAME="Render State" API="OpenGL"/>
@@ -1456,7 +1456,7 @@ void main(void)
       <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="0" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Model" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Model" API=""/>
      <RmRenderStateBlock NAME="Render State" API="OpenGL"/>
@@ -1589,7 +1589,7 @@ void main(void)
       <RmStreamChannel NAME="Tangent_0" API="" DATA_SIZE="12" DATA_TYPE="2" REGISTER="0" USAGE="6" USAGE_INDEX="0" ATTRIBUTE_NAME="Tangent"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="Sphere" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Sphere" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Sphere" API=""/>
      <RmRenderStateBlock NAME="Render State" API="OpenGL"/>
@@ -1726,7 +1726,7 @@ void main(void)
      <RmShaderConstant NAME="SpecularMaterial" API="" REGISTER="-1"/>
     </RmGLPass>
    </RmOpenGLEffect>
-   <Rm2DTextureVariable NAME="EarthNight" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\EarthNight.jpg" ORIGIN="1"/>
+   <Rm2DTextureVariable NAME="EarthNight" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\EarthNight.jpg" ORIGIN="1"/>
    <Rm2DTextureVariable NAME="Earth" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Earth.jpg" ORIGIN="1"/>
    <Rm2DTextureVariable NAME="EarthNormal2048" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\EarthNormal2048.png" ORIGIN="1"/>
    <Rm2DTextureVariable NAME="EarthClouds" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\EarthClouds.jpg" ORIGIN="1"/>

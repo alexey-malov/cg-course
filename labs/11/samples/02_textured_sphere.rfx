@@ -1010,7 +1010,7 @@ C:\Users\dvnt\OneDrive\Документы\ВУЗ\3_курс\2_семестр\К�
   </RmRegistryBranch>
   <RmEffectGroup NAME="Effect Group 1" API="">
    <RmOpenGLEffect NAME="Position" API="OpenGL" ACTIVE_CAMERA="">
-    <Rm2DTextureVariable NAME="EarthTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Earth.jpg" ORIGIN="0"/>
+    <Rm2DTextureVariable NAME="EarthTexture" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Earth.jpg" ORIGIN="0"/>
     <RmStreamMap NAME="Stream Mapping" API="">
      <RmStream NAME="Stream" API="" STRIDE="32">
       <RmStreamChannel NAME="Position_0" API="" DATA_SIZE="12" DATA_TYPE="2" REGISTER="0" USAGE="0" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_Vertex"/>
@@ -1018,7 +1018,7 @@ C:\Users\dvnt\OneDrive\Документы\ВУЗ\3_курс\2_семестр\К�
       <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="0" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Model" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Model" API=""/>
      <RmGLShader NAME="Vertex Program" API="OpenGL" PIXEL_SHADER="FALSE"><RmShaderCode TYPE="TEXT"><![CDATA[

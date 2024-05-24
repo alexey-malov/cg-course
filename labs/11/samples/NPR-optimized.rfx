@@ -1233,7 +1233,7 @@ void main(void)
    <Rm2DTextureVariable NAME="hatch4" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch4.dds" ORIGIN="0"/>
    <Rm2DTextureVariable NAME="hatch5" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch5.dds" ORIGIN="0"/>
    <Rm2DTextureVariable NAME="hatch0" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch0.dds" ORIGIN="0"/>
-   <Rm2DTextureVariable NAME="hatch1" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Hatch1.dds" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="hatch1" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch1.dds" ORIGIN="0"/>
   </RmEffectGroup>
   <RmEffectGroup NAME="NPR Metallic Cartoon" API="">
    <RmOpenGLEffect NAME="Metallic Cartoon Shader" API="OpenGL" ACTIVE_CAMERA="">
@@ -1323,7 +1323,7 @@ void main(void)
    <RmVectorVariable NAME="light2" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" VALUE_0="0.000000" VALUE_1="100.000000" VALUE_2="100.000000" VALUE_3="1.000000" MIN="-10.000000" MAX="10.000000" CLAMP="FALSE" NORMALIZE="FALSE"/>
    <RmVectorVariable NAME="light0" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" VALUE_0="-100.000000" VALUE_1="0.000000" VALUE_2="0.000000" VALUE_3="1.000000" MIN="-10.000000" MAX="10.000000" CLAMP="FALSE" NORMALIZE="FALSE"/>
    <RmColorVariable NAME="Material" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" VALUE_0="0.260816" VALUE_1="0.666667" VALUE_2="0.274381" VALUE_3="1.000000"/>
-   <Rm2DTextureVariable NAME="Outline" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\NPR Metallic Outline.tga" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="Outline" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\NPR Metallic Outline.tga" ORIGIN="0"/>
   </RmEffectGroup>
   <RmEffectGroup NAME="NPR Toon with Dynamic Spec" API="">
    <RmOpenGLEffect NAME="Cartoon shading with dynamic specular" API="OpenGL" ACTIVE_CAMERA="">
@@ -1459,7 +1459,7 @@ POSSIBILITY OF SUCH DAMAGE.
       <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="0" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
      </RmStream>
     </RmStreamMap>
-    <RmModelData NAME="SkyDome" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\SkyDome.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="SkyDome" API="" FILE_NAME="..\Models\SkyDome.3ds" ORIENTATION="0"/>
     <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Models\Teapot.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Elephant" API=""/>
@@ -1614,7 +1614,7 @@ void main(void)
   <RmMatrixVariable NAME="view_matrix" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="View" VALUE_0="1.000000" VALUE_1="0.000000" VALUE_2="0.000000" VALUE_3="0.000000" VALUE_4="0.000000" VALUE_5="1.000000" VALUE_6="0.000000" VALUE_7="0.000000" VALUE_8="0.000000" VALUE_9="0.000000" VALUE_10="1.000000" VALUE_11="0.000000" VALUE_12="0.000000" VALUE_13="0.000000" VALUE_14="0.000000" VALUE_15="1.000000"/>
   <RmMatrixVariable NAME="view_proj_matrix" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="ViewProjection" VALUE_0="1.000000" VALUE_1="0.000000" VALUE_2="0.000000" VALUE_3="0.000000" VALUE_4="0.000000" VALUE_5="1.000000" VALUE_6="0.000000" VALUE_7="0.000000" VALUE_8="0.000000" VALUE_9="0.000000" VALUE_10="1.000000" VALUE_11="0.000000" VALUE_12="0.000000" VALUE_13="0.000000" VALUE_14="0.000000" VALUE_15="1.000000"/>
   <RmVectorVariable NAME="view_position" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="ViewPosition" VALUE_0="198.541672" VALUE_1="-23.783081" VALUE_2="-3.958301" VALUE_3="1.000000" MIN="-10.000000" MAX="10.000000" CLAMP="FALSE" NORMALIZE="FALSE"/>
-  <Rm2DTextureVariable NAME="ToonShaderTexture" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Textures\Toon.bmp" ORIGIN="0"/>
+  <Rm2DTextureVariable NAME="ToonShaderTexture" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Toon.bmp" ORIGIN="0"/>
   <RmStreamMap NAME="P Stream Mapping" API="">
    <RmStream NAME="Stream 0" API="" STRIDE="12">
     <RmStreamChannel NAME="Position_0" API="" DATA_SIZE="12" DATA_TYPE="2" REGISTER="0" USAGE="0" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_Vertex"/>
@@ -1639,10 +1639,10 @@ void main(void)
     <RmStreamChannel NAME="TexCoord_0" API="" DATA_SIZE="8" DATA_TYPE="1" REGISTER="1" USAGE="5" USAGE_INDEX="0" ATTRIBUTE_NAME="rm_TexCoord0"/>
    </RmStream>
   </RmStreamMap>
-  <RmModelData NAME="Sphere" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\Sphere.3ds" ORIENTATION="0"/>
-  <RmModelData NAME="ninjaHead" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\ninjaHead.obj" ORIENTATION="0"/>
-  <RmModelData NAME="Elephant" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\ElephantBody.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="Sphere" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="ninjaHead" API="" FILE_NAME="..\Models\ninjaHead.obj" ORIENTATION="0"/>
+  <RmModelData NAME="Elephant" API="" FILE_NAME="..\Models\ElephantBody.3ds" ORIENTATION="0"/>
   <RmModelData NAME="Teapot" API="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Models\Teapot.3ds" ORIENTATION="0"/>
-  <RmModelData NAME="ScreenAlignedQuad" API="" FILE_NAME="..\..\..\..\..\..\..\..\..\..\..\..\Program Files (x86)\AMD\RenderMonkey 1.82\Examples\Media\Models\ScreenAlignedQuad.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="ScreenAlignedQuad" API="" FILE_NAME="..\Models\ScreenAlignedQuad.3ds" ORIENTATION="0"/>
  </RmEffectWorkspace>
 </RENDER_MONKEY>
