@@ -1727,9 +1727,9 @@ void main(void)
     </RmGLPass>
    </RmOpenGLEffect>
    <Rm2DTextureVariable NAME="EarthNight" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\EarthNight.jpg" ORIGIN="1"/>
-   <Rm2DTextureVariable NAME="Earth" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Earth.jpg" ORIGIN="1"/>
-   <Rm2DTextureVariable NAME="EarthNormal2048" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\EarthNormal2048.png" ORIGIN="1"/>
-   <Rm2DTextureVariable NAME="EarthClouds" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\EarthClouds.jpg" ORIGIN="1"/>
+   <Rm2DTextureVariable NAME="Earth" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Earth.jpg" ORIGIN="1"/>
+   <Rm2DTextureVariable NAME="EarthNormal2048" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\EarthNormal2048.png" ORIGIN="1"/>
+   <Rm2DTextureVariable NAME="EarthClouds" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\EarthClouds.jpg" ORIGIN="1"/>
   </RmEffectGroup>
  </RmEffectWorkspace>
 </RENDER_MONKEY>

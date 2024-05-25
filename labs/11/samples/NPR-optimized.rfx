@@ -1228,11 +1228,11 @@ void main(void)
    <RmVectorVariable NAME="MiscParam" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" VALUE_0="6.000000" VALUE_1="0.000000" VALUE_2="0.000000" VALUE_3="1.000000" MIN="-10.000000" MAX="10.000000" CLAMP="FALSE" NORMALIZE="FALSE"/>
    <RmVectorVariable NAME="lightDir" API="" ARTIST_EDITABLE="FALSE" VARIABLE_SEMANTIC="" VALUE_0="0.000000" VALUE_1="0.000000" VALUE_2="1.000000" VALUE_3="0.000000" MIN="-10.000000" MAX="10.000000" CLAMP="FALSE" NORMALIZE="FALSE"/>
    <RmColorVariable NAME="baseColor" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" VALUE_0="0.339913" VALUE_1="1.000000" VALUE_2="0.664835" VALUE_3="1.000000"/>
-   <Rm2DTextureVariable NAME="hatch2" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch2.dds" ORIGIN="0"/>
-   <Rm2DTextureVariable NAME="hatch3" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch3.dds" ORIGIN="0"/>
-   <Rm2DTextureVariable NAME="hatch4" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch4.dds" ORIGIN="0"/>
-   <Rm2DTextureVariable NAME="hatch5" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch5.dds" ORIGIN="0"/>
-   <Rm2DTextureVariable NAME="hatch0" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Textures\Hatch0.dds" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="hatch2" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch2.dds" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="hatch3" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch3.dds" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="hatch4" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch4.dds" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="hatch5" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch5.dds" ORIGIN="0"/>
+   <Rm2DTextureVariable NAME="hatch0" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch0.dds" ORIGIN="0"/>
    <Rm2DTextureVariable NAME="hatch1" API="" ARTIST_EDITABLE="TRUE" VARIABLE_SEMANTIC="" FILE_NAME="..\Textures\Hatch1.dds" ORIGIN="0"/>
   </RmEffectGroup>
   <RmEffectGroup NAME="NPR Metallic Cartoon" API="">
