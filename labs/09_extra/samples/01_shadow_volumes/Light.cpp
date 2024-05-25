@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "Light.h"
 
 CLight::CLight(void)

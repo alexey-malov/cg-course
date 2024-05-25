@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "AnimationController.h"
 
 CAnimationController::CAnimationController(void)
@@ -12,13 +12,13 @@ CAnimationController::~CAnimationController(void)
 
 void CAnimationController::Reset()
 {
-	m_lastTick = GetTickCount();
+	m_lastTick = static_cast<DWORD>(GetTickCount64());
 	m_delta = 0;
 }
 
 void CAnimationController::Tick()
 {
-	DWORD currentTick = GetTickCount();
+	DWORD currentTick = static_cast<DWORD>(GetTickCount64());
 	m_delta = currentTick - m_lastTick;
 	m_lastTick = currentTick;
 }

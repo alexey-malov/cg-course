@@ -1,11 +1,10 @@
-#include "StdAfx.h"
+п»ї#include "StdAfx.h"
 #include "MyApplication.h"
-#include "Matrix4.h"
 
 const double CMyApplication::FOV = 60;
 const double CMyApplication::ZNEAR = 1;
 
-// Величина вытягивания вершин
+// Р’РµР»РёС‡РёРЅР° РІС‹С‚СЏРіРёРІР°РЅРёСЏ РІРµСЂС€РёРЅ
 const float CMyApplication::EXTRUSION_FACTOR = 100;
 
 CMyApplication::CMyApplication(const char * title, int width, int height)
@@ -13,6 +12,7 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 ,m_rotationController(width, height)
 ,m_lightAnimationPhase(0)
 ,m_torusAnimationPhase(0)
+,m_lightPosition(0)
 {
 	AddEventListener(&m_rotationController);
 	m_rotationController.AddEventListener(this);
@@ -20,7 +20,7 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 	m_light.SetAmbientIntensity(0.2f, 0.2f, 0.2f);
 	m_light.SetDiffuseIntensity(0.8f, 0.8f, 0.8f);
 	m_light.SetSpecularIntensity(0.4f, 0.4f, 0.4f);
-	m_light.SetPosition(CVector3f(3, 3, 2));
+	m_light.SetPosition(glm::vec3(3.0f, 3.0f, 2.0f ));
 
 	m_material.SetShininess(30);
 	m_material.SetAmbient(static_cast<GLfloat>(0.2), static_cast<GLfloat>(0.1), static_cast<GLfloat>(0.3));
@@ -31,12 +31,12 @@ CMyApplication::CMyApplication(const char * title, int width, int height)
 void CMyApplication::OnInit()
 {
 	glClearColor(static_cast<GLclampf>(0.3), static_cast<GLclampf>(0.3), static_cast<GLclampf>(0.3), static_cast<GLclampf>(1));
+
 	glLoadIdentity();
-	CMatrix4d modelView;
-	modelView.LoadLookAtRH(
-		0, 0, 10, 
-		0, 0, 0, 
-		0, 1, 0);
+	glm::dmat4x4 modelView = glm::lookAt(
+		glm::dvec3{ 0.0, 0.0, 10.0 },
+		glm::dvec3{ 0.0, 0.0, 0.0 },
+		glm::dvec3{ 0.0, 1.0, 0.0 });
 	m_rotationController.SetModelViewMatrix(modelView);
 
 	glEnable(GL_CULL_FACE);
@@ -70,7 +70,7 @@ void CMyApplication::OnIdle()
 
 void CMyApplication::DrawLightSource()const
 {
-	// Рисуем источник света
+	// Р РёСЃСѓРµРј РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р°
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
 	glPushMatrix();
@@ -81,10 +81,10 @@ void CMyApplication::DrawLightSource()const
 
 void CMyApplication::DrawScene(bool enableLighting)const
 {
-	// Активизируем материал
+	// РђРєС‚РёРІРёР·РёСЂСѓРµРј РјР°С‚РµСЂРёР°Р»
 	m_material.Activate(GL_FRONT);
 
-	// Задаем параметры источника света
+	// Р—Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РёСЃС‚РѕС‡РЅРёРєР° СЃРІРµС‚Р°
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
@@ -92,17 +92,17 @@ void CMyApplication::DrawScene(bool enableLighting)const
 	light.SetPosition(m_lightPosition);
 	if (!enableLighting)
 	{
-		// При выключенном освещении источник света 
-		// испускает только фоновый свет
+		// РџСЂРё РІС‹РєР»СЋС‡РµРЅРЅРѕРј РѕСЃРІРµС‰РµРЅРёРё РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р° 
+		// РёСЃРїСѓСЃРєР°РµС‚ С‚РѕР»СЊРєРѕ С„РѕРЅРѕРІС‹Р№ СЃРІРµС‚
 		light.SetDiffuseIntensity(0, 0, 0);
 		light.SetSpecularIntensity(0, 0, 0);
 	}
 	light.SetLight(GL_LIGHT0);
 
-	// Рисуем куб
+	// Р РёСЃСѓРµРј РєСѓР±
 	m_cube.Draw();
 
-	// Рисуем пару сцепленных торов
+	// Р РёСЃСѓРµРј РїР°СЂСѓ СЃС†РµРїР»РµРЅРЅС‹С… С‚РѕСЂРѕРІ
 	glPushMatrix();
 	glTranslatef(-2, -8, -2);
 	glRotatef(m_torusAnimationPhase, 1, 0, 0);
@@ -118,54 +118,54 @@ void CMyApplication::DrawShadowVolume()const
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 0, 0);
 
-	// Задаем операции циклического либо нециклического инкремента
-	// и декремента в зависимости от наличия расширения GL_EXT_stencil_wrap
+	// Р—Р°РґР°РµРј РѕРїРµСЂР°С†РёРё С†РёРєР»РёС‡РµСЃРєРѕРіРѕ Р»РёР±Рѕ РЅРµС†РёРєР»РёС‡РµСЃРєРѕРіРѕ РёРЅРєСЂРµРјРµРЅС‚Р°
+	// Рё РґРµРєСЂРµРјРµРЅС‚Р° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РЅР°Р»РёС‡РёСЏ СЂР°СЃС€РёСЂРµРЅРёСЏ GL_EXT_stencil_wrap
 	GLenum incrOp = GLEW_EXT_stencil_wrap ? GL_INCR_WRAP_EXT : GL_INCR;
 	GLenum decrOp = GLEW_EXT_stencil_wrap ? GL_DECR_WRAP_EXT : GL_DECR;
 
-	// Есть ли поддержка раздельных операций над буфером трафарета
-	// для лицевых и нелицевых граней, а также оборачивания при
-	// инкременте/декременте?
+	// Р•СЃС‚СЊ Р»Рё РїРѕРґРґРµСЂР¶РєР° СЂР°Р·РґРµР»СЊРЅС‹С… РѕРїРµСЂР°С†РёР№ РЅР°Рґ Р±СѓС„РµСЂРѕРј С‚СЂР°С„Р°СЂРµС‚Р°
+	// РґР»СЏ Р»РёС†РµРІС‹С… Рё РЅРµР»РёС†РµРІС‹С… РіСЂР°РЅРµР№, Р° С‚Р°РєР¶Рµ РѕР±РѕСЂР°С‡РёРІР°РЅРёСЏ РїСЂРё
+	// РёРЅРєСЂРµРјРµРЅС‚Рµ/РґРµРєСЂРµРјРµРЅС‚Рµ?
 	if (GLEW_EXT_stencil_two_side && GL_EXT_stencil_wrap)
 	{
-		// Теневой объем будет нарисован за один этап
+		// РўРµРЅРµРІРѕР№ РѕР±СЉРµРј Р±СѓРґРµС‚ РЅР°СЂРёСЃРѕРІР°РЅ Р·Р° РѕРґРёРЅ СЌС‚Р°Рї
 
-		// Включаем двусторонний тест трафарета
+		// Р’РєР»СЋС‡Р°РµРј РґРІСѓСЃС‚РѕСЂРѕРЅРЅРёР№ С‚РµСЃС‚ С‚СЂР°С„Р°СЂРµС‚Р°
 		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 
-		// Фрагменты нелицевых граней, не прошедшие тест глубины,
-		// будут увеличивать значения в буфере трафарета
+		// Р¤СЂР°РіРјРµРЅС‚С‹ РЅРµР»РёС†РµРІС‹С… РіСЂР°РЅРµР№, РЅРµ РїСЂРѕС€РµРґС€РёРµ С‚РµСЃС‚ РіР»СѓР±РёРЅС‹,
+		// Р±СѓРґСѓС‚ СѓРІРµР»РёС‡РёРІР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ РІ Р±СѓС„РµСЂРµ С‚СЂР°С„Р°СЂРµС‚Р°
 		glActiveStencilFaceEXT(GL_BACK);
 		glStencilOp(GL_KEEP, GL_INCR_WRAP_EXT, GL_KEEP);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		// Фрагменты лицевых граней, не прошедшие тест глубины,
-		// будут уменьшать значения в буфере трафарета
+		// Р¤СЂР°РіРјРµРЅС‚С‹ Р»РёС†РµРІС‹С… РіСЂР°РЅРµР№, РЅРµ РїСЂРѕС€РµРґС€РёРµ С‚РµСЃС‚ РіР»СѓР±РёРЅС‹,
+		// Р±СѓРґСѓС‚ СѓРјРµРЅСЊС€Р°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ РІ Р±СѓС„РµСЂРµ С‚СЂР°С„Р°СЂРµС‚Р°
 		glActiveStencilFaceEXT(GL_FRONT);
 		glStencilOp(GL_KEEP, GL_DECR_WRAP_EXT, GL_KEEP);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		// Рисуем теневой объем, выключив режим отбраковки граней
+		// Р РёСЃСѓРµРј С‚РµРЅРµРІРѕР№ РѕР±СЉРµРј, РІС‹РєР»СЋС‡РёРІ СЂРµР¶РёРј РѕС‚Р±СЂР°РєРѕРІРєРё РіСЂР°РЅРµР№
 		glDisable(GL_CULL_FACE);
 		m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
 
-		// Включаем режим отбраковки граней
+		// Р’РєР»СЋС‡Р°РµРј СЂРµР¶РёРј РѕС‚Р±СЂР°РєРѕРІРєРё РіСЂР°РЅРµР№
 		glEnable(GL_CULL_FACE);
-		// Выключаем двусторонний тест трафарета
+		// Р’С‹РєР»СЋС‡Р°РµРј РґРІСѓСЃС‚РѕСЂРѕРЅРЅРёР№ С‚РµСЃС‚ С‚СЂР°С„Р°СЂРµС‚Р°
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 	}
-	else	// Требуемые расширения не поддерживаются
+	else	// РўСЂРµР±СѓРµРјС‹Рµ СЂР°СЃС€РёСЂРµРЅРёСЏ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚СЃСЏ
 	{
-		// Теневой объем будет нарисован в два этапа
+		// РўРµРЅРµРІРѕР№ РѕР±СЉРµРј Р±СѓРґРµС‚ РЅР°СЂРёСЃРѕРІР°РЅ РІ РґРІР° СЌС‚Р°РїР°
 
-		// Рисуем нелицевые грани, увеличивая значения в буфере трафарета
-		// при непрохождении теста глубины
+		// Р РёСЃСѓРµРј РЅРµР»РёС†РµРІС‹Рµ РіСЂР°РЅРё, СѓРІРµР»РёС‡РёРІР°СЏ Р·РЅР°С‡РµРЅРёСЏ РІ Р±СѓС„РµСЂРµ С‚СЂР°С„Р°СЂРµС‚Р°
+		// РїСЂРё РЅРµРїСЂРѕС…РѕР¶РґРµРЅРёРё С‚РµСЃС‚Р° РіР»СѓР±РёРЅС‹
 		glCullFace(GL_FRONT);
 		glStencilOp(GL_KEEP, incrOp, GL_KEEP);
 		m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
 
-		// Рисуем лицевые грани, уменьшая значения в буфере трафарета
-		// при непрохождении теста глубины
+		// Р РёСЃСѓРµРј Р»РёС†РµРІС‹Рµ РіСЂР°РЅРё, СѓРјРµРЅСЊС€Р°СЏ Р·РЅР°С‡РµРЅРёСЏ РІ Р±СѓС„РµСЂРµ С‚СЂР°С„Р°СЂРµС‚Р°
+		// РїСЂРё РЅРµРїСЂРѕС…РѕР¶РґРµРЅРёРё С‚РµСЃС‚Р° РіР»СѓР±РёРЅС‹
 		glCullFace(GL_BACK);
 		glStencilOp(GL_KEEP, decrOp, GL_KEEP);
 		m_cube.DrawShadowVolume(m_lightPosition, EXTRUSION_FACTOR);
@@ -187,21 +187,21 @@ void CMyApplication::OnDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
-	glLoadMatrixd(m_rotationController.GetModelViewMatrix());
+	glLoadMatrixd(&(m_rotationController.GetModelViewMatrix()[0][0]));
 
-	// Рисуем источик света в виде сферы
+	// Р РёСЃСѓРµРј РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р° РІ РІРёРґРµ СЃС„РµСЂС‹
 	DrawLightSource();
 
-	// Рисуем сцену без источников света
+	// Р РёСЃСѓРµРј СЃС†РµРЅСѓ Р±РµР· РёСЃС‚РѕС‡РЅРёРєРѕРІ СЃРІРµС‚Р°
 	DrawScene(false);
 
-	// Рисуем теневой объем
+	// Р РёСЃСѓРµРј С‚РµРЅРµРІРѕР№ РѕР±СЉРµРј
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glDepthMask(GL_FALSE);
 	glDisable(GL_LIGHTING);
 	DrawShadowVolume();
 
-	// Рисуем сцену со включенным источником света
+	// Р РёСЃСѓРµРј СЃС†РµРЅСѓ СЃРѕ РІРєР»СЋС‡РµРЅРЅС‹Рј РёСЃС‚РѕС‡РЅРёРєРѕРј СЃРІРµС‚Р°
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glDepthMask(GL_TRUE);
 	glStencilFunc(GL_EQUAL, 0, ~0);
@@ -211,7 +211,7 @@ void CMyApplication::OnDisplay()
 	glDepthFunc(GL_LESS);
 	glDisable(GL_STENCIL_TEST);
 	
-	// Рисуем ребра граней теневого объема
+	// Р РёСЃСѓРµРј СЂРµР±СЂР° РіСЂР°РЅРµР№ С‚РµРЅРµРІРѕРіРѕ РѕР±СЉРµРјР°
 	DrawShadowVolumeEdges();
 }
 
@@ -222,27 +222,27 @@ void CMyApplication::OnRotationControllerUpdate()
 
 void CMyApplication::OnReshape(int width, int height)
 {
-	// Задаем порт просмотра размером с клиентскую область окна
+	// Р—Р°РґР°РµРј РїРѕСЂС‚ РїСЂРѕСЃРјРѕС‚СЂР° СЂР°Р·РјРµСЂРѕРј СЃ РєР»РёРµРЅС‚СЃРєСѓСЋ РѕР±Р»Р°СЃС‚СЊ РѕРєРЅР°
 	glViewport(0, 0, width, height);
 
-	// Вычисляем соотношение сторон окна
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РѕРєРЅР°
 	double aspect = double(width) / height;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	// Устанавливаем матрицу проецирования
+	// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°С‚СЂРёС†Сѓ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ
 	gluPerspective(FOV, aspect, ZNEAR, ZNEAR + 1);
 
-	// Получаем коэффициенты матрицы проецирования
+	// РџРѕР»СѓС‡Р°РµРј РєРѕСЌС„С„РёС†РёРµРЅС‚С‹ РјР°С‚СЂРёС†С‹ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ
 	double projectionMatrix[4][4]{};
 	glGetDoublev(GL_PROJECTION_MATRIX, &projectionMatrix[0][0]);
 
-	// И корректируем их для случая бесконечно удаленной дальней
-	// плоскости отсечения
+	// Р РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РёС… РґР»СЏ СЃР»СѓС‡Р°СЏ Р±РµСЃРєРѕРЅРµС‡РЅРѕ СѓРґР°Р»РµРЅРЅРѕР№ РґР°Р»СЊРЅРµР№
+	// РїР»РѕСЃРєРѕСЃС‚Рё РѕС‚СЃРµС‡РµРЅРёСЏ
 	projectionMatrix[2][2] = -1;
 	projectionMatrix[3][2] = -2 * ZNEAR;
 
-	// Загружаем модифицированную матрицу проецирования
+	// Р—Р°РіСЂСѓР¶Р°РµРј РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРЅСѓСЋ РјР°С‚СЂРёС†Сѓ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ
 	glLoadMatrixd(&projectionMatrix[0][0]);
 
 	glMatrixMode(GL_MODELVIEW);

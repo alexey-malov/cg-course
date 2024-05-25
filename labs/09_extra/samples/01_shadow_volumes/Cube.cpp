@@ -1,6 +1,5 @@
-#include "StdAfx.h"
+п»ї#include "StdAfx.h"
 #include "Cube.h"
-#include "Vector3.h"
 
 	/*
 	   Y
@@ -20,7 +19,7 @@
 	|    |/
 	4----5
 */
-// Массив координат вершин
+// РњР°СЃСЃРёРІ РєРѕРѕСЂРґРёРЅР°С‚ РІРµСЂС€РёРЅ
 const float CCube::m_vertices[8][3] = 
 {
 	{-1, -1, -1},	// 0
@@ -33,18 +32,18 @@ const float CCube::m_vertices[8][3] =
 	{-1, +1, +1},	// 7
 };
 
-// Массив координат граней (в порядке, совпадающем с 
-// порядком объявления их в массиве цветов)
-// индексы вершин граней перечисляются в порядке их обхода
-// против часовой стрелки (если смотреть на грань снаружи)
+// РњР°СЃСЃРёРІ РєРѕРѕСЂРґРёРЅР°С‚ РіСЂР°РЅРµР№ (РІ РїРѕСЂСЏРґРєРµ, СЃРѕРІРїР°РґР°СЋС‰РµРј СЃ 
+// РїРѕСЂСЏРґРєРѕРј РѕР±СЉСЏРІР»РµРЅРёСЏ РёС… РІ РјР°СЃСЃРёРІРµ С†РІРµС‚РѕРІ)
+// РёРЅРґРµРєСЃС‹ РІРµСЂС€РёРЅ РіСЂР°РЅРµР№ РїРµСЂРµС‡РёСЃР»СЏСЋС‚СЃСЏ РІ РїРѕСЂСЏРґРєРµ РёС… РѕР±С…РѕРґР°
+// РїСЂРѕС‚РёРІ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРё (РµСЃР»Рё СЃРјРѕС‚СЂРµС‚СЊ РЅР° РіСЂР°РЅСЊ СЃРЅР°СЂСѓР¶Рё)
 const unsigned short CCube::m_faces[6][4] = 
 {
-	{4, 7, 3, 0},	// грань x<0
-	{5, 1, 2, 6},	// грань x>0
-	{4, 0, 1, 5},	// грань y<0
-	{7, 6, 2, 3},	// грань y>0
-	{0, 3, 2, 1},	// грань z<0
-	{4, 5, 6, 7},	// грань z>0
+	{4, 7, 3, 0},	// РіСЂР°РЅСЊ x<0
+	{5, 1, 2, 6},	// РіСЂР°РЅСЊ x>0
+	{4, 0, 1, 5},	// РіСЂР°РЅСЊ y<0
+	{7, 6, 2, 3},	// РіСЂР°РЅСЊ y>0
+	{0, 3, 2, 1},	// РіСЂР°РЅСЊ z<0
+	{4, 5, 6, 7},	// РіСЂР°РЅСЊ z>0
 };
 const size_t CCube::m_faceCount = sizeof(m_faces) / sizeof(*m_faces);
 
@@ -52,24 +51,24 @@ std::vector<CCube::Edge> CCube::m_edges;
 
 void CCube::InitEdges()
 {
-	// пробегаем по всем граням
+	// РїСЂРѕР±РµРіР°РµРј РїРѕ РІСЃРµРј РіСЂР°РЅСЏРј
 	for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
 	{
 		const unsigned short * face = m_faces[faceIndex];
 
-		// Вычисляем нормаль к грани
-		CVector3f v0 = CVector3f(m_vertices[face[0]]);
-		CVector3f v1 = CVector3f(m_vertices[face[1]]);
-		CVector3f v2 = CVector3f(m_vertices[face[2]]);
-		CVector3f normal = Cross(v1 - v0, v2 - v0);
+		// Р’С‹С‡РёСЃР»СЏРµРј РЅРѕСЂРјР°Р»СЊ Рє РіСЂР°РЅРё
+		glm::vec3 v0 = glm::make_vec3(m_vertices[face[0]]);
+		glm::vec3 v1 = glm::make_vec3(m_vertices[face[1]]);
+		glm::vec3 v2 = glm::make_vec3(m_vertices[face[2]]);
+		glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
 
-		// пробегаем по всем вершинам грани
+		// РїСЂРѕР±РµРіР°РµРј РїРѕ РІСЃРµРј РІРµСЂС€РёРЅР°Рј РіСЂР°РЅРё
 		for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex)
 		{
 			const unsigned short startVertex = face[vertexIndex];
 			const unsigned short endVertex = face[(vertexIndex + 1) % 4];
 
-			// Ищем среди существующих ребер ребро, содержащее вершины startVertex и endVertex
+			// РС‰РµРј СЃСЂРµРґРё СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… СЂРµР±РµСЂ СЂРµР±СЂРѕ, СЃРѕРґРµСЂР¶Р°С‰РµРµ РІРµСЂС€РёРЅС‹ startVertex Рё endVertex
 			size_t edgeIndex;
 			for (edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
 			{
@@ -82,9 +81,9 @@ void CCube::InitEdges()
 					break;
 				}
 			}
-			if (edgeIndex == m_edges.size()) // такого ребра нет
+			if (edgeIndex == m_edges.size()) // С‚Р°РєРѕРіРѕ СЂРµР±СЂР° РЅРµС‚
 			{
-				// добавляем новое ребро
+				// РґРѕР±Р°РІР»СЏРµРј РЅРѕРІРѕРµ СЂРµР±СЂРѕ
 				Edge newEdge;
 				newEdge.vStart = startVertex;
 				newEdge.vEnd = endVertex;
@@ -94,20 +93,20 @@ void CCube::InitEdges()
 			}
 			else
 			{
-				// такое ребро уже есть
+				// С‚Р°РєРѕРµ СЂРµР±СЂРѕ СѓР¶Рµ РµСЃС‚СЊ
 				Edge & edge = m_edges[edgeIndex];
 				if (!edge.backFaceNormalIsDefined &&
 					(edge.vStart == endVertex && edge.vEnd == startVertex)
 					)
 				{
-					// Добавляем нормаль нелицевой грани ребра
+					// Р”РѕР±Р°РІР»СЏРµРј РЅРѕСЂРјР°Р»СЊ РЅРµР»РёС†РµРІРѕР№ РіСЂР°РЅРё СЂРµР±СЂР°
 					edge.backFaceNormalIsDefined = true;
 					edge.backFaceNormal = normal;
 				}
 			}
 		}
 	}
-	// Удаляем ребра, для которых не задана нормаль нелицевой грани
+	// РЈРґР°Р»СЏРµРј СЂРµР±СЂР°, РґР»СЏ РєРѕС‚РѕСЂС‹С… РЅРµ Р·Р°РґР°РЅР° РЅРѕСЂРјР°Р»СЊ РЅРµР»РёС†РµРІРѕР№ РіСЂР°РЅРё
 	for (int edgeIndex = m_edges.size() - 1; edgeIndex >=0; --edgeIndex)
 	{
 		if (!m_edges[edgeIndex].backFaceNormalIsDefined)
@@ -129,51 +128,51 @@ CCube::CCube(float size)
 	SetSideColor(CS_POSITIVE_Z, 255, 255, 255);
 }
 
-void CCube::DrawShadowVolumeSides(CVector3f const& lightPosition, float extrusionFactor)const
+void CCube::DrawShadowVolumeSides(glm::vec3 const& lightPosition, float extrusionFactor)const
 {
-	// Среди всех ребер ищем те, которые являются силуэтными
+	// РЎСЂРµРґРё РІСЃРµС… СЂРµР±РµСЂ РёС‰РµРј С‚Рµ, РєРѕС‚РѕСЂС‹Рµ СЏРІР»СЏСЋС‚СЃСЏ СЃРёР»СѓСЌС‚РЅС‹РјРё
 	for (size_t edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
 	{
 		Edge const& edge = m_edges[edgeIndex];
 
-		// Вектор направления на источник света
-		CVector3f lightDirection = 
-			lightPosition - CVector3f(m_vertices[edge.vStart]) * m_size;
+		// Р’РµРєС‚РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёСЏ РЅР° РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р°
+		glm::vec3 lightDirection = 
+			lightPosition - glm::make_vec3(m_vertices[edge.vStart]) * m_size;
 
-		// Определяем освещенность прилегающих к ребру граней
-		bool frontFaceIsLit = Dot(edge.frontFaceNormal, lightDirection) > 0;
+		// РћРїСЂРµРґРµР»СЏРµРј РѕСЃРІРµС‰РµРЅРЅРѕСЃС‚СЊ РїСЂРёР»РµРіР°СЋС‰РёС… Рє СЂРµР±СЂСѓ РіСЂР°РЅРµР№
+		bool frontFaceIsLit = glm::dot(edge.frontFaceNormal, lightDirection) > 0;
 
-		bool backFaceIsLit = Dot(edge.backFaceNormal, lightDirection) > 0;
+		bool backFaceIsLit = glm::dot(edge.backFaceNormal, lightDirection) > 0;
 
-		if (frontFaceIsLit != backFaceIsLit) // Это силуэтное ребро?
+		if (frontFaceIsLit != backFaceIsLit) // Р­С‚Рѕ СЃРёР»СѓСЌС‚РЅРѕРµ СЂРµР±СЂРѕ?
 		{
-			// Вытягиваем вершину от источника света через ребро
-			// на заданный фактор вытягивания
-			CVector3f v0 = CVector3f(m_vertices[edge.vStart]) * m_size;
-			CVector3f v0e = 
+			// Р’С‹С‚СЏРіРёРІР°РµРј РІРµСЂС€РёРЅСѓ РѕС‚ РёСЃС‚РѕС‡РЅРёРєР° СЃРІРµС‚Р° С‡РµСЂРµР· СЂРµР±СЂРѕ
+			// РЅР° Р·Р°РґР°РЅРЅС‹Р№ С„Р°РєС‚РѕСЂ РІС‹С‚СЏРіРёРІР°РЅРёСЏ
+			glm::vec3 v0 = glm::make_vec3(m_vertices[edge.vStart]) * m_size;
+			glm::vec3 v0e = 
 				v0 + (v0 - lightPosition) * extrusionFactor;
 
-			CVector3f v1 = CVector3f(m_vertices[edge.vEnd]) * m_size;
-			CVector3f v1e = 
+			glm::vec3 v1 = glm::make_vec3(m_vertices[edge.vEnd]) * m_size;
+			glm::vec3 v1e = 
 				v1 + (v1 - lightPosition) * extrusionFactor;
 
-			// Задаем вершины четырехугольника в зависимости от того,
-			// какая из прилегающих граней освещена
+			// Р—Р°РґР°РµРј РІРµСЂС€РёРЅС‹ С‡РµС‚С‹СЂРµС…СѓРіРѕР»СЊРЅРёРєР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РѕРіРѕ,
+			// РєР°РєР°СЏ РёР· РїСЂРёР»РµРіР°СЋС‰РёС… РіСЂР°РЅРµР№ РѕСЃРІРµС‰РµРЅР°
 			if (frontFaceIsLit)
 			{
-				glVertex3fv(v1);
-				glVertex3fv(v0);
-				// четвертая координата, равная 0, вытягивает вершину
-				// в бесконечность
+				glVertex3fv(glm::value_ptr(v1));
+				glVertex3fv(glm::value_ptr(v0));
+				// С‡РµС‚РІРµСЂС‚Р°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р°, СЂР°РІРЅР°СЏ 0, РІС‹С‚СЏРіРёРІР°РµС‚ РІРµСЂС€РёРЅСѓ
+				// РІ Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ
 				glVertex4f(v0e.x, v0e.y, v0e.z, 0);
 				glVertex4f(v1e.x, v1e.y, v1e.z, 0);
 			}
 			else
 			{
-				glVertex3fv(v0);
-				glVertex3fv(v1);
-				// четвертая координата, равная 0, вытягивает вершину
-				// в бесконечность
+				glVertex3fv(glm::value_ptr(v0));
+				glVertex3fv(glm::value_ptr(v1));
+				// С‡РµС‚РІРµСЂС‚Р°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р°, СЂР°РІРЅР°СЏ 0, РІС‹С‚СЏРіРёРІР°РµС‚ РІРµСЂС€РёРЅСѓ
+				// РІ Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ
 				glVertex4f(v1e.x, v1e.y, v1e.z, 0);
 				glVertex4f(v0e.x, v0e.y, v0e.z, 0);
 			}
@@ -181,29 +180,29 @@ void CCube::DrawShadowVolumeSides(CVector3f const& lightPosition, float extrusio
 	}
 }
 
-void CCube::DrawShadowVolumeCaps(CVector3f const& lightPosition, float extrusionFactor)const
+void CCube::DrawShadowVolumeCaps(glm::vec3 const& lightPosition, float extrusionFactor) const
 {
 	for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
 	{
 		const unsigned short * face = m_faces[faceIndex];
 
-		CVector3f v0 = CVector3f(m_vertices[face[0]]) * m_size;
-		CVector3f v1 = CVector3f(m_vertices[face[1]]) * m_size;
-		CVector3f v2 = CVector3f(m_vertices[face[2]]) * m_size;
-		CVector3f v3 = CVector3f(m_vertices[face[3]]) * m_size;
+		glm::vec3 v0 = glm::make_vec3(m_vertices[face[0]]) * m_size;
+		glm::vec3 v1 = glm::make_vec3(m_vertices[face[1]]) * m_size;
+		glm::vec3 v2 = glm::make_vec3(m_vertices[face[2]]) * m_size;
+		glm::vec3 v3 = glm::make_vec3(m_vertices[face[3]]) * m_size;
 
-		// нормаль к грани
-		CVector3f faceNormal = Cross(v1 - v0, v2 - v0);
+		// РЅРѕСЂРјР°Р»СЊ Рє РіСЂР°РЅРё
+		glm::vec3 faceNormal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
 
-		// Вычисляем направление на источник света
-		CVector3f lightDirection = lightPosition - v0;
+		// Р’С‹С‡РёСЃР»СЏРµРј РЅР°РїСЂР°РІР»РµРЅРёРµ РЅР° РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р°
+		glm::vec3 lightDirection = lightPosition - v0;
 
-		bool faceIsLit = Dot(faceNormal, lightDirection) > 0;
+		bool faceIsLit = glm::dot(faceNormal, lightDirection) > 0;
 
 		float w = 1;
-		if (!faceIsLit)	// Освещенная грань?
+		if (!faceIsLit)	// РћСЃРІРµС‰РµРЅРЅР°СЏ РіСЂР°РЅСЊ?
 		{
-			w = 0;	// вершины будут "вытягиваться" в бесконечность
+			w = 0;	// РІРµСЂС€РёРЅС‹ Р±СѓРґСѓС‚ "РІС‹С‚СЏРіРёРІР°С‚СЊСЃСЏ" РІ Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ
 			v0 += (v0 - lightPosition) * extrusionFactor;
 			v1 += (v1 - lightPosition) * extrusionFactor;
 			v2 += (v2 - lightPosition) * extrusionFactor;
@@ -218,19 +217,19 @@ void CCube::DrawShadowVolumeCaps(CVector3f const& lightPosition, float extrusion
 }
 
 void CCube::DrawShadowVolume(
-	CVector3f const& lightPosition, float extrusionFactor)const
+	glm::vec3 const& lightPosition, float extrusionFactor) const
 {
-	// Инициализируем информацию о ребрах при первом вызове
+	// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЂРµР±СЂР°С… РїСЂРё РїРµСЂРІРѕРј РІС‹Р·РѕРІРµ
 	if (m_edges.empty())
 	{
 		InitEdges();
 	}
 	glBegin(GL_QUADS);
-	// Рисуем боковые грани теневого объема, вытягивая силуэтные ребра
+	// Р РёСЃСѓРµРј Р±РѕРєРѕРІС‹Рµ РіСЂР°РЅРё С‚РµРЅРµРІРѕРіРѕ РѕР±СЉРµРјР°, РІС‹С‚СЏРіРёРІР°СЏ СЃРёР»СѓСЌС‚РЅС‹Рµ СЂРµР±СЂР°
 	DrawShadowVolumeSides(lightPosition, extrusionFactor);
 
-	// Рисуем "верхнюю" и "нижнюю" части теневого объема,
-	// вытягивая неосвещенные грани объекта в бесконечность
+	// Р РёСЃСѓРµРј "РІРµСЂС…РЅСЋСЋ" Рё "РЅРёР¶РЅСЋСЋ" С‡Р°СЃС‚Рё С‚РµРЅРµРІРѕРіРѕ РѕР±СЉРµРјР°,
+	// РІС‹С‚СЏРіРёРІР°СЏ РЅРµРѕСЃРІРµС‰РµРЅРЅС‹Рµ РіСЂР°РЅРё РѕР±СЉРµРєС‚Р° РІ Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ
 	DrawShadowVolumeCaps(lightPosition, extrusionFactor);
 	glEnd();
 }
@@ -241,37 +240,36 @@ void CCube::Draw()const
 	{
 		for (size_t face = 0; face < m_faceCount; ++face)
 		{
-			// устанавливаем цвет грани
+			// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С†РІРµС‚ РіСЂР°РЅРё
 			glColor4ubv(m_sideColors[face]);
 			const unsigned short * facePoints = m_faces[face];
 
-			// получаем вершины очередной грани куба
-			CVector3f p0(m_vertices[facePoints[0]]);
-			CVector3f p1(m_vertices[facePoints[1]]);
-			CVector3f p2(m_vertices[facePoints[2]]);
-			CVector3f p3(m_vertices[facePoints[3]]);
-			// Вычисляем координаты вершин куба с учетом его размера
+			// РїРѕР»СѓС‡Р°РµРј РІРµСЂС€РёРЅС‹ РѕС‡РµСЂРµРґРЅРѕР№ РіСЂР°РЅРё РєСѓР±Р°
+			glm::vec3 p0(glm::make_vec3(m_vertices[facePoints[0]]));
+			glm::vec3 p1(glm::make_vec3(m_vertices[facePoints[1]]));
+			glm::vec3 p2(glm::make_vec3(m_vertices[facePoints[2]]));
+			glm::vec3 p3(glm::make_vec3(m_vertices[facePoints[3]]));
+			// Р’С‹С‡РёСЃР»СЏРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅ РєСѓР±Р° СЃ СѓС‡РµС‚РѕРј РµРіРѕ СЂР°Р·РјРµСЂР°
 			p0 *= m_size;// * 0.5f;
 			p1 *= m_size;// * 0.5f;
 			p2 *= m_size;// * 0.5f;
 			p3 *= m_size;// * 0.5f;
 
-			// Вычисляем нормаль к грани куба через
-			// векторное произведение его смежных сторон
-			CVector3f v01 = p1 - p0;
-			CVector3f v02 = p2 - p0;
-			CVector3f normal = Cross(v01, v02);
-			normal.Normalize();
+			// Р’С‹С‡РёСЃР»СЏРµРј РЅРѕСЂРјР°Р»СЊ Рє РіСЂР°РЅРё РєСѓР±Р° С‡РµСЂРµР·
+			// РІРµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РµРіРѕ СЃРјРµР¶РЅС‹С… СЃС‚РѕСЂРѕРЅ
+			glm::vec3 v01 = p1 - p0;
+			glm::vec3 v02 = p2 - p0;
+			glm::vec3 normal = glm::normalize(glm::cross(v01, v02));
 
-			glNormal3fv(normal);
+			glNormal3fv(glm::value_ptr(normal));
 
-			// В классе CVector3f перегружен оператор приведения к типу cosnt float*
-			// поэтому фактически следующая строка эквивалентна
+			// Р’ РєР»Р°СЃСЃРµ glm::vec3 РїРµСЂРµРіСЂСѓР¶РµРЅ РѕРїРµСЂР°С‚РѕСЂ РїСЂРёРІРµРґРµРЅРёСЏ Рє С‚РёРїСѓ cosnt float*
+			// РїРѕСЌС‚РѕРјСѓ С„Р°РєС‚РёС‡РµСЃРєРё СЃР»РµРґСѓСЋС‰Р°СЏ СЃС‚СЂРѕРєР° СЌРєРІРёРІР°Р»РµРЅС‚РЅР°
 			// glVertex3fv(&p0.x);
-			glVertex3fv(p0);
-			glVertex3fv(p1);
-			glVertex3fv(p2);
-			glVertex3fv(p3);
+			glVertex3fv(glm::value_ptr(p0));
+			glVertex3fv(glm::value_ptr(p1));
+			glVertex3fv(glm::value_ptr(p2));
+			glVertex3fv(glm::value_ptr(p3));
 		}
 	}
 	glEnd();

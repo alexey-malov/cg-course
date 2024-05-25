@@ -1,4 +1,4 @@
-// stdafx.h : include file for standard system include files,
+﻿// stdafx.h : include file for standard system include files,
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
@@ -12,6 +12,9 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <gl/glut.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/ext.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <string>

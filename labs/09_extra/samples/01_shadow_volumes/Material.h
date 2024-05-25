@@ -1,23 +1,23 @@
-#pragma once
+п»ї#pragma once
 
 class CMaterial
 {
 public:
 	CMaterial();
 
-	// Коэффициент диффузного отражения
+	// РљРѕСЌС„С„РёС†РёРµРЅС‚ РґРёС„С„СѓР·РЅРѕРіРѕ РѕС‚СЂР°Р¶РµРЅРёСЏ
 	void SetDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1);
 
-	// Коэффициент фонового отражения
+	// РљРѕСЌС„С„РёС†РёРµРЅС‚ С„РѕРЅРѕРІРѕРіРѕ РѕС‚СЂР°Р¶РµРЅРёСЏ
 	void SetAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1);
 
-	// Коэффициент зеркального отражения
+	// РљРѕСЌС„С„РёС†РёРµРЅС‚ Р·РµСЂРєР°Р»СЊРЅРѕРіРѕ РѕС‚СЂР°Р¶РµРЅРёСЏ
 	void SetSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1);
 
-	// Степень зеркального отражения (для модели Фонга)
+	// РЎС‚РµРїРµРЅСЊ Р·РµСЂРєР°Р»СЊРЅРѕРіРѕ РѕС‚СЂР°Р¶РµРЅРёСЏ (РґР»СЏ РјРѕРґРµР»Рё Р¤РѕРЅРіР°)
 	void SetShininess(GLfloat shininess);
 
-	// Делаем материал активным для заданной грани объекта
+	// Р”РµР»Р°РµРј РјР°С‚РµСЂРёР°Р» Р°РєС‚РёРІРЅС‹Рј РґР»СЏ Р·Р°РґР°РЅРЅРѕР№ РіСЂР°РЅРё РѕР±СЉРµРєС‚Р°
 	void Activate(GLenum side = GL_FRONT)const;
 private:
 	GLfloat m_shininess;

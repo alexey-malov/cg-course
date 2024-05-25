@@ -1,6 +1,4 @@
-#pragma once
-
-#include "Vector3.h"
+п»ї#pragma once
 
 class CCube
 {
@@ -20,50 +18,50 @@ public:
 public:
 	CCube(float size = 1);
 	void Draw()const;
-	void DrawShadowVolume(CVector3f const& lightPosition, float extrusionFactor)const;
+	void DrawShadowVolume(glm::vec3 const& lightPosition, float extrusionFactor) const;
 	void SetSideColor(CubeSide side, GLubyte r, GLubyte g, GLubyte b, GLubyte a = 255);
 private:
-	// Рисуем боковые стороны теневого объема
-	void DrawShadowVolumeSides(CVector3f const& lightPosition, float extrusionFactor)const;
+	// Р РёСЃСѓРµРј Р±РѕРєРѕРІС‹Рµ СЃС‚РѕСЂРѕРЅС‹ С‚РµРЅРµРІРѕРіРѕ РѕР±СЉРµРјР°
+	void DrawShadowVolumeSides(glm::vec3 const& lightPosition, float extrusionFactor) const;
 
-	// Рисуем верх и низ теневого объема
-	void DrawShadowVolumeCaps(CVector3f const& lightPosition, float extrusionFactor)const;
+	// Р РёСЃСѓРµРј РІРµСЂС… Рё РЅРёР· С‚РµРЅРµРІРѕРіРѕ РѕР±СЉРµРјР°
+	void DrawShadowVolumeCaps(glm::vec3 const& lightPosition, float extrusionFactor) const;
 
-	// выполняем инициализицию информации о ребрах
+	// РІС‹РїРѕР»РЅСЏРµРј РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЂРµР±СЂР°С…
 	static void InitEdges();
 
-	// Размер куба
+	// Р Р°Р·РјРµСЂ РєСѓР±Р°
 	float m_size;
 
-	// Цвета сторон куба
+	// Р¦РІРµС‚Р° СЃС‚РѕСЂРѕРЅ РєСѓР±Р°
 	GLubyte m_sideColors[6][4];
 
-	// Массив вершин куба
+	// РњР°СЃСЃРёРІ РІРµСЂС€РёРЅ РєСѓР±Р°
 	static const float m_vertices[8][3];
 
-	// Массив граней губа
+	// РњР°СЃСЃРёРІ РіСЂР°РЅРµР№ РіСѓР±Р°
 	static const unsigned short m_faces[6][4];
 	static const size_t m_faceCount;
 
-	// Информация о ребре полигональной сетки
+	// РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЂРµР±СЂРµ РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё
 	struct Edge
 	{
-		// индексы вершин, составляющих ребро
-		short vStart, vEnd;
+		// РёРЅРґРµРєСЃС‹ РІРµСЂС€РёРЅ, СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёС… СЂРµР±СЂРѕ
+		short vStart = 0, vEnd = 0;
 
-		// нормали прилегающих к ребру граней
-		// frontFaceNormal - нормаль грани, в состав которой вершины 
-		// ребра входят в последовательности vStart, vEnd
-		// backFaceNormal - нормаль грани, в состав которой вершины
-		// ребра входя в последовательности vEnd, vStart
-		CVector3f frontFaceNormal;
-		CVector3f backFaceNormal;
+		// РЅРѕСЂРјР°Р»Рё РїСЂРёР»РµРіР°СЋС‰РёС… Рє СЂРµР±СЂСѓ РіСЂР°РЅРµР№
+		// frontFaceNormal - РЅРѕСЂРјР°Р»СЊ РіСЂР°РЅРё, РІ СЃРѕСЃС‚Р°РІ РєРѕС‚РѕСЂРѕР№ РІРµСЂС€РёРЅС‹
+		// СЂРµР±СЂР° РІС…РѕРґСЏС‚ РІ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё vStart, vEnd
+		// backFaceNormal - РЅРѕСЂРјР°Р»СЊ РіСЂР°РЅРё, РІ СЃРѕСЃС‚Р°РІ РєРѕС‚РѕСЂРѕР№ РІРµСЂС€РёРЅС‹
+		// СЂРµР±СЂР° РІС…РѕРґСЏ РІ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё vEnd, vStart
+		glm::vec3 frontFaceNormal = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 backFaceNormal = glm::vec3(0.0f, 0.0f, 0.0f);
 
-		// была ли задана нелицевая прилегающая грань
-		// (используется при сборе информации о ребрах)
-		bool backFaceNormalIsDefined;
+		// Р±С‹Р»Р° Р»Рё Р·Р°РґР°РЅР° РЅРµР»РёС†РµРІР°СЏ РїСЂРёР»РµРіР°СЋС‰Р°СЏ РіСЂР°РЅСЊ
+		// (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїСЂРё СЃР±РѕСЂРµ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЂРµР±СЂР°С…)
+		bool backFaceNormalIsDefined = false;
 	};
 
-	// Массив ребер куба
+	// РњР°СЃСЃРёРІ СЂРµР±РµСЂ РєСѓР±Р°
 	static std::vector<Edge> m_edges;
 };
