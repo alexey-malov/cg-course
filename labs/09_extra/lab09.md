@@ -4,6 +4,8 @@
 
 &emsp;[Технология Stencil Shadow Volumes](#_toc101941331)
 
+&emsp;&emsp;[Установка и подключение библиотеки GLM](#_toc101941329)
+
 &emsp;&emsp;[Визуализация теневого объема куба](#_toc101941332)
 
 &emsp;&emsp;[Визуализация сцены, содержащей отбрасывающие тень объекты](#_toc101941333)
@@ -26,11 +28,33 @@
 
 Для иллюстрации технологии Stencil Shadow Volumes разработаем приложение, визуализирующее куб, отбрасывающий тени на окружающие его объекты. 
 
+### <a name="_toc101941329"></a>**Установка и подключение библиотеки GLM**
+
+Для дальнейшей работы нам нужно подключить библиотеку GLM. OpenGL Mathematics (GLM) - это математическая библиотека C++ для графического программного обеспечения, основанная на спецификациях OpenGL Shading Language (GLSL). 
+
+Для того, чтобы установить библиотеку GLM, скачайте в свой проект пакет NuGet - glm.
+
+![image](images/glm-connection-step-1.png)
+
+![image](images/glm-connection-step-2.png)
+
+После этого NuGet сам подгрузит нужную нам библиотеку в проект.
+
+Для использования библиотеки GLM необходимо подключить заголовочные файлы **<glm/ext.hpp>**, **<glm/ext/matrix_transform.hpp>**(нужен для работы с `glm::translate`, `glm::rotate`, `glm::scale`).
+
+```cpp
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/ext.hpp>
+#include <glm/ext/matrix_transform.hpp>
+```
+
 ### <a name="_toc101941332"></a>**Визуализация теневого объема куба**
 
 В качестве отбрасывающего тень объекта был выбран именно куб, поскольку данный геометрический объект легко представить в виде полигональной сетки. Описываемая технология может быть с легкостью адаптирована для использования при визуализации других объектов, задаваемых при помощи полигональных сеток.
 
-В качестве основы воспользуемся классом **CCube**, разработанным в одной из предыдущих лабораторных работ. На следующем листинге приведен каркас видоизмененного класса CCube (изменения и дополнения выделены цветом).
+В качестве основы воспользуемся классом `CCube`, разработанным в одной из предыдущих лабораторных работ. На следующем листинге приведен каркас видоизмененного класса `CCube`.
+
+Для представления вектора мы используем вектор `glm::vec3` из библиотеки GLM.
 
 ```cpp
 class CCube
@@ -52,17 +76,17 @@ public:
     CCube(float size = 1);
     void Draw()const;
     void DrawShadowVolume(
-        CVector3f const& lightPosition, float extrusionFactor)const;
+        glm::vec3 const& lightPosition, float extrusionFactor) const;
     void SetSideColor(
         CubeSide side, GLubyte r, GLubyte g, GLubyte b, GLubyte a = 255);
 private:
     // Рисуем боковые стороны теневого объема
     void DrawShadowVolumeSides(
-        CVector3f const& lightPosition, float extrusionFactor)const;
+        glm::vec3 const& lightPosition, float extrusionFactor) const;
 
     // Рисуем верх и низ теневого объема
     void DrawShadowVolumeCaps(
-        CVector3f const& lightPosition, float extrusionFactor)const;
+        glm::vec3 const& lightPosition, float extrusionFactor) const;
 
     // выполняем инициализацию информации о ребрах
     static void InitEdges();
@@ -84,19 +108,19 @@ private:
     struct Edge
     {
         // индексы вершин, составляющих ребро
-        short vStart, vEnd;
+        short vStart = 0, vEnd = 0;
 
         // нормали прилегающих к ребру граней
-        // frontFaceNormal - нормаль грани, в состав которой вершины 
+        // frontFaceNormal - нормаль грани, в состав которой вершины
         // ребра входят в последовательности vStart, vEnd
         // backFaceNormal - нормаль грани, в состав которой вершины
         // ребра входя в последовательности vEnd, vStart
-        CVector3f frontFaceNormal;
-        CVector3f backFaceNormal;
+        glm::vec3 frontFaceNormal = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 backFaceNormal = glm::vec3(0.0f, 0.0f, 0.0f);
 
-        // была ли задана нелицевая нормаль прилегающей грани
+        // была ли задана нелицевая прилегающая грань
         // (используется при сборе информации о ребрах)
-        bool backFaceNormalIsDefined;
+        bool backFaceNormalIsDefined = false;
     };
 
     // Массив ребер куба
@@ -118,18 +142,15 @@ private:
 
 Можно предложить следующий алгоритм сбора информации о ребрах полигональной сетки.
 
-1. Для всех граней полигональной сетки
-   
-    a. Для каждой вершины грани
-    
+- Для всех граней полигональной сетки
+  - Для каждой вершины грани
     - Текущая и следующая вершины грани могут сформировать новое ребро, либо дополнить уже существующее
-    
     - Ищем среди ранее найденных ребер ребро, содержащее пару обрабатываемых вершин
-        
     - Если ребро не нашли, то добавляем новое ребро, установив в качестве нормали лицевой грани нормаль текущей грани
-    
     - Если же ребро нашли, то убеждаемся, что вершины ребра в него входят в обратном порядке (т.е. грань является по отношению к текущему ребру нелицевой) и задаем в качестве нормали нелицевой грани ребра нормаль текущей грани
-2. Поскольку среди найденных ребер могут оказаться те, для которых нормаль нелицевой грани не задана (это произойдет в том случае, если сетка не удовлетворяет необходимым требованиям), удаляем данные не полностью заданные ребра из массива ребер.
+- Поскольку среди найденных ребер могут оказаться те, для которых нормаль нелицевой грани не задана (это произойдет в том случае, если сетка не удовлетворяет необходимым требованиям), удаляем данные не полностью заданные ребра из массива ребер.
+
+Для вычисления векторного произведение используем `glm::cross`, для нормализации вектора - `glm::normalize`, для создания вектора - `glm::make_vec3` из библиотеки GLM.
 
 ```cpp
     /*
@@ -188,10 +209,10 @@ void CCube::InitEdges()
         const unsigned short * face = m_faces[faceIndex];
 
         // Вычисляем нормаль к грани
-        CVector3f v0 = CVector3f(m_vertices[face[0]]);
-        CVector3f v1 = CVector3f(m_vertices[face[1]]);
-        CVector3f v2 = CVector3f(m_vertices[face[2]]);
-        CVector3f normal = Cross(v1 - v0, v2 - v0);
+        glm::vec3 v0 = glm::make_vec3(m_vertices[face[0]]);
+        glm::vec3 v1 = glm::make_vec3(m_vertices[face[1]]);
+        glm::vec3 v2 = glm::make_vec3(m_vertices[face[2]]);
+        glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
 
         // пробегаем по всем вершинам грани
         for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex)
@@ -199,8 +220,7 @@ void CCube::InitEdges()
             const unsigned short startVertex = face[vertexIndex];
             const unsigned short endVertex = face[(vertexIndex + 1) % 4];
 
-            // Ищем среди существующих ребер ребро, 
-            // содержащее вершины startVertex и endVertex
+            // Ищем среди существующих ребер ребро, содержащее вершины startVertex и endVertex
             size_t edgeIndex;
             for (edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
             {
@@ -254,9 +274,11 @@ void CCube::InitEdges()
 
 Отметим, что четвертая координата w вытягиваемой вершины, обращается в 0, что автоматически устремляет ее в бесконечность.
 
+Меняем функцию Dot на встроенную функцию `glm::dot` из библиотеки GLM.
+
 ```cpp
 void CCube::DrawShadowVolumeSides(
-    CVector3f const& lightPosition, float extrusionFactor)const
+    glm::vec3 const& lightPosition, float extrusionFactor)const
 {
     // Среди всех ребер ищем те, которые являются силуэтными
     for (size_t edgeIndex = 0; edgeIndex < m_edges.size(); ++edgeIndex)
@@ -264,32 +286,32 @@ void CCube::DrawShadowVolumeSides(
         Edge const& edge = m_edges[edgeIndex];
 
         // Вектор направления на источник света
-        CVector3f lightDirection = 
-            lightPosition - CVector3f(m_vertices[edge.vStart]) * m_size;
+        glm::vec3 lightDirection = 
+            lightPosition - glm::make_vec3(m_vertices[edge.vStart]) * m_size;
 
         // Определяем освещенность прилегающих к ребру граней
-        bool frontFaceIsLit = Dot(edge.frontFaceNormal, lightDirection) > 0;
+        bool frontFaceIsLit = glm::dot(edge.frontFaceNormal, lightDirection) > 0;
 
-        bool backFaceIsLit = Dot(edge.backFaceNormal, lightDirection) > 0;
+        bool backFaceIsLit = glm::dot(edge.backFaceNormal, lightDirection) > 0;
 
         if (frontFaceIsLit != backFaceIsLit) // Это силуэтное ребро?
         {
             // Вытягиваем вершину от источника света через ребро
             // на заданный фактор вытягивания
-            CVector3f v0 = CVector3f(m_vertices[edge.vStart]) * m_size;
-            CVector3f v0e = 
+            glm::vec3 v0 = glm::make_vec3(m_vertices[edge.vStart]) * m_size;
+            glm::vec3 v0e = 
                 v0 + (v0 - lightPosition) * extrusionFactor;
 
-            CVector3f v1 = CVector3f(m_vertices[edge.vEnd]) * m_size;
-            CVector3f v1e = 
+            glm::vec3 v1 = glm::make_vec3(m_vertices[edge.vEnd]) * m_size;
+            glm::vec3 v1e = 
                 v1 + (v1 - lightPosition) * extrusionFactor;
 
             // Задаем вершины четырехугольника в зависимости от того,
             // какая из прилегающих граней освещена
             if (frontFaceIsLit)
             {
-                glVertex3fv(v1);
-                glVertex3fv(v0);
+                glVertex3fv(glm::value_ptr(v1));
+                glVertex3fv(glm::value_ptr(v0));
                 // четвертая координата, равная 0, вытягивает вершину
                 // в бесконечность
                 glVertex4f(v0e.x, v0e.y, v0e.z, 0);
@@ -297,8 +319,8 @@ void CCube::DrawShadowVolumeSides(
             }
             else
             {
-                glVertex3fv(v0);
-                glVertex3fv(v1);
+                glVertex3fv(glm::value_ptr(v0));
+                glVertex3fv(glm::value_ptr(v1));
                 // четвертая координата, равная 0, вытягивает вершину
                 // в бесконечность
                 glVertex4f(v1e.x, v1e.y, v1e.z, 0);
@@ -318,24 +340,24 @@ Depth-fail алгоритм (алгоритм Кармака) требует р�
 
 ```cpp
 void CCube::DrawShadowVolumeCaps(
-    CVector3f const& lightPosition, float extrusionFactor)const
+    glm::vec3 const& lightPosition, float extrusionFactor) const
 {
     for (size_t faceIndex = 0; faceIndex < m_faceCount; ++faceIndex)
     {
         const unsigned short * face = m_faces[faceIndex];
 
-        CVector3f v0 = CVector3f(m_vertices[face[0]]) * m_size;
-        CVector3f v1 = CVector3f(m_vertices[face[1]]) * m_size;
-        CVector3f v2 = CVector3f(m_vertices[face[2]]) * m_size;
-        CVector3f v3 = CVector3f(m_vertices[face[3]]) * m_size;
+        glm::vec3 v0 = glm::make_vec3(m_vertices[face[0]]) * m_size;
+        glm::vec3 v1 = glm::make_vec3(m_vertices[face[1]]) * m_size;
+        glm::vec3 v2 = glm::make_vec3(m_vertices[face[2]]) * m_size;
+        glm::vec3 v3 = glm::make_vec3(m_vertices[face[3]]) * m_size;
 
         // нормаль к грани
-        CVector3f faceNormal = Cross(v1 - v0, v2 - v0);
+        glm::vec3 faceNormal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
 
         // Вычисляем направление на источник света
-        CVector3f lightDirection = lightPosition - v0;
+        glm::vec3 lightDirection = lightPosition - v0;
 
-        bool faceIsLit = Dot(faceNormal, lightDirection) > 0;
+        bool faceIsLit = glm::dot(faceNormal, lightDirection) > 0;
 
         float w = 1;
         if (!faceIsLit)    // Освещенная грань?
@@ -355,31 +377,11 @@ void CCube::DrawShadowVolumeCaps(
 }
 ```
 
-Добавим в класс **CVector3** недостающий оператор +=.
-
-```cpp
-template <class T>
-class CVector3
-{
-public:
-    …
-
-    CVector3 & operator+=(CVector3 const& v)
-    {
-        x += v.x;
-        y += v.y;
-        z += v.z;
-        return *this;
-    }
-    …
-};
-```
-
-При первом вызове метода **CCube::DrawShadowVolume** класс выполнит инициализацию массива с информацией о ребрах модели, а затем выполнит вызов методов визуализации боковых граней, «верха» и «низа».
+При первом вызове метода `CCube::DrawShadowVolume` класс выполнит инициализацию массива с информацией о ребрах модели, а затем выполнит вызов методов визуализации боковых граней, «верха» и «низа».
 
 ```cpp
 void CCube::DrawShadowVolume(
-    CVector3f const& lightPosition, float extrusionFactor)const
+    glm::vec3 const& lightPosition, float extrusionFactor) const
 {
     // Инициализируем информацию о ребрах при первом вызове
     if (m_edges.empty())
@@ -399,7 +401,7 @@ void CCube::DrawShadowVolume(
 
 ### <a name="_toc101941333"></a>**Визуализация сцены, содержащей отбрасывающие тень объекты**
 
-В классе CMyApplication выделены методы, осуществляющие визуализацию сцены, источника света, а также теневого объема.
+В классе `CMyApplication` выделены методы, осуществляющие визуализацию сцены, источника света, а также теневого объема.
 
 ```cpp
 class CMyApplication 
@@ -422,7 +424,7 @@ private:
     // Рисуем теневой объем куба
     void DrawShadowVolume()const;
     // Рисуем ребра теневого объема куба
-    void DrawShadowVolumeEdges    ()const;
+    void DrawShadowVolumeEdges()const;
 private:
     CCube m_cube;
 
@@ -439,7 +441,7 @@ private:
 
     // Точечный источник света и его положение в пространстве
     COmniLight m_light;
-    CVector3f m_lightPosition;
+    glm::vec3 m_lightPosition;
 
     // Материал объектов сцены
     CMaterial m_material;
@@ -497,7 +499,7 @@ void CMyApplication::OnReshape(int width, int height)
     gluPerspective(FOV, aspect, ZNEAR, ZNEAR + 1);
 
     // Получаем коэффициенты матрицы проецирования
-    double projectionMatrix[4][4];
+    double projectionMatrix[4][4]{};
     glGetDoublev(GL_PROJECTION_MATRIX, &projectionMatrix[0][0]);
 
     // И корректируем их для случая бесконечно удаленной дальней
@@ -516,37 +518,42 @@ void CMyApplication::OnReshape(int width, int height)
 
 В конструкторе класса задаются параметры источника света и материала, а также выполняется подписка на события контроллера вращения.
 
+Для представления матрицы 4x4 используем `glm:::dmat4x4` из библиотеки GLM.
+
 ```cpp
 CMyApplication::CMyApplication(const char * title, int width, int height)
 :CGLApplication(title, width, height, true, true)
 ,m_rotationController(width, height)
 ,m_lightAnimationPhase(0)
 ,m_torusAnimationPhase(0)
+,m_lightPosition(0)
 {
     AddEventListener(&m_rotationController);
     m_rotationController.AddEventListener(this);
 
-    m_light.SetAmbientIntensity(0.2f, 0.2f, 0.2f);    m_light.SetPosition(CVector3f(3, 3, 2));
+    m_light.SetAmbientIntensity(0.2f, 0.2f, 0.2f);
+    m_light.SetDiffuseIntensity(0.8f, 0.8f, 0.8f);
+    m_light.SetSpecularIntensity(0.4f, 0.4f, 0.4f);
+    m_light.SetPosition(glm::vec3(3.0f, 3.0f, 2.0f ));
 
     m_material.SetShininess(30);
-    m_material.SetAmbient(0.2, 0.1, 0.3);
-    m_material.SetDiffuse(0.5, 0.6, 0.7);
-    m_material.SetSpecular(0.3, 0.3, 0.3);
+    m_material.SetAmbient(static_cast<GLfloat>(0.2), static_cast<GLfloat>(0.1), static_cast<GLfloat>(0.3));
+    m_material.SetDiffuse(static_cast<GLfloat >(0.5), static_cast<GLfloat>(0.6), static_cast<GLfloat>(0.7));
+    m_material.SetSpecular(static_cast<GLfloat>(0.3), static_cast<GLfloat>(0.3), static_cast<GLfloat>(0.3));
 }
 
 void CMyApplication::OnInit()
 {
-    glClearColor(0.3, 0.3, 0.3, 1);
+    glClearColor(static_cast<GLclampf>(0.3), static_cast<GLclampf>(0.3), static_cast<GLclampf>(0.3), static_cast<GLclampf>(1));
+
     glLoadIdentity();
-    CMatrix4d modelView;
-    modelView.LoadLookAtRH(
-        0, 0, 10, 
-        0, 0, 0, 
-        0, 1, 0);
+    glm::dmat4x4 modelView = glm::lookAt(
+        glm::dvec3{ 0.0, 0.0, 10.0 },
+        glm::dvec3{ 0.0, 0.0, 0.0 },
+        glm::dvec3{ 0.0, 1.0, 0.0 });
     m_rotationController.SetModelViewMatrix(modelView);
 
     glEnable(GL_CULL_FACE);
-
     glEnable(GL_DEPTH_TEST);
 }
 ```
@@ -565,7 +572,7 @@ void CMyApplication::OnDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
-    glLoadMatrixd(m_rotationController.GetModelViewMatrix());
+    glLoadMatrixd(&(m_rotationController.GetModelViewMatrix()[0][0]));
 
     // Рисуем источник света в виде сферы
     DrawLightSource();

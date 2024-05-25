@@ -1,22 +1,25 @@
-#include "StdAfx.h"
+п»ї#include "StdAfx.h"
 #include "RotationController.h"
-#include "Vector3.h"
 #include "IApplication.h"
 #include "IRotationControllerListener.h"
+#include <numbers>
 
 CRotationController::CRotationController(int windowWidth, int windowHeight)
 :m_leftButtonPressed(false)
 ,m_windowWidth(windowWidth)
 ,m_windowHeight(windowHeight)
+,m_mouseY(0)
+,m_mouseX(0)
+,m_modelViewMatrix({})
 {
 }
 
-void CRotationController::SetModelViewMatrix(CMatrix4d const& matrix)
+void CRotationController::SetModelViewMatrix(glm::dmat4x4 const& matrix)
 {
 	m_modelViewMatrix = matrix;
 }
 
-CMatrix4d const& CRotationController::GetModelViewMatrix()const
+glm::dmat4x4 const& CRotationController::GetModelViewMatrix() const
 {
 	return m_modelViewMatrix;
 }
@@ -29,12 +32,12 @@ void CRotationController::OnReshape(int windowWidth, int windowHeight)
 
 void CRotationController::OnMouse(int button, int state, int x, int y)
 {
-	// Событие от левой кнопки мыши
+	// РЎРѕР±С‹С‚РёРµ РѕС‚ Р»РµРІРѕР№ РєРЅРѕРїРєРё РјС‹С€Рё
 	if (button == GLUT_LEFT_BUTTON)
 	{
-		// Сохраняем состояние левой кнопки мыши
+		// РЎРѕС…СЂР°РЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ Р»РµРІРѕР№ РєРЅРѕРїРєРё РјС‹С€Рё
 		m_leftButtonPressed = (state == GLUT_DOWN);
-		// Сохраняем координаты мыши
+		// РЎРѕС…СЂР°РЅСЏРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РјС‹С€Рё
 		m_mouseX = x;
 		m_mouseY = y;
 	}
@@ -42,40 +45,62 @@ void CRotationController::OnMouse(int button, int state, int x, int y)
 
 void CRotationController::OnMotion(int x, int y)
 {
-	// Если нажата левая кнопка мыши
+	// Р•СЃР»Рё РЅР°Р¶Р°С‚Р° Р»РµРІР°СЏ РєРЅРѕРїРєР° РјС‹С€Рё
 	if (m_leftButtonPressed)
 	{
-		// Вычисляем смещение курсора мыши
+		// Р’С‹С‡РёСЃР»СЏРµРј СЃРјРµС‰РµРЅРёРµ РєСѓСЂСЃРѕСЂР° РјС‹С€Рё
 		int dx = x - m_mouseX;
 		int dy = y - m_mouseY;
 
-		// Вычисляем угол поворота вокруг осей Y и X как линейно зависящие
-		// от смещения мыши по осям X и Y
-		GLfloat rotateX = GLfloat(dy) * 180 / m_windowHeight;
-		GLfloat rotateY = GLfloat(dx) * 180 / m_windowWidth;
+		// Р’С‹С‡РёСЃР»СЏРµРј СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РІРѕРєСЂСѓРі РѕСЃРµР№ Y Рё X РєР°Рє Р»РёРЅРµР№РЅРѕ Р·Р°РІРёСЃСЏС‰РёРµ
+		// РѕС‚ СЃРјРµС‰РµРЅРёСЏ РјС‹С€Рё РїРѕ РѕСЃСЏРј X Рё Y
+		GLdouble rotateX = GLdouble(dy) * std::numbers::pi / m_windowHeight;
+		GLdouble rotateY = GLdouble(dx) * std::numbers::pi / m_windowWidth;
 
 		RotateCamera(rotateX, rotateY);
 
-		// Сохраняем текущие координаты мыши
+		// РЎРѕС…СЂР°РЅСЏРµРј С‚РµРєСѓС‰РёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РјС‹С€Рё
 		m_mouseX = x;
 		m_mouseY = y;
 	}
 }
 
-// Вращаем камеру вокруг начала кординат на заданный угол
-void CRotationController::RotateCamera(GLfloat rotateX, GLfloat rotateY)
+// РћСЂС‚РѕРЅРѕСЂРјРёСЂСѓРµРј РјР°С‚СЂРёС†Сѓ 4*4 (СЌС‚Рѕ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р°С„С„РёРЅРЅР°СЏ РјР°С‚СЂРёС†Р°)
+glm::dmat4x4 CRotationController::Orthonormalize(const glm::dmat4x4& m)
 {
-	// Поворачиваем вокруг осей x и y камеры
-	m_modelViewMatrix.Rotate(rotateX, m_modelViewMatrix[0], m_modelViewMatrix[4], m_modelViewMatrix[8]);
-	m_modelViewMatrix.Rotate(rotateY, m_modelViewMatrix[1], m_modelViewMatrix[5], m_modelViewMatrix[9]);
+	// РР·РІР»РµРєР°РµРј РїРѕРґРјР°С‚СЂРёС†Сѓ 3*3 РёР· РјР°С‚СЂРёС†С‹ m Рё РѕСЂС‚РѕРЅРѕСЂРјРёСЂСѓРµРј РµС‘
+	const auto normalizedMatrix = glm::orthonormalize(glm::dmat3x3{ m });
+	// Р—Р°РјРµРЅСЏРµРј 3 СЃС‚РѕР»Р±С†Р° РёСЃС…РѕРґРЅРѕР№ РјР°С‚СЂРёС†С‹
+	return {
+		glm::dvec4{ normalizedMatrix[0], 0.0 },
+		glm::dvec4{ normalizedMatrix[1], 0.0 },
+		glm::dvec4{ normalizedMatrix[2], 0.0 },
+		m[3]
+	};
+}
 
-	// В ходе умножения матриц могут возникать погрешности, которые,
-	// накапливаясь могут сильно искажать картинку
-	// Для их компенсации после каждой модификации матрицы моделирования-вида
-	// проводим ее ортонормирование
-	m_modelViewMatrix.Normalize();
+// Р’СЂР°С‰Р°РµРј РєР°РјРµСЂСѓ РІРѕРєСЂСѓРі РЅР°С‡Р°Р»Р° РєРѕРѕСЂРґРёРЅР°С‚ РЅР° Р·Р°РґР°РЅРЅС‹Р№ СѓРіРѕР»
+void CRotationController::RotateCamera(GLdouble rotateX, GLdouble rotateY)
+{
+	// РџРѕРІРѕСЂР°С‡РёРІР°РµРј РІРѕРєСЂСѓРі РѕСЃРµР№ x Рё y РєР°РјРµСЂС‹
+	const glm::dvec3 xAxis{
+		m_modelViewMatrix[0][0], m_modelViewMatrix[1][0], m_modelViewMatrix[2][0]
+	};
+	const glm::dvec3 yAxis{
+		m_modelViewMatrix[0][1], m_modelViewMatrix[1][1], m_modelViewMatrix[2][1]
+	};
+	m_modelViewMatrix = glm::rotate(m_modelViewMatrix, rotateX, xAxis);
+	m_modelViewMatrix = glm::rotate(m_modelViewMatrix, rotateY, yAxis);
 
-	// Событие об обновлении матрицы моделирования-вида
+	// Р’ С…РѕРґРµ СѓРјРЅРѕР¶РµРЅРёСЏ РјР°С‚СЂРёС† РјРѕРіСѓС‚ РІРѕР·РЅРёРєР°С‚СЊ РїРѕРіСЂРµС€РЅРѕСЃС‚Рё, РєРѕС‚РѕСЂС‹Рµ,
+	// РЅР°РєР°РїР»РёРІР°СЏСЃСЊ РјРѕРіСѓС‚ СЃРёР»СЊРЅРѕ РёСЃРєР°Р¶Р°С‚СЊ РєР°СЂС‚РёРЅРєСѓ
+	// Р”Р»СЏ РёС… РєРѕРјРїРµРЅСЃР°С†РёРё РїРѕСЃР»Рµ РєР°Р¶РґРѕР№ РјРѕРґРёС„РёРєР°С†РёРё РјР°С‚СЂРёС†С‹ РјРѕРґРµР»РёСЂРѕРІР°РЅРёСЏ-РІРёРґР°
+	// РїСЂРѕРІРѕРґРёРј РµРµ РѕСЂС‚РѕРЅРѕСЂРјРёСЂРѕРІР°РЅРёРµ
+
+	m_modelViewMatrix = Orthonormalize(m_modelViewMatrix);
+
+
+	// РЎРѕР±С‹С‚РёРµ РѕР± РѕР±РЅРѕРІР»РµРЅРёРё РјР°С‚СЂРёС†С‹ РјРѕРґРµР»РёСЂРѕРІР°РЅРёСЏ-РІРёРґР°
 	class CRotationEvent
 	{
 	public:
@@ -85,6 +110,6 @@ void CRotationController::RotateCamera(GLfloat rotateX, GLfloat rotateY)
 		}
 	};
 
-	// Диспетчеризуем событие
+	// Р”РёСЃРїРµС‚С‡РµСЂРёР·СѓРµРј СЃРѕР±С‹С‚РёРµ
 	DispatchEvent(CRotationEvent());
 }

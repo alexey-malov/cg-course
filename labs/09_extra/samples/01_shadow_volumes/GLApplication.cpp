@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+п»ї#include "StdAfx.h"
 #include "GLApplication.h"
 #include "IApplicationListener.h"
 
@@ -12,7 +12,7 @@ CGLApplication::CGLApplication(
    bool needStencil
    )
 {
-	// Только один экземпляр приложения разрешено создать
+	// РўРѕР»СЊРєРѕ РѕРґРёРЅ СЌРєР·РµРјРїР»СЏСЂ РїСЂРёР»РѕР¶РµРЅРёСЏ СЂР°Р·СЂРµС€РµРЅРѕ СЃРѕР·РґР°С‚СЊ
 	if (m_pApplication)
 	{
 		assert(!"Only one instance of the application is permitted");
@@ -20,17 +20,18 @@ CGLApplication::CGLApplication(
 	}
 	m_pApplication = this;
 
-	// Добавляем себя в слушатели своих же событий, что облегчит
-	// получение уведомлений о них классами-наследниками
+	// Р”РѕР±Р°РІР»СЏРµРј СЃРµР±СЏ РІ СЃР»СѓС€Р°С‚РµР»Рё СЃРІРѕРёС… Р¶Рµ СЃРѕР±С‹С‚РёР№, С‡С‚Рѕ РѕР±Р»РµРіС‡РёС‚
+	// РїРѕР»СѓС‡РµРЅРёРµ СѓРІРµРґРѕРјР»РµРЅРёР№ Рѕ РЅРёС… РєР»Р°СЃСЃР°РјРё-РЅР°СЃР»РµРґРЅРёРєР°РјРё
 	AddEventListener(this);
 
-	// Инициализируем библиотеку GLUT, подсовывая ей
-	// фиктивные параметры командой строки
+	// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј Р±РёР±Р»РёРѕС‚РµРєСѓ GLUT, РїРѕРґСЃРѕРІС‹РІР°СЏ РµР№
+	// С„РёРєС‚РёРІРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РєРѕРјР°РЅРґРѕР№ СЃС‚СЂРѕРєРё
 	int argc = 1;
-	char *argv[] = {"", };
+	char argv0[] = "";
+	char *argv[] = {argv0, };
 	glutInit(&argc, argv);
 
-	// Задаем режим буфера кадра, запрошенный пользователем
+	// Р—Р°РґР°РµРј СЂРµР¶РёРј Р±СѓС„РµСЂР° РєР°РґСЂР°, Р·Р°РїСЂРѕС€РµРЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
 	glutInitDisplayMode(
 		GLUT_RGBA |
 		GLUT_DOUBLE |
@@ -38,22 +39,22 @@ CGLApplication::CGLApplication(
 		(needStencil ? GLUT_STENCIL : 0)
 		);
 
-	// Если пользователь указал размеры окна, сообщаем о них GLUT
+	// Р•СЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓРєР°Р·Р°Р» СЂР°Р·РјРµСЂС‹ РѕРєРЅР°, СЃРѕРѕР±С‰Р°РµРј Рѕ РЅРёС… GLUT
 	if (width > 0 && height > 0)
 	{
 		glutInitWindowSize(width, height);
 	}
 
-	// Создаем окно приложения
+	// РЎРѕР·РґР°РµРј РѕРєРЅРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
 	glutCreateWindow(title);
 
-	// Задаем обработчики событий
+	// Р—Р°РґР°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
 	InitEventHandlers();
 }
 
 void CGLApplication::InitEventHandlers()
 {
-	// Инициализируем обработчики часто используемых событий
+	// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РѕР±СЂР°Р±РѕС‚С‡РёРєРё С‡Р°СЃС‚Рѕ РёСЃРїРѕР»СЊР·СѓРµРјС‹С… СЃРѕР±С‹С‚РёР№
 	glutDisplayFunc(&DisplayHandler);
 	glutReshapeFunc(&ReshapeHandler);
 	glutKeyboardFunc(&KeyboardHandler);
@@ -62,13 +63,13 @@ void CGLApplication::InitEventHandlers()
 	glutMotionFunc(&MotionHandler);
 	glutIdleFunc(&IdleHandler);
 
-	// При желании можно добавить обработчики остальных
-	// событий, поддерживаемых glut
+	// РџСЂРё Р¶РµР»Р°РЅРёРё РјРѕР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ РѕР±СЂР°Р±РѕС‚С‡РёРєРё РѕСЃС‚Р°Р»СЊРЅС‹С…
+	// СЃРѕР±С‹С‚РёР№, РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹С… glut
 }
 
 void CGLApplication::MotionHandler(int x, int y)
 {
-	// Событие о перемещении кнопки мыши мыши
+	// РЎРѕР±С‹С‚РёРµ Рѕ РїРµСЂРµРјРµС‰РµРЅРёРё РєРЅРѕРїРєРё РјС‹С€Рё РјС‹С€Рё
 	class CMotionEvent
 	{
 	public:
@@ -77,7 +78,7 @@ void CGLApplication::MotionHandler(int x, int y)
 		{
 		}
 
-		// Оператор () перенаправляет событие в метод OnMotion слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnMotion СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnMotion(m_x, m_y);
@@ -86,13 +87,13 @@ void CGLApplication::MotionHandler(int x, int y)
 		int m_x, m_y;
 	};
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CMotionEvent(x, y));
 }
 
 void CGLApplication::MouseHandler(int button, int state, int x, int y)
 {
-	// Событие о нажатии/отпускании кнопки мыши мыши
+	// РЎРѕР±С‹С‚РёРµ Рѕ РЅР°Р¶Р°С‚РёРё/РѕС‚РїСѓСЃРєР°РЅРёРё РєРЅРѕРїРєРё РјС‹С€Рё РјС‹С€Рё
 	class CMouseEvent
 	{
 	public:
@@ -101,7 +102,7 @@ void CGLApplication::MouseHandler(int button, int state, int x, int y)
 		{
 		}
 
-		// Оператор () перенаправляет событие в метод OnMouse слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnMouse СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnMouse(m_button, m_state, m_x, m_y);
@@ -110,18 +111,18 @@ void CGLApplication::MouseHandler(int button, int state, int x, int y)
 		int m_button, m_state, m_x, m_y;
 	};
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CMouseEvent(button, state, x, y));
 }
 
 
 void CGLApplication::DisplayHandler()
 {
-	// Событие о необходимости перерисовки окна
+	// РЎРѕР±С‹С‚РёРµ Рѕ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµСЂРёСЃРѕРІРєРё РѕРєРЅР°
 	class CDisplayEvent
 	{
 	public:
-		// Оператор () перенаправляет событие в метод OnDisplay слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnDisplay СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnDisplay();
@@ -129,9 +130,9 @@ void CGLApplication::DisplayHandler()
 	};
 
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CDisplayEvent());
-	// Обмениваем местами теневой и лицевой буферы кадра
+	// РћР±РјРµРЅРёРІР°РµРј РјРµСЃС‚Р°РјРё С‚РµРЅРµРІРѕР№ Рё Р»РёС†РµРІРѕР№ Р±СѓС„РµСЂС‹ РєР°РґСЂР°
 	glutSwapBuffers();
 }
 
@@ -139,24 +140,24 @@ void CGLApplication::IdleHandler()
 {
 	Sleep(1);
 
-	// Событие о том, что приложению нечем заняться
+	// РЎРѕР±С‹С‚РёРµ Рѕ С‚РѕРј, С‡С‚Рѕ РїСЂРёР»РѕР¶РµРЅРёСЋ РЅРµС‡РµРј Р·Р°РЅСЏС‚СЊСЃСЏ
 	class CIdleEvent
 	{
 	public:
-		// Оператор () перенаправляет событие в метод OnIdle слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnIdle СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnIdle();
 		}
 	};
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CIdleEvent());
 }
 
 void CGLApplication::ReshapeHandler(int width, int height)
 {
-	// Событие об изменении размеров окна
+	// РЎРѕР±С‹С‚РёРµ РѕР± РёР·РјРµРЅРµРЅРёРё СЂР°Р·РјРµСЂРѕРІ РѕРєРЅР°
 	class CReshapeEvent
 	{
 	public:
@@ -165,7 +166,7 @@ void CGLApplication::ReshapeHandler(int width, int height)
 		{
 		}
 
-		// Оператор () перенаправляет событие в метод OnReshape слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnReshape СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnReshape(m_width, m_height);
@@ -174,13 +175,13 @@ void CGLApplication::ReshapeHandler(int width, int height)
 		int m_width, m_height;
 	};
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CReshapeEvent(width, height));
 }
 
 void CGLApplication::SpecialKeyHandler(int key, int x, int y)
 {
-	// Событие о нажати специальной клавиши
+	// РЎРѕР±С‹С‚РёРµ Рѕ РЅР°Р¶Р°С‚РёРё СЃРїРµС†РёР°Р»СЊРЅРѕР№ РєР»Р°РІРёС€Рё
 	class CSpecialKeyEvent
 	{
 	public:
@@ -188,7 +189,7 @@ void CGLApplication::SpecialKeyHandler(int key, int x, int y)
 			:m_key(key), m_x(x), m_y(y)
 		{
 		}
-		// Оператор () перенаправляет событие в метод OnSpecialKey слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnSpecialKey СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnSpecialKey(m_key, m_x, m_y);
@@ -198,13 +199,13 @@ void CGLApplication::SpecialKeyHandler(int key, int x, int y)
 		unsigned m_x, m_y;
 	};	
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CSpecialKeyEvent(key, x, y));
 }
 
 void CGLApplication::KeyboardHandler(unsigned char key, int x, int y)
 {
-	// Событие о нажатии клавиши на клавиатуре
+	// РЎРѕР±С‹С‚РёРµ Рѕ РЅР°Р¶Р°С‚РёРё РєР»Р°РІРёС€Рё РЅР° РєР»Р°РІРёР°С‚СѓСЂРµ
 	class CKeyboardEvent
 	{
 	public:
@@ -212,7 +213,7 @@ void CGLApplication::KeyboardHandler(unsigned char key, int x, int y)
 			:m_key(key), m_x(x), m_y(y)
 		{
 		}
-		// Оператор () перенаправляет событие в метод OnKeyboard слушателя
+		// РћРїРµСЂР°С‚РѕСЂ () РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РІ РјРµС‚РѕРґ OnKeyboard СЃР»СѓС€Р°С‚РµР»СЏ
 		void operator()(IApplicationListener * pListener)const
 		{
 			pListener->OnKeyboard(m_key, m_x, m_y);
@@ -222,32 +223,32 @@ void CGLApplication::KeyboardHandler(unsigned char key, int x, int y)
 		unsigned m_x, m_y;
 	};
 
-	// Рассылаем событие всем слушателям
+	// Р Р°СЃСЃС‹Р»Р°РµРј СЃРѕР±С‹С‚РёРµ РІСЃРµРј СЃР»СѓС€Р°С‚РµР»СЏРј
 	m_pApplication->DispatchEvent(CKeyboardEvent(key, x, y));
 }
 
 void CGLApplication::PostRedisplay()
 {
-	// Инициируем перерисовку калпа
+	// РРЅРёС†РёРёСЂСѓРµРј РїРµСЂРµСЂРёСЃРѕРІРєСѓ РєР°Р»РїР°
 	glutPostRedisplay();
 }
 
 void CGLApplication::SetTimer(int milliseconds, TimerProc proc, int value)
 {
-	// Устанавливаем таймер
+	// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚Р°Р№РјРµСЂ
 	glutTimerFunc(milliseconds, proc, value);
 }
 
 void CGLApplication::MainLoop(void)
 {
-	// Вызываем обработчик OnInit, который может быть 
-	// перегружен в классе-наследнике
+	// Р’С‹Р·С‹РІР°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРє OnInit, РєРѕС‚РѕСЂС‹Р№ РјРѕР¶РµС‚ Р±С‹С‚СЊ 
+	// РїРµСЂРµРіСЂСѓР¶РµРЅ РІ РєР»Р°СЃСЃРµ-РЅР°СЃР»РµРґРЅРёРєРµ
 	OnInit();
-	// И переходим в цикл обработки сообщений GLUT
+	// Р РїРµСЂРµС…РѕРґРёРј РІ С†РёРєР» РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№ GLUT
 	glutMainLoop();
 }
 
-// Данный метод может быть перегружен классами-наследниками
+// Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ РєР»Р°СЃСЃР°РјРё-РЅР°СЃР»РµРґРЅРёРєР°РјРё
 void CGLApplication::OnInit()
 {
 

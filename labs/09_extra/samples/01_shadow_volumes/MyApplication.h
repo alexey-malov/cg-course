@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "glapplication.h"
 #include "Cube.h"
 #include "RotationController.h"
@@ -20,38 +20,38 @@ private:
 	virtual void OnReshape(int width, int height);
 	virtual void OnRotationControllerUpdate();
 private:
-	// Рисуем источник света в виде сферы
+	// Р РёСЃСѓРµРј РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р° РІ РІРёРґРµ СЃС„РµСЂС‹
 	void DrawLightSource()const;
-	// Рисуем освещенную, либо неосвещенную сцену
+	// Р РёСЃСѓРµРј РѕСЃРІРµС‰РµРЅРЅСѓСЋ, Р»РёР±Рѕ РЅРµРѕСЃРІРµС‰РµРЅРЅСѓСЋ СЃС†РµРЅСѓ
 	void DrawScene(bool enableLighting)const;
-	// Рисуем теневой объем куба
+	// Р РёСЃСѓРµРј С‚РµРЅРµРІРѕР№ РѕР±СЉРµРј РєСѓР±Р°
 	void DrawShadowVolume()const;
-	// Рисуем ребра теневого объема куба
+	// Р РёСЃСѓРµРј СЂРµР±СЂР° С‚РµРЅРµРІРѕРіРѕ РѕР±СЉРµРјР° РєСѓР±Р°
 	void DrawShadowVolumeEdges()const;
 private:
 	CCube m_cube;
 
-	// Параметры камеры (ZFAR = +бесконечность)
+	// РџР°СЂР°РјРµС‚СЂС‹ РєР°РјРµСЂС‹ (ZFAR = +Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ)
 	static const double FOV;
 	static const double ZNEAR;
 
-	// Коэффициент вытягивания силуэтных граней
+	// РљРѕСЌС„С„РёС†РёРµРЅС‚ РІС‹С‚СЏРіРёРІР°РЅРёСЏ СЃРёР»СѓСЌС‚РЅС‹С… РіСЂР°РЅРµР№
 	static const float EXTRUSION_FACTOR;
 
-	// Контроллеры вращения и анимации
+	// РљРѕРЅС‚СЂРѕР»Р»РµСЂС‹ РІСЂР°С‰РµРЅРёСЏ Рё Р°РЅРёРјР°С†РёРё
 	CRotationController m_rotationController;
 	CAnimationController m_animationController;
 
-	// Точечный источник света и его положение в пространстве
+	// РўРѕС‡РµС‡РЅС‹Р№ РёСЃС‚РѕС‡РЅРёРє СЃРІРµС‚Р° Рё РµРіРѕ РїРѕР»РѕР¶РµРЅРёРµ РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 	COmniLight m_light;
-	CVector3f m_lightPosition;
+	glm::vec3 m_lightPosition;
 
-	// Материал объектов сцены
+	// РњР°С‚РµСЂРёР°Р» РѕР±СЉРµРєС‚РѕРІ СЃС†РµРЅС‹
 	CMaterial m_material;
 
-	// Фаза анимации источника света (0..2pi)
+	// Р¤Р°Р·Р° Р°РЅРёРјР°С†РёРё РёСЃС‚РѕС‡РЅРёРєР° СЃРІРµС‚Р° (0..2pi)
 	float m_lightAnimationPhase;
 
-	// Фаза анимации (угол вращения) торов
+	// Р¤Р°Р·Р° Р°РЅРёРјР°С†РёРё (СѓРіРѕР» РІСЂР°С‰РµРЅРёСЏ) С‚РѕСЂРѕРІ
 	float m_torusAnimationPhase;
 };

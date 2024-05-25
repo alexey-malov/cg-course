@@ -1,23 +1,22 @@
-#pragma once
+п»ї#pragma once
 
-#include "Vector3.h"
 #include "Light.h"
 
 class COmniLight : public CLight
 {
 public:
-	COmniLight(CVector3f const& position = CVector3f(0, 0, 0));
+	COmniLight(glm::vec3 const& position = glm::vec3( 0.0f, 0.0f, 0.0f ));
 
-	// Положение источника света
-	void SetPosition(CVector3f const& position);
-	// активизацтя источника света
+	// РџРѕР»РѕР¶РµРЅРёРµ РёСЃС‚РѕС‡РЅРёРєР° СЃРІРµС‚Р°
+	void SetPosition(glm::vec3 const& position);
+	// Р°РєС‚РёРІРёР·Р°С†РёСЏ РёСЃС‚РѕС‡РЅРёРєР° СЃРІРµС‚Р°
 	void SetLight(GLenum light)const;
-	// параметры ослабления интенсивности в зависимости от расстояния
+	// РїР°СЂР°РјРµС‚СЂС‹ РѕСЃР»Р°Р±Р»РµРЅРёСЏ РёРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚Рё РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ
 	void SetQuadraticAttenuation(GLfloat quadraticAttenuation);
 	void SetLinearAttenuation(GLfloat linearAttenuation);
 	void SetConstantAttenuation(GLfloat constantAttenuation);
 private:
-	CVector3f m_position;
+	glm::vec3 m_position;
 	GLfloat m_quadraticAttenuation;
 	GLfloat m_linearAttenuation;
 	GLfloat m_constantAttenuation;
