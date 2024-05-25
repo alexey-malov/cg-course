@@ -24,7 +24,7 @@ public:
 	// Удаляем указатель на слушателя событий из коллекции слушателей
 	virtual void RemoveEventListener(ListenerType * pListener)
 	{
-		Listeners::const_iterator it = m_listeners.find(pListener);
+		auto it = m_listeners.find(pListener);
 		if (it != m_listeners.end())
 		{
 			m_listeners.erase(it);

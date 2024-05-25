@@ -30,7 +30,7 @@ private:
 	glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m);
 
 	// Вращение камеры на заданные углы
-	void RotateCamera(GLfloat rotateX, GLfloat rotateY);
+	void RotateCamera(GLdouble rotateX, GLdouble rotateY);
 
 	bool m_leftButtonPressed;
 	int m_mouseX;

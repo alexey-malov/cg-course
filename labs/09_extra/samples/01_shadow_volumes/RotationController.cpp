@@ -2,6 +2,7 @@
 #include "RotationController.h"
 #include "IApplication.h"
 #include "IRotationControllerListener.h"
+#include <numbers>
 
 CRotationController::CRotationController(int windowWidth, int windowHeight)
 :m_leftButtonPressed(false)
@@ -53,8 +54,8 @@ void CRotationController::OnMotion(int x, int y)
 
 		// Вычисляем угол поворота вокруг осей Y и X как линейно зависящие
 		// от смещения мыши по осям X и Y
-		GLfloat rotateX = GLfloat(dy) * 180 / m_windowHeight;
-		GLfloat rotateY = GLfloat(dx) * 180 / m_windowWidth;
+		GLdouble rotateX = GLdouble(dy) * std::numbers::pi / m_windowHeight;
+		GLdouble rotateY = GLdouble(dx) * std::numbers::pi / m_windowWidth;
 
 		RotateCamera(rotateX, rotateY);
 
@@ -79,7 +80,7 @@ glm::dmat4x4 CRotationController::Orthonormalize(const glm::dmat4x4& m)
 }
 
 // Вращаем камеру вокруг начала координат на заданный угол
-void CRotationController::RotateCamera(GLfloat rotateX, GLfloat rotateY)
+void CRotationController::RotateCamera(GLdouble rotateX, GLdouble rotateY)
 {
 	// Поворачиваем вокруг осей x и y камеры
 	const glm::dvec3 xAxis{
@@ -88,8 +89,8 @@ void CRotationController::RotateCamera(GLfloat rotateX, GLfloat rotateY)
 	const glm::dvec3 yAxis{
 		m_modelViewMatrix[0][1], m_modelViewMatrix[1][1], m_modelViewMatrix[2][1]
 	};
-	m_modelViewMatrix = glm::rotate(m_modelViewMatrix, static_cast<double>(rotateX), xAxis);
-	m_modelViewMatrix = glm::rotate(m_modelViewMatrix, static_cast<double>(rotateY), yAxis);
+	m_modelViewMatrix = glm::rotate(m_modelViewMatrix, rotateX, xAxis);
+	m_modelViewMatrix = glm::rotate(m_modelViewMatrix, rotateY, yAxis);
 
 	// В ходе умножения матриц могут возникать погрешности, которые,
 	// накапливаясь могут сильно искажать картинку

@@ -27,7 +27,8 @@ CGLApplication::CGLApplication(
 	// Инициализируем библиотеку GLUT, подсовывая ей
 	// фиктивные параметры командой строки
 	int argc = 1;
-	char *argv[] = {"", };
+	char argv0[] = "";
+	char *argv[] = {argv0, };
 	glutInit(&argc, argv);
 
 	// Задаем режим буфера кадра, запрошенный пользователем
