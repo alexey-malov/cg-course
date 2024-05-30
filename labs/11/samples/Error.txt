@@ -1,7 +1,0 @@
-//=====================================================
-// RenderMonkey Error Log Created 5/23/2024 10:55 am
-//=====================================================
-[RmApplicationImpl.cpp] (line  454):  SUCCEEDED RMEffectInit()
-[RmApplicationImpl.cpp] (line  461):  SUCCEEDED AfxGetInstanceHandle()
-[RmApplicationImpl.cpp] (line  467):  SUCCEEDED LoadAccelerators()
-[RmApplicationImpl.cpp] (line  473):  SUCCEEDED AfxEnableControlContainer()
