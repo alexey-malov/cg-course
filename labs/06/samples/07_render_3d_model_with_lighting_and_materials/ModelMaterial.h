@@ -8,21 +8,21 @@ class CModelMaterial : private boost::noncopyable
 public:
 	CModelMaterial();
 
-	// Добавить текстурную карту №1 к материалу
+	// Р”РѕР±Р°РІРёС‚СЊ С‚РµРєСЃС‚СѓСЂРЅСѓСЋ РєР°СЂС‚Сѓ в„–1 Рє РјР°С‚РµСЂРёР°Р»Сѓ
 	CTextureMap & AddTextureMap1(GLuint texture);
 
-	// Связана ли с материалом текстурная карта №1?
+	// РЎРІСЏР·Р°РЅР° Р»Рё СЃ РјР°С‚РµСЂРёР°Р»РѕРј С‚РµРєСЃС‚СѓСЂРЅР°СЏ РєР°СЂС‚Р° в„–1?
 	bool HasTextureMap1()const;
 
-	// Получить текстурную карту №1
+	// РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСЃС‚СѓСЂРЅСѓСЋ РєР°СЂС‚Сѓ в„–1
 	CTextureMap const& GetTextureMap1()const;
 	CTextureMap & GetTextureMap1();
 
-	// Получить материал OpenGL
+	// РџРѕР»СѓС‡РёС‚СЊ РјР°С‚РµСЂРёР°Р» OpenGL
 	CMaterial & GetMaterial();
 	CMaterial const& GetMaterial()const;
 
-	// Материал видим с лицевой и нелицевой грани?
+	// РњР°С‚РµСЂРёР°Р» РІРёРґРёРј СЃ Р»РёС†РµРІРѕР№ Рё РЅРµР»РёС†РµРІРѕР№ РіСЂР°РЅРё?
 	bool IsTwoSided()const;
 	void SetTwoSided(bool value);
 private:

@@ -7,7 +7,7 @@
 
 bool CModel::CompareTextureNames::operator()(std::string const& textureName1, std::string const& textureName2)const
 {
-	// Переводим имя первой текстуры к нижнему регистру
+	// РџРµСЂРµРІРѕРґРёРј РёРјСЏ РїРµСЂРІРѕР№ С‚РµРєСЃС‚СѓСЂС‹ Рє РЅРёР¶РЅРµРјСѓ СЂРµРіРёСЃС‚СЂСѓ
 	std::string name1LowerCase(textureName1);
 	std::transform(
 		name1LowerCase.begin(),
@@ -15,7 +15,7 @@ bool CModel::CompareTextureNames::operator()(std::string const& textureName1, st
 		name1LowerCase.begin(),
 		tolower);
 
-	// Переводим имя второй текстуры к нижнему регистру
+	// РџРµСЂРµРІРѕРґРёРј РёРјСЏ РІС‚РѕСЂРѕР№ С‚РµРєСЃС‚СѓСЂС‹ Рє РЅРёР¶РЅРµРјСѓ СЂРµРіРёСЃС‚СЂСѓ
 	std::string name2LowerCase(textureName2);
 	std::transform(
 		name2LowerCase.begin(),
@@ -23,7 +23,7 @@ bool CModel::CompareTextureNames::operator()(std::string const& textureName1, st
 		name2LowerCase.begin(),
 		tolower);
 
-	// Возвращаем результат сравнения имен в нижнем регистре
+	// Р’РѕР·РІСЂР°С‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚ СЃСЂР°РІРЅРµРЅРёСЏ РёРјРµРЅ РІ РЅРёР¶РЅРµРј СЂРµРіРёСЃС‚СЂРµ
 	return name1LowerCase < name2LowerCase;
 }
 
@@ -56,22 +56,22 @@ CModelMaterial & CModel::GetMaterial(size_t index)
 
 CTexture2D & CModel::AddTextureImage(std::string const& name)
 {
-	// Ищем, есть ли текстура с таким именем
+	// РС‰РµРј, РµСЃС‚СЊ Р»Рё С‚РµРєСЃС‚СѓСЂР° СЃ С‚Р°РєРёРј РёРјРµРЅРµРј
 	CTextures::iterator it = m_textures.find(name);
 	if (it != m_textures.end())
 	{
-		// Если есть, возвращаем ссылку на существующую
+		// Р•СЃР»Рё РµСЃС‚СЊ, РІРѕР·РІСЂР°С‰Р°РµРј СЃСЃС‹Р»РєСѓ РЅР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ
 		return *it->second;
 	}
 
-	// В противном случае создаем новую текстуру
+	// Р’ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ СЃРѕР·РґР°РµРј РЅРѕРІСѓСЋ С‚РµРєСЃС‚СѓСЂСѓ
 	CTexture2DPtr pTexture(new CTexture2D());
-	// и добавляем ее в контейнер текстур,
+	// Рё РґРѕР±Р°РІР»СЏРµРј РµРµ РІ РєРѕРЅС‚РµР№РЅРµСЂ С‚РµРєСЃС‚СѓСЂ,
 	m_textures.insert(CTextures::value_type(name, pTexture));
-	// а ее имя в вектор имен
+	// Р° РµРµ РёРјСЏ РІ РІРµРєС‚РѕСЂ РёРјРµРЅ
 	m_textureNames.push_back(name);
 
-	// возвращаем ссылку на добавленную текстуру
+	// РІРѕР·РІСЂР°С‰Р°РµРј СЃСЃС‹Р»РєСѓ РЅР° РґРѕР±Р°РІР»РµРЅРЅСѓСЋ С‚РµРєСЃС‚СѓСЂСѓ
 	return *pTexture;
 }
 
@@ -91,7 +91,7 @@ std::string CModel::GetTextureName(size_t index)const
 	return m_textureNames.at(index);
 }
 
-// Возвращаем текстурный объект по его имени
+// Р’РѕР·РІСЂР°С‰Р°РµРј С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚ РїРѕ РµРіРѕ РёРјРµРЅРё
 CTexture2D & CModel::GetTextureByName(std::string const& name)
 {
 	CTextures::iterator it = m_textures.find(name);
@@ -102,7 +102,7 @@ CTexture2D & CModel::GetTextureByName(std::string const& name)
 	return *it->second;
 }
 
-// Возвращаем текстурный объект по его имени
+// Р’РѕР·РІСЂР°С‰Р°РµРј С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚ РїРѕ РµРіРѕ РёРјРµРЅРё
 CTexture2D const & CModel::GetTextureByName(std::string const& name)const
 {
 	CTextures::const_iterator it = m_textures.find(name);
@@ -113,14 +113,14 @@ CTexture2D const & CModel::GetTextureByName(std::string const& name)const
 	return *it->second;
 }
 
-// Возвращаем текстурный объект по его индексу
+// Р’РѕР·РІСЂР°С‰Р°РµРј С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚ РїРѕ РµРіРѕ РёРЅРґРµРєСЃСѓ
 CTexture2D & CModel::GetTexture(size_t index)
 {
 	std::string textureName = m_textureNames.at(index);
 	return GetTextureByName(textureName);
 }
 
-// Возвращаем текстурный объект по его индексу
+// Р’РѕР·РІСЂР°С‰Р°РµРј С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚ РїРѕ РµРіРѕ РёРЅРґРµРєСЃСѓ
 CTexture2D const & CModel::GetTexture(size_t index)const
 {
 	std::string textureName = m_textureNames.at(index);
@@ -149,9 +149,9 @@ CMesh & CModel::AddMesh(unsigned int vertexBufferOffset,
 		));
 	m_meshes.push_back(pMesh);
 
-	// При добавлении полигональной сетки старый bounding box 
-	// может оказаться неактуальным, поэтому делаем пометку о необходимости
-	// его обновления
+	// РџСЂРё РґРѕР±Р°РІР»РµРЅРёРё РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё СЃС‚Р°СЂС‹Р№ bounding box 
+	// РјРѕР¶РµС‚ РѕРєР°Р·Р°С‚СЊСЃСЏ РЅРµР°РєС‚СѓР°Р»СЊРЅС‹Рј, РїРѕСЌС‚РѕРјСѓ РґРµР»Р°РµРј РїРѕРјРµС‚РєСѓ Рѕ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
+	// РµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ
 	m_boundingBoxMustBeUpdated = true;
 
 	return *pMesh;
@@ -196,8 +196,8 @@ CBoundingBox const CModel::GetBoundingBox()const
 {
 	if (m_boundingBoxMustBeUpdated)
 	{
-		// Ограничивающий блок модели равен объединению ограничивающих блоков
-		// всех сеток, входящих в состав модели
+		// РћРіСЂР°РЅРёС‡РёРІР°СЋС‰РёР№ Р±Р»РѕРє РјРѕРґРµР»Рё СЂР°РІРµРЅ РѕР±СЉРµРґРёРЅРµРЅРёСЋ РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РёС… Р±Р»РѕРєРѕРІ
+		// РІСЃРµС… СЃРµС‚РѕРє, РІС…РѕРґСЏС‰РёС… РІ СЃРѕСЃС‚Р°РІ РјРѕРґРµР»Рё
 		CBoundingBox box;
 		for (size_t i = 0; i < m_meshes.size(); ++i)
 		{
@@ -205,7 +205,7 @@ CBoundingBox const CModel::GetBoundingBox()const
 		}
 		m_boundingBox = box;
 
-		// ограничивающий блок теперь актуален
+		// РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РёР№ Р±Р»РѕРє С‚РµРїРµСЂСЊ Р°РєС‚СѓР°Р»РµРЅ
 		m_boundingBoxMustBeUpdated = false;
 	}
 

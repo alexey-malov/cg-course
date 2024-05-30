@@ -25,8 +25,6 @@
 #include <GdiPlus.h>
 #pragma comment(lib,"gdiplus.lib")
 
-
-//#define GLEW_STATIC
 #include <GL/glew.h>
 
 #include <GL/glut.h>

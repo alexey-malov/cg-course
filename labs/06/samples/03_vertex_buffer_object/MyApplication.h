@@ -16,22 +16,22 @@ protected:
 	virtual void OnMouse(int button, int state, int x, int y);
 private:
 	void DrawCube()const;
-	// Выполняем создание и инициализацию буферов вершин и индексов
+	// Р’С‹РїРѕР»РЅСЏРµРј СЃРѕР·РґР°РЅРёРµ Рё РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ Р±СѓС„РµСЂРѕРІ РІРµСЂС€РёРЅ Рё РёРЅРґРµРєСЃРѕРІ
 	void InitBuffers();
-	// Угол обзора по вертикали
+	// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 	static const double FIELD_OF_VIEW;
 
-	// Расстояние до ближней и дальней плоскостей отсечения
+	// Р Р°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ Р±Р»РёР¶РЅРµР№ Рё РґР°Р»СЊРЅРµР№ РїР»РѕСЃРєРѕСЃС‚РµР№ РѕС‚СЃРµС‡РµРЅРёСЏ
 	static const double ZNEAR;
 	static const double ZFAR;
 	CRotationController m_rotationController;
 
-	// Буфер вершин
+	// Р‘СѓС„РµСЂ РІРµСЂС€РёРЅ
 	CArrayBuffer m_vertices;
-	// Буфер индексов
+	// Р‘СѓС„РµСЂ РёРЅРґРµРєСЃРѕРІ
 	CElementArrayBuffer m_indices;
 
-	// Адреса массивов вершин, цвета и индексов
+	// РђРґСЂРµСЃР° РјР°СЃСЃРёРІРѕРІ РІРµСЂС€РёРЅ, С†РІРµС‚Р° Рё РёРЅРґРµРєСЃРѕРІ
 	GLvoid const * m_pVertexArray;
 	GLvoid const * m_pColorArray;
 	GLvoid const * m_pIndexArray;

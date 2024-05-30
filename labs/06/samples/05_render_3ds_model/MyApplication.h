@@ -18,7 +18,7 @@ protected:
 	virtual void OnMotion(int x, int y);
 	virtual void OnMouse(int button, int state, int x, int y);
 private:
-	// Угол обзора по вертикали
+	// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 	static const double FIELD_OF_VIEW;
 
 	CRotationController m_rotationController;

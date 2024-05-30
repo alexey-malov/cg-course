@@ -38,7 +38,7 @@ void CTextureLoader::SetWrapMode(GLenum wrapS, GLenum wrapT)
 
 GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textureName, GLint level)const
 {
-	// Загружаем изображение при помощи GDI+
+	// Р—Р°РіСЂСѓР¶Р°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ РїСЂРё РїРѕРјРѕС‰Рё GDI+
 	Gdiplus::Bitmap bmp(fileName.c_str());
 
 	if (bmp.GetLastStatus() != Gdiplus::Ok)
@@ -50,14 +50,14 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 		throw std::runtime_error("Error loading texture file " + name);
 	}
 
-	// Определяем формат пикселей для использования 
-	// с методом Bitmap::Lock и функцией gluBuild2DMipmaps
+	// РћРїСЂРµРґРµР»СЏРµРј С„РѕСЂРјР°С‚ РїРёРєСЃРµР»РµР№ РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ 
+	// СЃ РјРµС‚РѕРґРѕРј Bitmap::Lock Рё С„СѓРЅРєС†РёРµР№ gluBuild2DMipmaps
 	Gdiplus::PixelFormat pixelFormat = 0;
 	GLint textureFormat = 0;
 	GLint colorComponents = 0;
 	GLint internalFormat = 0;
 
-	// Есть ли в изображении альфа-канал?
+	// Р•СЃС‚СЊ Р»Рё РІ РёР·РѕР±СЂР°Р¶РµРЅРёРё Р°Р»СЊС„Р°-РєР°РЅР°Р»?
 	if ((bmp.GetPixelFormat() & PixelFormatAlpha) != 0)
 	{
 		colorComponents = 4;
@@ -75,25 +75,25 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 
 	Gdiplus::Rect lockRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
 
-	// Получаем прямой доступ для чтения к данным растрового изображения
+	// РџРѕР»СѓС‡Р°РµРј РїСЂСЏРјРѕР№ РґРѕСЃС‚СѓРї РґР»СЏ С‡С‚РµРЅРёСЏ Рє РґР°РЅРЅС‹Рј СЂР°СЃС‚СЂРѕРІРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	Gdiplus::BitmapData bitmapData{};
 	bitmapData.Scan0 = NULL;
 	bmp.LockBits(&lockRect, Gdiplus::ImageLockModeRead, pixelFormat, &bitmapData);
 
-	// Создаем текстурный объект (при необходимости)
+	// РЎРѕР·РґР°РµРј С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚ (РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё)
 	CTexture2DHandle texture(textureName);
 	if (textureName == 0)
 	{
 		texture.Create();
 	}
-	// делаем активным текстурный объект с данным идентификатором
-	// (с ним еще пока не связано никакое изображение)
+	// РґРµР»Р°РµРј Р°РєС‚РёРІРЅС‹Рј С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚ СЃ РґР°РЅРЅС‹Рј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРј
+	// (СЃ РЅРёРј РµС‰Рµ РїРѕРєР° РЅРµ СЃРІСЏР·Р°РЅРѕ РЅРёРєР°РєРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ)
 	texture.Bind();
 
 	if (m_buildMipmaps)
 	{
-		// Строим семейство мип-уровней для загруженного изображения
-		// и присоединям их к выбранному текстурному объекту
+		// РЎС‚СЂРѕРёРј СЃРµРјРµР№СЃС‚РІРѕ РјРёРї-СѓСЂРѕРІРЅРµР№ РґР»СЏ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+		// Рё РїСЂРёСЃРѕРµРґРёРЅСЏРј РёС… Рє РІС‹Р±СЂР°РЅРЅРѕРјСѓ С‚РµРєСЃС‚СѓСЂРЅРѕРјСѓ РѕР±СЉРµРєС‚Сѓ
 		gluBuild2DMipmaps(
 			GL_TEXTURE_2D, 
 			colorComponents, 
@@ -103,28 +103,28 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 	}
 	else
 	{
-		// Задаем изображение для заданного уровня детализации
+		// Р—Р°РґР°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ СѓСЂРѕРІРЅСЏ РґРµС‚Р°Р»РёР·Р°С†РёРё
 		texture.TexImage(
-			level,	// Уровень детализации
+			level,	// РЈСЂРѕРІРµРЅСЊ РґРµС‚Р°Р»РёР·Р°С†РёРё
 			internalFormat, 
 			bitmapData.Width, bitmapData.Height, 
-			0, // ширина рамки
+			0, // С€РёСЂРёРЅР° СЂР°РјРєРё
 			textureFormat, 
 			GL_UNSIGNED_BYTE, 
 			bitmapData.Scan0);
 	}
 
-	// Задаем параметры фильтрации текстуры,
+	// Р—Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ С„РёР»СЊС‚СЂР°С†РёРё С‚РµРєСЃС‚СѓСЂС‹,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter);
-	// а также параметры "заворачивания" текстурных координат
+	// Р° С‚Р°РєР¶Рµ РїР°СЂР°РјРµС‚СЂС‹ "Р·Р°РІРѕСЂР°С‡РёРІР°РЅРёСЏ" С‚РµРєСЃС‚СѓСЂРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
 
-	// Завершаем работу с данными растра
+	// Р—Р°РІРµСЂС€Р°РµРј СЂР°Р±РѕС‚Сѓ СЃ РґР°РЅРЅС‹РјРё СЂР°СЃС‚СЂР°
 	bmp.UnlockBits(&bitmapData);
 
-	// Возвращаем идентификатор созданного изображения
+	// Р’РѕР·РІСЂР°С‰Р°РµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРѕР·РґР°РЅРЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	return texture;
 }
 

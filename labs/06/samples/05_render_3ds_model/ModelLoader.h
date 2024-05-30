@@ -10,48 +10,48 @@ class CModelLoader
 public:
 	CModelLoader();
 
-	// Выполняем загрузку 3ds файла, заполняя переданную модель
+	// Р’С‹РїРѕР»РЅСЏРµРј Р·Р°РіСЂСѓР·РєСѓ 3ds С„Р°Р№Р»Р°, Р·Р°РїРѕР»РЅСЏСЏ РїРµСЂРµРґР°РЅРЅСѓСЋ РјРѕРґРµР»СЊ
 	void Load3dsFile(const char * fileName, CModel & model);
 
-	// игнорировать ошибки при загрузке текстур?
+	// РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ РѕС€РёР±РєРё РїСЂРё Р·Р°РіСЂСѓР·РєРµ С‚РµРєСЃС‚СѓСЂ?
 	void IgnoreMissingTextures(bool ignoreMissingTextures);
 
-	// Установить режим использования вершинного буфера модели
+	// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІРµСЂС€РёРЅРЅРѕРіРѕ Р±СѓС„РµСЂР° РјРѕРґРµР»Рё
 	void SetVertexBufferUsage(GLenum vertexBufferUsage);
 
-	// Установить режим использования индексного буфера модели
+	// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РёРЅРґРµРєСЃРЅРѕРіРѕ Р±СѓС„РµСЂР° РјРѕРґРµР»Рё
 	void SetIndexBufferUsage(GLenum indexBufferUsage);
 
 private:
-	// Загружаем материалы
+	// Р—Р°РіСЂСѓР¶Р°РµРј РјР°С‚РµСЂРёР°Р»С‹
 	void LoadMaterials(
 		Lib3dsFile const& file, 
 		CModel & model, 
 		std::string const& baseFolder = "");
 
-	// Загружаем текстуры, связанные с материалом
+	// Р—Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂС‹, СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ РјР°С‚РµСЂРёР°Р»РѕРј
 	void LoadMaterialTextures(
 		Lib3dsMaterial const& materialInfo, 
 		CModel & model, 
 		CModelMaterial & material, 
 		std::string const& baseFolder = "");
 
-	// Загружаем текстуру и добавляем ее в модель
+	// Р—Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂСѓ Рё РґРѕР±Р°РІР»СЏРµРј РµРµ РІ РјРѕРґРµР»СЊ
 	GLuint LoadTexture(
 		std::string const & name, 
 		CModel & model, 
 		std::string const& baseFolder = "");
 
-	// Инициализируем текстурную карту данными из .3ds файла
+	// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј С‚РµРєСЃС‚СѓСЂРЅСѓСЋ РєР°СЂС‚Сѓ РґР°РЅРЅС‹РјРё РёР· .3ds С„Р°Р№Р»Р°
 	void InitTextureMap(
 		Lib3dsTextureMap const & textureMapInfo, 
 		CTextureMap & textureMap);
 
-	// Загружаем полигональные сетки
+	// Р—Р°РіСЂСѓР¶Р°РµРј РїРѕР»РёРіРѕРЅР°Р»СЊРЅС‹Рµ СЃРµС‚РєРё
 	void LoadMeshes(Lib3dsFile const& file, CModel & model);
 
-	// Добавляем к модели полигональную сетку и заполняем
-	// переданные массивы вершин и индексов данными из 3ds файла
+	// Р”РѕР±Р°РІР»СЏРµРј Рє РјРѕРґРµР»Рё РїРѕР»РёРіРѕРЅР°Р»СЊРЅСѓСЋ СЃРµС‚РєСѓ Рё Р·Р°РїРѕР»РЅСЏРµРј
+	// РїРµСЂРµРґР°РЅРЅС‹Рµ РјР°СЃСЃРёРІС‹ РІРµСЂС€РёРЅ Рё РёРЅРґРµРєСЃРѕРІ РґР°РЅРЅС‹РјРё РёР· 3ds С„Р°Р№Р»Р°
 	static void LoadMesh(
 		Lib3dsMesh const& mesh, 
 		CModel & model, 
@@ -59,22 +59,22 @@ private:
 		std::vector<unsigned short> & indexBufferData
 		);
 
-	// Заполняем массив вершин данными из .3ds файла
+	// Р—Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ РґР°РЅРЅС‹РјРё РёР· .3ds С„Р°Р№Р»Р°
 	static void FillVertexBufferData(
 		Lib3dsMesh const& mesh, 
 		std::vector<unsigned char> & vertexBufferData);
 
-	// Заполняем массив индексов данными из .3ds файла
+	// Р—Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ РёРЅРґРµРєСЃРѕРІ РґР°РЅРЅС‹РјРё РёР· .3ds С„Р°Р№Р»Р°
 	static void FillIndexBufferData(
 		Lib3dsMesh const& mesh, 
 		std::vector<unsigned short> & indexBufferData);
 private:
-	// Режим использования вершинного буфера
+	// Р РµР¶РёРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІРµСЂС€РёРЅРЅРѕРіРѕ Р±СѓС„РµСЂР°
 	GLenum m_vertexBufferUsage;
 
-	// Режим использования буфера индексов
+	// Р РµР¶РёРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ Р±СѓС„РµСЂР° РёРЅРґРµРєСЃРѕРІ
 	GLenum m_indexBufferUsage;
 
-	// Игнорировать ошибки загрузки текстур?
+	// РРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ РѕС€РёР±РєРё Р·Р°РіСЂСѓР·РєРё С‚РµРєСЃС‚СѓСЂ?
 	bool m_ignoreMissingTextures;
 };

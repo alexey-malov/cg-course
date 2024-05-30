@@ -6,7 +6,7 @@
 #include "TextureMap.h"
 #include "BoundingBox.h"
 
-// Класс для автоматического освобождения ресурсов, связанных с .3ds файлом
+// РљР»Р°СЃСЃ РґР»СЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ СЂРµСЃСѓСЂСЃРѕРІ, СЃРІСЏР·Р°РЅРЅС‹С… СЃ .3ds С„Р°Р№Р»РѕРј
 class CModelLoader::CFile3ds : boost::noncopyable
 {
 public:
@@ -42,13 +42,13 @@ CModelLoader::CModelLoader()
 {
 }
 
-// Установить режим использования вершинного буфера модели
+// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІРµСЂС€РёРЅРЅРѕРіРѕ Р±СѓС„РµСЂР° РјРѕРґРµР»Рё
 void CModelLoader::SetVertexBufferUsage(GLenum vertexBufferUsage)
 {
 	m_vertexBufferUsage = vertexBufferUsage;
 }
 
-// Установить режим использования индексного буфера модели
+// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РёРЅРґРµРєСЃРЅРѕРіРѕ Р±СѓС„РµСЂР° РјРѕРґРµР»Рё
 void CModelLoader::SetIndexBufferUsage(GLenum indexBufferUsage)
 {
 	m_indexBufferUsage = indexBufferUsage;
@@ -56,32 +56,32 @@ void CModelLoader::SetIndexBufferUsage(GLenum indexBufferUsage)
 
 void CModelLoader::Load3dsFile(const char * fileName, CModel & model)
 {
-	// Открываем файл
+	// РћС‚РєСЂС‹РІР°РµРј С„Р°Р№Р»
 	CFile3ds file(fileName);
 
-	// Опеределяем путь к каталогу с .3ds файлом.
-	// Он понадобится для поиска текстур
+	// РћРїРµСЂРµРґРµР»СЏРµРј РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ СЃ .3ds С„Р°Р№Р»РѕРј.
+	// РћРЅ РїРѕРЅР°РґРѕР±РёС‚СЃСЏ РґР»СЏ РїРѕРёСЃРєР° С‚РµРєСЃС‚СѓСЂ
 	std::string filePath = fileName;
-	// позиция косой черты (прямой, либо обратной)
+	// РїРѕР·РёС†РёСЏ РєРѕСЃРѕР№ С‡РµСЂС‚С‹ (РїСЂСЏРјРѕР№, Р»РёР±Рѕ РѕР±СЂР°С‚РЅРѕР№)
 	size_t slashPos = filePath.find_last_of("/\\");
 
-	// fileFolder будет содержать либо пустую строку, либо каталог,
-	// содержащий 3ds файл
+	// fileFolder Р±СѓРґРµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ Р»РёР±Рѕ РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ, Р»РёР±Рѕ РєР°С‚Р°Р»РѕРі,
+	// СЃРѕРґРµСЂР¶Р°С‰РёР№ 3ds С„Р°Р№Р»
 	std::string fileFolder = 
 		(slashPos == std::string::npos) ? "" :
 		filePath.substr(0, slashPos + 1);
 
-	// Загружаем материалы
+	// Р—Р°РіСЂСѓР¶Р°РµРј РјР°С‚РµСЂРёР°Р»С‹
 	LoadMaterials(file.GetFile(), model, fileFolder);
 
-	// Загружаем полигональные сетки
+	// Р—Р°РіСЂСѓР¶Р°РµРј РїРѕР»РёРіРѕРЅР°Р»СЊРЅС‹Рµ СЃРµС‚РєРё
 	LoadMeshes(file.GetFile(), model);
 }
 
 void CModelLoader::LoadMeshes(Lib3dsFile const& file, CModel & model)
 {
-	// Временные массивы вершин и индексов, 
-	// которые будут заполнены данными всех сеток 3ds файла
+	// Р’СЂРµРјРµРЅРЅС‹Рµ РјР°СЃСЃРёРІС‹ РІРµСЂС€РёРЅ Рё РёРЅРґРµРєСЃРѕРІ, 
+	// РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ Р·Р°РїРѕР»РЅРµРЅС‹ РґР°РЅРЅС‹РјРё РІСЃРµС… СЃРµС‚РѕРє 3ds С„Р°Р№Р»Р°
 	std::vector<unsigned char> vertexBufferData;
 	std::vector<unsigned short> indexBufferData;
 
@@ -91,25 +91,25 @@ void CModelLoader::LoadMeshes(Lib3dsFile const& file, CModel & model)
 	{
 		Lib3dsMesh const & mesh = *file.meshes[i];
 
-		// Добавляем данные полигональной сетки из 3ds файла
-		// к текущей модели, а информацию о вершинах и индексах
-		// добавляем в массивы вершин и индексов
+		// Р”РѕР±Р°РІР»СЏРµРј РґР°РЅРЅС‹Рµ РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё РёР· 3ds С„Р°Р№Р»Р°
+		// Рє С‚РµРєСѓС‰РµР№ РјРѕРґРµР»Рё, Р° РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІРµСЂС€РёРЅР°С… Рё РёРЅРґРµРєСЃР°С…
+		// РґРѕР±Р°РІР»СЏРµРј РІ РјР°СЃСЃРёРІС‹ РІРµСЂС€РёРЅ Рё РёРЅРґРµРєСЃРѕРІ
 		LoadMesh(mesh, model, vertexBufferData, indexBufferData);
 	}
 
-	// Создаем вершинный буфер
+	// РЎРѕР·РґР°РµРј РІРµСЂС€РёРЅРЅС‹Р№ Р±СѓС„РµСЂ
 	model.GetVertexBuffer().Create();
-	// и заполняем его данными о вершинах, собранными со всех 
-	// полигональных сеток модели
+	// Рё Р·Р°РїРѕР»РЅСЏРµРј РµРіРѕ РґР°РЅРЅС‹РјРё Рѕ РІРµСЂС€РёРЅР°С…, СЃРѕР±СЂР°РЅРЅС‹РјРё СЃРѕ РІСЃРµС… 
+	// РїРѕР»РёРіРѕРЅР°Р»СЊРЅС‹С… СЃРµС‚РѕРє РјРѕРґРµР»Рё
 	model.GetVertexBuffer().BufferData(
 		vertexBufferData.size() * sizeof(vertexBufferData[0]), 
 		&vertexBufferData[0], 
 		m_vertexBufferUsage);
 
-	// Создаем буфер индексов
+	// РЎРѕР·РґР°РµРј Р±СѓС„РµСЂ РёРЅРґРµРєСЃРѕРІ
 	model.GetIndexBuffer().Create();
-	// и заполняем его данными об индексах вершин, составляющих грани,
-	// собранными со всех полигональных сеток модели
+	// Рё Р·Р°РїРѕР»РЅСЏРµРј РµРіРѕ РґР°РЅРЅС‹РјРё РѕР± РёРЅРґРµРєСЃР°С… РІРµСЂС€РёРЅ, СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёС… РіСЂР°РЅРё,
+	// СЃРѕР±СЂР°РЅРЅС‹РјРё СЃРѕ РІСЃРµС… РїРѕР»РёРіРѕРЅР°Р»СЊРЅС‹С… СЃРµС‚РѕРє РјРѕРґРµР»Рё
 	model.GetIndexBuffer().BufferData(
 		indexBufferData.size() * sizeof(indexBufferData[0]), 
 		&indexBufferData[0], 
@@ -123,30 +123,30 @@ void CModelLoader::LoadMesh(
 	std::vector<unsigned short> & indexBufferData
 	)
 {
-	// Вычисляем смещение в буфере вершин текущей полигональной сетки
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРјРµС‰РµРЅРёРµ РІ Р±СѓС„РµСЂРµ РІРµСЂС€РёРЅ С‚РµРєСѓС‰РµР№ РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё
 	const unsigned int vertexBufferOffset = static_cast<unsigned>(
 		sizeof(unsigned char) * vertexBufferData.size());
-	// Вычисляем смещение в буфере индексом текущей полигональной сетки
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРјРµС‰РµРЅРёРµ РІ Р±СѓС„РµСЂРµ РёРЅРґРµРєСЃРѕРј С‚РµРєСѓС‰РµР№ РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё
 	const unsigned int indexBufferOffset = static_cast<unsigned>(
 		sizeof(unsigned short) * indexBufferData.size());
 
-	// Заполняем вершинный массив данными из .3ds файла
+	// Р—Р°РїРѕР»РЅСЏРµРј РІРµСЂС€РёРЅРЅС‹Р№ РјР°СЃСЃРёРІ РґР°РЅРЅС‹РјРё РёР· .3ds С„Р°Р№Р»Р°
 	FillVertexBufferData(mesh, vertexBufferData);
-	// Заполняем массив индексов данными из .3ds файла
+	// Р—Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ РёРЅРґРµРєСЃРѕРІ РґР°РЅРЅС‹РјРё РёР· .3ds С„Р°Р№Р»Р°
 	FillIndexBufferData(mesh, indexBufferData);
 
-	// Вычисляем ограничивающий блок текущей полигональной сетки
-	// при помощи средств библиотеки lib3ds
+	// Р’С‹С‡РёСЃР»СЏРµРј РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РёР№ Р±Р»РѕРє С‚РµРєСѓС‰РµР№ РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё
+	// РїСЂРё РїРѕРјРѕС‰Рё СЃСЂРµРґСЃС‚РІ Р±РёР±Р»РёРѕС‚РµРєРё lib3ds
 	float minMeshBound[3];
 	float maxMeshBound[3];
 	lib3ds_mesh_bounding_box(
 		const_cast<Lib3dsMesh*>(&mesh), 
 		minMeshBound, maxMeshBound);
 
-	// Создаем Bounding box на основе данных, возвращенных lib3ds
+	// РЎРѕР·РґР°РµРј Bounding box РЅР° РѕСЃРЅРѕРІРµ РґР°РЅРЅС‹С…, РІРѕР·РІСЂР°С‰РµРЅРЅС‹С… lib3ds
 	CBoundingBox meshBoundingBox((CVector3f(minMeshBound)), (CVector3f(maxMeshBound)));
 
-	// Добавляем к модели полигональную сетку
+	// Р”РѕР±Р°РІР»СЏРµРј Рє РјРѕРґРµР»Рё РїРѕР»РёРіРѕРЅР°Р»СЊРЅСѓСЋ СЃРµС‚РєСѓ
 	model.AddMesh(
 		vertexBufferOffset, 
 		indexBufferOffset, 
@@ -163,7 +163,7 @@ void CModelLoader::FillIndexBufferData(Lib3dsMesh const& mesh, std::vector<unsig
 {
 	const int numberOfFaces = mesh.nfaces;
 
-	// Резервируем в массиве место для хранения вершин N граней
+	// Р РµР·РµСЂРІРёСЂСѓРµРј РІ РјР°СЃСЃРёРІРµ РјРµСЃС‚Рѕ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РІРµСЂС€РёРЅ N РіСЂР°РЅРµР№
 	indexBufferData.reserve(indexBufferData.size() + numberOfFaces * 3);
 
 	for (int i = 0; i < numberOfFaces; ++i)
@@ -187,31 +187,31 @@ void CModelLoader::FillVertexBufferData(Lib3dsMesh const& mesh, std::vector<unsi
 {
 	const int numberOfVertices = mesh.nvertices;
 
-	// адрес массива вершин в 3ds-файле
+	// Р°РґСЂРµСЃ РјР°СЃСЃРёРІР° РІРµСЂС€РёРЅ РІ 3ds-С„Р°Р№Р»Рµ
 	float (*pInputVertices)[3] = mesh.vertices;
 
-	// адрес массива текстурных координат в 3ds файле
+	// Р°РґСЂРµСЃ РјР°СЃСЃРёРІР° С‚РµРєСЃС‚СѓСЂРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РІ 3ds С„Р°Р№Р»Рµ
 	float (*pInputTexCoords)[2] = mesh.texcos;
 
-	// смещение до начала данных в 3ds файле
+	// СЃРјРµС‰РµРЅРёРµ РґРѕ РЅР°С‡Р°Р»Р° РґР°РЅРЅС‹С… РІ 3ds С„Р°Р№Р»Рµ
 	size_t vertexBufferOffset = vertexBufferData.size();
 
-	// проверяем, есть ли у сетки текстурные координаты
+	// РїСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё Сѓ СЃРµС‚РєРё С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
 	if (pInputTexCoords != NULL)
 	{
-		// сетка с текстурными координатами
+		// СЃРµС‚РєР° СЃ С‚РµРєСЃС‚СѓСЂРЅС‹РјРё РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё
 
-		// увеличиваем массив на размер, занимаемых вершинами 
-		// с текстурными координатами
+		// СѓРІРµР»РёС‡РёРІР°РµРј РјР°СЃСЃРёРІ РЅР° СЂР°Р·РјРµСЂ, Р·Р°РЅРёРјР°РµРјС‹С… РІРµСЂС€РёРЅР°РјРё 
+		// СЃ С‚РµРєСЃС‚СѓСЂРЅС‹РјРё РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё
 		vertexBufferData.resize(
 			vertexBufferOffset + sizeof(TexturedVertex) * numberOfVertices);
 
-		// задаем адрес расположения вершинных данных полигональной сетки
+		// Р·Р°РґР°РµРј Р°РґСЂРµСЃ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ РІРµСЂС€РёРЅРЅС‹С… РґР°РЅРЅС‹С… РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё
 		TexturedVertex * outputVertices = 
 			reinterpret_cast<TexturedVertex*>(
 				&vertexBufferData[vertexBufferOffset]);
 
-		// Заполняем массив данными о вершинах в формате структуры TexturedVertex
+		// Р—Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ РґР°РЅРЅС‹РјРё Рѕ РІРµСЂС€РёРЅР°С… РІ С„РѕСЂРјР°С‚Рµ СЃС‚СЂСѓРєС‚СѓСЂС‹ TexturedVertex
 		for (int v = 0; v < numberOfVertices; ++v)
 		{
 			float * inputPosition = pInputVertices[v];
@@ -219,45 +219,45 @@ void CModelLoader::FillVertexBufferData(Lib3dsMesh const& mesh, std::vector<unsi
 
 			TexturedVertex & outputVertex = outputVertices[v];
 			Vector3 & outputPosition = outputVertex.position;
-			// задаем координаты вершины в пространстве
+			// Р·Р°РґР°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹ РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 			outputPosition.x = inputPosition[0];
 			outputPosition.y = inputPosition[1];
 			outputPosition.z = inputPosition[2];
 
-			// задаем текстурные координаты вершины
+			// Р·Р°РґР°РµРј С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
 			outputVertex.texCoord.x = inputTexCoord[0];
 			outputVertex.texCoord.y = inputTexCoord[1];
 
-			// TODO: нужно вычислить значение вектора нормали
+			// TODO: РЅСѓР¶РЅРѕ РІС‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ РІРµРєС‚РѕСЂР° РЅРѕСЂРјР°Р»Рё
 			Vector3 & outputNormal = outputVertex.normal;
 			outputNormal.x = outputNormal.y = outputNormal.z = 0;
 		}
 	}
 	else
 	{
-		// сетка без текстурных координат
+		// СЃРµС‚РєР° Р±РµР· С‚РµРєСЃС‚СѓСЂРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
 
-		// увеличиваем массив на размер, занимаемых вершинами 
-		// без текстурных координат
+		// СѓРІРµР»РёС‡РёРІР°РµРј РјР°СЃСЃРёРІ РЅР° СЂР°Р·РјРµСЂ, Р·Р°РЅРёРјР°РµРјС‹С… РІРµСЂС€РёРЅР°РјРё 
+		// Р±РµР· С‚РµРєСЃС‚СѓСЂРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
 		vertexBufferData.resize(vertexBufferOffset + sizeof(Vertex) * numberOfVertices);
 
-		// задаем адрес расположения вершинных данных полигональной сетки
+		// Р·Р°РґР°РµРј Р°РґСЂРµСЃ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ РІРµСЂС€РёРЅРЅС‹С… РґР°РЅРЅС‹С… РїРѕР»РёРіРѕРЅР°Р»СЊРЅРѕР№ СЃРµС‚РєРё
 		Vertex * outputVertices = 
 			reinterpret_cast<Vertex*>(&vertexBufferData[vertexBufferOffset]);
 
-		// Заполняем массив данными о вершинах в формате структуры Vertex
+		// Р—Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ РґР°РЅРЅС‹РјРё Рѕ РІРµСЂС€РёРЅР°С… РІ С„РѕСЂРјР°С‚Рµ СЃС‚СЂСѓРєС‚СѓСЂС‹ Vertex
 		for (int v = 0; v < numberOfVertices; ++v)
 		{
 			float * inputPosition = pInputVertices[v];
 
 			Vertex & outputVertex = outputVertices[v];
 			Vector3 & outputPosition = outputVertex.position;
-			// задаем координаты вершины в пространстве
+			// Р·Р°РґР°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹ РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 			outputPosition.x = inputPosition[0];
 			outputPosition.y = inputPosition[1];
 			outputPosition.z = inputPosition[2];
 
-			// TODO: вычислить значение вектора нормали
+			// TODO: РІС‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ РІРµРєС‚РѕСЂР° РЅРѕСЂРјР°Р»Рё
 			Vector3 & outputNormal = outputVertex.normal;
 			outputNormal.x = outputNormal.y = outputNormal.z = 0;
 		}
@@ -272,31 +272,31 @@ void CModelLoader::LoadMaterials(Lib3dsFile const& file, CModel & model, std::st
 	{
 		Lib3dsMaterial const * pMaterial = file.materials[i];
 
-		// Добавляем новый материал к модели
+		// Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ РјР°С‚РµСЂРёР°Р» Рє РјРѕРґРµР»Рё
 		CModelMaterial & material = model.AddMaterial();
-		// и получаем связанное с этим материлом описание
+		// Рё РїРѕР»СѓС‡Р°РµРј СЃРІСЏР·Р°РЅРЅРѕРµ СЃ СЌС‚РёРј РјР°С‚РµСЂРёР»РѕРј РѕРїРёСЃР°РЅРёРµ
 		CMaterial & materialInfo = material.GetMaterial();
 
-		// Задаем фоновый цвет материала
+		// Р—Р°РґР°РµРј С„РѕРЅРѕРІС‹Р№ С†РІРµС‚ РјР°С‚РµСЂРёР°Р»Р°
 		{
 			const float * ambient = pMaterial->ambient;
 			materialInfo.SetAmbient(ambient[0],ambient[1], ambient[2]);
 		}
 
-		// Задаем диффузный цвет материала
+		// Р—Р°РґР°РµРј РґРёС„С„СѓР·РЅС‹Р№ С†РІРµС‚ РјР°С‚РµСЂРёР°Р»Р°
 		{
 			const float * diffuse = pMaterial->diffuse;
 			materialInfo.SetDiffuse(diffuse[0], diffuse[1], diffuse[2]);
 		}
 
-		// Задаем зеркальный цвет материала и степень блеска
+		// Р—Р°РґР°РµРј Р·РµСЂРєР°Р»СЊРЅС‹Р№ С†РІРµС‚ РјР°С‚РµСЂРёР°Р»Р° Рё СЃС‚РµРїРµРЅСЊ Р±Р»РµСЃРєР°
 		{
 			const float * specular = pMaterial->specular;
 			materialInfo.SetSpecular(specular[0], specular[1], specular[2]);
 			materialInfo.SetShininess(pMaterial->shininess);
 		}
 
-		// Загружаем текстуры материала
+		// Р—Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂС‹ РјР°С‚РµСЂРёР°Р»Р°
 		LoadMaterialTextures(*pMaterial, model, material, baseFolder);
 	}
 }
@@ -307,21 +307,21 @@ void CModelLoader::LoadMaterialTextures(
 	CModelMaterial & material, 
 	std::string const& baseFolder)
 {
-	// Пытаемся загрузить текстурную карту №1
+	// РџС‹С‚Р°РµРјСЃСЏ Р·Р°РіСЂСѓР·РёС‚СЊ С‚РµРєСЃС‚СѓСЂРЅСѓСЋ РєР°СЂС‚Сѓ в„–1
 	{
 		Lib3dsTextureMap const & tex1 = materialInfo.texture1_map;
 
-		// Проверяем, есть ли имя у первой текстуры?
+		// РџСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё РёРјСЏ Сѓ РїРµСЂРІРѕР№ С‚РµРєСЃС‚СѓСЂС‹?
 		if (*tex1.name)
 		{
 			try
 			{
-				// Загружаем текстуру
+				// Р—Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂСѓ
 				CTexture2DHandle texture1 = 
 					LoadTexture(tex1.name, model, baseFolder);
-				// Добавляем текстурную карту
+				// Р”РѕР±Р°РІР»СЏРµРј С‚РµРєСЃС‚СѓСЂРЅСѓСЋ РєР°СЂС‚Сѓ
 				CTextureMap & textureMap1 = material.AddTextureMap1(texture1);
-				// Наполняем ее сведениями из .3ds файла
+				// РќР°РїРѕР»РЅСЏРµРј РµРµ СЃРІРµРґРµРЅРёСЏРјРё РёР· .3ds С„Р°Р№Р»Р°
 				InitTextureMap(tex1, textureMap1);
 			}
 			catch (std::runtime_error const&)
@@ -337,21 +337,21 @@ void CModelLoader::LoadMaterialTextures(
 
 GLuint CModelLoader::LoadTexture(std::string const & name, CModel & model, std::string const& baseFolder)
 {
-	// Добавляем текстуру с заданным именем к модели
+	// Р”РѕР±Р°РІР»СЏРµРј С‚РµРєСЃС‚СѓСЂСѓ СЃ Р·Р°РґР°РЅРЅС‹Рј РёРјРµРЅРµРј Рє РјРѕРґРµР»Рё
 	CTexture2D & texture = model.AddTextureImage(name);
-	// Нам вернут либо ссылку на существующий текстурный объект,
-	// либо ссылку на вновь созданный
+	// РќР°Рј РІРµСЂРЅСѓС‚ Р»РёР±Рѕ СЃСЃС‹Р»РєСѓ РЅР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ С‚РµРєСЃС‚СѓСЂРЅС‹Р№ РѕР±СЉРµРєС‚,
+	// Р»РёР±Рѕ СЃСЃС‹Р»РєСѓ РЅР° РІРЅРѕРІСЊ СЃРѕР·РґР°РЅРЅС‹Р№
 
-	if (!texture)	// Если для текстуры еще не задано текстурное изображение
+	if (!texture)	// Р•СЃР»Рё РґР»СЏ С‚РµРєСЃС‚СѓСЂС‹ РµС‰Рµ РЅРµ Р·Р°РґР°РЅРѕ С‚РµРєСЃС‚СѓСЂРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
 	{
 		CTextureLoader loader;
 
 		std::string textureFilePath = baseFolder + name;
 
-		// Загружаем текстурное изображение и присоединяем его к текстуре
-		// Из-за простейшего перевода имени из string в wstring 
-		// корректно загружаться будут только файлы, в пути которых не содержатся 
-		// символы за пределами кодовой таблицы ASCII
+		// Р—Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ Рё РїСЂРёСЃРѕРµРґРёРЅСЏРµРј РµРіРѕ Рє С‚РµРєСЃС‚СѓСЂРµ
+		// РР·-Р·Р° РїСЂРѕСЃС‚РµР№С€РµРіРѕ РїРµСЂРµРІРѕРґР° РёРјРµРЅРё РёР· string РІ wstring 
+		// РєРѕСЂСЂРµРєС‚РЅРѕ Р·Р°РіСЂСѓР¶Р°С‚СЊСЃСЏ Р±СѓРґСѓС‚ С‚РѕР»СЊРєРѕ С„Р°Р№Р»С‹, РІ РїСѓС‚Рё РєРѕС‚РѕСЂС‹С… РЅРµ СЃРѕРґРµСЂР¶Р°С‚СЃСЏ 
+		// СЃРёРјРІРѕР»С‹ Р·Р° РїСЂРµРґРµР»Р°РјРё РєРѕРґРѕРІРѕР№ С‚Р°Р±Р»РёС†С‹ ASCII
 		texture.Attach(
 			loader.LoadTexture2D(
 				std::wstring(textureFilePath.begin(), 

@@ -51,19 +51,19 @@ CVector3f const CBoundingBox::GetCenter()const
 
 CBoundingBox const CBoundingBox::Union(CBoundingBox const& other)const
 {
-	if (m_isEmpty && other.m_isEmpty)	// оба блока пусты
+	if (m_isEmpty && other.m_isEmpty)	// РѕР±Р° Р±Р»РѕРєР° РїСѓСЃС‚С‹
 	{
 		return CBoundingBox();
 	}
-	else if (m_isEmpty)	// пустой только текущий
+	else if (m_isEmpty)	// РїСѓСЃС‚РѕР№ С‚РѕР»СЊРєРѕ С‚РµРєСѓС‰РёР№
 	{
 		return other;
 	}
-	else if (other.m_isEmpty)	// текущий - непустой
+	else if (other.m_isEmpty)	// С‚РµРєСѓС‰РёР№ - РЅРµРїСѓСЃС‚РѕР№
 	{
 		return *this;
 	}
-	else	// объединяем два непустых блока
+	else	// РѕР±СЉРµРґРёРЅСЏРµРј РґРІР° РЅРµРїСѓСЃС‚С‹С… Р±Р»РѕРєР°
 	{
 		using namespace std;
 		return CBoundingBox(

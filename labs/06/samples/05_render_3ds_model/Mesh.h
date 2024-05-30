@@ -7,38 +7,38 @@ class CMesh : public boost::noncopyable
 {
 public:
 	CMesh(
-		unsigned int vertexBufferOffset,	// смещение в буфере вершин
-		unsigned int indexBufferOffset,		// смещение в буфере индексов
-		unsigned vertexCount,				// количество вершин
-		unsigned indexCount,				// количество индексов
-		bool hasTextureCoords,				// наличие текстурных координат
-		CBoundingBox const& boundingBox,	// ограничивающий блок
-		GLenum primitiveType,				// тип примитивов сетки
-		GLenum indexType					// тип индексов сетки
+		unsigned int vertexBufferOffset,	// СЃРјРµС‰РµРЅРёРµ РІ Р±СѓС„РµСЂРµ РІРµСЂС€РёРЅ
+		unsigned int indexBufferOffset,		// СЃРјРµС‰РµРЅРёРµ РІ Р±СѓС„РµСЂРµ РёРЅРґРµРєСЃРѕРІ
+		unsigned vertexCount,				// РєРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ
+		unsigned indexCount,				// РєРѕР»РёС‡РµСЃС‚РІРѕ РёРЅРґРµРєСЃРѕРІ
+		bool hasTextureCoords,				// РЅР°Р»РёС‡РёРµ С‚РµРєСЃС‚СѓСЂРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
+		CBoundingBox const& boundingBox,	// РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РёР№ Р±Р»РѕРє
+		GLenum primitiveType,				// С‚РёРї РїСЂРёРјРёС‚РёРІРѕРІ СЃРµС‚РєРё
+		GLenum indexType					// С‚РёРї РёРЅРґРµРєСЃРѕРІ СЃРµС‚РєРё
 		);
 
-	// Есть ли в сетке текстурные координаты?
+	// Р•СЃС‚СЊ Р»Рё РІ СЃРµС‚РєРµ С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹?
 	bool HasTextureCoords()const;
 
-	// Возвращаем смещение относительно начала буфера вершин
+	// Р’РѕР·РІСЂР°С‰Р°РµРј СЃРјРµС‰РµРЅРёРµ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РЅР°С‡Р°Р»Р° Р±СѓС„РµСЂР° РІРµСЂС€РёРЅ
 	unsigned int GetVertexBufferOffset()const;
 
-	// Возвращаем смещение относительно начала буфера индексов
+	// Р’РѕР·РІСЂР°С‰Р°РµРј СЃРјРµС‰РµРЅРёРµ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РЅР°С‡Р°Р»Р° Р±СѓС„РµСЂР° РёРЅРґРµРєСЃРѕРІ
 	unsigned int GetIndexBufferOffset()const;
 
-	// Возвращаем количество индексов
+	// Р’РѕР·РІСЂР°С‰Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РёРЅРґРµРєСЃРѕРІ
 	unsigned int GetIndexCount()const;
 
-	// Возвращаем количество вершин
+	// Р’РѕР·РІСЂР°С‰Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ
 	unsigned int GetVertexCount()const;
 
-	// Возвращаем ограничивающий блок
+	// Р’РѕР·РІСЂР°С‰Р°РµРј РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РёР№ Р±Р»РѕРє
 	CBoundingBox const& GetBoundingBox()const;
 
-	// Возвращаем тип примитивов (GL_TRIANGLES, GL_TRIANGLE_STRIP и т.п.)
+	// Р’РѕР·РІСЂР°С‰Р°РµРј С‚РёРї РїСЂРёРјРёС‚РёРІРѕРІ (GL_TRIANGLES, GL_TRIANGLE_STRIP Рё С‚.Рї.)
 	GLenum GetPrimitiveType()const;
 
-	// Возвращаем тип данных для хранения индексов (GL_UNSIGNED_SHORT и т.п.)
+	// Р’РѕР·РІСЂР°С‰Р°РµРј С‚РёРї РґР°РЅРЅС‹С… РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РёРЅРґРµРєСЃРѕРІ (GL_UNSIGNED_SHORT Рё С‚.Рї.)
 	GLenum GetIndexType()const;
 private:
 	unsigned int m_vertexBufferOffset;

@@ -182,10 +182,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\03_vertex_buffer_object\RotationController.cpp" />
     <ClCompile Include="02_vertex_array.cpp" />
     <ClCompile Include="GLApplication.cpp" />
     <ClCompile Include="MyApplication.cpp" />
+    <ClCompile Include="RotationController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -194,12 +194,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\03_vertex_buffer_object\RotationController.h" />
-    <ClInclude Include="..\03_vertex_buffer_object\Vector3.h" />
     <ClInclude Include="GLApplication.h" />
     <ClInclude Include="MyApplication.h" />
+    <ClInclude Include="RotationController.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

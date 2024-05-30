@@ -4,7 +4,7 @@
 #include "Material.h"
 #include "DirectLight.h"
 
-// Угол обзора по вертикали
+// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 const double CMyApplication::FIELD_OF_VIEW = 60;
 
 CMyApplication::CMyApplication(const char * title, int width, int height)
@@ -22,7 +22,7 @@ void CMyApplication::OnInit()
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(1, 1, 1, 1);
 	
-	// Включаем свет и задаем его параметры
+	// Р’РєР»СЋС‡Р°РµРј СЃРІРµС‚ Рё Р·Р°РґР°РµРј РµРіРѕ РїР°СЂР°РјРµС‚СЂС‹
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	CDirectLight light;
@@ -31,11 +31,11 @@ void CMyApplication::OnInit()
 	light.SetSpecularIntensity(0.1f, 0.1f, 0.1f);
 	light.SetLight(GL_LIGHT0);
 
-	// Загружаем трехмерную модель
+	// Р—Р°РіСЂСѓР¶Р°РµРј С‚СЂРµС…РјРµСЂРЅСѓСЋ РјРѕРґРµР»СЊ
 	CModelLoader loader;
 	loader.Load3dsFile("loader.3ds", m_model);
 
-	// Определяем ограничивающий блой данной модели
+	// РћРїСЂРµРґРµР»СЏРµРј РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰РёР№ Р±Р»РѕР№ РґР°РЅРЅРѕР№ РјРѕРґРµР»Рё
 	CBoundingBox const& modelBoundingBox = m_model.GetBoundingBox();
 
 	if (modelBoundingBox.IsEmpty())
@@ -43,15 +43,15 @@ void CMyApplication::OnInit()
 		throw std::runtime_error("Model is empty. Nothing to render");
 	}
 
-	// Центр bounding box-а модели
+	// Р¦РµРЅС‚СЂ bounding box-Р° РјРѕРґРµР»Рё
 	CVector3f modelCenter = modelBoundingBox.GetCenter();
-	// Длина диагонали bounding box-а
+	// Р”Р»РёРЅР° РґРёР°РіРѕРЅР°Р»Рё bounding box-Р°
 	float modelDiagonal = modelBoundingBox.GetSize().GetLength();
-	// Отодвигаем камеру от центра на расстояние, равное диагонали 
-	// bounding box-а
+	// РћС‚РѕРґРІРёРіР°РµРј РєР°РјРµСЂСѓ РѕС‚ С†РµРЅС‚СЂР° РЅР° СЂР°СЃСЃС‚РѕСЏРЅРёРµ, СЂР°РІРЅРѕРµ РґРёР°РіРѕРЅР°Р»Рё 
+	// bounding box-Р°
 	CVector3f cameraPosition = modelCenter + CVector3f(modelDiagonal, 0, 0);
 
-	// Задаем параметры камеры
+	// Р—Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РєР°РјРµСЂС‹
 	glLoadIdentity();
 	gluLookAt(
 		cameraPosition.x, cameraPosition.y, cameraPosition.z, 
@@ -68,8 +68,8 @@ void CMyApplication::OnDisplay()
 	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	// Задаем параметры материала, используемого по умолчанию для 
-	// граней, для которых материал не был указан
+	// Р—Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РјР°С‚РµСЂРёР°Р»Р°, РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ 
+	// РіСЂР°РЅРµР№, РґР»СЏ РєРѕС‚РѕСЂС‹С… РјР°С‚РµСЂРёР°Р» РЅРµ Р±С‹Р» СѓРєР°Р·Р°РЅ
 	CMaterial material;
 	material.SetSpecular(0.3f, 0.3f, 0.3f);
 	material.SetShininess(20);
@@ -83,7 +83,7 @@ void CMyApplication::OnReshape(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	// Вычисляем соотношение сторон клиентской области окна
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё РѕРєРЅР°
 	double aspect = double(width) / double(height);
 
 	float zFar = m_model.GetBoundingBox().GetSize().GetLength() * 2;

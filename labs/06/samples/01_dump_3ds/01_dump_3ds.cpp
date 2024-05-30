@@ -25,7 +25,7 @@ private:
 	Lib3dsFile * m_pFile;
 };
 
-// Конвертируем RGB-значения в строку
+// РљРѕРЅРІРµСЂС‚РёСЂСѓРµРј RGB-Р·РЅР°С‡РµРЅРёСЏ РІ СЃС‚СЂРѕРєСѓ
 std::string RgbToString(float const rgb[3])
 {
 	stringstream s;
@@ -33,7 +33,7 @@ std::string RgbToString(float const rgb[3])
 	return s.str();
 }
 
-// Выводим информацию о материалах
+// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РјР°С‚РµСЂРёР°Р»Р°С…
 void DumpMaterials(Lib3dsFile const * pFile)
 {
 	const int materialsCount = pFile->nmaterials;
@@ -44,14 +44,14 @@ void DumpMaterials(Lib3dsFile const * pFile)
 	{
 		Lib3dsMaterial const * pMaterial = pFile->materials[i];
 
-		// Выводим параметры материала
+		// Р’С‹РІРѕРґРёРј РїР°СЂР°РјРµС‚СЂС‹ РјР°С‚РµСЂРёР°Р»Р°
 		cout << "\t"   << "Material: '" << pMaterial->name << "'\n";
 		cout << "\t\t" << "Ambient: " << RgbToString(pMaterial->ambient) << "\n";
 		cout << "\t\t" << "Diffuse: " << RgbToString(pMaterial->diffuse) << "\n";
 		cout << "\t\t" << "Specular: " << RgbToString(pMaterial->specular) << "\n";
 		cout << "\t\t" << "Shininess: " << pMaterial->shininess << "\n";
 
-		// А также имя текстуры, которая может быть привязана к материалу
+		// Рђ С‚Р°РєР¶Рµ РёРјСЏ С‚РµРєСЃС‚СѓСЂС‹, РєРѕС‚РѕСЂР°СЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСЂРёРІСЏР·Р°РЅР° Рє РјР°С‚РµСЂРёР°Р»Сѓ
 		Lib3dsTextureMap const & textureMap = pMaterial->texture1_map;
 		if (strlen(textureMap.name) != 0)
 		{
@@ -67,7 +67,7 @@ std::string VectorToString(float const vec[3])
 	return s.str();
 }
 
-// Выводим информацию об источниках света
+// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РёСЃС‚РѕС‡РЅРёРєР°С… СЃРІРµС‚Р°
 void DumpLights(Lib3dsFile const *pFile)
 {
 	std::cout << "===Lights===\n";
@@ -90,7 +90,7 @@ std::string TextureCoordsToString(float const vec[2])
 	return s.str();
 }
 
-// Выводим информацию о полигональных сетках
+// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕР»РёРіРѕРЅР°Р»СЊРЅС‹С… СЃРµС‚РєР°С…
 void DumpMeshes(Lib3dsFile const * pFile)
 {
 	std::cout << "===Meshes==\n";
@@ -100,10 +100,10 @@ void DumpMeshes(Lib3dsFile const * pFile)
 	{
 		Lib3dsMesh const * pMesh = pFile->meshes[i];
 
-		// Выводим имя полигональоной сетки
+		// Р’С‹РІРѕРґРёРј РёРјСЏ РїРѕР»РёРіРѕРЅР°Р»СЊРѕРЅРѕР№ СЃРµС‚РєРё
 		cout << "\t"   << "Mesh: '" << pMesh->name << "'\n";
 
-		// Выводим информацию о ее вершинах
+		// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РµРµ РІРµСЂС€РёРЅР°С…
 		{
 			const int vertexCount = pMesh->nvertices;
 			cout << "\t\t" << "Vertices: " << vertexCount << "\n";
@@ -117,14 +117,14 @@ void DumpMeshes(Lib3dsFile const * pFile)
 
 				if (textureCoords != NULL)
 				{
-					// При наличии текстурных координат, выводим и их
+					// РџСЂРё РЅР°Р»РёС‡РёРё С‚РµРєСЃС‚СѓСЂРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚, РІС‹РІРѕРґРёРј Рё РёС…
 					cout << " Tex: " << TextureCoordsToString(textureCoords[i]);
 				}
 				cout << "\n";
 			}
 		}
 
-		// Выводим информацию о гранях
+		// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РіСЂР°РЅСЏС…
 		{
 			const int faceCount = pMesh->nfaces;
 			cout << "\t\t" << "Faces: " << faceCount << "\n";
@@ -144,23 +144,23 @@ void DumpMeshes(Lib3dsFile const * pFile)
 
 void Dump3dsFile(const char *fileName)
 {
-	// Открываем файл формата 3ds
+	// РћС‚РєСЂС‹РІР°РµРј С„Р°Р№Р» С„РѕСЂРјР°С‚Р° 3ds
 	Lib3dsFile * pFile = lib3ds_file_open(fileName);
 
-	// В случае ошибки выбрасываем исключение
+	// Р’ СЃР»СѓС‡Р°Рµ РѕС€РёР±РєРё РІС‹Р±СЂР°СЃС‹РІР°РµРј РёСЃРєР»СЋС‡РµРЅРёРµ
 	if (pFile == NULL)
 	{
 		throw std::runtime_error("Unable to read 3ds file");
 	}
 
-	// Сохраняем указатель на файл в обертке CFile3ds
+	// РЎРѕС…СЂР°РЅСЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С„Р°Р№Р» РІ РѕР±РµСЂС‚РєРµ CFile3ds
 	CFile3ds file(pFile);
 
-	// Выводим информацию о материалах,
+	// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РјР°С‚РµСЂРёР°Р»Р°С…,
 	DumpMaterials(pFile);
-	// источниках света
+	// РёСЃС‚РѕС‡РЅРёРєР°С… СЃРІРµС‚Р°
 	DumpLights(pFile);
-	// и полигональных сетках
+	// Рё РїРѕР»РёРіРѕРЅР°Р»СЊРЅС‹С… СЃРµС‚РєР°С…
 	DumpMeshes(pFile);
 }
 
@@ -168,15 +168,15 @@ int main(int argc, char* argv[])
 {
 	if (argc == 1)
 	{
-		// Если программа запущена без аргументов командной строки,
-		// выводим инструкцию по пользованию
+		// Р•СЃР»Рё РїСЂРѕРіСЂР°РјРјР° Р·Р°РїСѓС‰РµРЅР° Р±РµР· Р°СЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё,
+		// РІС‹РІРѕРґРёРј РёРЅСЃС‚СЂСѓРєС†РёСЋ РїРѕ РїРѕР»СЊР·РѕРІР°РЅРёСЋ
 		cout << "Usage:\n01_dump_3ds.exe <3ds file name>\n";
 		return 0;
 	}
 	else if (argc != 2)
 	{
-		// Если программа запущена с неверным числом аргументов,
-		// сообщаем о некорректном использовании
+		// Р•СЃР»Рё РїСЂРѕРіСЂР°РјРјР° Р·Р°РїСѓС‰РµРЅР° СЃ РЅРµРІРµСЂРЅС‹Рј С‡РёСЃР»РѕРј Р°СЂРіСѓРјРµРЅС‚РѕРІ,
+		// СЃРѕРѕР±С‰Р°РµРј Рѕ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё
 		cout << "Invalid command line. Use the following syntax\n"
 			<< "01_dump_3ds.exe <3ds file name>\n";
 		return 1;

@@ -18,10 +18,10 @@ private:
 	void DrawCube()const;
 
 	CRotationController m_rotationController;
-	// Угол обзора по вертикали
+	// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 	static const double FIELD_OF_VIEW;
 
-	// Расстояние до ближней и дальней плоскостей отсечения
+	// Р Р°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ Р±Р»РёР¶РЅРµР№ Рё РґР°Р»СЊРЅРµР№ РїР»РѕСЃРєРѕСЃС‚РµР№ РѕС‚СЃРµС‡РµРЅРёСЏ
 	static const double ZNEAR;
 	static const double ZFAR;
 };
