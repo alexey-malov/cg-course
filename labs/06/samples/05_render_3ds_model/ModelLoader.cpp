@@ -124,11 +124,11 @@ void CModelLoader::LoadMesh(
 	)
 {
 	// Вычисляем смещение в буфере вершин текущей полигональной сетки
-	const unsigned int vertexBufferOffset = 
-		sizeof(unsigned char) * vertexBufferData.size();
+	const unsigned int vertexBufferOffset = static_cast<unsigned>(
+		sizeof(unsigned char) * vertexBufferData.size());
 	// Вычисляем смещение в буфере индексом текущей полигональной сетки
-	const unsigned int indexBufferOffset = 
-		sizeof(unsigned short) * indexBufferData.size();
+	const unsigned int indexBufferOffset = static_cast<unsigned>(
+		sizeof(unsigned short) * indexBufferData.size());
 
 	// Заполняем вершинный массив данными из .3ds файла
 	FillVertexBufferData(mesh, vertexBufferData);

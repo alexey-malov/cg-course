@@ -13,7 +13,7 @@ CModelRenderer::CModelRenderer(void)
 
 void CModelRenderer::RenderModel(CModel const& model)const
 {
-	const size_t meshCount = model.GetMeshCount();
+	const unsigned meshCount = static_cast<unsigned>(model.GetMeshCount());
 
 	// Если нет полигональных сеток, то нечего рисовать
 	if (meshCount == 0)
@@ -35,7 +35,7 @@ void CModelRenderer::RenderModel(CModel const& model)const
 
 	m_cullFace = true;
 
-	const int materialCount = model.GetMeterialCount();
+	const int materialCount = static_cast<int>(model.GetMeterialCount());
 
 	// Пробегаемся по всем материалам модели
 	for (int material = -1; material < materialCount; ++material)
@@ -48,7 +48,7 @@ void CModelRenderer::RenderModel(CModel const& model)const
 		bool materialActivated = false;
 
 		// В каждой сетке рисуем подсетку, использующую данный материал
-		for (size_t mesh = 0; mesh < meshCount; ++mesh)
+		for (unsigned mesh = 0; mesh < meshCount; ++mesh)
 		{
 			// При рисоваии подсетки материал нужно активировать материал,
 			// если он не был ранее активирован и это не материал

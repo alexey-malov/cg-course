@@ -85,7 +85,7 @@ unsigned CMesh::AddSubMesh(unsigned startIndex, unsigned subMeshIndexCount)
 	m_subMeshes.push_back(subMesh);
 
 	// ¬озвращаем индекс вставленной подсетки
-	return m_subMeshes.size() - 1;
+	return static_cast<unsigned>(m_subMeshes.size() - 1);
 }
 
 CMesh::SubMesh CMesh::GetSubMesh(unsigned index)const
@@ -95,7 +95,7 @@ CMesh::SubMesh CMesh::GetSubMesh(unsigned index)const
 
 unsigned CMesh::GetSubMeshCount()const
 {
-	return m_subMeshes.size();
+	return static_cast<unsigned>(m_subMeshes.size());
 }
 
 void CMesh::SetMaterialSubMesh(int materialIndex, unsigned subMeshIndex)
@@ -171,7 +171,7 @@ int CMesh::GetMaterialSubMesh(int materialIndex)const
 
 unsigned CMesh::GetMaterialsCount()const
 {
-	return m_materials.size();
+	return static_cast<unsigned>(m_materials.size());
 }
 
 int CMesh::GetMaterial(unsigned index)const

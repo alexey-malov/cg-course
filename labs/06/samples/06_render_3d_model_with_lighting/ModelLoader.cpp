@@ -205,8 +205,8 @@ void CModelLoader::LoadMesh(
 	)
 {
 	// Вычисляем смещение в буфере вершин текущей полигональной сетки
-	const unsigned int vertexBufferOffset = 
-		sizeof(unsigned char) * vertexBufferData.size();
+	const unsigned int vertexBufferOffset = static_cast<unsigned>(
+		sizeof(unsigned char) * vertexBufferData.size());
 
 	// Обновленный массив граней
 	std::vector<MeshFace> updatedFaces;
@@ -276,7 +276,7 @@ unsigned CModelLoader::FillIndexBufferData(
 	std::vector<unsigned char> & indexBufferData)
 {
 	// количество граней
-	const int numberOfFaces = faces.size();
+	const int numberOfFaces = static_cast<unsigned>(faces.size());
 
 	// размер (в байтах), требуемых для хранения одного индекса
 	unsigned indexSize = sizeof(IndexType);
@@ -293,8 +293,8 @@ unsigned CModelLoader::FillIndexBufferData(
 	// 8-битные индексы будут выровнены по границе байтов
 	// 16-битные индексы - по двухбайтной границе
 	// 32-битные индексы - по смещению, кратному 4
-	unsigned const indexBufferOffset = 
-		((indexBufferData.size() + indexSize - 1) / indexSize) * indexSize;
+	unsigned const indexBufferOffset = static_cast<unsigned>(
+		((indexBufferData.size() + indexSize - 1) / indexSize) * indexSize);
 
 	// Увеличиваем размер буфера индексов так, чтобы по смещению
 	// indexBufferOffset разместить данные размером meshIndexDataSize
@@ -585,7 +585,7 @@ unsigned CModelLoader::SplitVerticesAndBuildNormals(
 	}
 
 	// Возвращаем количество вершин, полученных после расщепления
-	return numberOfVertices;
+	return static_cast<unsigned>(numberOfVertices);
 }
 
 

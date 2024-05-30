@@ -208,7 +208,7 @@ void CModelLoader::LoadMesh(
 {
 	// Вычисляем смещение в буфере вершин текущей полигональной сетки
 	const unsigned int vertexBufferOffset = 
-		sizeof(unsigned char) * vertexBufferData.size();
+		static_cast<unsigned>(sizeof(unsigned char) * vertexBufferData.size());
 
 	// Обновленный массив граней
 	std::vector<MeshFace> updatedFaces;
@@ -296,7 +296,7 @@ void CModelLoader::LoadMesh(
 		{
 			// Т.к. грани треугольный, количество индексов в 3 раза больше
 			// количества граней
-			unsigned const subMeshIndexCount = subMeshFaceCount * 3;
+			unsigned const subMeshIndexCount = static_cast<unsigned>(subMeshFaceCount * 3);
 
 			// Добавляем подсетку
 			unsigned subMeshIndex = addedMesh.AddSubMesh(
@@ -320,7 +320,7 @@ unsigned CModelLoader::FillIndexBufferData(
 	std::vector<unsigned char> & indexBufferData)
 {
 	// количество граней
-	const unsigned numberOfFaces = faces.size();
+	const unsigned numberOfFaces = static_cast<unsigned>(faces.size());
 
 	// размер (в байтах), требуемых для хранения одного индекса
 	unsigned indexSize = sizeof(IndexType);
@@ -337,8 +337,8 @@ unsigned CModelLoader::FillIndexBufferData(
 	// 8-битные индексы будут выровнены по границе байтов
 	// 16-битные индексы - по двухбайтной границе
 	// 32-битные индексы - по смещению, кратному 4
-	unsigned const indexBufferOffset = 
-		((indexBufferData.size() + indexSize - 1) / indexSize) * indexSize;
+	unsigned const indexBufferOffset = static_cast<unsigned>(
+		((indexBufferData.size() + indexSize - 1) / indexSize) * indexSize);
 
 	// Увеличиваем размер буфера индексов так, чтобы по смещению
 	// indexBufferOffset разместить данные размером meshIndexDataSize
@@ -648,7 +648,7 @@ unsigned CModelLoader::SplitVerticesAndBuildNormals(
 	}
 
 	// Возвращаем количество вершин, полученных после расщепления
-	return numberOfVertices;
+	return static_cast<unsigned>(numberOfVertices);
 }
 
 
@@ -861,7 +861,7 @@ void CModelLoader::BuildMaterialFacesList(
 	// для граней, без материала)
 	std::vector<unsigned> materialFaceCount(materialCount + 1);
 
-	size_t const faceCount = faces.size();
+	unsigned const faceCount = static_cast<unsigned>(faces.size());
 
 	// Пробегаем по всем граням полигональной сетки
 	for (size_t faceIndex = 0; faceIndex < faceCount; ++faceIndex)
@@ -901,7 +901,7 @@ void CModelLoader::BuildMaterialFacesList(
 
 	// пробегаем по граням сетки, добавляя индекс грани
 	// в массив граней, использующих соответствующий материал
-	for (size_t faceIndex = 0; faceIndex < faceCount; ++faceIndex)
+	for (unsigned faceIndex = 0; faceIndex < faceCount; ++faceIndex)
 	{
 		// индекс материала грани
 		int faceMaterial = faces[faceIndex].materialIndex;
