@@ -1460,7 +1460,7 @@ POSSIBILITY OF SUCH DAMAGE.
      </RmStream>
     </RmStreamMap>
     <RmModelData NAME="SkyDome" API="" FILE_NAME="..\Models\SkyDome.3ds" ORIENTATION="0"/>
-    <RmModelData NAME="Model" API="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Models\Teapot.3ds" ORIENTATION="0"/>
+    <RmModelData NAME="Model" API="" FILE_NAME="..\Models\Teapot.3ds" ORIENTATION="0"/>
     <RmGLPass NAME="Pass 0" API="OpenGL" PASS_INDEX="0" ENABLED="TRUE">
      <RmModelReference NAME="Elephant" API=""/>
      <RmRenderStateBlock NAME="Render State" API="OpenGL">
@@ -1642,7 +1642,7 @@ void main(void)
   <RmModelData NAME="Sphere" API="" FILE_NAME="..\Models\Sphere.3ds" ORIENTATION="0"/>
   <RmModelData NAME="ninjaHead" API="" FILE_NAME="..\Models\ninjaHead.obj" ORIENTATION="0"/>
   <RmModelData NAME="Elephant" API="" FILE_NAME="..\Models\ElephantBody.3ds" ORIENTATION="0"/>
-  <RmModelData NAME="Teapot" API="" FILE_NAME="..\..\..\..\cg-master\labs\10\render-monkey-samples\Models\Teapot.3ds" ORIENTATION="0"/>
+  <RmModelData NAME="Teapot" API="" FILE_NAME="..\Models\Teapot.3ds" ORIENTATION="0"/>
   <RmModelData NAME="ScreenAlignedQuad" API="" FILE_NAME="..\Models\ScreenAlignedQuad.3ds" ORIENTATION="0"/>
  </RmEffectWorkspace>
 </RENDER_MONKEY>
