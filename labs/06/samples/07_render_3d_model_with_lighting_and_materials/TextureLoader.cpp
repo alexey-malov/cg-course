@@ -43,7 +43,10 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 
 	if (bmp.GetLastStatus() != Gdiplus::Ok)
 	{
-		throw std::runtime_error("Error loading texture file " + std::string(fileName.begin(), fileName.end()));
+		std::string name;
+		size_t size;
+		name.resize(fileName.length());
+		wcstombs_s(&size, &name[0], name.size() + 1, fileName.c_str(), fileName.size());
 	}
 
 	// Определяем формат пикселей для использования 
@@ -72,7 +75,7 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 	Gdiplus::Rect lockRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
 
 	// Получаем прямой доступ для чтения к данным растрового изображения
-	Gdiplus::BitmapData bitmapData;
+	Gdiplus::BitmapData bitmapData{};
 	bitmapData.Scan0 = NULL;
 	bmp.LockBits(&lockRect, Gdiplus::ImageLockModeRead, pixelFormat, &bitmapData);
 
