@@ -367,7 +367,9 @@ void SetCamera()
 
 GLenum g_polygonMode = GL_FILL;
 bool g_textureEnabled = true;
+bool g_textureLinear = true;
 bool g_detailTextureEnabled = true;
+bool g_detailTextureLinear = true;
 
 void DrawSky(float eyeOffset)
 {
@@ -417,6 +419,9 @@ void DrawTerrain()
 		{
 			glActiveTextureARB(GL_TEXTURE1_ARB);
 			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, g_tile.detailTextureName);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, g_detailTextureLinear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, g_detailTextureLinear ? GL_LINEAR : GL_NEAREST);
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 		}
 		else
@@ -430,6 +435,10 @@ void DrawTerrain()
 	if (g_textureEnabled)
 	{
 		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, g_tile.textureName);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, g_textureLinear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, g_textureLinear ? GL_LINEAR : GL_NEAREST);
+
 	}
 	else
 	{
@@ -664,11 +673,23 @@ void OnCommandMessage(WPARAM wParam, LPARAM lParam)
 	case ID_TEXTURE_ENABLE:
 		g_textureEnabled = true;
 		break;
+	case ID_TEXTURE_NEAREST:
+		g_textureLinear = false;
+		break;
+	case ID_TEXTURE_LINEAR:
+		g_textureLinear = true;
+		break;
 	case ID_TEXTURE_DISABLE:
 		g_textureEnabled = false;
 		break;
 	case ID_DETAILTEXTURE_ENABLED:
 		g_detailTextureEnabled = true;
+		break;
+	case ID_DETAILTEXTURE_NEAREST:
+		g_detailTextureLinear = false;
+		break;
+	case ID_DETAILTEXTURE_LINEAR:
+		g_detailTextureLinear = false;
 		break;
 	case ID_DETAILTEXTURE_DISABLED:
 		g_detailTextureEnabled = false;
