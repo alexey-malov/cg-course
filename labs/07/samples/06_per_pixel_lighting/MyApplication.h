@@ -27,7 +27,7 @@ private:
 
 	CRotationController m_rotationController;
 
-	// Угол обзора по вертикали
+	// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 	static const double FIELD_OF_VIEW;
 	static const double ZNEAR;
 	static const double ZFAR;
@@ -36,11 +36,11 @@ private:
 	CTexture2D m_cloudsTexture;
 	CSphere m_sphere;
 
-	// программный объект
+	// РїСЂРѕРіСЂР°РјРјРЅС‹Р№ РѕР±СЉРµРєС‚
 	CProgram m_program;
-	// расположение uniform-переменной mainTexture
+	// СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ uniform-РїРµСЂРµРјРµРЅРЅРѕР№ mainTexture
 	GLint m_mainTextureSamplerLocation;
-	// расположение uniform-переменной cloudsTexture
+	// СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ uniform-РїРµСЂРµРјРµРЅРЅРѕР№ cloudsTexture
 	GLint m_cloudsTextureSamplerLocation;
 
 	COmniLight m_light;

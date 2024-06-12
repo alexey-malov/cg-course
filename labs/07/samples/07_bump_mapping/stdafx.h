@@ -17,6 +17,9 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <GdiPlus.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/ext.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <stdexcept>
 #include <set>
 #include <algorithm>

@@ -6,7 +6,7 @@ public:
 	CShaderLoader(void);
 	~CShaderLoader(void);
 
-	// Выполняем загрузку исходного кода шейдера из файла
+	// Р’С‹РїРѕР»РЅСЏРµРј Р·Р°РіСЂСѓР·РєСѓ РёСЃС…РѕРґРЅРѕРіРѕ РєРѕРґР° С€РµР№РґРµСЂР° РёР· С„Р°Р№Р»Р°
 	GLuint LoadShader(
 		GLenum shaderType, 
 		const wchar_t * fileName, 
@@ -16,7 +16,7 @@ public:
 		const char * fileName, 
 		GLuint shaderId = 0);
 
-	// Выполняем загрузку исходного кода шейдера из входного потока
+	// Р’С‹РїРѕР»РЅСЏРµРј Р·Р°РіСЂСѓР·РєСѓ РёСЃС…РѕРґРЅРѕРіРѕ РєРѕРґР° С€РµР№РґРµСЂР° РёР· РІС…РѕРґРЅРѕРіРѕ РїРѕС‚РѕРєР°
 	GLuint LoadShader(
 		GLenum shaderType, 
 		std::istream & stream, 

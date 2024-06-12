@@ -7,16 +7,16 @@ class CProgramInfo
 public:
 	CProgramInfo(GLuint program);
 
-	// Определяем по идентификатору типа его строковое представление
+	// РћРїСЂРµРґРµР»СЏРµРј РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ С‚РёРїР° РµРіРѕ СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
 	static std::string TypeToString(GLenum type);
 
-	// Возвращаем количество uniform-переменных в программе
+	// Р’РѕР·РІСЂР°С‰Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ uniform-РїРµСЂРµРјРµРЅРЅС‹С… РІ РїСЂРѕРіСЂР°РјРјРµ
 	GLuint GetActiveUniforms()const;
 
-	// Возвращаем количество attribute-переменных в программе
+	// Р’РѕР·РІСЂР°С‰Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ attribute-РїРµСЂРµРјРµРЅРЅС‹С… РІ РїСЂРѕРіСЂР°РјРјРµ
 	GLuint GetActiveAttributes()const;
 
-	// Выводим информацию о заданной uniform-переменной в поток
+	// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ Р·Р°РґР°РЅРЅРѕР№ uniform-РїРµСЂРµРјРµРЅРЅРѕР№ РІ РїРѕС‚РѕРє
 	void PrintUniformInfo(GLuint index, std::ostream & stream)const;
 	void PrintAttributeInfo(GLuint index, std::ostream & stream)const;
 

@@ -3,14 +3,14 @@
 class CBaseTexture
 {
 public:
-	// Ãåíåðèðóåì èìÿ äëÿ òåêñòóðíîãî îáúåêòà
+	// Ð“ÐµÐ½ÐµÑ€Ð¸Ñ€ÑƒÐµÐ¼ Ð¸Ð¼Ñ Ð´Ð»Ñ Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð½Ð¾Ð³Ð¾ Ð¾Ð±ÑŠÐµÐºÑ‚Ð°
 	void Create()
 	{
 		assert(!m_texture);
 		glGenTextures(1, &m_texture);
 	}
 
-	// Óäàëÿåì òåêñòóðíûé îáúåêò
+	// Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð½Ñ‹Ð¹ Ð¾Ð±ÑŠÐµÐºÑ‚
 	void Delete()
 	{
 		assert(m_texture);
@@ -18,7 +18,7 @@ public:
 		m_texture = 0;
 	}
 	
-	// Îòâÿçûâàåìñÿ îò òåêñòóðíîãî îáúåêòà è âîçâðàùàåì åãî èäåíòèôèêàòîð
+	// ÐžÑ‚Ð²ÑÐ·Ñ‹Ð²Ð°ÐµÐ¼ÑÑ Ð¾Ñ‚ Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð½Ð¾Ð³Ð¾ Ð¾Ð±ÑŠÐµÐºÑ‚Ð° Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ ÐµÐ³Ð¾ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€
 	GLuint Detach()
 	{
 		GLuint texture = m_texture;
@@ -26,13 +26,13 @@ public:
 		return texture;
 	}
 
-	// Ïîëó÷àåì èäåíòèôèêàòîð òåêñòóðíîãî îáúåêòà
+	// ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð½Ð¾Ð³Ð¾ Ð¾Ð±ÑŠÐµÐºÑ‚Ð°
 	operator GLuint()const
 	{
 		return m_texture;
 	}
 
-	// Äåëàåì îáúåêò àêòèâíûì
+	// Ð”ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð±ÑŠÐµÐºÑ‚ Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ð¼
 	void BindTo(GLenum target)const
 	{
 		assert(m_texture != 0);
@@ -77,18 +77,18 @@ public:
 		bool m = t_managed;
 		if (m && (*this != 0))
 		{
-			Delete();
+			this->Delete();
 		}
 	}
 
-	// Ïðèñîåäèíÿåì òåêñòóðíûé îáúåêò
+	// ÐŸÑ€Ð¸ÑÐ¾ÐµÐ´Ð¸Ð½ÑÐµÐ¼ Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð½Ñ‹Ð¹ Ð¾Ð±ÑŠÐµÐºÑ‚
 	void Attach(GLuint texture)
 	{
 		if (t_managed && (*this != 0) && (texture != *this))
 		{
-			Delete();
+			this->Delete();
 		}
-		SetTexture(texture);
+		this->SetTexture(texture);
 	}
 };
 

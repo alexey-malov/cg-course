@@ -16,22 +16,22 @@ void CProgramInfo::PrintUniformInfo(GLuint index, std::ostream & stream)const
 	GLint uniformSize = 0;
 	GLenum uniformType = 0;
 
-	// Получаем информацию об активной uniform-переменной
+	// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± Р°РєС‚РёРІРЅРѕР№ uniform-РїРµСЂРµРјРµРЅРЅРѕР№
 	std::string name = 
 		m_program.GetActiveUniform(index, &uniformSize, &uniformType);
-	// Получаем строковое представление ее типа
+	// РџРѕР»СѓС‡Р°РµРј СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РµРµ С‚РёРїР°
 	std::string type = TypeToString(uniformType);
 
-	// Выводим тип и имя переменной
+	// Р’С‹РІРѕРґРёРј С‚РёРї Рё РёРјСЏ РїРµСЂРµРјРµРЅРЅРѕР№
 	stream << type << " " << " " << name;
 
-	// Если это массив, то выводим его размер
+	// Р•СЃР»Рё СЌС‚Рѕ РјР°СЃСЃРёРІ, С‚Рѕ РІС‹РІРѕРґРёРј РµРіРѕ СЂР°Р·РјРµСЂ
 	if (uniformSize != 1)
 	{
 		stream << "[" << uniformSize << "]";
 	}
 
-	// Если это не встроенная переменная, то выводим ее расположение
+	// Р•СЃР»Рё СЌС‚Рѕ РЅРµ РІСЃС‚СЂРѕРµРЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ, С‚Рѕ РІС‹РІРѕРґРёРј РµРµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ
 	if (name.length() > 3 && name.substr(0, 3) != "gl_")
 	{
 		GLint location = 
@@ -51,22 +51,22 @@ void CProgramInfo::PrintAttributeInfo(GLuint index, std::ostream & stream)const
 	GLint uniformSize = 0;
 	GLenum uniformType = 0;
 
-	// Получаем информацию об активной attribute-переменной
+	// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± Р°РєС‚РёРІРЅРѕР№ attribute-РїРµСЂРµРјРµРЅРЅРѕР№
 	std::string name = 
 		m_program.GetActiveAttrib(index, &uniformSize, &uniformType);
-	// Получаем строковое представление ее типа
+	// РџРѕР»СѓС‡Р°РµРј СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РµРµ С‚РёРїР°
 	std::string type = TypeToString(uniformType);
 
-	// Выводим тип и имя переменной
+	// Р’С‹РІРѕРґРёРј С‚РёРї Рё РёРјСЏ РїРµСЂРµРјРµРЅРЅРѕР№
 	stream << type << " " << " " << name;
 
-	// Если это массив, то выводим его размер
+	// Р•СЃР»Рё СЌС‚Рѕ РјР°СЃСЃРёРІ, С‚Рѕ РІС‹РІРѕРґРёРј РµРіРѕ СЂР°Р·РјРµСЂ
 	if (uniformSize != 1)
 	{
 		stream << "[" << uniformSize << "]";
 	}
 
-	// Если это не встроенная переменная, то выводим ее расположение
+	// Р•СЃР»Рё СЌС‚Рѕ РЅРµ РІСЃС‚СЂРѕРµРЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ, С‚Рѕ РІС‹РІРѕРґРёРј РµРµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ
 	if (name.length() > 3 && name.substr(0, 3) != "gl_")
 	{
 		GLint location = 
@@ -79,7 +79,7 @@ void CProgramInfo::Print(std::ostream & stream)const
 {
 	stream << "Program id: " << m_program.Get() << "\n";
 
-	// Если в программе есть активные uniform-переменные, выводим информацию о них
+	// Р•СЃР»Рё РІ РїСЂРѕРіСЂР°РјРјРµ РµСЃС‚СЊ Р°РєС‚РёРІРЅС‹Рµ uniform-РїРµСЂРµРјРµРЅРЅС‹Рµ, РІС‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРёС…
 	if (m_program.GetActiveUniformMaxLength() != 0)
 	{
 		GLuint const activeUniforms = GetActiveUniforms();
@@ -92,7 +92,7 @@ void CProgramInfo::Print(std::ostream & stream)const
 		}
 	}
 
-	// Если в программе есть активные attribute-переменные, выводим информацию о них
+	// Р•СЃР»Рё РІ РїСЂРѕРіСЂР°РјРјРµ РµСЃС‚СЊ Р°РєС‚РёРІРЅС‹Рµ attribute-РїРµСЂРµРјРµРЅРЅС‹Рµ, РІС‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРёС…
 	if (m_program.GetActiveAttributeMaxLength() != 0)
 	{
 		GLuint const activeAttributes = GetActiveAttributes();
@@ -146,7 +146,7 @@ std::string CProgramInfo::TypeToString(GLenum type)
 	};
 	static const unsigned TYPE_MAP_ITEMS_COUNT = 
 		sizeof(typeMap) / sizeof(*typeMap);
-	// Ищем среди имеющихся типов тип с нужным идентификатором
+	// РС‰РµРј СЃСЂРµРґРё РёРјРµСЋС‰РёС…СЃСЏ С‚РёРїРѕРІ С‚РёРї СЃ РЅСѓР¶РЅС‹Рј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРј
 	for (unsigned int i = 0; i < TYPE_MAP_ITEMS_COUNT; ++i)
 	{
 		if (type == typeMap[i].type)

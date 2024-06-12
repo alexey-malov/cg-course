@@ -1,13 +1,10 @@
 #pragma once
 
-#include "Vector3.h"
-#include "Vector2.h"
-
 class CUtils3D
 {
 public:
-	static CVector3f CalculateTangent(
-		CVector3f const& p1, CVector3f const& p2, CVector3f const& p3,
-		CVector2f const& t1, CVector2f const& t2, CVector2f const& t3
+	static glm::vec3 CalculateTangent(
+		glm::vec3 const& p1, glm::vec3 const& p2, glm::vec3 const& p3,
+		glm::vec2 const& t1, glm::vec2 const& t2, glm::vec2 const& t3
 		);
 };

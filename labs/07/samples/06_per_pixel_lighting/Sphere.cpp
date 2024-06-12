@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Sphere.h"
-#include "Vector3.h"
 
 #define M_PI       3.14159265358979323846
 
@@ -16,18 +15,18 @@ CSphere::CSphere(
 }
 
 /*
-Рисуем сферу при помощи последовательности triangle strip-ов
-Каждая лента соответствует линии параллелей
+Р РёСЃСѓРµРј СЃС„РµСЂСѓ РїСЂРё РїРѕРјРѕС‰Рё РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё triangle strip-РѕРІ
+РљР°Р¶РґР°СЏ Р»РµРЅС‚Р° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р»РёРЅРёРё РїР°СЂР°Р»Р»РµР»РµР№
 */
 void CSphere::DrawSphere()const
 {
-	// шаг по параллелям
+	// С€Р°Рі РїРѕ РїР°СЂР°Р»Р»РµР»СЏРј
 	const float stackStep = static_cast<float>(M_PI) / m_stacks;
 
-	// шаг по меридианам
+	// С€Р°Рі РїРѕ РјРµСЂРёРґРёР°РЅР°Рј
 	const float sliceStep = 2 * static_cast<float>(M_PI) / m_slices;
 
-	// начальный угол по параллелям
+	// РЅР°С‡Р°Р»СЊРЅС‹Р№ СѓРіРѕР» РїРѕ РїР°СЂР°Р»Р»РµР»СЏРј
 	for (unsigned stack = 0; stack < m_stacks; ++stack)
 	{
 		float stackAngle = static_cast<float>(M_PI) * 0.5f - stack * stackStep;
@@ -39,28 +38,28 @@ void CSphere::DrawSphere()const
 		const float z1 = m_radius * sinf(nextStackAngle);
 
 		glBegin(GL_TRIANGLE_STRIP);
-		// цикл по меридианам
+		// С†РёРєР» РїРѕ РјРµСЂРёРґРёР°РЅР°Рј
 		for (unsigned slice = 0; slice <= m_slices; ++slice)
 		{
-			// вычисляем угол, текущего меридиана
+			// РІС‹С‡РёСЃР»СЏРµРј СѓРіРѕР», С‚РµРєСѓС‰РµРіРѕ РјРµСЂРёРґРёР°РЅР°
 			float sliceAngle = (slice != m_slices) ? slice * sliceStep : 0;
 
-			// Вычисляем координаты на текущей параллели
+			// Р’С‹С‡РёСЃР»СЏРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° С‚РµРєСѓС‰РµР№ РїР°СЂР°Р»Р»РµР»Рё
 			float x0 = stackRadius * cosf(sliceAngle);
 			float y0 = stackRadius * sinf(sliceAngle);
-			// вычисляем и задаем вектор нормали, текстурные координаты 
-			// и положение вершины в пространстве
-			CVector3f normal0(x0, y0, z0);
-			normal0.Normalize();
-			glNormal3fv(normal0);
+			// РІС‹С‡РёСЃР»СЏРµРј Рё Р·Р°РґР°РµРј РІРµРєС‚РѕСЂ РЅРѕСЂРјР°Р»Рё, С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ 
+			// Рё РїРѕР»РѕР¶РµРЅРёРµ РІРµСЂС€РёРЅС‹ РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
+			glm::vec3 normal0(x0, y0, z0);
+			glm::vec3 normal = glm::normalize(normal0);
+			glNormal3fv(glm::value_ptr(normal));
 			glTexCoord2f(float(slice) / m_slices, float(stack) / m_stacks);
 			glVertex3f(x0, y0, z0);
 
 			float x1 = nextStackRadius * cosf(sliceAngle);
 			float y1 = nextStackRadius * sinf(sliceAngle);
-			CVector3f normal1(x1, y1, z1);
-			normal1.Normalize();
-			glNormal3fv(normal1);
+			glm::vec3 normal1(x1, y1, z1);
+			glm::vec3 normalVec1 = glm::normalize(normal1);
+			glNormal3fv(glm::value_ptr(normalVec1));
 			glTexCoord2f(float(slice) / m_slices, float(stack + 1) / m_stacks);
 			glVertex3f(x1, y1, z1);
 
