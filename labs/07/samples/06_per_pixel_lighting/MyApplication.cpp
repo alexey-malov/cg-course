@@ -46,8 +46,7 @@ void CMyApplication::OnInit()
 		glm::dvec3{ 0, 1, 0 });
 	m_rotationController.SetModelViewMatrix(modelView);
 
-	float data[] = { 0, 0, 10 };
-	m_light.SetPosition(glm::make_vec3(data));
+	m_light.SetPosition({ 0.0f, 0.0f, 10.0f });
 	m_light.SetDiffuseIntensity(1, 1, 1, 1);
 	m_light.SetAmbientIntensity(0.1f, 0.1f, 0.1f, 1.0f);
 	m_light.SetSpecularIntensity(1, 1, 1, 1);
