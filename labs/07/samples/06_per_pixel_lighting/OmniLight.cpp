@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "OmniLight.h"
 
-COmniLight::COmniLight(CVector3f const& position)
+COmniLight::COmniLight(glm::vec3 const& position)
 :m_position(position)
 ,m_quadraticAttenuation(0)
 ,m_linearAttenuation(0)
@@ -27,7 +27,7 @@ void COmniLight::SetLight(GLenum light)const
 	CLight::SetLight(light);
 }
 
-void COmniLight::SetPosition(CVector3f const& position)
+void COmniLight::SetPosition(glm::vec3 const& position)
 {
 	m_position = position;
 }

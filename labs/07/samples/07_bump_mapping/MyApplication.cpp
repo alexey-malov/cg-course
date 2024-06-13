@@ -5,10 +5,9 @@
 #include "ProgramLinker.h"
 #include "TextureLoader.h"
 #include "ProgramInfo.h"
-#include "Matrix4.h"
 #include "Utils3D.h"
 
-// Угол обзора по вертикали
+// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 const double CMyApplication::FIELD_OF_VIEW = 60;
 
 const double CMyApplication::ZNEAR = 1;
@@ -43,17 +42,16 @@ void CMyApplication::OnInit()
 	glColor3f(1, 1, 1);
 	
 
-	CMatrix4d modelView;
-	modelView.LoadLookAtRH(
-		0, 0, 3, 
-		0, 0, 0, 
-		0, 1, 0);
+	glm::dmat4x4 modelView = glm::lookAt(
+		glm::dvec3{ 0, 0, 3 }, 
+		glm::dvec3{ 0, 0, 0 }, 
+		glm::dvec3{ 0, 1, 0 });
 	m_rotationController.SetModelViewMatrix(modelView);
 
 	InitShaders();
 	LoadTextures();
 
-	m_light.SetPosition(CVector3f(0, 0, 5));
+	m_light.SetPosition(glm::vec3(0, 0, 5));
 	m_light.SetDiffuseIntensity(1, 1, 1, 1);
 	m_light.SetSpecularIntensity(1, 1, 1, 1);
 
@@ -74,46 +72,46 @@ void CMyApplication::DrawQuad()
 {
 	struct Vertex
 	{
-		float pos[3];
-		float tex[2];
+		glm::vec3 pos;
+		glm::vec2 tex;
 		float normal[3];
 	};
 
 	Vertex vertices[4] = 
 	{
-		{
-			{-1, 1, 0},		// координаты вершины
-			{0, 0},			// текстурные координаты
-			{0, 0, 1},		// нормаль
+		{ 
+			glm::vec3( - 1, 1, 0 ), // РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+			glm::vec2( 0, 0 ), // С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+			{0, 0, 1},		// РЅРѕСЂРјР°Р»СЊ
+		},
+		{ 
+			glm::vec3( - 1, -1, 0 ), // РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+			glm::vec2( 0, 1 ), // С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+			{0, 0, 1},		// РЅРѕСЂРјР°Р»СЊ
 		},
 		{
-			{-1, -1, 0},		// координаты вершины
-			{0, 1},			// текстурные координаты
-			{0, 0, 1},		// нормаль
+			glm::vec3( 1, -1, 0 ), // РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+			glm::vec2( 1, 1 ), // С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+			{0, 0, 1},		// РЅРѕСЂРјР°Р»СЊ
 		},
 		{
-			{1, -1, 0},		// координаты вершины
-			{1, 1},			// текстурные координаты
-			{0, 0, 1},		// нормаль
-		},
-		{
-			{1, 1, 0},		// координаты вершины
-			{1, 0},			// текстурные координаты
-			{0, 0, 1},		// нормаль
+			glm::vec3( 1, 1, 0 ), // РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+			glm::vec2( 1, 0 ), // С‚РµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+			{0, 0, 1},		// РЅРѕСЂРјР°Р»СЊ
 		},
 	};
 
-	// Вычисляем касательную
-	CVector3f p0(vertices[0].pos);
-	CVector2f t0(vertices[0].tex);
+	// Р’С‹С‡РёСЃР»СЏРµРј РєР°СЃР°С‚РµР»СЊРЅСѓСЋ
+	glm::vec3 p0(vertices[0].pos);
+	glm::vec2 t0(vertices[0].tex);
 
-	CVector3f p1(vertices[1].pos);
-	CVector2f t1(vertices[1].tex);
+	glm::vec3 p1(vertices[1].pos);
+	glm::vec2 t1(vertices[1].tex);
 
-	CVector3f p2(vertices[2].pos);
-	CVector2f t2(vertices[2].tex);
+	glm::vec3 p2(vertices[2].pos);
+	glm::vec2 t2(vertices[2].tex);
 
-	CVector3f tangent = CUtils3D::CalculateTangent(p0, p1, p2, t0, t1, t2);
+	glm::vec3 tangent = CUtils3D::CalculateTangent(p0, p1, p2, t0, t1, t2);
 
 	glBegin(GL_QUADS);
 	for (size_t i = 0; i < 4; ++i)
@@ -121,9 +119,9 @@ void CMyApplication::DrawQuad()
 		Vertex const& v = vertices[i];
 
 		glNormal3fv(v.normal);
-		glTexCoord2fv(v.tex);
-		glVertexAttrib3fv(m_tangentLocation, tangent);
-		glVertex3fv(v.pos);
+		glTexCoord2fv(glm::value_ptr(v.tex));
+		glVertexAttrib3fv(m_tangentLocation, glm::value_ptr(tangent));
+		glVertex3fv(glm::value_ptr(v.pos));
 	}
 	glEnd();
 
@@ -133,7 +131,7 @@ void CMyApplication::OnDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glLoadMatrixd(m_rotationController.GetModelViewMatrix());
+	glLoadMatrixd(&(m_rotationController.GetModelViewMatrix()[0][0]));
 
 	glActiveTexture(GL_TEXTURE0);
 	m_diffuseMap.Bind();
@@ -161,30 +159,30 @@ void CMyApplication::LoadTextures()
 
 void CMyApplication::InitShaders()
 {
-	// Загружаем шейдеры
+	// Р—Р°РіСЂСѓР¶Р°РµРј С€РµР№РґРµСЂС‹
 	CShaderLoader loader;
 	CShader vertexShader =
 		loader.LoadShader(GL_VERTEX_SHADER, L"bump.vsh");
 	CShader fragmentShader =
 		loader.LoadShader(GL_FRAGMENT_SHADER, L"bump.fsh");
 
-	// Создаем программы и присоединяем к ней шейдеры
+	// РЎРѕР·РґР°РµРј РїСЂРѕРіСЂР°РјРјС‹ Рё РїСЂРёСЃРѕРµРґРёРЅСЏРµРј Рє РЅРµР№ С€РµР№РґРµСЂС‹
 	m_program.Create();
 	m_program.AttachShader(vertexShader);
 	m_program.AttachShader(fragmentShader);
 
-	// Компилируем шейдеры
+	// РљРѕРјРїРёР»РёСЂСѓРµРј С€РµР№РґРµСЂС‹
 	CShaderCompiler compiler;
 	compiler.CompileShader(vertexShader);
 	compiler.CompileShader(fragmentShader);
 	compiler.CheckStatus();
 
-	// Компонуем программу
+	// РљРѕРјРїРѕРЅСѓРµРј РїСЂРѕРіСЂР°РјРјСѓ
 	CProgramLinker linker;
 	linker.LinkProgram(m_program);
 	linker.CheckStatus();
 
-	// Выводим информацию о программе
+	// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїСЂРѕРіСЂР°РјРјРµ
 	CProgramInfo programInfo(m_program);
 	programInfo.Print(std::cout);
 
@@ -197,7 +195,7 @@ void CMyApplication::OnReshape(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	// Вычисляем соотношение сторон клиентской области окна
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё РѕРєРЅР°
 	double aspect = double(width) / double(height);
 
 	glMatrixMode(GL_PROJECTION);

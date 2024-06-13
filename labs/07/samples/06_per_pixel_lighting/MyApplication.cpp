@@ -5,9 +5,8 @@
 #include "ProgramLinker.h"
 #include "TextureLoader.h"
 #include "ProgramInfo.h"
-#include "Matrix4.h"
 
-// Угол обзора по вертикали
+// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 const double CMyApplication::FIELD_OF_VIEW = 60;
 
 const double CMyApplication::ZNEAR = 1;
@@ -41,14 +40,13 @@ void CMyApplication::OnInit()
 	glColor3f(1, 1, 1);
 	
 
-	CMatrix4d modelView;
-	modelView.LoadLookAtRH(
-		0, 0, 3, 
-		0, 0, 0, 
-		0, 1, 0);
+	glm::dmat4x4 modelView = glm::lookAt(
+		glm::dvec3{ 0, 0, 3 }, 
+		glm::dvec3{ 0, 0, 0 }, 
+		glm::dvec3{ 0, 1, 0 });
 	m_rotationController.SetModelViewMatrix(modelView);
 
-	m_light.SetPosition(CVector3f(0, 0, 10));
+	m_light.SetPosition({ 0.0f, 0.0f, 10.0f });
 	m_light.SetDiffuseIntensity(1, 1, 1, 1);
 	m_light.SetAmbientIntensity(0.1f, 0.1f, 0.1f, 1.0f);
 	m_light.SetSpecularIntensity(1, 1, 1, 1);
@@ -81,16 +79,16 @@ void CMyApplication::OnDisplay()
 	glEnable(GL_TEXTURE_2D);
 	m_cloudsTexture.Bind();
 
-	// Подключаем шейдерную программу
+	// РџРѕРґРєР»СЋС‡Р°РµРј С€РµР№РґРµСЂРЅСѓСЋ РїСЂРѕРіСЂР°РјРјСѓ
 	glUseProgram(m_program);
 
-	// Устанавливаем значение uniform-переменной mainTexture
-	// Значением переменной типа sampler должен быть номер текстурного блока,
-	// к которому она привязана
+	// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ uniform-РїРµСЂРµРјРµРЅРЅРѕР№ mainTexture
+	// Р—РЅР°С‡РµРЅРёРµРј РїРµСЂРµРјРµРЅРЅРѕР№ С‚РёРїР° sampler РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РЅРѕРјРµСЂ С‚РµРєСЃС‚СѓСЂРЅРѕРіРѕ Р±Р»РѕРєР°,
+	// Рє РєРѕС‚РѕСЂРѕРјСѓ РѕРЅР° РїСЂРёРІСЏР·Р°РЅР°
 	glUniform1i(m_mainTextureSamplerLocation, 0);
 	glUniform1i(m_cloudsTextureSamplerLocation, 1);
 
-	glLoadMatrixd(m_rotationController.GetModelViewMatrix());
+	glLoadMatrixd(&(m_rotationController.GetModelViewMatrix()[0][0]));
 
 	m_light.SetLight(GL_LIGHT0);
 	m_material.Activate(GL_FRONT);
@@ -109,34 +107,34 @@ void CMyApplication::LoadTextures()
 
 void CMyApplication::InitShaders()
 {
-	// Загружаем шейдеры
+	// Р—Р°РіСЂСѓР¶Р°РµРј С€РµР№РґРµСЂС‹
 	CShaderLoader loader;
 	CShader vertexShader =
 		loader.LoadShader(GL_VERTEX_SHADER, L"texture_mapping.vsh");
 	CShader fragmentShader =
 		loader.LoadShader(GL_FRAGMENT_SHADER, L"texture_mapping.fsh");
 
-	// Создаем программы и присоединяем к ней шейдеры
+	// РЎРѕР·РґР°РµРј РїСЂРѕРіСЂР°РјРјС‹ Рё РїСЂРёСЃРѕРµРґРёРЅСЏРµРј Рє РЅРµР№ С€РµР№РґРµСЂС‹
 	m_program.Create();
 	m_program.AttachShader(vertexShader);
 	m_program.AttachShader(fragmentShader);
 
-	// Компилируем шейдеры
+	// РљРѕРјРїРёР»РёСЂСѓРµРј С€РµР№РґРµСЂС‹
 	CShaderCompiler compiler;
 	compiler.CompileShader(vertexShader);
 	compiler.CompileShader(fragmentShader);
 	compiler.CheckStatus();
 
-	// Компонуем программу
+	// РљРѕРјРїРѕРЅСѓРµРј РїСЂРѕРіСЂР°РјРјСѓ
 	CProgramLinker linker;
 	linker.LinkProgram(m_program);
 	linker.CheckStatus();
 
-	// Выводим информацию о программе
+	// Р’С‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїСЂРѕРіСЂР°РјРјРµ
 	CProgramInfo programInfo(m_program);
 	programInfo.Print(std::cout);
 
-	// Получаем и сохраняем расположение uniform-переменной mainTexture
+	// РџРѕР»СѓС‡Р°РµРј Рё СЃРѕС…СЂР°РЅСЏРµРј СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ uniform-РїРµСЂРµРјРµРЅРЅРѕР№ mainTexture
 	m_mainTextureSamplerLocation = m_program.GetUniformLocation("mainTexture");
 	m_cloudsTextureSamplerLocation = m_program.GetUniformLocation("cloudsTexture");
 }
@@ -145,7 +143,7 @@ void CMyApplication::OnReshape(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	// Вычисляем соотношение сторон клиентской области окна
+	// Р’С‹С‡РёСЃР»СЏРµРј СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РєР»РёРµРЅС‚СЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё РѕРєРЅР°
 	double aspect = double(width) / double(height);
 
 	glMatrixMode(GL_PROJECTION);

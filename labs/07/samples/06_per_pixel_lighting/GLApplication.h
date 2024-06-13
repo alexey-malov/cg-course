@@ -21,13 +21,13 @@ protected:
 	virtual ~CGLApplication(void);
 
 	virtual void OnInit();
-	// Данный метод всегда должен быть перегружен
+	// Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ РІСЃРµРіРґР° РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ
 	virtual void OnDisplay() = 0;	
 
-	// Инициирует перерисовку изображения в окне
+	// РРЅРёС†РёРёСЂСѓРµС‚ РїРµСЂРµСЂРёСЃРѕРІРєСѓ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ РѕРєРЅРµ
 	void PostRedisplay();
 
-	// Установка обарботчика таймера
+	// РЈСЃС‚Р°РЅРѕРІРєР° РѕР±СЂР°Р±РѕС‚С‡РёРєР° С‚Р°Р№РјРµСЂР°
 	typedef void (*TimerProc)(int value);
 	void SetTimer(int milliseconds, TimerProc proc, int value);
 private:

@@ -27,7 +27,7 @@ private:
 
 	CRotationController m_rotationController;
 
-	// Угол обзора по вертикали
+	// РЈРіРѕР» РѕР±Р·РѕСЂР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 	static const double FIELD_OF_VIEW;
 	static const double ZNEAR;
 	static const double ZFAR;
@@ -35,7 +35,7 @@ private:
 	CTexture2D m_normalMap;
 	CTexture2D m_diffuseMap;
 
-	// программный объект
+	// РїСЂРѕРіСЂР°РјРјРЅС‹Р№ РѕР±СЉРµРєС‚
 	CProgram m_program;
 	GLint m_tangentLocation;
 	GLint m_normalMapLocation;

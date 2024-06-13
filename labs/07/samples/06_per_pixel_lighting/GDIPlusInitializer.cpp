@@ -8,7 +8,7 @@ CGDIPlusInitializer::CGDIPlusInitializer(void)
 
 	if (Gdiplus::GdiplusStartup(&m_token, &input, &output) != Gdiplus::Ok)
 	{
-		// Не удалось инициализировать GDI+
+		// РќРµ СѓРґР°Р»РѕСЃСЊ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ GDI+
 		throw std::runtime_error("Failed to initialize GDI+");
 	}
 }

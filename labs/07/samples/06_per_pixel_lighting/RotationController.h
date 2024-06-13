@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IApplicationListener.h"
-#include "Matrix4.h"
 #include "IEventDispatcher.h"
 
 class IRotationControllerListener;
@@ -15,21 +14,23 @@ class CRotationController
 public:
 	CRotationController(int windowWidth, int windowHeight);
 
-	// Установка и получение матрицы моделирования-вида,
-	// которой упавляет контроллер вращения
-	void SetModelViewMatrix(CMatrix4d const& matrix);
-	CMatrix4d const& GetModelViewMatrix()const;
+	// РЈСЃС‚Р°РЅРѕРІРєР° Рё РїРѕР»СѓС‡РµРЅРёРµ РјР°С‚СЂРёС†С‹ РјРѕРґРµР»РёСЂРѕРІР°РЅРёСЏ-РІРёРґР°,
+	// РєРѕС‚РѕСЂРѕР№ СѓРїСЂР°РІР»СЏРµС‚ РєРѕРЅС‚СЂРѕР»Р»РµСЂ РІСЂР°С‰РµРЅРёСЏ
+	void SetModelViewMatrix(glm::dmat4x4 const& matrix);
+	glm::dmat4x4 const& GetModelViewMatrix()const;
 
 
 private:
-	// Обработчики событий о нажатии кнопки мыши и перемещении 
-	// курсора, а также события об изменении размеров окна
+	// РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№ Рѕ РЅР°Р¶Р°С‚РёРё РєРЅРѕРїРєРё РјС‹С€Рё Рё РїРµСЂРµРјРµС‰РµРЅРёРё 
+	// РєСѓСЂСЃРѕСЂР°, Р° С‚Р°РєР¶Рµ СЃРѕР±С‹С‚РёСЏ РѕР± РёР·РјРµРЅРµРЅРёРё СЂР°Р·РјРµСЂРѕРІ РѕРєРЅР°
 	virtual void OnReshape(int windowWidth, int windowHeight);
 	virtual void OnMouse(int button, int state, int x, int y);
 	virtual void OnMotion(int x, int y);
 
-	// Вращение камеры на заданные углы
-	void RotateCamera(GLfloat rotateX, GLfloat rotateY);
+	glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m);
+
+	// Р’СЂР°С‰РµРЅРёРµ РєР°РјРµСЂС‹ РЅР° Р·Р°РґР°РЅРЅС‹Рµ СѓРіР»С‹
+	void RotateCamera(GLdouble rotateX, GLdouble rotateY);
 
 	bool m_leftButtonPressed;
 	int m_mouseX;
@@ -37,6 +38,6 @@ private:
 	int m_windowWidth;
 	int m_windowHeight;
 
-	// Матрица моделирования-вида, управляемая контроллером вращения
-	CMatrix4d m_modelViewMatrix;
+	// РњР°С‚СЂРёС†Р° РјРѕРґРµР»РёСЂРѕРІР°РЅРёСЏ-РІРёРґР°, СѓРїСЂР°РІР»СЏРµРјР°СЏ РєРѕРЅС‚СЂРѕР»Р»РµСЂРѕРј РІСЂР°С‰РµРЅРёСЏ
+	glm::dmat4x4 m_modelViewMatrix;
 };
