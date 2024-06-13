@@ -179,87 +179,58 @@
 ```
 
 ##### Функция main
+
 Функция **main** нашего приложения будет выполнять обработку параметров командой строки и вывод инструкции по использованию программы.
 
-void Dump3dsFile(const char \*fileName)
-
+```cpp
+void Dump3dsFile(const char *fileName)
 {
-
-`	`//...
-
+    //...
 }
 
-int main(int argc, char\* argv[])
-
+int main(int argc, char *argv[])
 {
-
-`	`if (argc == 1)
-
-`	`{
-
-`		`// Если программа запущена без аргументов командной строки,
-
-`		`// выводим инструкцию по пользованию
-
-`		`cout << "Usage:\n01\_dump\_3ds.exe <3ds file name>\n";
-
-`		`return 0;
-
-`	`}
-
-`	`else if (argc != 2)
-
-`	`{
-
-`		`// Если программа запущена с неверным числом аргументов,
-
-`		`// сообщаем о некорректном использовании
-
-`		`cout << "Invalid command line. Use the following syntax\n"
-
-`			`<< "01\_dump\_3ds.exe <3ds file name>\n";
-
-`		`return 1;
-
-`	`}
-
-`	`try
-
-`	`{
-
-`		`Dump3dsFile(argv[1]);
-
-`	`}
-
-`	`catch (std::runtime\_error const& e)
-
-`	`{
-
-`		`cout << "Error: " << e.what();	
-
-`		`return 2;
-
-`	`}
-
-`	`return 0;
-
+    if (argc == 1)
+    {
+        // Если программа запущена без аргументов командной строки,
+        // выводим инструкцию по пользованию
+        cout << "Usage: n01_dump_3ds.exe <3ds file name>\n";
+        return 0;
+    }
+    else if (argc != 2)
+    {
+        // Если программа запущена с неверным числом аргументов,
+        // сообщаем о некорректном использовании
+        cout << "Invalid command line. Use the following syntax\n"
+             << "01_dump_3ds.exe <3ds file name>\n";
+        return 1;
+    }
+    try
+    {
+        Dump3dsFile(argv[1]);
+    }
+    catch (std::runtime_error const &e)
+    {
+        cout << "Error: " << e.what();
+        return 2;
+    }
+    return 0;
 }
+```
+
 ##### Открытие и закрытие .3ds-файла
+
 Для работы с файлами .3ds библиотека lib3ds предоставляет ряд функций:
 
-extern LIB3DSAPI Lib3dsFile\* lib3ds\_file\_open(const char \*filename);
-
-extern LIB3DSAPI int lib3ds\_file\_save(Lib3dsFile \*file, const char \*filename);
-
-extern LIB3DSAPI Lib3dsFile\* lib3ds\_file\_new();
-
-extern LIB3DSAPI void lib3ds\_file\_free(Lib3dsFile \*file);
-
-extern LIB3DSAPI void lib3ds\_file\_eval(Lib3dsFile \*file, float t);
-
-extern LIB3DSAPI int lib3ds\_file\_read(Lib3dsFile \*file, Lib3dsIo \*io);
-
-extern LIB3DSAPI int lib3ds\_file\_write(Lib3dsFile \*file, Lib3dsIo \*io);
+```cpp
+extern LIB3DSAPI Lib3dsFile* lib3ds_file_open(const char *filename);
+extern LIB3DSAPI int lib3ds_file_save(Lib3dsFile *file, const char *filename);
+extern LIB3DSAPI Lib3dsFile* lib3ds_file_new();
+extern LIB3DSAPI void lib3ds_file_free(Lib3dsFile *file);
+extern LIB3DSAPI void lib3ds_file_eval(Lib3dsFile *file, float t);
+extern LIB3DSAPI int lib3ds_file_read(Lib3dsFile *file, Lib3dsIo *io);
+extern LIB3DSAPI int lib3ds_file_write(Lib3dsFile *file, Lib3dsIo *io);
+```
 
 Две последние функции позволяют загрузить или сохранить 3ds файл с использованием функций ввода-вывода, определяемых пользователем, что позволит, наример, загрузить файл с Unicode-именем, либо из массива в памяти.
 
@@ -267,639 +238,373 @@ extern LIB3DSAPI int lib3ds\_file\_write(Lib3dsFile \*file, Lib3dsIo \*io);
 
 Для автоматического освобождения занимаемой 3ds-файлом памяти создадим простенький класс CFile3ds, деструктор которого будет вызывать функцию lib3ds\_file\_free для освобождения связанных с файлом ресурсов.
 
+```cpp
 class CFile3ds
-
 {
-
 public:
-
-`	`CFile3ds(Lib3dsFile \* pFile)
-
-`		`:m\_pFile(pFile)
-
-`	`{
-
-`	`}
-
-`	`~CFile3ds()
-
-`	`{
-
-`		`if (m\_pFile)
-
-`		`{
-
-`			`lib3ds\_file\_free(m\_pFile);
-
-`		`}
-
-`	`}
+    CFile3ds(Lib3dsFile *pFile)
+        : m_pFile(pFile)
+    {
+    }
+    ~CFile3ds()
+    {
+        if (m_pFile)
+        {
+            lib3ds_file_free(m_pFile);
+        }
+    }
 
 private:
-
-`	`CFile3ds(CFile3ds const&);
-
-`	`CFile3ds& operator=(CFile3ds const&);
-
-`	`Lib3dsFile \* m\_pFile;
-
+    CFile3ds(CFile3ds const &);
+    CFile3ds &operator=(CFile3ds const &);
+    Lib3dsFile *m_pFile;
 };
+```
 
 Функция Dump3dsFile будет выглядеть следующим образом:
 
-void DumpMaterials(Lib3dsFile const \* pFile)
-
+```cpp
+void DumpMaterials(Lib3dsFile const *pFile)
 {
-
-`	`// ...
-
+    // ...
 }
 
-void DumpLights(Lib3dsFile const \*pFile)
-
+void DumpLights(Lib3dsFile const *pFile)
 {
-
-`	`// ...
-
+    // ...
 }
 
-void DumpMeshes(Lib3dsFile const \* pFile)
-
+void DumpMeshes(Lib3dsFile const *pFile)
 {
-
-`	`// ...
-
+    // ...
 }
 
-void Dump3dsFile(const char \*fileName)
-
+void Dump3dsFile(const char *fileName)
 {
-
-`	`// Открываем файл формата 3ds
-
-`	`Lib3dsFile \* pFile = lib3ds\_file\_open(fileName);
-
-`	`// В случае ошибки выбрасываем исключение
-
-`	`if (pFile == NULL)
-
-`	`{
-
-`		`throw std::runtime\_error("Unable to read 3ds file");
-
-`	`}
-
-`	`// Сохраняем указатель на файл в обертке CFile3ds
-
-`	`CFile3ds file(pFile);
-
-`	`// Выводим информацию о материалах,
-
-`	`DumpMaterials(pFile);
-
-`	`// источниках света
-
-`	`DumpLights(pFile);
-
-`	`// и полигональных сетках
-
-`	`DumpMeshes(pFile);
-
+    // Открываем файл формата 3ds
+    Lib3dsFile *pFile = lib3ds_file_open(fileName);
+    // В случае ошибки выбрасываем исключение
+    if (pFile == NULL)
+    {
+        throw std::runtime_error("Unable to read 3ds file");
+    }
+    // Сохраняем указатель на файл в обертке CFile3ds
+    CFile3ds file(pFile);
+    // Выводим информацию о материалах,
+    DumpMaterials(pFile);
+    // источниках света
+    DumpLights(pFile);
+    // и полигональных сетках
+    DumpMeshes(pFile);
 }
+```
 
 Функция lib3ds\_file\_open загружает содержимое 3ds файла в память и возвращает структуру **Lib3dsFile**, содержащую информацию о 3ds-файле. Данная структура объявлена следующим образом:
-
+```cpp
 typedef struct Lib3dsFile {
-
-`    `unsigned            user\_id;
-
-`    `void\*               user\_ptr;
-
-`    `unsigned            mesh\_version;
-
-`    `unsigned            keyf\_revision;
-
-`    `char                name[12+1];
-
-`    `float               master\_scale;
-
-`    `float               construction\_plane[3];
-
-`    `float               ambient[3];
-
-`    `Lib3dsShadow        shadow;
-
-`    `Lib3dsBackground    background;
-
-`    `Lib3dsAtmosphere    atmosphere;
-
-`    `Lib3dsViewport      viewport;
-
-`    `Lib3dsViewport      viewport\_keyf;
-
-`    `int                 frames;
-
-`    `int                 segment\_from;
-
-`    `int                 segment\_to;
-
-`    `int                 current\_frame;
-
-`    `int                 materials\_size;
-
-`    `int                 nmaterials;    // Количество материалов
-
-`    `Lib3dsMaterial\*\*    materials;     // Массив материалов
-
-`    `int                 cameras\_size;
-
-`    `int                 ncameras;                      
-
-`    `Lib3dsCamera\*\*      cameras;
-
-`    `int                 lights\_size;
-
-`    `int                 nlights;       // Количество источников света
-
-`    `Lib3dsLight\*\*       lights;        // Массив источников света
-
-`    `int                 meshes\_size;
-
-`    `int                 nmeshes;       // Количество полигональных сеток 
-
-`    `Lib3dsMesh\*\*        meshes;        // Массив полигональных сеток 
-
-`    `Lib3dsNode\*         nodes;
-
+    unsigned            user_id;
+    void                user_ptr;
+    unsigned            mesh_version;
+    unsigned            keyf_revision;
+    char                name[12+1];
+    float               master_scale;
+    float               construction_plane[3];
+    float               ambient[3];
+    Lib3dsShadow        shadow;
+    Lib3dsBackground    background;
+    Lib3dsAtmosphere    atmosphere;
+    Lib3dsViewport      viewport;
+    Lib3dsViewport      viewport_keyf;
+    int                 frames;
+    int                 segment_from;
+    int                 segment_to;
+    int                 current_frame;
+    int                 materials_size;
+    int                 nmaterials;      // Количество материалов
+    Lib3dsMaterial      materials;     // Массив материалов
+    int                 cameras_size;
+    int                 ncameras;                      
+    Lib3dsCamera        cameras;
+    int                 lights_size;
+    int                 nlights;         // Количество источников света
+    Lib3dsLight         lights;        // Массив источников света
+    int                 meshes_size;
+    int                 nmeshes;         // Количество полигональных сеток 
+    Lib3dsMesh          meshes;        // Массив полигональных сеток 
+    Lib3dsNode          nodes;
 } Lib3dsFile;
+```
+
 ##### Вывод информации о материалах, хранящихся в .3ds файлах
+
 Для доступа к материалам 3ds-файла воспользуемся полями **nmaterials** и **materials** структуры **Lib3dsFile**. Для простоты, выведем только часть информации о материалах – цвета диффузной, фоновой и зеркальной составляющих цвета, параметр зеркального блеска, а также текстурную карту. Данную информацию можно получить из структуры **Lib3dsMaterial**:
 
-/\*\* Material \*/
-
+```cpp
+// Material
 typedef struct Lib3dsMaterial {
-
-`    `unsigned            user\_id;
-
-`    `void\*               user\_ptr;
-
-`    `char                name[64];        /\* Material name \*/
-
-`    `float               ambient[3];      /\* Material ambient reflectivity \*/
-
-`    `float               diffuse[3];      /\* Material diffuse reflectivity \*/
-
-`    `float               specular[3];     /\* Material specular reflectivity \*/
-
-`    `float               shininess;          /\* Material specular exponent \*/
-
-`    `float               shin\_strength;
-
-`    `int                 use\_blur;
-
-`    `float               blur;
-
-`    `float               transparency;
-
-`    `float               falloff;
-
-`    `int                 is\_additive;
-
-`    `int                 self\_illum\_flag; /\* bool \*/
-
-`    `float               self\_illum;
-
-`    `int                 use\_falloff;
-
-`    `int                 shading;
-
-`    `int                 soften;         /\* bool \*/
-
-`    `int                 face\_map;       /\* bool \*/
-
-`    `int                 two\_sided;      /\* Material visible from back \*/
-
-`    `int                 map\_decal;      /\* bool \*/
-
-`    `int                 use\_wire;
-
-`    `int                 use\_wire\_abs;
-
-`    `float               wire\_size;
-
-`    `Lib3dsTextureMap    *texture1\_map;*
-\*
-`    `Lib3dsTextureMap*    texture1\_mask;
-
-`    `Lib3dsTextureMap    texture2\_map;
-
-`    `Lib3dsTextureMap    texture2\_mask;
-
-`    `Lib3dsTextureMap    opacity\_map;
-
-`    `Lib3dsTextureMap    opacity\_mask;
-
-`    `Lib3dsTextureMap    bump\_map;
-
-`    `Lib3dsTextureMap    bump\_mask;
-
-`    `Lib3dsTextureMap    specular\_map;
-
-`    `Lib3dsTextureMap    specular\_mask;
-
-`    `Lib3dsTextureMap    shininess\_map;
-
-`    `Lib3dsTextureMap    shininess\_mask;
-
-`    `Lib3dsTextureMap    self\_illum\_map;
-
-`    `Lib3dsTextureMap    self\_illum\_mask;
-
-`    `Lib3dsTextureMap    reflection\_map;
-
-`    `Lib3dsTextureMap    reflection\_mask;
-
-`    `unsigned            autorefl\_map\_flags;
-
-`    `/\* 0=None, 1=Low, 2=Medium, 3=High \*/
-
-`    `int                 autorefl\_map\_anti\_alias;
-
-`    `int                 autorefl\_map\_size;
-
-`    `int                 autorefl\_map\_frame\_step;
-
+    unsigned            user_id;
+    void                user_ptr;
+    char                name[64];        // Material name
+    float               ambient[3];      // Material ambient reflectivity
+    float               diffuse[3];      // Material diffuse reflectivity
+    float               specular[3];     // Material specular reflectivity
+    float               shininess;          // Material specular exponent
+    float               shin_strength;
+    int                 use_blur;
+    float               blur;
+    float               transparency;
+    float               falloff;
+    int                 is_additive;
+    int                 self_illum_flag;  //bool
+    float               self_illum;
+    int                 use_falloff;
+    int                 shading;
+    int                 soften;          //bool
+    int                 face_map;       //bool
+    int                 two_sided;      //Material visible from back
+    int                 map_decal;      //bool
+    int                 use_wire;
+    int                 use_wire_abs;
+    float               wire_size;
+    Lib3dsTextureMap    *texture1_map;
+    Lib3dsTextureMap*    texture1_mask;
+    Lib3dsTextureMap    texture2_map;
+    Lib3dsTextureMap    texture2_mask;
+    Lib3dsTextureMap    opacity_map;
+    Lib3dsTextureMap    opacity_mask;
+    Lib3dsTextureMap    bump_map;
+    Lib3dsTextureMap    bump_mask;
+    Lib3dsTextureMap    specular_map;
+    Lib3dsTextureMap    specular_mask;
+    Lib3dsTextureMap    shininess_map;
+    Lib3dsTextureMap    shininess_mask;
+    Lib3dsTextureMap    self_illum_map;
+    Lib3dsTextureMap    self_illum_mask;
+    Lib3dsTextureMap    reflection_map;
+    Lib3dsTextureMap    reflection_mask;
+    unsigned            autorefl_map_flags;
+    //0=None, 1=Low, 2=Medium, 3=High
+    int                 autorefl_map_anti_alias;
+    int                 autorefl_map_size;
+    int                 autorefl_map_frame_step;
 } Lib3dsMaterial;
+```
 
 Информацию о текстурах, связанных с материалом, получим из структуры **Lib3dsTextureMap**.
-
-/\* Material texture map \*/
-
-typedef struct Lib3dsTextureMap {
-
-`    `unsigned    user\_id;
-
-`    `void\*       user\_ptr;
-
-`    `char        name[64]; // Имя файла. Если пустая строка, то нет текстуры
-
-`    `unsigned    flags;
-
-`    `float       percent;
-
-`    `float       blur;
-
-`    `float       scale[2];  // параметры 
-
-`    `float       offset[2]; // трансформации 
-
-`    `float       rotation;  // текстурных координат
-
-`    `float       tint\_1[3];
-
-`    `float       tint\_2[3];
-
-`    `float       tint\_r[3];
-
-`    `float       tint\_g[3];
-
-`    `float       tint\_b[3];
-
+```cpp
+// Material texture map
+typedef struct Lib3dsTextureMap
+{
+    unsigned user_id;
+    void *user_ptr;
+    char name[64]; // Имя файла. Если пустая строка, то нет текстуры
+    unsigned flags;
+    float percent;
+    float blur;
+    float scale[2];  // параметры
+    float offset[2]; // трансформации
+    float rotation;  // текстурных координат
+    float tint_1[3];
+    float tint_2[3];
+    float tint_r[3];
+    float tint_g[3];
+    float tint_b[3];
 } Lib3dsTextureMap;
+```
 
 Исходный код функции DumpMaterials, выводящей информацию о материалах и связанных с ними текстурах.
-
+```cpp
 // Выводим информацию о материалах
-
-void DumpMaterials(Lib3dsFile const \* pFile)
-
+void DumpMaterials(Lib3dsFile const *pFile)
 {
+    const int materialsCount = pFile->nmaterials;
+    std::cout << "===Materials===\n";
+    for (int i = 0; i < materialsCount; ++i)
+    {
+        Lib3dsMaterial const *pMaterial = pFile->materials[i];
 
-`	`const int materialsCount = pFile->nmaterials;
+        // Выводим параметры материала
+        cout << "\t" << "Material: '" << pMaterial->name << "'\n";
+        cout << "\t\t" << "Ambient: " << RgbToString(pMaterial->ambient) << "\n";
+        cout << "\t\t" << "Diffuse: " << RgbToString(pMaterial->diffuse) << "\n";
+        cout << "\t\t" << "Specular: " << RgbToString(pMaterial->specular) << "\n";
+        cout << "\t\t" << "Shininess: " << pMaterial->shininess << "\n";
 
-`	`std::cout << "===Materials===\n";
+        // а также имя текстуры, которая может быть привязана к материалу
+        Lib3dsTextureMap const &textureMap = pMaterial->texture1_map;
 
-`	`for (int i = 0; i < materialsCount; ++i)
-
-`	`{
-
-`		`Lib3dsMaterial const \* pMaterial = pFile->materials[i];
-
-`		`// Выводим параметры материала,
-
-`		`cout << "\t"   << "Material: '" << pMaterial->name << "'\n";
-
-`		`cout << "\t\t" << "Ambient: " << RgbToString(pMaterial->ambient) << "\n";
-
-`		`cout << "\t\t" << "Diffuse: " << RgbToString(pMaterial->diffuse) << "\n";
-
-`		`cout << "\t\t" << "Specular: " << RgbToString(pMaterial->specular)
-
-`			   `<< "\n";
-
-`		`cout << "\t\t" << "Shininess: " << pMaterial->shininess << "\n";
-
-`		`// а также имя текстуры, которая может быть привязана к материалу
-
-`		`Lib3dsTextureMap const & textureMap = pMaterial->texture1\_map;
-
-`		`// Проверяем задано ли имя файла текстуры для данного материала
-
-`		`if (textureMap.name[0] != '\0')
-
-`		`{
-
-`			`cout << "\t\t" << "Texture: " << textureMap.name << "\n";
-
-`		`}
-
-`	`}
-
+        // Проверяем задано ли имя файла текстуры для данного материала
+        if (textureMap.name[0] != '\0')
+        {
+            cout << "\t\t" << "Texture: " << textureMap.name << "\n";
+        }
+    }
 }
+```
 ##### Вывод информации об источниках света
 Информация об источнике света в 3ds файле описывается в библиотеке lib3ds при помощи структуры **Lib3dsLight**:
-
-/\*\* Light object \*/
-
+```cpp
+//Light object
 typedef struct Lib3dsLight {
-
-`    `unsigned    user\_id;
-
-`    `void\*       user\_ptr;
-
-`    `char        name[64];
-
-`    `unsigned    object\_flags; 
-
-`    `int         spot\_light;     /\* bool \*/
-
-`    `int         see\_cone;
-
-`    `float       color[3];
-
-`    `float       position[3];
-
-`    `float       target[3];
-
-`    `float       roll;
-
-`    `int         off;              /\* bool \*/
-
-`    `float       outer\_range;
-
-`    `float       inner\_range;
-
-`    `float       multiplier;
-
-`    `/\*const char\*\*  excludes;\*/
-
-`    `float       attenuation;
-
-`    `int         rectangular\_spot;   /\* bool \*/
-
-`    `int         shadowed;           /\* bool \*/
-
-`    `float       shadow\_bias;
-
-`    `float       shadow\_filter;
-
-`    `int         shadow\_size;
-
-`    `float       spot\_aspect;
-
-`    `int         use\_projector;
-
-`    `char        projector[64];
-
-`    `int         spot\_overshoot;      /\* bool \*/
-
-`    `int         ray\_shadows;         /\* bool \*/
-
-`    `float       ray\_bias;
-
-`    `float       hotspot;
-
-`    `float       falloff;
-
+    unsigned user_id;
+    void* user_ptr;
+    char name[64];
+    unsigned object_flags; 
+    int spot_light;        /* bool */
+    int see_cone;
+    float color[3];
+    float position[3];
+    float target[3];
+    float roll;
+    int off;               /* bool */
+    float outer_range;
+    float inner_range;
+    float multiplier;
+    /*const char** excludes;*/
+    float attenuation;
+    int rectangular_spot;  /* bool */
+    int shadowed;          /* bool */
+    float shadow_bias;
+    float shadow_filter;
+    int shadow_size;
+    float spot_aspect;
+    int use_projector;
+    char projector[64];
+    int spot_overshoot;    /* bool */
+    int ray_shadows;       /* bool */
+    float ray_bias;
+    float hotspot;
+    float falloff;
 } Lib3dsLight;
-
+```
 Нас будет интересовать лишь имя источника света, цвет и положение в пространстве.
-
+```cpp
 std::string VectorToString(float const vec[3])
-
 {
-
-`	`stringstream s;
-
-`	`s << "(" << vec[0] << "; " << vec[1] << "; " << vec[2] << ")";
-
-`	`return s.str();
-
+    stringstream s;
+    s << "(" << vec[0] << "; " << vec[1] << "; " << vec[2] << ")";
+    return s.str();
 }
-
 // Выводим информацию об источниках света
-
 void DumpLights(Lib3dsFile const \*pFile)
-
 {
-
-`	`std::cout << "===Lights===\n";
-
-`	`const int lightsCount = pFile->nlights;
-
-`	`for (int i = 0; i < lightsCount; ++i)
-
-`	`{
-
-`		`Lib3dsLight const \* pLight = pFile->lights[i];
-
-`		`cout << "\t"   << "Light: '" << pLight->name << "'\n";
-
-`		`cout << "\t\t" << "Color: " << RgbToString(pLight->color) << "\n";
-
-`		`cout << "\t\t" << "Position: " << VectorToString(pLight->position)
-
-`				`<< "\n";
-
-`	`}
-
+    std::cout << "===Lights===\n";
+    const int lightsCount = pFile->nlights;
+    for (int i = 0; i < lightsCount; ++i)
+    {
+        Lib3dsLight const \* pLight = pFile->lights[i];
+        cout << "\t"   << "Light: '" << pLight->name << "'\n";
+        cout << "\t\t" << "Color: " << RgbToString(pLight->color) << "\n";
+        cout << "\t\t" << "Position: " << VectorToString(pLight->position)
+        << "\n";
+    }
 }
+```
 ##### <a name="_ref308648917"></a>Вывод информации о полигональных сетках
 Информация о полигональной сетке хранится в структуре **Lib3dsMesh**. Нас будет интересовать лишь информация о вершинах и гранях.
 
-typedef struct Lib3dsFace {
+```cpp
+typedef struct Lib3dsFace
+{
+    unsigned short index[3]; // Индексы вершин грани
+    unsigned short flags;
+    int material;             // Индекс материала. Если равен -1, то материал грани не задан
+    unsigned smoothing_group; // Группы сглаживания
+} Lib3dsFace;
 
-`    `unsigned short  index[3]; // Индексы вершин грани
+/* Triangular mesh object */
 
-`    `unsigned short  flags;
-
-`    `int             material; // Индекс материала.
-
-`                              `// Если равен -1, то материал грани не задан
-
-`    `unsigned        smoothing\_group; // Группы сглаживания
-
-} Lib3dsFace; 
-
-/\* Triangular mesh object \*/
-
-typedef struct Lib3dsMesh {
-
-`    `unsigned        user\_id;
-
-`    `void\*           user\_ptr;
-
-`    `char            name[64];/\*Mesh name. Don't use more than 8 characters \*/
-
-`    `unsigned        object\_flags;        /\*\*< @see Lib3dsObjectFlags \*/ 
-
-`    `int             color; /\*\*< Index to editor palette [0..255] \*/
-
-`    `float           matrix[4][4];/\*\*< Transformation matrix for mesh data \*/
-
-`    `unsigned short  nvertices;/\*\*< Number of vertices in vertex array (max. 65535) \*/
-
-`    `float           (\*vertices)[3];
-
-`    `float           (\*texcos)[2];
-
-`    `unsigned short\* vflags;
-
-`    `unsigned short  nfaces;/\*\*< Number of faces in face array (max. 65535) \*/
-
-`    `Lib3dsFace\*     faces;               
-
-`    `char            box\_front[64];
-
-`    `char            box\_back[64];
-
-`    `char            box\_left[64];
-
-`    `char            box\_right[64];
-
-`    `char            box\_top[64];
-
-`    `char            box\_bottom[64];
-
-`    `int             map\_type;
-
-`    `float           map\_pos[3];
-
-`    `float           map\_matrix[4][4];
-
-`    `float           map\_scale;
-
-`    `float           map\_tile[2];
-
-`    `float           map\_planar\_size[2];
-
-`    `float           map\_cylinder\_height;
-
+typedef struct Lib3dsMesh
+{
+    unsigned user_id;
+    void *user_ptr;
+    char name[64];            /* Mesh name. Don't use more than 8 characters */
+    unsigned object_flags;    /*< @see Lib3dsObjectFlags */
+    int color;                /*< Index to editor palette [0..255] */
+    float matrix[4][4];       /*< Transformation matrix for mesh data */
+    unsigned short nvertices; /*< Number of vertices in vertex array (max. 65535) */
+    float (*vertices)[3];
+    float (*texcos)[2];
+    unsigned short *vflags;
+    unsigned short nfaces;    /*< Number of faces in face array (max. 65535) */
+    Lib3dsFace *faces;
+    char box_front[64];
+    char box_back[64];
+    char box_left[64];
+    char box_right[64];
+    char box_top[64];
+    char box_bottom[64];
+    int map_type;
+    float map_pos[3];
+    float map_matrix[4][4];
+    float map_scale;
+    float map_tile[2];
+    float map_planar_size[2];
+    float map_cylinder_height;
 } Lib3dsMesh;
+```
 
 При наличии текстурных координат у вершин полигональной сетки, адрес их массива будет задан в поле **texcos** структуры Lib3dsMesh. В противном случае данное поле будет равно NULL.
 
 Разработаем функцию DumpMeshes, выводящую информацию о полигональной сетке.
-
+```cpp
 std::string TextureCoordsToString(float const vec[2])
-
 {
-
-`	`stringstream s;
-
-`	`s << "(" << vec[0] << "; " << vec[1] << ")";
-
-`	`return s.str();
-
+    stringstream s;
+    s << "(" << vec[0] << "; " << vec[1] << ")";
+    return s.str();
 }
 
 // Выводим информацию о полигональных сетках
 
-void DumpMeshes(Lib3dsFile const \* pFile)
-
+void DumpMeshes(Lib3dsFile const *pFile)
 {
+    std::cout << "===Meshes==\n";
+    const int meshCount = pFile->nmeshes;
+    for (int i = 0; i < meshCount; ++i)
+    {
+        Lib3dsMesh const *pMesh = pFile->meshes[i];
 
-`	`std::cout << "===Meshes==\n";
+        // Выводим имя полигональоной сетки
+        cout << "\t" << "Mesh: '" << pMesh->name << "'\n";
 
-`	`const int meshCount = pFile->nmeshes;
+        // Выводим информацию о ее вершинах
+        {
+            const int vertexCount = pMesh->nvertices;
+            cout << "\t\t" << "Vertices: " << vertexCount << "\n";
+            float const(*vertices)[3] = pMesh->vertices;
+            float const(*textureCoords)[2] = pMesh->texcos;
 
-`	`for (int i = 0; i <meshCount; ++i)
+            for (int i = 0; i < vertexCount; ++i)
+            {
+                cout << "\t\t\tVertex[" << i << "] " << VectorToString(vertices[i]);
+                if (textureCoords != NULL)
+                {
+                    // При наличии текстурных координат, выводим и их
+                    cout << " Tex: " << TextureCoordsToString(textureCoords[i]);
+                }
+                cout << "\n";
+            }
+        }
 
-`	`{
-
-`		`Lib3dsMesh const \* pMesh = pFile->meshes[i];
-
-`		`// Выводим имя полигональоной сетки
-
-`		`cout << "\t"   << "Mesh: '" << pMesh->name << "'\n";
-
-`		`// Выводим информацию о ее вершинах
-
-`		`{
-
-`			`const int vertexCount = pMesh->nvertices;
-
-`			`cout << "\t\t" << "Vertices: " << vertexCount << "\n";
-
-`			`float const (\*vertices)[3] = pMesh->vertices;
-
-`			`float const (\*textureCoords)[2] = pMesh->texcos;
-
-`			`for (int i = 0; i < vertexCount; ++i)
-
-`			`{
-
-`				`cout << "\t\t\tVertex[" << i << "] " << VectorToString(vertices[i]);
-
-`				`if (textureCoords != NULL)
-
-`				`{
-
-`					`// При наличии текстурных координат, выводим и их
-
-`					`cout << " Tex: " << TextureCoordsToString(textureCoords[i]);
-
-`				`}
-
-`				`cout << "\n";
-
-`			`}
-
-`		`}
-
-`		`// Выводим информацию о гранях
-
-`		`{
-
-`			`const int faceCount = pMesh->nfaces;
-
-`			`cout << "\t\t" << "Faces: " << faceCount << "\n";
-
-`			`for (int f = 0; f < faceCount; ++f)
-
-`			`{
-
-`				`Lib3dsFace const& face = pMesh->faces[f];
-
-`				`const unsigned short \* indices = face.index;
-
-`				`cout << "\t\t\tFace[" << f << "] " 
-
-`					`<< "(" << indices[0] << ", " << indices[1] << ", " 
-
-`					`<< indices[2] << ")"
-
-`					`<< " smooth: " << face.smoothing\_group << " flags:" << face.flags
-
-`					`<< " material: '" << face.material << "'\n";
-
-`			`}
-
-`		`}
-
-`	`}
-
+        // Выводим информацию о гранях
+        {
+            const int faceCount = pMesh->nfaces;
+            cout << "\t\t" << "Faces: " << faceCount << "\n";
+            for (int f = 0; f < faceCount; ++f)
+            {
+                Lib3dsFace const &face = pMesh->faces[f];
+                const unsigned short *indices = face.index;
+                cout << "\t\t\tFace[" << f << "] "
+                     << "(" << indices[0] << ", " << indices[1] << ", "
+                     << indices[2] << ")"
+                     << " smooth: " << face.smoothing_group << " flags:" << face.flags
+                     << " material: '" << face.material << "'\n";
+            }
+        }
+    }
 }
+```
 
 Попробуйте запустить данное приложение, передав ему в качестве параметра имя файла формата 3ds.
 ## <a name="_toc340531762"></a>**Визуализация массивов примитивов**
@@ -920,68 +625,47 @@ void DumpMeshes(Lib3dsFile const \* pFile)
 Данные функции довольно универсальны, поскольку позволяют размещать атрибуты вершин (координаты, цвета, нормали и т.п.) как в независимых массивах, так и в чередующихся (interleaved) массивах. Шаг между элементами каждого из массивов задается при помощи параметра stride.
 
 Пример независимого задания массивов координат вершин и цветов на примере треугольника.
-
+```cpp
 // Структура - трехмерный вектор
-
 struct Vec3
-
 {
-
-`	`GLfloat x, y, z;
-
+    GLfloat x, y, z;
 };
 
 // Структура - четырехкомпонентный цвет
-
 struct Color4
-
 {
-
-`	`GLubyte r, g, b, a;
-
+    GLubyte r, g, b, a;
 };
 
 static const Vec3 coords[3] = 
-
 {
-
-`	`{-1, -1, -3},
-
-`	`{1, -1, -3},
-
-`	`{0, 1, -3},
-
+    {-1, -1, -3},
+    {1, -1, -3},
+    {0, 1, -3},
 };
 
 static const Color4 colors[3] = 
-
 {
-
-`	`{255, 0, 0, 255},
-
-`	`{0, 255, 0, 255},
-
-`	`{0, 0, 255, 255},
-
+    {255, 0, 0, 255},
+    {0, 255, 0, 255},
+    {0, 0, 255, 255},
 };
+```
 
 Для передачи OpenGL сведений о данных массивах может быть использован код вроде следующего:
-
+```cpp
 // Задаем адрес массива вершин
-
 glVertexPointer(
-
-`	`3,			// Координаты задаются в виде трехкомпонентного вектора
-
-`	`GL\_FLOAT,	// типа float
-
-`	`sizeof(Vec3), // Количество байт между началом i-ой и i+1-ой вершинами
-
-`	`&coords[0]); // Адрес первой вершины
+    3,               // Координаты задаются в виде трехкомпонентного вектора
+    GL_FLOAT,        // типа float
+    sizeof(Vec3),    // Количество байт между началом i-ой и i+1-ой вершинами
+    &coords[0]       // Адрес первой вершины
+);
 
 // Аналогично задаем параметры массива цветов
-
-glColorPointer(4, GL\_UNSIGNED\_BYTE, sizeof(Color4), &colors[0]);
+glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Color4), &colors[0]);
+```
 
 После того, как параметры массивов были указаны, можно выполнить рисование примитивов, предварительно разрешив использование соответствующих массивов при помощи функции [glEnableClientState](http://www.opengl.org/sdk/docs/man/xhtml/glEnableClientState.xml). Для рисования передачи данных о вершинах группы примитивов воспользуемся функцией [glDrawArrays](http://www.opengl.org/sdk/docs/man/xhtml/glDrawArrays.xml). После того, как рисование было завершено, запретим использование массивов при помощи функции [glDisableClientState](http://www.opengl.org/sdk/docs/man/xhtml/glEnableClientState.xml). 
 
@@ -991,25 +675,18 @@ glColorPointer(4, GL\_UNSIGNED\_BYTE, sizeof(Color4), &colors[0]);
 
 Код, выполняющий настройку клиентского состояния OpenGL и визуализацию треугольника, представлен ниже.
 
+```cpp
 // Разрешаем использование массива координат вершин
-
-glEnableClientState(GL\_VERTEX\_ARRAY);
-
+glEnableClientState(GL_VERTEX_ARRAY);
 // И массива цветов
-
-glEnableClientState(GL\_COLOR\_ARRAY);
-
+glEnableClientState(GL_COLOR_ARRAY);
 // Рисуем массив треугольников начиная с 0-вершины, всего 3 вершины
-
-glDrawArrays(GL\_TRIANGLES, 0, 3);
-
+glDrawArrays(GL_TRIANGLES, 0, 3);
 // Выключаем использовнием массива цветов
-
-glDisableClientState(GL\_COLOR\_ARRAY);
-
+glDisableClientState(GL_COLOR_ARRAY);
 // Выключаем использование массива координат вершин
-
-glDisableClientState(GL\_VERTEX\_ARRAY);
+glDisableClientState(GL_VERTEX_ARRAY);
+```
 
 На следующем рисунке показано, каким образом подобные массивы располагаются в памяти, а также раскрывается смысл параметра stride, который принимают функции **gl\*Pointer**.
 
@@ -1035,119 +712,73 @@ glDisableClientState(GL\_VERTEX\_ARRAY);
 
 Пример передачи информации о чередующемся массиве вершин OpenGL на примере куба показан ниже. Данные куба хранятся в двух массивах – массиве вершин и массиве граней.
 
-void CMyApplication::DrawCube()const
-
+```cpp
+void CMyApplication::DrawCube() const
 {
+    /*
+         Y
+         |
+         |
+         |
+         +---X
+        /
+       /
+      Z
+         3----2
+        /    /|
+       /    / |
+      7----6  |
+      |  0 |  1
+      |    | /
+      |    |/
+      4----5
+    */
 
-`	`/\*
+    // Массив координат вершин
+    static const Vertex vertices[8] = 
+    {
+        {{-1, -1, -1}, {255, 0, 0, 255}},    // 0
+        {{+1, -1, -1}, {255, 255, 0, 255}},  // 1
+        {{+1, +1, -1}, {0, 255, 0, 255}},    // 2
+        {{-1, +1, -1}, {0, 0, 0, 255}},      // 3
+        {{-1, -1, +1}, {255, 0, 255, 255}},  // 4
+        {{+1, -1, +1}, {255, 255, 255, 255}},// 5
+        {{+1, +1, +1}, {0, 255, 255, 255}},  // 6
+        {{-1, +1, +1}, {0, 0, 255, 255}},    // 7
+    };
 
-`	   `Y
+    // Массив граней, а точнее, индексов составляющих их вершин.
+    // Индексы вершин граней перечисляются в порядке их обхода
+    // против часовой стрелки (если смотреть на грань снаружи)
+    static const unsigned char faces[6][4] = 
+    {
+        {4, 7, 3, 0},  // грань x<0
+        {5, 1, 2, 6},  // грань x>0
+        {4, 0, 1, 5},  // грань y<0
+        {7, 6, 2, 3},  // грань y>0
+        {0, 3, 2, 1},  // грань z<0
+        {4, 5, 6, 7},  // грань z>0
+    };
 
-`	   `|
+    // Передаем информацию о массиве вершин
+    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), &vertices[0].pos);
 
-`	   `|
+    // и массиве цветов
+    glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), &vertices[0].color);
 
-`	   `|
+    // Разрешаем использование массива координат вершин и цветов
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
-`	   `+---X
+    glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, faces);
 
-`	  `/
+    // Выключаем использование массива цветов
+    glDisableClientState(GL_COLOR_ARRAY);
 
-`	 `/
-
-`	`Z
-
-`	   `3----2
-
-`	  `/    /|
-
-`	 `/    / |
-
-`	`7----6  |
-
-`	`|  0 |  1
-
-`	`|    | /
-
-`	`|    |/
-
-`	`4----5
-
-`	`\*/
-
-`	`// Массив координат вершин
-
-`	`static const Vertex vertices[8] = 
-
-`	`{
-
-`		`{{-1, -1, -1}, {255, 0, 0, 255}},		// 0
-
-`		`{{+1, -1, -1}, {255, 255, 0, 255}},		// 1
-
-`		`{{+1, +1, -1}, {0, 255, 0, 255}},		// 2
-
-`		`{{-1, +1, -1}, {0, 0, 0, 255}},		// 3
-
-`		`{{-1, -1, +1}, {255, 0, 255, 255}},		// 4
-
-`		`{{+1, -1, +1}, {255, 255, 255, 255}},	// 5
-
-`		`{{+1, +1, +1}, {0, 255, 255, 255}},		// 6
-
-`		`{{-1, +1, +1}, {0, 0, 255, 255}},		// 7
-
-`	`};
-
-`	`// Массив граней, а точнее, индексов составляющих их вершин.
-
-`	`// Индексы вершин граней перечисляются в порядке их обхода
-
-`	`// против часовой стрелки (если смотреть на грань снаружи)
-
-`	`static const unsigned char faces[6][4] = 
-
-`	`{
-
-`		`{4, 7, 3, 0},	// грань x<0
-
-`		`{5, 1, 2, 6},	// грань x>0
-
-`		`{4, 0, 1, 5},	// грань y<0
-
-`		`{7, 6, 2, 3},	// грань y>0
-
-`		`{0, 3, 2, 1},	// грань z<0
-
-`		`{4, 5, 6, 7},	// грань z>0
-
-`	`};
-
-`	`// Передаем информацию о массиве вершин
-
-`	`glVertexPointer(3, GL\_FLOAT, sizeof(Vertex), &vertices[0].pos);
-
-`	`// и массиве цветов
-
-`	`glColorPointer(4, GL\_UNSIGNED\_BYTE, sizeof(Vertex), &vertices[1].color);
-
-`	`// Разрешаем использование массива координат вершин и цветов
-
-`	`glEnableClientState(GL\_VERTEX\_ARRAY);
-
-`	`glEnableClientState(GL\_COLOR\_ARRAY);
-
-`	`glDrawElements(GL\_QUADS, 24, GL\_UNSIGNED\_BYTE, faces);
-
-`	`// Выключаем использовнием массива цветов
-
-`	`glDisableClientState(GL\_COLOR\_ARRAY);
-
-`	`// Выключаем использование массива координат вершин
-
-`	`glDisableClientState(GL\_VERTEX\_ARRAY);
-
+    // Выключаем использование массива координат вершин
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
+```
 
 На следующем рисунке показано, каким образом располагаются в памяти чередующиеся (Interleaved) массивы вершинных атрибутов, а также поясняется значение параметра stride, который принимают функции **gl\*Pointer**.
 
@@ -1171,432 +802,277 @@ OpenGL предоставляет такую возможность при по�
 
 Класс CBufferObjectBase реализовывает операции, специфичные для всех типов буферных объектов.
 
+```cpp
 class CBufferObjectBase
-
 {
-
 public:
+    // Генерируем имя для буферного объекта
+    void Create()
+    {
+        if (m_bufferId == 0)
+        {
+            glGenBuffers(1, &m_bufferId);
+        }
+    }
 
-`	`// Генерируем имя для буферного объекта
+    // Возвращаем идентификатор буферного объекта
+    operator GLuint() const
+    {
+        return m_bufferId;
+    }
 
-`	`void Create()
+    // "Отсоединяем" буферный объект от текущего экземпляра класса
+    GLuint Detach()
+    {
+        GLuint bufferId = m_bufferId;
+        m_bufferId = 0;
+        return bufferId;
+    }
 
-`	`{
-
-`		`if (m\_bufferId == 0)
-
-`		`{
-
-`			`glGenBuffers(1, &m\_bufferId);
-
-`		`}
-
-`	`}
-
-`	`// Возвращаем идентификатор буферного объекта
-
-`	`operator GLuint()const
-
-`	`{
-
-`		`return m\_bufferId;
-
-`	`}
-
-`	`// "Отсоединяем" буферный объект от текущего экземпляра класса
-
-`	`GLuint Detach()
-
-`	`{
-
-`		`GLuint bufferId = m\_bufferId;
-
-`		`m\_bufferId = 0;
-
-`		`return bufferId;
-
-`	`}
-
-`	`// Удаляем буферный объект
-
-`	`void Delete()
-
-`	`{
-
-`		`if (m\_bufferId != 0)
-
-`		`{
-
-`			`glDeleteBuffers(1, &m\_bufferId);
-
-`			`m\_bufferId = 0;
-
-`		`}
-
-`	`}
+    // Удаляем буферный объект
+    void Delete()
+    {
+        if (m_bufferId != 0)
+        {
+            glDeleteBuffers(1, &m_bufferId);
+            m_bufferId = 0;
+        }
+    }
 
 protected:
+    CBufferObjectBase(GLuint bufferId)
+        : m_bufferId(bufferId)
+    {
+    }
 
-`	`CBufferObjectBase(GLuint bufferId)
+    // Делаем буферный объект активным
+    void BindTo(GLenum target) const
+    {
+        glBindBuffer(target, m_bufferId);
+    }
 
-`		`:m\_bufferId(bufferId)
-
-`	`{
-
-`	`}
-
-`	`// Делаем буферный объект активным
-
-`	`void BindTo(GLenum target)const
-
-`	`{
-
-`		`glBindBuffer(target, m\_bufferId);
-
-`	`}
-
-`	`// Задаем идентификатор буферного объекта
-
-`	`void SetBuffer(GLuint bufferId)
-
-`	`{
-
-`		`m\_bufferId = bufferId;
-
-`	`}
+    // Задаем идентификатор буферного объекта
+    void SetBuffer(GLuint bufferId)
+    {
+        m_bufferId = bufferId;
+    }
 
 private:
+    GLuint m_bufferId;
 
-`	`GLuint m\_bufferId;
-
-`	`CBufferObjectBase(CBufferObjectBase const&);
-
-`	`CBufferObjectBase& operator=(CBufferObjectBase const&);
-
+    CBufferObjectBase(CBufferObjectBase const&);
+    CBufferObjectBase& operator=(CBufferObjectBase const&);
 };
+```
 
 Следующий класс определяет операции над буферами, специфичными для конкретных типов массивов.
 
-template <bool t\_managed, GLenum target>
-
+```cpp
+template <bool t_managed, GLenum target>
 class CBufferObjectImpl : public CBufferObjectBase
-
 {
-
 public:
+    CBufferObjectImpl<t_managed, target>(GLuint bufferId = 0)
+        : CBufferObjectBase(bufferId)
+    {
+    }
 
-`	`CBufferObjectImpl<t\_managed, target>(GLuint bufferId = 0)
+    ~CBufferObjectImpl()
+    {
+        if (t_managed && (*this != 0))
+        {
+            Delete();
+        }
+    }
 
-`		`:CBufferObjectBase(bufferId)
+    void Bind() const
+    {
+        BindTo(target);
+    }
 
-`	`{
+    void Attach(GLuint bufferId)
+    {
+        if (t_managed && (*this != 0) && (bufferId != *this))
+        {
+            Delete();
+        }
+        SetBuffer(bufferId);
+    }
 
-`	`}
+    static GLvoid* MapBuffer(GLenum access)
+    {
+        return glMapBuffer(target, access);
+    }
 
-`	`~CBufferObjectImpl()
+    static GLboolean UnmapBuffer()
+    {
+        return glUnmapBuffer(target);
+    }
 
-`	`{
+    static void BufferData(GLsizeiptr size, GLvoid const* data, GLenum usage)
+    {
+        glBufferData(target, size, data, usage);
+    }
 
-`		`if (t\_managed && (\*this != 0))
+    static void BufferSubData(GLintptr offset, GLsizeiptr size, const GLvoid* data)
+    {
+        glBufferSubData(target, offset, size, data);
+    }
 
-`		`{
-
-`			`Delete();
-
-`		`}
-
-`	`}
-
-`	`void Bind()const
-
-`	`{
-
-`		`BindTo(target);
-
-`	`}
-
-`	`void Attach(GLuint bufferId)
-
-`	`{
-
-`		`if (t\_managed && (\*this != 0) && (bufferId != \*this))
-
-`		`{
-
-`			`Delete();
-
-`		`}
-
-`		`SetBuffer(bufferId);
-
-`	`}
-
-`	`static GLvoid\* MapBuffer(GLenum access)
-
-`	`{
-
-`		`return glMapBuffer(target, access);
-
-`	`}
-
-`	`static GLboolean UnmapBuffer()
-
-`	`{
-
-`		`return glUnmapBuffer(target);
-
-`	`}
-
-`	`static void BufferData(GLsizeiptr size, GLvoid const\* data, GLenum usage)
-
-`	`{
-
-`		`glBufferData(target, size, data, usage);
-
-`	`}
-
-`	`static void BufferSubData(GLintptr offset, GLsizeiptr size, 
-
-`		`const GLvoid\* data)
-
-`	`{
-
-`		`glBufferSubData(target, offset, size, data)
-
-`	`}
-
-`	`CBufferObjectImpl<t\_managed, target> & operator=(GLuint bufferId)
-
-`	`{
-
-`		`Attach(bufferId);
-
-`		`return \*this;
-
-`	`}
-
+    CBufferObjectImpl<t_managed, target>& operator=(GLuint bufferId)
+    {
+        Attach(bufferId);
+        return *this;
+    }
 };
 
-
-typedef CBufferObjectImpl<true, GL\_ARRAY\_BUFFER> CArrayBuffer;
-
-typedef CBufferObjectImpl<false, GL\_ARRAY\_BUFFER> CArrayBufferHandle;
-
-typedef CBufferObjectImpl<true, GL\_ELEMENT\_ARRAY\_BUFFER> CElementArrayBuffer;
-
-typedef CBufferObjectImpl<false, GL\_ELEMENT\_ARRAY\_BUFFER> CElementArrayBufferHandle;
+typedef CBufferObjectImpl<true, GL_ARRAY_BUFFER> CArrayBuffer;
+typedef CBufferObjectImpl<false, GL_ARRAY_BUFFER> CArrayBufferHandle;
+typedef CBufferObjectImpl<true, GL_ELEMENT_ARRAY_BUFFER> CElementArrayBuffer;
+typedef CBufferObjectImpl<false, GL_ELEMENT_ARRAY_BUFFER> CElementArrayBufferHandle;
+```
 
 Для того, чтобы приложение смогло использовать функции по работе с буферными объектами, необходимо получить адреса соответствующих функций расширения. Как мы уже знаем из прошлой лабораторной работы, сделать это очень просто с использованием библиотеки GLEW.
+
 ### <a name="_toc340531766"></a>**Применяем буферные объекты на практике**
+
 Разработаем приложение, выполняющее визуализацию куба с цветными вершинами, но теперь с использованием буферных объектов.
+
 #### ***Инициализация библиотеки GLEW***
+
 При входе в функцию main необходимо вызвать функцию glewInit() для инициализации библиотеки GLEW[^7] и настройки поддерживаемых OpenGL расширений. Кроме того, необходимо добавить в настройки компоновщика библиотеку glew32s.lib.
 
+```cpp
 CMyApplication app("Rendering using Vertex Buffer Object", 800, 600);
-
-int \_tmain(int /\*argc\*/, \_TCHAR\* /\*argv\*/[])
-
+int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
+    glewInit();
 
-`	`glewInit();
+    try
+    {
+        app.MainLoop();
+    }
+    catch (std::exception const& e)
+    {
+        std::cout << e.what();
+    }
 
-`	`try
-
-`	`{
-
-`		`app.MainLoop();
-
-`	`}
-
-`	`catch (std::exception const& e)
-
-`	`{
-
-`		`std::cout << e.what();
-
-`	`}
-
-`	`return 0;
-
+    return 0;
 }
+```
+
 #### ***Инициализация буферных объектов и их содержимого***
+
 Для использования вершинных и индексных буферов в нашем приложении добавим экземпляры классов CArrayBuffer и CElementArrayBuffer в класс CMyApplication.
 
+```cpp
 class CMyApplication : public CGLApplication
-
 {
-
-...
+    //...
 
 private:
+    void DrawCube() const;
 
-`	`void DrawCube()const;
+    // Выполняем создание и инициализацию буферов вершин и индексов
+    void InitBuffers();
 
-`	`// Выполняем создание и инициализацию буферов вершин и индексов
+    // Буфер вершин
+    CArrayBuffer m_vertices;
 
-`	`void InitBuffers();
+    // Буфер индексов
+    CElementArrayBuffer m_indices;
 
-...
+    // Адреса массивов вершин, цвета и индексов
+    GLvoid const* m_pVertexArray;
+    GLvoid const* m_pColorArray;
+    GLvoid const* m_pIndexArray;
 
-`	`// Буфер вершин
-
-`	`CArrayBuffer m\_vertices;
-
-// Буфер индексов
-
-`	`CElementArrayBuffer m\_indices;
-
-`	`// Адреса массивов вершин, цвета и индексов
-
-`	`GLvoid const \* m\_pVertexArray;
-
-`	`GLvoid const \* m\_pColorArray;
-
-`	`GLvoid const \* m\_pIndexArray;
-
+public:
+    CMyApplication(const char* title, int width, int height)
+        : CGLApplication(title, width, height)
+        , m_rotationController(width, height)
+        , m_pVertexArray(NULL)
+        , m_pIndexArray(NULL)
+        , m_pColorArray(NULL)
+    {
+    }
 };
-
-CMyApplication::CMyApplication(const char \* title, int width, int height)
-
-:CGLApplication(title, width, height)
-
-,m\_rotationController(width, height)
-
-,m\_pVertexArray(NULL)
-
-,m\_pIndexArray(NULL)
-
-,m\_pColorArray(NULL)
-
-{
-
-}
+```
 
 В обработчик OnInit добавим вызов метода InitArrays(), в котором проверим поддержку реализацией OpenGL необходимого для работы приложения расширения **GL\_ARB\_vertex\_buffer\_object**.
 
+```cpp
 void CMyApplication::OnInit()
-
 {
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(1, 1, 1, 1);
 
-`	`glEnable(GL\_DEPTH\_TEST);
-
-`	`glClearColor(1, 1, 1, 1);
-
-
-
-`	`glLoadIdentity();
-
-`	`gluLookAt(0, 3, 4, 0, 0, 0, 0, 1, 0);
-
-`	`InitBuffers();
-
+    glLoadIdentity();
+    gluLookAt(0, 3, 4, 0, 0, 0, 0, 1, 0);
+    InitBuffers();
 }
 
 // Выполняем создание и инициализацию буферов вершин и индексов
-
 void CMyApplication::InitBuffers()
-
 {
-
-`	`// Проверяем наличие необходимого расширения GL\_ARB\_vertex\_buffer\_object
-
-`	`if (!GLEW\_ARB\_vertex\_buffer\_object)
-
-`	`{
-
-`		`throw std::runtime\_error(
-
-`			`"GL\_ARB\_vertex\_buffer\_object extension is not supported");
-
-`	`}
+    // Проверяем наличие необходимого расширения GL_ARB_vertex_buffer_object
+    if (!GLEW_ARB_vertex_buffer_object)
+    {
+        throw std::runtime_error(
+            "GL_ARB_vertex_buffer_object extension is not supported");
+    }
+}
+```
 
 Затем подготовим содержимое массивов вершин и индексов. Эта часть кода полностью совпадает с кодом предыдущей программы.
 
-`	`/\*
+```cpp
+/*
+    Y
+    |
+    |
+    |
+    +---X
+   /
+  /
+ Z
+    3----2
+   /    /|
+  /    / |
+    7----6  |
+  |  0 |  1
+  |    | /
+  |    |/
+    4----5
+*/
 
-`	   `Y
+// Массив координат вершин
+static const Vertex vertices[8] = 
+{
+    {{-1, -1, -1}, {255, 0, 0, 255}},    // 0
+    {{+1, -1, -1}, {255, 255, 0, 255}},  // 1
+    {{+1, +1, -1}, {0, 255, 0, 255}},    // 2
+    {{-1, +1, -1}, {0, 0, 0, 255}},      // 3
+    {{-1, -1, +1}, {255, 0, 255, 255}},  // 4
+    {{+1, -1, +1}, {255, 255, 255, 255}},// 5
+    {{+1, +1, +1}, {0, 255, 255, 255}},  // 6
+    {{-1, +1, +1}, {0, 0, 255, 255}},    // 7
+};
 
-`	   `|
-
-`	   `|
-
-`	   `|
-
-`	   `+---X
-
-`	  `/
-
-`	 `/
-
-`	`Z
-
-`	   `3----2
-
-`	  `/    /|
-
-`	 `/    / |
-
-`	`7----6  |
-
-`	`|  0 |  1
-
-`	`|    | /
-
-`	`|    |/
-
-`	`4----5
-
-`	`\*/
-
-`	`// Массив координат вершин
-
-`	`static const Vertex vertices[8] = 
-
-`	`{
-
-`		`{{-1, -1, -1}, {255, 0, 0, 255}},		// 0
-
-`		`{{+1, -1, -1}, {255, 255, 0, 255}},		// 1
-
-`		`{{+1, +1, -1}, {0, 255, 0, 255}},		// 2
-
-`		`{{-1, +1, -1}, {0, 0, 0, 255}},		// 3
-
-`		`{{-1, -1, +1}, {255, 0, 255, 255}},		// 4
-
-`		`{{+1, -1, +1}, {255, 255, 255, 255}},	// 5
-
-`		`{{+1, +1, +1}, {0, 255, 255, 255}},		// 6
-
-`		`{{-1, +1, +1}, {0, 0, 255, 255}},		// 7
-
-`	`};
-
-`	`// Массив координат граней (в порядке, совпадающем с 
-
-`	`// порядком объявления их в массиве цветов)
-
-`	`// индексы вершин граней перечисляются в порядке их обхода
-
-`	`// против часовой стрелки (если смотреть на грань снаружи)
-
-`	`static const unsigned char faces[6][4] = 
-
-`	`{
-
-`		`{4, 7, 3, 0},	// грань x<0
-
-`		`{5, 1, 2, 6},	// грань x>0
-
-`		`{4, 0, 1, 5},	// грань y<0
-
-`		`{7, 6, 2, 3},	// грань y>0
-
-`		`{0, 3, 2, 1},	// грань z<0
-
-`		`{4, 5, 6, 7},	// грань z>0
-
-`	`};
+// Массив координат граней (в порядке, совпадающем с 
+// порядком объявления их в массиве цветов)
+// индексы вершин граней перечисляются в порядке их обхода
+// против часовой стрелки (если смотреть на грань снаружи)
+static const unsigned char faces[6][4] = 
+{
+    {4, 7, 3, 0},  // грань x<0
+    {5, 1, 2, 6},  // грань x>0
+    {4, 0, 1, 5},  // грань y<0
+    {7, 6, 2, 3},  // грань y>0
+    {0, 3, 2, 1},  // грань z<0
+    {4, 5, 6, 7},  // грань z>0
+};
+```
 
 Следующим нашим шагом будет создание буферного объекта для хранения массива вершин. Для этого мы должны сгенерировать имя (целочисленный идентификатор) для буфера при помощи функции [glGenBuffers](http://www.opengl.org/sdk/docs/man/xhtml/glGenBuffers.xml). Для выполнения данной задачи в разработанном нами классе CBufferObjectBase служит метод Create().
 
@@ -1612,10 +1088,10 @@ void CMyApplication::InitBuffers()
 Шаблонный класс **CBufferObjectImpl** предоставляет метод **Bind** для привязки буферного объекта к параметру target, задаваемому в параметре шаблона.
 
 После того, как буферный объект был привязан, можно задать его содержимое при помощи функции [glBufferData](http://www.opengl.org/sdk/docs/man/xhtml/glBufferData.xml).
-
+```cpp
 void glBufferData(
-
-`	`GLenum target, GLsizeiptr size, const GLvoid\* data, GLenum usage);
+    GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage);
+```
 
 Параметр usage является подсказкой OpenGL о том, каким образом приложение планирует осуществлять доступ к данным, хранящимся в буфере. Данный параметр может помочь OpenGL обеспечить наилучшую производительность работы с буфером.
 
@@ -1635,57 +1111,34 @@ void glBufferData(
 
 Мы будем использовать в качестве параметра usage значение GL\_STATIC\_DRAW, что говорит о том, что мы не планируем задать содержимого буфера лишь однажды, и будем использовать данные, находящиеся в буфере, преимущественно, для рисования.
 
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`/\* Создаем и заполняем данными буфер вершин                             \*/
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`// Создаем объект "буфер вершин"
-
-`	`m\_vertices.Create();
-
-`	`// Делаем его активным
-
-`	`m\_vertices.Bind();
-
-`	`// Копируем данные из массива вершин в буферный объект 
-
-`	`m\_vertices.BufferData(sizeof(vertices), vertices, GL\_STATIC\_DRAW);
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`/\* Создаем и заполняем данными буфер индексов                           \*/
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`m\_indices.Create();
-
-`	`m\_indices.Bind();
-
-`	`m\_indices.BufferData(sizeof(faces), faces, GL\_STATIC\_DRAW);
+```cpp
+    //Создаем и заполняем данными буфер вершин
+    //Создаем объект "буфер вершин"
+    m_vertices.Create();
+    // Делаем его активным
+    m_vertices.Bind();
+    // Копируем данные из массива вершин в буферный объект 
+    m_vertices.BufferData(sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //Создаем и заполняем данными буфер индексов
+    m_indices.Create();
+    m_indices.Bind();
+    m_indices.BufferData(sizeof(faces), faces, GL_STATIC_DRAW);
+```
 
 Как уже говорилось ранее, после привязки буфера, имеющего идентификатор, отличный от 0, указатель на вершинные данные (например, в функции glVertexPointer) обретает иной смысл. Вместо адреса данных в памяти нашего приложения **должно передаваться смещение (в байтах) внутри буфера**, который хранится уже на стороне сервера OpenGL. Иными словами, после привязки буфера с ненулевым идентификатором, вместо смещения относительно нулевой ячейки памяти в адресном пространстве нашего приложения (а это есть не что иное, как указатель), передается смещение относительно начала буфера в адресном пространстве сервера OpenGL.
 
 ![](images/Aspose.Words.1c8fbd76-b881-4d10-95db-b8a605d5501a.010.png)
 
 Для определения смещения полей pos и color относительно начала структуры Vertex воспользуемся макросом **offsetof**, объявленным в stddef.h.
-
-`	`// При использовании буферных объектов вместо указателя 
-
-`	`// на данные используется их смещение относительно начала буфера
-
-`	`m\_pVertexArray = reinterpret\_cast<const GLvoid\*>(offsetof(Vertex, pos));
-
-`	`m\_pColorArray = reinterpret\_cast<const GLvoid\*>(offsetof(Vertex, color));
-
-`	`// Адрес данных в массиве индексов начинается со смещения 0
-
-`	`// относительно начала массива
-
-`	`m\_pIndexArray = reinterpret\_cast<const GLvoid\*>(0);
-
-}
+```cpp
+    // При использовании буферных объектов вместо указателя 
+    // на данные используется их смещение относительно начала буфера
+    m_pVertexArray = reinterpret_cast<const GLvoid\*>(offsetof(Vertex, pos));
+    m_pColorArray = reinterpret_cast<const GLvoid\*>(offsetof(Vertex, color));
+    // Адрес данных в массиве индексов начинается со смещения 0
+    // относительно начала массива
+    m_pIndexArray = reinterpret_cast<const GLvoid\*>(0);
+```
 #### ***Визуализация объектов хранящихся в вершинных и индексных буферах***
 Для рисования цветного куба с использованием буферных объектов необходимо выполнить следующие действия:
 
@@ -1699,48 +1152,36 @@ void glBufferData(
   - Отключить привязку к буферам вершин и индексов
 
 Исходный код функции рисования куба показан ниже.
-
-void CMyApplication::DrawCube()const
-
+```cpp
+void CMyApplication::DrawCube() const
 {
+    // Выполняем привязку буферов
+    m_vertices.Bind();
+    m_indices.Bind();
 
-`	`// Выполняем привязку буферов
+    // Разрешаем использование массива координат вершин и цветов  
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
-`	`m\_vertices.Bind();
+    // Задаем указатели (а точнее, смещение) на начало
+    // массивов координат и цветов вершин
+    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), m_pVertexArray);
+    glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), m_pColorArray);
 
-`	`m\_indices.Bind();
+    // Рисуем четырехугольные грани, составляющие куб
+    glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, m_pIndexArray);
 
-`	`// Разрешаем использование массива координат вершин и цветов	glEnableClientState(GL\_VERTEX\_ARRAY);
+    // отключаем использование буферных объектов
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-`	`glEnableClientState(GL\_COLOR\_ARRAY);
+    // Выключаем использование массива цветов
+    glDisableClientState(GL_COLOR_ARRAY);
 
-`	`// Задаем указатели (а точнее, смещение) на начало
-
-`	`// массивов координат и цветов вершин
-
-`	`glVertexPointer(3, GL\_FLOAT, sizeof(Vertex), m\_pVertexArray);
-
-`	`glColorPointer(4, GL\_UNSIGNED\_BYTE, sizeof(Vertex), m\_pColorArray);
-
-`	`// Рисуем четырехугольные грани, составляющие куб
-
-`	`glDrawElements(GL\_QUADS, 24, GL\_UNSIGNED\_BYTE, m\_pIndexArray);
-
-`	`// отключаем использование буферных объектов
-
-`	`glBindBuffer(GL\_ARRAY\_BUFFER, 0);
-
-`	`glBindBuffer(GL\_ELEMENT\_ARRAY\_BUFFER, 0);
-
-`	`// Выключаем использование массива цветов
-
-`	`glDisableClientState(GL\_COLOR\_ARRAY);
-
-`	`// Выключаем использование массива координат вершин
-
-`	`glDisableClientState(GL\_VERTEX\_ARRAY);
-
+    // Выключаем использование массива координат вершин
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
+```
 ### <a name="_toc340531767"></a>**Поддержка альтернативных способов визуализации сцены**
 Использование буферных объектов позволяет хранить вершины и грани трехмерных моделей на стороне сервера OpenGL, что может положительно сказаться на быстродействии приложения за счет сокращения объемов данных, передаваемых от приложения к OpenGL. Тем не менее, возможна ситуация, при которой текущая реализация OpenGL не поддерживает некоторые из используемых программой расширений.
 
@@ -1753,100 +1194,64 @@ void CMyApplication::DrawCube()const
 Вносить изменения в уже имеющийся класс для работы с буферными объектами мы не будем. Он и так хорошо справляется со своими обязанностями. Зато на его основе можно создать другой шаблонный класс, решающий поставленную задачу, с использованием композиции[^8] классов.
 #### ***Шаблонный класс CBufferImpl***
 Данный класс инкапсулирует хранилище данных о вершинах или индексах. В качестве хранилища может быть выбран буферный объект OpenGL либо, при отсутствии поддержки буферных объектов реализацией OpenGL, класс vector стандартной библиотеки языка C++. Использование класса vector для хранения данных также может быть явно указано пользователем данного класса. Для этого необходимо конструктору класса передать **false** в качестве значения аргумента **useVBO**.
-
-/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-/\* Реализация класса "Буфер", инкапсулирующая хранение данных           \*/
-
-/\* и использующая буферные объекты в случае их поддержки OpenGL         \*/
-
-/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
+```cpp
+/**********************************************************************/
+/* Реализация класса "Буфер", инкапсулирующая хранение данных         */
+/* и использующая буферные объекты в случае их поддержки OpenGL       */
+/**********************************************************************/
 
 template <GLenum target>
-
 class CBufferImpl
-
 {
-
 public:
+  // Параметр useVBO является пожеланием клиента об использовании
+  // Buffer object для хранения данных
+  CBufferImpl(bool useVBO = true)
+    : m_hasData(false)
+    , m_useVBO(useVBO)
+    , m_created(false)
+  {
+  }
 
-`	`// Параметр useVBO является пожеланием клиента об использовании
-
-`	`// Buffer object для хранения данных
-
-`	`CBufferImpl(bool useVBO = true)
-
-`		`:m\_hasData(false)
-
-`		`,m\_useVBO(useVBO)
-
-`		`,m\_created(false)
-
-`	`{
-
-`	`}
-
-`	`…
+  // Запрещаем копирование и присваивание экземпляров класса
+  CBufferImpl(const CBufferImpl&) = delete;
+  CBufferImpl& operator=(const CBufferImpl&) = delete;
 
 private:
+  // буферный объект для хранения данных
+  CBufferObjectImpl<true, target> m_buffer;
 
-`	`// Запрещаем копирование и присваивание экземпляров класса
+  // обычный вектор для хранения данных. Применяется, если реализация
+  // не поддерживает буферные объекты
+  std::vector<BYTE> m_data;
 
-`	`CBufferImpl(CBufferImpl const&);
-
-`	`CBufferImpl& operator=(CBufferImpl const&);
-
-`	`// буферный объект для хранения данных
-
-`	`CBufferObjectImpl<true, target> m\_buffer;
-
-`	`// обычный вектор для хранения данных. Применяется, если реализация
-
-`	`// не поддерживает буферные объекты
-
-`	`std::vector<BYTE>	m\_data;
-
-`	`bool m\_hasData;	// сигнализируем о наличии данных
-
-`	`bool m\_useVBO;	// сигнализирум об использовании буферных объектов
-
-`	`bool m\_created; // сигнализируем о том, что буфер был создан	
-
+  bool m_hasData;  // сигнализируем о наличии данных
+  bool m_useVBO;   // сигнализирум об использовании буферных объектов
+  bool m_created;  // сигнализируем о том, что буфер был создан  
 };
+```
 
 Для создания буфера служит метод Create, который в зависимости от доступности расширения GL\_ARB\_vertex\_buffer\_object, а также от желания пользователя использовать данное расширение, выбирает необходимый способ хранения. Если использование буферного объекта возможно и выбрано пользователем, происходит создание буферного объекта с использованием переменной класса m\_buffer.
-
-`	`// Создаем буффер для хранения данных, по возможности используя
-
-`	`// буферный объект
-
-`	`void Create()
-
-`	`{
-
-`		`if (!m\_created) // создаем буфер только при первом вызове Create()
-
-`		`{
-
-`			`// Совпадает ли желание клиента с возможностями реализации?
-
-`			`m\_useVBO = m\_useVBO && (GLEW\_ARB\_vertex\_buffer\_object == GL\_TRUE);
-
-`			`if (m\_useVBO && (m\_buffer == 0))
-
-`			`{
-
-`				`// Если совпадает, инициализируем Buffer Object
-
-`				`m\_buffer.Create();
-
-`			`}
-
-`			`m\_created = true;
-
-`		`}
-
-`	`}
+```cpp
+// Создаем буффер для хранения данных, по возможности используя
+// буферный объект
+void Create()
+{
+    if (!m_created) // создаем буфер только при первом вызове Create()
+    {
+        // Совпадает ли желание клиента с возможностями реализации?
+        m_useVBO = m_useVBO && (GLEW_ARB_vertex_buffer_object == GL_TRUE);
+        
+        if (m_useVBO && (m_buffer == 0))
+        {
+            // Если совпадает, инициализируем Buffer Object
+            m_buffer.Create();
+        }
+        
+        m_created = true;
+    }
+}
+```
 
 Для привязки буфера для использования по назначению класса служит метод Bind. Данный метод перенаправляет вызов метода Bind() в класс буферного объекта (при его использовании), а затем вызывает приватный метод UpdateCurrentBufferPointer().
 
@@ -1862,467 +1267,284 @@ private:
 - Поскольку взаимодействие с буферным объектом инкапсулировано в методах класса CBufferImpl, можно при каждом вызове методов, работающих с текущим буферным объектом, сравнивать значение указателя this с указателем на ранее привязанный объект. В случае их несовпадения – явно вызывать метод Bind()
 - Вторая проблема решается при этом автоматически – метод Bind не будет вызван, если данный объект уже был привязан, и избыточный вызов метода Bind не приведет к лишнему вызову функции glBindBuffer.
 
-`	`// Привязываем буфер для использования по назначению класса
+```cpp
+// Привязываем буфер для использования по назначению класса
+void Bind() const
+{
+    if (!m_created)
+    {
+        throw std::logic_error("The buffer has not been created");
+    }
 
-`	`void Bind()const
+    // Если используется буферный объект, выполняем его привязку
+    if (m_useVBO)
+    {
+        m_buffer.Bind();
+    }
+    else if (GLEW_ARB_vertex_buffer_object)
+    {
+        // иначе – отключаем привязку к буферному объекту
+        glBindBuffer(target, 0);
+    }
 
-`	`{
+    // Обновляем указатель на текущий буферный объект (параметр this)
+    // Первый параметр сообщает методу о том, что вызывать метод Bind
+    // еще раз (из метода UpdateCurrentBufferPointer) не нужно
+    UpdateCurrentBufferPointer(false, this);
+}
 
-`		`if (!m\_created)
+// Обновляем указатель на текущий буфер (статическая переменная метода)
+// В случае, если произошла смена буфера, вызываем Bind (если нужно)
+// В ряде случаев данный метод может не суметь определить необходимость
+// вызова Bind(), поэтому лучше всегда вызывать его явно
+static void UpdateCurrentBufferPointer(bool callBind, CBufferImpl const* thisPtr)
+{
+    // инициализация данной статической переменной выполнится один раз
+    // при первом вызове метода UpdateCurrentBufferPointer()
+    static const CBufferImpl* pCurrentBuffer = NULL;
 
-`		`{
+    // Если ранее привязанный и текущий буферы не совпадают
+    if (pCurrentBuffer != thisPtr)
+    {
+        // обновляем указатель на текущий буфер
+        pCurrentBuffer = thisPtr;
 
-`			`throw std::logic\_error("The buffer has not been created");
-
-`		`}
-
-`		`// Если используется буферный объект, выполняем его привязку
-
-`		`if (m\_useVBO)
-
-`		`{
-
-`			`m\_buffer.Bind();
-
-`		`}
-
-`		`else if (GLEW\_ARB\_vertex\_buffer\_object)
-
-`		`{
-
-`			`// иначе – отключаем привязку к буферному объекту
-
-`			`glBindBuffer(target, 0);
-
-`		`}
-
-`		`// Обновляем указатель на текущий буферный объект (параметр this)
-
-`		`// Первый параметр сообщает методу о том, что вызывать метод Bind
-
-`		`// еще раз (из метода UpdateCurrentBufferPointer) не нужно
-
-`		`UpdateCurrentBufferPointer(false, this);
-
-`	`}
-
-`	`…
-
-private:
-
-`	`// Обновляем указатель на текущий буфер (статическая переменная метода)
-
-`	`// В случае, если произошла смена буфера, вызываем Bind (если нужно)
-
-`	`// В ряде случаев данный метод может не суметь определить необходимость 
-
-`	`// вызова Bind(), поэтому лучше всегда вызывать его явно
-
-`	`static void UpdateCurrentBufferPointer(
-
-`		`bool callBind, 
-
-`		`CBufferImpl const\* thisPtr)
-
-`	`{
-
-`		`// инициализация данной статической переменной выполнится один раз
-
-`		`// при первом вызове метода UpdateCurrentBufferPointer()
-
-`		`static const CBufferImpl \* pCurrentBuffer = NULL;
-
-`		`// Если ранее привязанный и текущий буферы не совпадают
-
-`		`if (pCurrentBuffer!= thisPtr)
-
-`		`{
-
-`			`// обновляем указатель на текущий буфер
-
-`			`pCurrentBuffer = thisPtr;
-
-`			`// и в случае необходимости вызываем метод Bind
-
-`			`if (callBind && (thisPtr != NULL))
-
-`			`{
-
-`				`thisPtr->Bind();
-
-`			`}
-
-`		`}
-
-`	`}
+        // и в случае необходимости вызываем метод Bind
+        if (callBind && (thisPtr != NULL))
+        {
+            thisPtr->Bind();
+        }
+    }
+}
+```
 
 Поскольку класс является шаблонным, для каждой инстанцированной  версии шаблона (иными словами, для каждого созданного на его основе класса), компилятором будет сгенерирована отдельная копия методов шаблонного класса, включая метод UpdateCurrentBufferPointer() с его статической переменной. А это именно то, что нам нужно. 
 
 Для отвязки текущего буферного объекта служит статический метод Unbind(). Он будет вызываться приложением в том случае, когда необходимо явным образом отключить использование буферных объектов.
-
-`	`// Выполняем отвязку от использования буферного объекта
-
-`	`static void Unbind()
-
-`	`{
-
-`		`if (GLEW\_ARB\_vertex\_buffer\_object)
-
-`		`{
-
-`			`glBindBuffer(target, 0);
-
-`		`}
-
-`		`UpdateCurrentBufferPointer(false, NULL);
-
-`	`}
+```cpp
+    // Выполняем отвязку от использования буферного объекта
+    static void Unbind()
+    {
+        if (GLEW\_ARB\_vertex\_buffer\_object)
+        {
+            glBindBuffer(target, 0);
+        }
+        UpdateCurrentBufferPointer(false, NULL);
+    }
+```
 
 У текущего решения пока есть один недостаток. Если ранее привязанный буфер будет разрушен, а после него создан новый (с другим идентификатором буферного объекта), располагающийся по адресу, совпадающему с ранее разрушенным, метод UpdateCurrentBufferPointer() будет считать, что  необходимости в вызове метода Bind() нет, т.к. ранее выбранный объект (теперь уже уничтоженный) располагается (точнее, располагался) по тому же адресу что и текущий.
 
 Чтобы это исправить, необходимо в деструкторе буфера явно установить текущий буферный объект в NULL (без вызова метода Bind).
 
-`	`~CBufferImpl()
-
-`	`{
-
-`		`// При уничтожении буфера хранимый классом указатель на 
-
-`		`// текущий привязанный буфер может стать невалидным, 
-
-`		`// что может вызвать проблемы с корректной работой метода 
-
-`		`// UpdateCurrentBufferPointer (метод Bind() вызван из него не будет,
-
-`		`// когда это нужно).
-
-`		`// Поэтому мы явным образом обнуляем указатель на текущий буфер
-
-`		`// при уничтожении экземпляра
-
-`		`UpdateCurrentBufferPointer(false, NULL);
-
-`	`}
+```cpp
+~CBufferImpl()
+{
+    // При уничтожении буфера хранимый классом указатель на
+    // текущий привязанный буфер может стать невалидным,
+    // что может вызвать проблемы с корректной работой метода
+    // UpdateCurrentBufferPointer (метод Bind() вызван из него не будет,
+    // когда это нужно).
+    // Поэтому мы явным образом обнуляем указатель на текущий буфер
+    // при уничтожении экземпляра
+    UpdateCurrentBufferPointer(false, NULL);
+}
+```
 
 Для загрузки данных  в буфер служит метод BufferData. Метод загружает данные либо в буферный объект, либо в std::vector. В самом начале данного метода вызывается метод UpdateCurrentBufferPointer, чтобы обновить указатель на текущий привязанный объект и выполнить привязку текущего буферного объекта, если он не был привязан.
+```cpp
+// Задаем содержимое буфера (параметры как в функции glBufferData)
+void BufferData(GLsizeiptr size, GLvoid const* data, GLenum usage)
+{
+    // Обновляем указатель на текущий буфер и, возможно,
+    // вызываем Bind()
+    UpdateCurrentBufferPointer(true, this);
 
-`	`// Задаем содержимое буфера (параметры как в функции glBufferData)
+    if (m_useVBO)
+    {
+        // Если используется buffer object, заносим данные в него
+        m_buffer.BufferData(size, data, usage);
+    }
+    else
+    {
+        // Если buffer object не используется, то заносим данные в массив
+        if (data != NULL)
+        {
+            GLubyte const * pDataStart = reinterpret_cast<GLubyte const*>(data);
+            GLubyte const * pDataEnd = pDataStart + size;
+            m_data.assign(pDataStart, pDataEnd);
+        }
+        else
+        {
+            // Если в качестве адреса данных передали NULL, очищаем массив
+            // Вместо метода std::vector.clear() используем обмен 
+            // с пустым вектором, т.к. std::vector.clear() не освобождает
+            // память, а лишь обнуляет количество его элементов
+            m_data.swap(std::vector<GLubyte>());
+        }
+    }
 
-`	`void BufferData(GLsizeiptr size, GLvoid const\* data, GLenum usage)
-
-`	`{
-
-`		`// Обновляем указатель на текущий буфер и, возможно,
-
-`		`// вызываем Bind()
-
-`		`UpdateCurrentBufferPointer(true, this);
-
-`		`if (m\_useVBO)
-
-`		`{
-
-`			`// Если используется buffer object, заносим данные в него
-
-`			`m\_buffer.BufferData(size, data, usage);
-
-`		`}
-
-`		`else
-
-`		`{
-
-`			`// Если buffer object не используется, то заносим данные в массив
-
-`			`if (data != NULL)
-
-`			`{
-
-`				`GLubyte const \* pDataStart = reinterpret\_cast<GLubyte const\*>(data);
-
-`				`GLubyte const \* pDataEnd = pDataStart + size;
-
-`				`m\_data.assign(pDataStart, pDataEnd);
-
-`			`}
-
-`			`else
-
-`			`{
-
-`				`// Если в качестве адреса данных передали NULL, очищаем массив
-
-`				`// Вместо метода std::vector.clear() используем обмен 
-
-`				`// с пустым вектором, т.к. std::vector.clear() не освобождает
-
-`				`// память, а лишь обнуляет количество его элементов
-
-`				`m\_data.swap(std::vector<GLubyte>());
-
-`			`}
-
-`		`}
-
-
-
-`		`m\_hasData = (data != NULL);
-
-`	`}
+    m_hasData = (data != NULL);
+}
+```
 
 Метод GetBufferPointer() используется для получения адреса буфера. В случае использования буферных объектов возвращается нулевой указатель, а при использовании std::vector – адрес первого элемента массива. 
 
-`	`// Возвращаем адрес начала буфера
-
-`	`GLvoid const\* GetBufferPointer()const
-
-`	`{
-
-`		`// Буферный объект должен быть заполнен данными
-
-`		`if (!m\_hasData)
-
-`		`{
-
-`			`throw std::logic\_error("The buffer contains no data");
-
-`		`}
-
-`		`// Обновляем указатель на текущий буфер и, возможно,
-
-`		`// вызываем Bind()
-
-`		`UpdateCurrentBufferPointer(true, this);
-
-`		`if (m\_useVBO)
-
-`		`{
-
-`			`// Если используется Vertex Buffer Object, то возвращаем NULL
-
-`			`return NULL;
-
-`		`}
-
-`		`else
-
-`		`{
-
-`			`// В противном случае - адрес первого элемента массива
-
-`			`return &m\_data[0];
-
-`		`}
-
-`	`}
+```cpp
+// Возвращаем адрес начала буфера
+GLvoid const* GetBufferPointer() const
+{
+    // Буферный объект должен быть заполнен данными
+    if (!m_hasData)
+    {
+        throw std::logic_error("The buffer contains no data");
+    }
+    // Обновляем указатель на текущий буфер и, возможно,
+    // вызываем Bind()
+    UpdateCurrentBufferPointer(true, this);
+    if (m_useVBO)
+    {
+        // Если используется Vertex Buffer Object, то возвращаем NULL
+        return NULL;
+    }
+    else
+    {
+        // В противном случае - адрес первого элемента массива
+        return &m_data[0];
+    }
+}
+```
 
 Для удобства использования зададим typedef-ы, задающие классы буферов для хранения массива вершин и массива индексов.
-
+```cpp
 typedef CBufferImpl<GL\_ARRAY\_BUFFER> CVertexBuffer;
 
 typedef CBufferImpl<GL\_ELEMENT\_ARRAY\_BUFFER> CIndexBuffer;
+```
 #### ***Применяем разработанный класс на практике***
 Изменений в коде по сравнению с предыдущей программой будет минимум. Вместо классов **CArrayBuffer** и **CElementArrayBuffer** будут использованы их «старшие братья» **CVertexBuffer** и **CIndexBuffer**.
 
+```cpp
 class CMyApplication : public CGLApplication
-
 {
-
-...
-
 private:
+    // Буфер вершин
+    CVertexBuffer m_vertices;
+    // Буфер индексов
+    CIndexBuffer m_indices;
+    GLubyte const* m_pVertexArray;
+    GLubyte const* m_pColorArray;
+    GLubyte const* m_pIndexArray;
 
-...
-
-`	`// Буфер вершин
-
-`	`CVertexBuffer m\_vertices;
-
-`	`// Буфер индексов
-
-`	`CIndexBuffer m\_indices;
-
-`	`GLubyte const \* m\_pVertexArray;
-
-`	`GLubyte const \* m\_pColorArray;
-
-`	`GLubyte const \* m\_pIndexArray;
-
+public:
+    CMyApplication(const char* title, int width, int height)
+        : CGLApplication(title, width, height),
+          m_rotationController(width, height),
+          m_pVertexArray(NULL),
+          m_pIndexArray(NULL),
+          m_pColorArray(NULL)
+    {
+        
+    }
 };
-
-CMyApplication::CMyApplication(const char \* title, int width, int height)
-
-:CGLApplication(title, width, height)
-
-,m\_rotationController(width, height)
-
-,m\_pVertexArray(NULL)
-
-,m\_pIndexArray(NULL)
-
-,m\_pColorArray(NULL)
-
-{
-
-}
+```
 
 В методе InitArrays 
-
+```cpp
 void CMyApplication::InitArrays()
-
 {
+    /*
+         Y
+        |
+        |
+        |
+        +---X
+       /
+      /
+     Z
+         3----2
+        /    /|
+       /    / |
+      7----6  |
+     |  0 |  1
+     |    | /
+     |    |/
+     4----5
+    */
 
-`	`/\*
+    // Массив координат вершин
+    static const Vertex vertices[8] =
+    {
+        {{-1, -1, -1}, {255, 0, 0, 255}},    // 0
+        {{+1, -1, -1}, {255, 255, 0, 255}},  // 1
+        {{+1, +1, -1}, {0, 255, 0, 255}},    // 2
+        {{-1, +1, -1}, {0, 0, 0, 255}},      // 3
+        {{-1, -1, +1}, {255, 0, 255, 255}},  // 4
+        {{+1, -1, +1}, {255, 255, 255, 255}},// 5
+        {{+1, +1, +1}, {0, 255, 255, 255}},  // 6
+        {{-1, +1, +1}, {0, 0, 255, 255}},    // 7
+    };
 
-`	   `Y
+    // Массив координат граней (в порядке, совпадающем с 
+    // порядком объявления их в массиве цветов)
+    // индексы вершин граней перечисляются в порядке их обхода
+    // против часовой стрелки (если смотреть на грань снаружи)
+    static const unsigned char faces[6][4] =
+    {
+        {4, 7, 3, 0},  // грань x<0
+        {5, 1, 2, 6},  // грань x>0
+        {4, 0, 1, 5},  // грань y<0
+        {7, 6, 2, 3},  // грань y>0
+        {0, 3, 2, 1},  // грань z<0
+        {4, 5, 6, 7},  // грань z>0
+    };
 
-`	   `|
+    m_vertices.Create();
+    m_vertices.BufferData(sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-`	   `|
+    m_pVertexArray = reinterpret_cast<GLubyte const*>(m_vertices.GetBufferPointer()) +
+                      offsetof(Vertex, pos);
 
-`	   `|
+    m_pColorArray = reinterpret_cast<GLubyte const*>(m_vertices.GetBufferPointer()) +
+                    offsetof(Vertex, color);
 
-`	   `+---X
+    m_indices.Create();
+    m_indices.BufferData(sizeof(faces), faces, GL_STATIC_DRAW);
 
-`	  `/
-
-`	 `/
-
-`	`Z
-
-`	   `3----2
-
-`	  `/    /|
-
-`	 `/    / |
-
-`	`7----6  |
-
-`	`|  0 |  1
-
-`	`|    | /
-
-`	`|    |/
-
-`	`4----5
-
-`	`\*/
-
-`	`// Массив координат вершин
-
-`	`static const Vertex vertices[8] = 
-
-`	`{
-
-`		`{{-1, -1, -1}, {255, 0, 0, 255}},		// 0
-
-`		`{{+1, -1, -1}, {255, 255, 0, 255}},		// 1
-
-`		`{{+1, +1, -1}, {0, 255, 0, 255}},		// 2
-
-`		`{{-1, +1, -1}, {0, 0, 0, 255}},			// 3
-
-`		`{{-1, -1, +1}, {255, 0, 255, 255}},		// 4
-
-`		`{{+1, -1, +1}, {255, 255, 255, 255}},	// 5
-
-`		`{{+1, +1, +1}, {0, 255, 255, 255}},		// 6
-
-`		`{{-1, +1, +1}, {0, 0, 255, 255}},		// 7
-
-`	`};
-
-`	`// Массив координат граней (в порядке, совпадающем с 
-
-`	`// порядком объявления их в массиве цветов)
-
-`	`// индексы вершин граней перечисляются в порядке их обхода
-
-`	`// против часовой стрелки (если смотреть на грань снаружи)
-
-`	`static const unsigned char faces[6][4] = 
-
-`	`{
-
-`		`{4, 7, 3, 0},	// грань x<0
-
-`		`{5, 1, 2, 6},	// грань x>0
-
-`		`{4, 0, 1, 5},	// грань y<0
-
-`		`{7, 6, 2, 3},	// грань y>0
-
-`		`{0, 3, 2, 1},	// грань z<0
-
-`		`{4, 5, 6, 7},	// грань z>0
-
-`	`};
-
-`	`m\_vertices.Create();
-
-`	`m\_vertices.BufferData(sizeof(vertices), vertices, GL\_STATIC\_DRAW);
-
-`	`m\_pVertexArray = 
-
-`		`reinterpret\_cast<GLubyte const\*>(m\_vertices.GetBufferPointer()) + 
-
-`		`offsetof(Vertex, pos);
-
-`	`m\_pColorArray = 
-
-`		`reinterpret\_cast<GLubyte const\*>(m\_vertices.GetBufferPointer()) + 
-
-`		`offsetof(Vertex, color);
-
-`	`m\_indices.Create();
-
-`	`m\_indices.BufferData(sizeof(faces), faces, GL\_STATIC\_DRAW);
-
-`	`m\_pIndexArray = reinterpret\_cast<GLubyte
-
-`		`const\*>(m\_indices.GetBufferPointer());
-
+    m_pIndexArray = reinterpret_cast<GLubyte const*>(m_indices.GetBufferPointer());
 }
-
+```
 В методе DrawCube остается лишь выполнить привязку буферов вершин и индексов и нарисовать примитивы, из которых состоит куб, обычным образом.
 
-void CMyApplication::DrawCube()const
-
+```cpp
+void CMyApplication::DrawCube() const
 {
+    // Разрешаем использование массива координат вершин
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
-`	`// Разрешаем использование массива координат вершин
+    // Включаем привязку для вершинного и индексного буферов
+    m_vertices.Bind();
+    m_indices.Bind();
 
-`	`glEnableClientState(GL\_VERTEX\_ARRAY);
+    // Устанавливаем указатели на данные вершин и цветов
+    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), m_pVertexArray);
+    glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), m_pColorArray);
 
-`	`glEnableClientState(GL\_COLOR\_ARRAY);
+    // Рисуем куб
+    glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, m_pIndexArray);
 
-`	`// Включаем привязку для вершинного и индексного буферов
+    // Отключаем использование вершинного и индексного буферов
+    CVertexBuffer::Unbind();
+    CIndexBuffer::Unbind();
 
-`	`m\_vertices.Bind();
+    // Выключаем использование массива цветов
+    glDisableClientState(GL_COLOR_ARRAY);
 
-`	`m\_indices.Bind();
-
-`	`glVertexPointer(3, GL\_FLOAT, sizeof(Vertex), m\_pVertexArray);
-
-`	`glColorPointer(4, GL\_UNSIGNED\_BYTE, sizeof(Vertex), m\_pColorArray);
-
-`	`glDrawElements(GL\_QUADS, 24, GL\_UNSIGNED\_BYTE, m\_pIndexArray);
-
-`	`// Отключаем использование вершинного и индексного буферов
-
-`	`CVertexBuffer::Unbind();
-
-`	`CIndexBuffer::Unbind();
-
-`	`// Выключаем использовнием массива цветов
-
-`	`glDisableClientState(GL\_COLOR\_ARRAY);
-
-`	`// Выключаем использование массива координат вершин
-
-`	`glDisableClientState(GL\_VERTEX\_ARRAY);
-
+    // Выключаем использование массива координат вершин
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
+```
 
 Подведем итоги. Разработанный нами шаблонный класс CBufferImpl предоставляет унифицированный интерфейс к вершинным и индексным буферам, выбирая, по возможности, наиболее эффективный способ хранения данных. Разработанный класс мы используем для хранения полигональных сеток трехмерных моделей, загрузка и визуализация которых будет проиллюстрирована в следующем разделе.
 ## <a name="_toc340531768"></a>**Загрузка и визуализация трехмерных моделей формата 3ds**
@@ -2347,1521 +1569,961 @@ void CMyApplication::DrawCube()const
 
 ![](images/Aspose.Words.1c8fbd76-b881-4d10-95db-b8a605d5501a.012.png)
 
-/\*
-
+```cpp
+/*
 Класс "ограничивающий блок"
-
-\*/
+*/
 
 class CBoundingBox
-
 {
-
 public:
+    // Создаем пустой блок
+    CBoundingBox();
 
-`	`// Создаем пустой блок
+    // Создаем блок по двум точкам, задающим минимальные
+    // и максимальные координаты
+    CBoundingBox(CVector3f const& minCoord, CVector3f const& maxCoord);
 
-`	`CBoundingBox();
+    // Сообщаем о том, является ли блок пустым
+    bool IsEmpty() const;
 
-`	`// Создаем блок по двум точкам, задающим минимальные
+    // Возвращаем результат объединения двух ограничивающих блоков
+    CBoundingBox const Union(CBoundingBox const& other) const;
 
-`	`// и максимальные координаты
+    // Возвращаем минимальные и максимальные координаты
+    CVector3f const& GetMinCoord() const;
+    CVector3f const& GetMaxCoord() const;
 
-`	`CBoundingBox(CVector3f const& minCoord, CVector3f const& maxCoord);
+    // Возвращаем размер блока: (max - min) 
+    CVector3f const GetSize() const;
 
-`	`// Сообщаем о том, является ли блок пустым
-
-`	`bool IsEmpty()const;
-
-`	`// Возвращаем результат объекдинения двух ограничивающих блоков
-
-`	`CBoundingBox const Union(CBoundingBox const& other)const;
-
-`	`// Возвращаем минимальные и максимальные координаты
-
-`	`CVector3f const & GetMinCoord()const;
-
-`	`CVector3f const & GetMaxCoord()const;
-
-`	`// Возвращаем размер блока: (min - max) 
-
-`	`CVector3f const GetSize()const;
-
-`	`// Возвращаем координаты центра блока
-
-`	`CVector3f const GetCenter()const;
+    // Возвращаем координаты центра блока
+    CVector3f const GetCenter() const;
 
 private:
-
-`	`bool	m\_isEmpty;
-
-`	`CVector3f m\_minCoord;
-
-`	`CVector3f m\_maxCoord;
-
+    bool m_isEmpty;
+    CVector3f m_minCoord;
+    CVector3f m_maxCoord;
 };
+```
 
 Конструкторы класса для создания пустого и непустого ограничивающих блоков:
-
+```cpp
 CBoundingBox::CBoundingBox()
-
-:m\_isEmpty(true)
-
+    : m_isEmpty(true)
 {
-
 }
 
 CBoundingBox::CBoundingBox(CVector3f const& minCoord, CVector3f const& maxCoord)
-
-:m\_minCoord(minCoord)
-
-,m\_maxCoord(maxCoord)
-
-,m\_isEmpty(false)
-
+    : m_minCoord(minCoord)
+    , m_maxCoord(maxCoord)
+    , m_isEmpty(false)
 {
-
 }
+```
 
 Методы для получения минимальных и максимальных координат блока, а также вектора, задающего его размер по координатным осям.
-
-CVector3f const & CBoundingBox::GetMinCoord()const
-
+```cpp
+CVector3f const & CBoundingBox::GetMinCoord() const
 {
-
-`	`if (m\_isEmpty)
-
-`	`{
-
-`		`throw std::logic\_error("Bounding box is empty");
-
-`	`}
-
-`	`return m\_minCoord;
-
+    if (m_isEmpty)
+    {
+        throw std::logic_error("Bounding box is empty");
+    }
+    return m_minCoord;
 }
 
-CVector3f const & CBoundingBox::GetMaxCoord()const
-
+CVector3f const & CBoundingBox::GetMaxCoord() const
 {
-
-`	`if (m\_isEmpty)
-
-`	`{
-
-`		`throw std::logic\_error("Bounding box is empty");
-
-`	`}
-
-`	`return m\_maxCoord;
-
+    if (m_isEmpty)
+    {
+        throw std::logic_error("Bounding box is empty");
+    }
+    return m_maxCoord;
 }
 
-CVector3f const CBoundingBox::GetSize()const
-
+CVector3f const CBoundingBox::GetSize() const
 {
-
-`	`if (m\_isEmpty)
-
-`	`{
-
-`		`return CVector3f(0, 0, 0);
-
-`	`}
-
-`	`return m\_maxCoord - m\_minCoord;
-
+    if (m_isEmpty)
+    {
+        return CVector3f(0, 0, 0);
+    }
+    return m_maxCoord - m_minCoord;
 }
+```
 
 Для вычисления центра нам понадобятся операции сложения векторов и умножения вектора на скаляр, отсутствующие в текущей версии класса CVector3. Доработаем класс CVector3:
 
+```cpp
 template <class T>
-
 class CVector3
-
 {
-
 public:
+    T x, y, z;
+    // ...
 
-`	`T x, y, z;
+    CVector3 const operator+(CVector3 const& v) const
+    {
+        return CVector3(x + v.x, y + v.y, z + v.z);
+    }
 
-`	`…
-
-`	`CVector3 const operator+(CVector3 const& v)const
-
-`	`{
-
-`		`return CVector3(x + v.x, y + v.y, z + v.z);
-
-`	`}
-
-`	`CVector3 const operator\*(T scale)const
-
-`	`{
-
-`		`return CVector3(x \* scale, y \* scale, z \* scale);
-
-`	`}
-
-`	`…
-
+    CVector3 const operator*(T scale) const
+    {
+        return CVector3(x * scale, y * scale, z * scale);
+    }
+    // ...
 };
+```
 
 Метод для вычисления центра непустого ограничивающего блока возвращает координаты среднего арифметического его минимальных и максимальных координат.
-
+```cpp
 CVector3f const CBoundingBox::GetCenter()const
-
 {
-
-`	`if (m\_isEmpty)
-
-`	`{
-
-`		`throw std::logic\_error("Bounding box is empty");
-
-`	`}
-
-`	`return (m\_minCoord + m\_maxCoord) \* 0.5f;
+    if (m\_isEmpty)
+        {
+            throw std::logic\_error("Bounding box is empty");
+        }
+    return (m\_minCoord + m\_maxCoord) \* 0.5f;
 
 }
+```
 
 Метод, возвращающий объединение двух ограничивающих блоков, выбирает минимальные координаты среди минимальных координат и максимальные среди максимальных. При этом объединение с пустым блоком возвращает исходный блок и наоборот. Объединение двух пустых блоков возвращает пустой блок
 
 ![](images/Aspose.Words.1c8fbd76-b881-4d10-95db-b8a605d5501a.013.png)
 
-CBoundingBox const CBoundingBox::Union(CBoundingBox const& other)const
-
+```cpp
+CBoundingBox const CBoundingBox::Union(CBoundingBox const& other) const
 {
-
-`	`if (m\_isEmpty && other.m\_isEmpty)	// оба блока пусты
-
-`	`{
-
-`		`return CBoundingBox();
-
-`	`}
-
-`	`else if (m\_isEmpty)	// пустой только текущий
-
-`	`{
-
-`		`return other;
-
-`	`}
-
-`	`else if (other.m\_isEmpty)	// текущий - непустой
-
-`	`{
-
-`		`return \*this;
-
-`	`}
-
-`	`else	// объединяем два непустых блока
-
-`	`{
-
-`		`using namespace std;
-
-`		`return CBoundingBox(
-
-`			`CVector3f(
-
-`				`min(m\_minCoord.x, other.m\_minCoord.x), 
-
-`				`min(m\_minCoord.y, other.m\_minCoord.y), 
-
-`				`min(m\_minCoord.z, other.m\_minCoord.z)
-
-`				`),
-
-`			`CVector3f(
-
-`				`max(m\_maxCoord.x, other.m\_maxCoord.x), 
-
-`				`max(m\_maxCoord.y, other.m\_maxCoord.y), 
-
-`				`max(m\_maxCoord.z, other.m\_maxCoord.z)
-
-`			`)
-
-`		`);
-
-`	`}
-
+    if (m_isEmpty && other.m_isEmpty)  // оба блока пусты
+    {
+        return CBoundingBox();
+    }
+    else if (m_isEmpty)  // пустой только текущий
+    {
+        return other;
+    }
+    else if (other.m_isEmpty)  // текущий - непустой
+    {
+        return *this;
+    }
+    else  // объединяем два непустых блока
+    {
+        using namespace std;
+        return CBoundingBox(
+            CVector3f(
+                min(m_minCoord.x, other.m_minCoord.x), 
+                min(m_minCoord.y, other.m_minCoord.y), 
+                min(m_minCoord.z, other.m_minCoord.z)
+            ),
+            CVector3f(
+                max(m_maxCoord.x, other.m_maxCoord.x), 
+                max(m_maxCoord.y, other.m_maxCoord.y), 
+                max(m_maxCoord.z, other.m_maxCoord.z)
+            )
+        );
+    }
 }
+```
 
 Метод, сообщающий о том, пуст блок или нет:
-
+```cpp
 bool CBoundingBox::IsEmpty()const
-
 {
-
-`	`return m\_isEmpty;
-
+    return m\_isEmpty;
 }
+```
 #### ***Класс CMesh – полигональная сетка***
 Класс полигональных сеток сам не хранит вершинных и индексных данных, т.к. для их хранением будет заниматься класс трехмерной модели. Сетка же будет хранить лишь смещения в буфере вершин и индексов, а также ряд других данных о полигональной сетке.
 
 Данный класс получился достаточно универсальным, т.к. он несет информацию о типе графических примитивов полигональной сетки, о наличии или отсутствии текстурных координат, а также о разрядности массивов индексов.
-
+```cpp
 class CMesh : public boost::noncopyable
-
 {
-
 public:
+    CMesh(
+    unsigned int vertexBufferOffset,	// смещение в буфере вершин
+    unsigned int indexBufferOffset,	// смещение в буфере индексов
+    unsigned vertexCount,			// количество вершин
+    unsigned indexCount,			// количество индексов
+    bool hasTextureCoords,			// наличие текстурных координат
+    CBoundingBox const& boundingBox,	// ограничивающий блок
+    GLenum primitiveType,			// тип примитивов сетки
+    GLenum indexType				// тип индексов сетки
+    );
 
-`	`CMesh(
+    // Есть ли в сетке текстурные координаты?
+    bool HasTextureCoords()const;
 
-`		`unsigned int vertexBufferOffset,	// смещение в буфере вершин
+    // Возвращаем смещение относительно начала буфера вершин
+    unsigned int GetVertexBufferOffset()const;
 
-`		`unsigned int indexBufferOffset,	// смещение в буфере индексов
+    // Возвращаем смещение относительно начала буфера индексов
+    unsigned int GetIndexBufferOffset()const;
 
-`		`unsigned vertexCount,			// количество вершин
+    // Возвращаем количество индексов
+    unsigned int GetIndexCount()const;
 
-`		`unsigned indexCount,			// количество индексов
+    // Возвращаем количество вершин
+    unsigned int GetVertexCount()const;
 
-`		`bool hasTextureCoords,			// наличие текстурных координат
+    // Возвращаем ограничивающий блок
+    CBoundingBox const& GetBoundingBox()const;
 
-`		`CBoundingBox const& boundingBox,	// ограничивающий блок
+    // Возвращаем тип примитивов (GL\_TRIANGLES, GL\_TRIANGLE\_STRIP и т.п.)
+    GLenum GetPrimitiveType()const;
 
-`		`GLenum primitiveType,			// тип примитивов сетки
-
-`		`GLenum indexType				// тип индексов сетки
-
-`		`);
-
-`	`// Есть ли в сетке текстурные координаты?
-
-`	`bool HasTextureCoords()const;
-
-`	`// Возвращаем смещение относительно начала буфера вершин
-
-`	`unsigned int GetVertexBufferOffset()const;
-
-`	`// Возвращаем смещение относительно начала буфера индексов
-
-`	`unsigned int GetIndexBufferOffset()const;
-
-`	`// Возвращаем количество индексов
-
-`	`unsigned int GetIndexCount()const;
-
-`	`// Возвращаем количество вершин
-
-`	`unsigned int GetVertexCount()const;
-
-`	`// Возвращаем ограничивающий блок
-
-`	`CBoundingBox const& GetBoundingBox()const;
-
-`	`// Возвращаем тип примитивов (GL\_TRIANGLES, GL\_TRIANGLE\_STRIP и т.п.)
-
-`	`GLenum GetPrimitiveType()const;
-
-`	`// Возвращаем тип данных для хранения индексов (GL\_UNSIGNED\_SHORT и т.п.)
-
-`	`GLenum GetIndexType()const;
+    // Возвращаем тип данных для хранения индексов (GL\_UNSIGNED\_SHORT и т.п.)
+    GLenum GetIndexType()const;
 
 private:
-
-`	`unsigned int m\_vertexBufferOffset;
-
-`	`unsigned int m\_indexBufferOffset;
-
-`	`unsigned int m\_vertexCount;
-
-`	`unsigned int m\_indexCount;
-
-`	`bool m\_hasTexture;
-
-`	`CBoundingBox const m\_boundingBox;
-
-`	`GLenum m\_primitiveType;
-
-`	`GLenum m\_indexType;
-
+    unsigned int m_vertexBufferOffset;
+    unsigned int m_indexBufferOffset;
+    unsigned int m_vertexCount;
+    unsigned int m_indexCount;
+    bool m_hasTexture;
+    CBoundingBox const m_boundingBox;
+    GLenum m_primitiveType;
+    GLenum m_indexType;
 };
-
+```
 Реализация класса CMesh весьма проста. К тому же мы нарочно  исключили из данного класса метод для ее рисования, т.к. это позволит использовать различные подходы для визуализации одной и той же полигональной сетки. Визуализацией полигональной сетки будет заниматься отдельный класс.
 
+```cpp
 CMesh::CMesh(
-
-`	`unsigned int vertexBufferOffset, 
-
-`	`unsigned int indexBufferOffset, 
-
-`	`unsigned vertexCount, 
-
-`	`unsigned indexCount, 
-
-`	`bool hasTexture,
-
-`	`CBoundingBox const& boundingBox,
-
-`	`GLenum primitiveType,
-
-`	`GLenum indexType
-
-`	`)
-
-:m\_indexBufferOffset(indexBufferOffset)
-
-,m\_vertexBufferOffset(vertexBufferOffset)
-
-,m\_vertexCount(vertexCount)
-
-,m\_indexCount(indexCount)
-
-,m\_hasTexture(hasTexture)
-
-,m\_boundingBox(boundingBox)
-
-,m\_primitiveType(primitiveType)
-
-,m\_indexType(indexType)
-
+    unsigned int vertexBufferOffset,
+    unsigned int indexBufferOffset,
+    unsigned vertexCount,
+    unsigned indexCount,
+    bool hasTexture,
+    CBoundingBox const& boundingBox,
+    GLenum primitiveType,
+    GLenum indexType
+)
+    : m_indexBufferOffset(indexBufferOffset),
+    m_vertexBufferOffset(vertexBufferOffset),
+    m_vertexCount(vertexCount),
+    m_indexCount(indexCount),
+    m_hasTexture(hasTexture),
+    m_boundingBox(boundingBox),
+    m_primitiveType(primitiveType),
+    m_indexType(indexType)
 {
-
 }
 
-bool CMesh::HasTextureCoords()const
-
+bool CMesh::HasTextureCoords() const
 {
-
-`	`return m\_hasTexture;
-
+    return m_hasTexture;
 }
 
-unsigned int CMesh::GetVertexBufferOffset()const
-
+unsigned int CMesh::GetVertexBufferOffset() const
 {
-
-`	`return m\_vertexBufferOffset;
-
+    return m_vertexBufferOffset;
 }
 
-unsigned int CMesh::GetIndexBufferOffset()const
-
+unsigned int CMesh::GetIndexBufferOffset() const
 {
-
-`	`return m\_indexBufferOffset;
-
+    return m_indexBufferOffset;
 }
 
-unsigned int CMesh::GetIndexCount()const
-
+unsigned int CMesh::GetIndexCount() const
 {
-
-`	`return m\_indexCount;
-
+    return m_indexCount;
 }
 
-CBoundingBox const& CMesh::GetBoundingBox()const
-
+unsigned int CMesh::GetVertexCount() const
 {
-
-`	`return m\_boundingBox;
-
+    return m_vertexCount;
 }
 
-GLenum CMesh::GetPrimitiveType()const
-
+CBoundingBox const& CMesh::GetBoundingBox() const
 {
-
-`	`return m\_primitiveType;
-
+    return m_boundingBox;
 }
 
-GLenum CMesh::GetIndexType()const
-
+GLenum CMesh::GetPrimitiveType() const
 {
-
-`	`return m\_indexType;
-
+    return m_primitiveType;
 }
 
-unsigned int CMesh::GetVertexCount()const
-
+GLenum CMesh::GetIndexType() const
 {
-
-`	`return m\_vertexCount;
-
+    return m_indexType;
 }
+```
 
 При изучении структуры 3ds-файла мы узнали, что каждая грань сетки хранит индекс используемого ею материала[^13]. Однако в нашей модели сейчас пока это не предусмотрено. Данная задача будет оставлена на самостоятельную реализацию[^14].
 #### ***Класс CTextureMap[^15] – карта текстуры***
 Данный класс хранит информацию о текстурной карте, используемой материалом полигональной сетки: идентификатор текстурного объекта OpenGL, коэффициенты масштабирования и смещения, а также угол поворота текстурных координат.
-
+```cpp
 class CTextureMap : private boost::noncopyable
 
 {
 
 public:
 
-`	`CTextureMap(GLuint textureId = 0);
+    CTextureMap(GLuint textureId = 0);
 
-`	`~CTextureMap(void);
+    ~CTextureMap(void);
 
-`	`// Связываем текстурную карту с текстурным объектом OpenGL
+    // Связываем текстурную карту с текстурным объектом OpenGL
+    void AttachTexture(GLuint textureId);
 
-`	`void AttachTexture(GLuint textureId);
+    // Получить текстурный объект, связанный с текстурной картой
+    CTexture2DHandle const& GetTexture()const;
 
-`	`// Получить текстурный объект, связанный с текстурной картой
+    // Установить трансформацию масштабирования текстурных координат
+    void SetScale(float sx, float sy);
 
-`	`CTexture2DHandle const& GetTexture()const;
+    // Установить смещение текстурных координат
+    void SetOffset(float dx, float dy);
 
-`	`// Установить трансформацию масштабирования текстурных координат
+    // Установить угол поворота текстурных координат
+    void SetRotation(float rotation);
 
-`	`void SetScale(float sx, float sy);
-
-`	`// Установить смещение текстурных координат
-
-`	`void SetOffset(float dx, float dy);
-
-`	`// Установить угол поворота текстурных координат
-
-`	`void SetRotation(float rotation);
-
-`	`// Связан ли текстурный объект с данонй текстурной картой
-
-`	`bool IsLoaded()const;
+    // Связан ли текстурный объект с данонй текстурной картой
+    bool IsLoaded()const;
 
 private:
-
-`	`CTexture2DHandle m\_texture;
-
-`	`float m\_sx;
-
-`	`float m\_sy;
-
-`	`float m\_dx;
-
-`	`float m\_dy;
-
-`	`float m\_rotation;
-
+    CTexture2DHandle m_texture;
+    float m_sx;
+    float m_sy;
+    float m_dx;
+    float m_dy;
+    float m_rotation;
 };
+```
 
 Реализация данного класса также является достаточно простой.
-
+```cpp
 CTextureMap::CTextureMap(GLuint textureId)
-
-:m\_sx(1)
-
-,m\_sy(1)
-
-,m\_dx(0)
-
-,m\_dy(0)
-
-,m\_rotation(0)
-
-,m\_texture(textureId)
-
+    :m_sx(1)
+    ,m_sy(1)
+    ,m_dx(0)
+    ,m_dy(0)
+    ,m_rotation(0)
+    ,m_texture(textureId)
 {
 
 }
 
 CTextureMap::~CTextureMap(void)
-
 {
 
 }
 
 CTexture2DHandle const& CTextureMap::GetTexture()const
-
 {
-
-`	`return m\_texture;
-
+    return m_texture;
 }
 
 bool CTextureMap::IsLoaded()const
-
 {
-
-`	`return m\_texture != 0;
-
+    return m_texture != 0;
 }
 
 void CTextureMap::AttachTexture(GLuint textureId)
-
 {
-
-`	`m\_texture = textureId;
-
+    m_texture = textureId;
 }
 
 void CTextureMap::SetScale(float sx, float sy)
-
 {
-
-`	`m\_sx = sx;
-
-`	`m\_sy = sy;
-
+    m_sx = sx;
+    m_sy = sy;
 }
 
 void CTextureMap::SetOffset(float dx, float dy)
-
 {
-
-`	`m\_dx = dx;
-
-`	`m\_dy = dy;
-
+    m_dx = dx;
+    m_dy = dy;
 }
 
 void CTextureMap::SetRotation(float rotation)
-
 {
-
-`	`m\_rotation = rotation;
-
+    m_rotation = rotation;
 }
-
+```
 В существующую версию класса CTextureImpl, разработанного для предыдущей лабораторной работы, был добавлен оператор присваивания идентификатора текстурного объекта. Данный оператор используется в методе CTextureMap::AttachTexture().
 
-template <bool t\_managed, class TBase>
-
+```cpp
+template <bool t_managed, class TBase>
 class CTextureImpl : public TBase
-
 {
-
 public:
+    // ...
 
-`	`…
+    CTextureImpl& operator=(GLuint texture)
+    {
+        Attach(texture);
+        return *this;
+    }
 
-`	`CTextureImpl& operator=(GLuint texture)
-
-`	`{
-
-`		`Attach(texture);
-
-`		`return \*this;
-
-`	`}
-
-`	`…
-
+    // ...
 };
+```
+
 #### ***Класс CModelMaterial – материал трехмерной модели***
 Данный класс хранит информацию о материале трехмерной модели: текстурную карту, материал OpenGL. В файлах формата 3ds с материалом может быть связано несколько текстурных карт – карты цвета, карта микрорельефа (bump map), карта прозрачности, карта цвета зеркального отражения и другие. Кроме того, с каждой текстурной картой может быть связана маска. Для простоты в нашем классе CModelMaterial мы поддержим лишь одну текстурную карту и стандартные параметры материала – диффузный, зеркальный и фоновый цвета, а также степень зеркального отражения.
 
+```cpp
 class CModelMaterial : private boost::noncopyable
-
 {
-
 public:
-
-`	`CModelMaterial();
-
-`	`// Добавить текстурную карту №1 к материалу
-
-`	`CTextureMap & AddTextureMap1(GLuint texture);
-
-`	`// Связана ли с материалом текстурная карта №1?
-
-`	`bool HasTextureMap1()const;
-
-`	`// Получить текстурную карту №1
-
-`	`CTextureMap const& GetTextureMap1()const;
-
-`	`CTextureMap & GetTextureMap1();
-
-`	`// Получить материал OpenGL
-
-`	`CMaterial & GetMaterial();
-
-`	`CMaterial const& GetMaterial()const;
-
+    CModelMaterial();
+    // Добавить текстурную карту №1 к материалу
+    CTextureMap & AddTextureMap1(GLuint texture);
+    // Связана ли с материалом текстурная карта №1?
+    bool HasTextureMap1()const;
+    // Получить текстурную карту №1
+    CTextureMap const& GetTextureMap1()const;
+    CTextureMap & GetTextureMap1();
+    // Получить материал OpenGL
+    CMaterial & GetMaterial();
+    CMaterial const& GetMaterial()const;
 private:
-
-`	`CTextureMap	m\_textureMap1;
-
-`	`CMaterial m\_material;
-
+    CTextureMap  m_textureMap1;
+    CMaterial m_material;
 };
+```
 
 Реализация данного класса также очень проста.
 
+```cpp
 CModelMaterial::CModelMaterial()
-
 {
-
 }
 
 CMaterial & CModelMaterial::GetMaterial()
-
 {
-
-`	`return m\_material;
-
+    return m_material;
 }
 
 CMaterial const& CModelMaterial::GetMaterial()const
-
 {
-
-`	`return m\_material;
-
+    return m_material;
 }
 
 CTextureMap & CModelMaterial::AddTextureMap1(GLuint texture)
-
 {
-
-`	`m\_textureMap1.AttachTexture(texture);
-
-`	`return m\_textureMap1;
-
+    m_textureMap1.AttachTexture(texture);
+    return m_textureMap1;
 }
 
 bool CModelMaterial::HasTextureMap1()const
-
 {
-
-`	`return m\_textureMap1.IsLoaded();
-
+    return m_textureMap1.IsLoaded();
 }
 
 CTextureMap & CModelMaterial::GetTextureMap1()
-
 {
-
-`	`return m\_textureMap1;
-
+    return m_textureMap1;
 }
 
 CTextureMap const& CModelMaterial::GetTextureMap1()const
-
 {
-
-`	`return m\_textureMap1;
-
+    return m_textureMap1;
 }
+```
 #### ***Класс CModel – трехмерная модель***
 Класс **CModel** хранит связанные с трехмерной моделью текстуры, материалы, полигональные сетки, а также буферы вершин и индексов. Кроме того, данный класс позволяет вычислить ограничивающий блок полигональных сеток модели. 
 
 С каждой текстурой, используемой моделью, связано ее имя (строка) и текстурный объект OpenGL. Класс спроектирован таким образом, чтобы разные материалы модели, использующие текстуры с одним и тем же именем, совместно использовали один и тот же текстурный объект, не создавая лишних дубликатов текстур. Это достигается использованием контейнера std::map, отображающего имя текстуры на соответствующий текстурный объект. Имена текстур сравниваются без учета регистра символов (имена «texture.jpg» и «Texture.JPG» считаются одинаковыми). Это достигается использованием собственного класса CompareTextureNames для сравнения строк, отличного от стандартного std::less, используемого контейнером std::map.
-
+```cpp
 class CModelMaterial;
-
 class CMesh;
-
 class CModel : boost::noncopyable
-
 {
-
 public:
+    CModel(void);
+    ~CModel(void);
+    // Работа с полигональными сеткам
 
-`	`CModel(void);
+    // Получаем полигональную сетку, входящую в модель по ее индексу
+    CMesh const &GetMesh(size_t index) const;
 
-`	`~CModel(void);
+    // Получаем количество полигональных сеток в модели
+    size_t GetMeshCount() const;
 
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
+    // Добавляем полигональную сетку к модели
+    CMesh &AddMesh(unsigned int vertexBufferOffset,
 
-`	`/\* Работа с полигональными сетками                                      \*/
+                   unsigned int indexBufferOffset,
+                   unsigned vertexCount,
+                   unsigned indexCount,
+                   bool hasTexture,
+                   CBoundingBox const &boundingBox,
+                   GLenum primitiveType,
+                   GLenum indexType);
 
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
+    // Работа с ограничивающим блоком модели
 
-`	`// Получаем полигональную сетку, входящую в модель по ее индексу
+    // Получаем bounding box, ограничивающий трехмерную модель
+    CBoundingBox const GetBoundingBox() const;
 
-`	`CMesh const& GetMesh(size\_t index)const;
+    // Работа с текстурами модели
 
-`	`// Получаем количество полигональных сеток в модели
+    // Добавляем текстурное изображение
+    CTexture2D &AddTextureImage(std::string const &name);
+    // Возвращаем количество текстур
+    size\_t GetTexturesCount() const;
+    // Возвращаем имя текстурного изображения по его индексу
+    std::string GetTextureName(size_t index) const;
+    // Возвращаем текстурный объект по его имени
+    CTexture2D &GetTextureByName(std::string const &name);
+    CTexture2D const &GetTextureByName(std::string const &name) const;
+    // Возвращаем текстурный объект по его индексу
+    CTexture2D &GetTexture(size_t index);
+    CTexture2D const &GetTexture(size_t index) const;
 
-`	`size\_t GetMeshCount()const;
+    // Работа с материалами модели
 
-`	`// Добавляем полигональную сетку к модели
+    // Добавляем материал
+    CModelMaterial &AddMaterial(std::string const &name);
+    // Получаем количество материалов
+    size_t GetMeterialCount() const;
+    // Получаем материал по его индексу
+    CModelMaterial const &GetMaterial(size_t index) const;
+    CModelMaterial &GetMaterial(size_t index);
 
-`	`CMesh & AddMesh(unsigned int vertexBufferOffset, 
+    // Работа с буферами вершин и индексов
 
-`		`unsigned int indexBufferOffset, 
-
-`		`unsigned vertexCount, 
-
-`		`unsigned indexCount, 
-
-`		`bool hasTexture,
-
-`		`CBoundingBox const& boundingBox,
-
-`		`GLenum primitiveType,
-
-`		`GLenum indexType
-
-`	`);
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`/\* Работа с ограничивающим блоком модели                                \*/
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`// Получаем bounding box, ограничивающий трехмерную модель
-
-`	`CBoundingBox const GetBoundingBox()const;
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`/\* Работа с текстурами модели                                           \*/
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`// Добавляем текстурное изображение
-
-`	`CTexture2D & AddTextureImage(std::string const& name);
-
-`	`// Возвращаем количество текстур
-
-`	`size\_t GetTexturesCount()const;
-
-`	`// Возвращаем имя текстурного изображения по его индексу
-
-`	`std::string GetTextureName(size\_t index)const;
-
-`	`// Возвращаем текстурный объект по его имени
-
-`	`CTexture2D & GetTextureByName(std::string const& name);
-
-`	`CTexture2D const & GetTextureByName(std::string const& name)const;
-
-`	`// Возвращаем текстурный объект по его индексу
-
-`	`CTexture2D & GetTexture(size\_t index);
-
-`	`CTexture2D const & GetTexture(size\_t index)const;
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`/\* Работа с материалами модели                                          \*/
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-
-
-`	`// Добавляем материал
-
-`	`CModelMaterial & AddMaterial(std::string const& name);
-
-`	`// Получаем количество материалов
-
-`	`size\_t GetMeterialCount()const;
-
-`	`// Получаем материал по его индексу
-
-`	`CModelMaterial const & GetMaterial(size\_t index)const;
-
-`	`CModelMaterial & GetMaterial(size\_t index);
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`/\* Работа с буферами вершин и индексов                                  \*/
-
-`	`/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/
-
-`	`// Получаем вершинный буфер
-
-`	`CVertexBuffer & GetVertexBuffer();
-
-`	`CVertexBuffer const& GetVertexBuffer()const;
-
-`	`// Получаем индексный буфер
-
-`	`CIndexBuffer & GetIndexBuffer();
-
-`	`CIndexBuffer const & GetIndexBuffer()const;
+    // Получаем вершинный буфер
+    CVertexBuffer &GetVertexBuffer();
+    CVertexBuffer const &GetVertexBuffer() const;
+    // Получаем индексный буфер
+    CIndexBuffer &GetIndexBuffer();
+    CIndexBuffer const &GetIndexBuffer() const;
 
 private:
-
-`	`// Функтор для сравнения имен текстур без учета регистра символов
-
-`	`class CompareTextureNames
-
-`	`{
-
-`	`public:
-
-`		`bool operator()(
-
-`			`std::string const& textureName1, 
-
-`			`std::string const& textureName2)const;
-
-`	`};
+    // Функтор для сравнения имен текстур без учета регистра символов
+    class CompareTextureNames
+    {
+    public:
+        bool operator()(
+            std::string const &textureName1,
+            std::string const &textureName2) const;
+    };
 
 private:
+    // Вершинный и индексный буферы
+    CVertexBuffer m_vertexBuffer;
+    CIndexBuffer m_indexBuffer;
 
-`	`// Вершинный и индексный буферы
+    // Материалы модели
+    typedef boost::shared_ptr<CModelMaterial> CModelMaterialPtr;
+    std::vector<CModelMaterialPtr> m_materials;
 
-`	`CVertexBuffer	m\_vertexBuffer;
+    // Текстурные изображения, используемые моделью
+    typedef boost::shared_ptr<CTexture2D> CTexture2DPtr;
 
-`	`CIndexBuffer	m\_indexBuffer;
+    typedef std::map<std::string, CTexture2DPtr, CompareTextureNames> CTextures;
 
-`	`// Материалы модели
+    typedef std::vector<std::string> CTextureNames;
 
-`	`typedef boost::shared\_ptr<CModelMaterial> CModelMaterialPtr;
+    CTextures m_textures; // текстуры модели (имя->текстура)
 
-`	`std::vector<CModelMaterialPtr> m\_materials;
+    CTextureNames m_textureNames; // массив текстурных имен
 
-`	`// Текстурные изображения, используемые моделью
+    // полигональные сетки модели
+    typedef boost::shared_ptr<CMesh> CMeshPtr;
 
-`	`typedef boost::shared\_ptr<CTexture2D> CTexture2DPtr;
+    std::vector<CMeshPtr> m_meshes;
 
-`	`typedef std::map<
+    // Флаг, сигнализирующий о необходимости перевычисления
+    // ограничивающего блока модели
+    mutable bool m_boundingBoxMustBeUpdated;
 
-`		`std::string, 
-
-`		`CTexture2DPtr,
-
-`		`CompareTextureNames> CTextures;
-
-`	`typedef std::vector<std::string> CTextureNames;
-
-`	`CTextures m\_textures;	// текстуры модели (имя->текстура)
-
-`	`CTextureNames m\_textureNames; // массив текстурных имен
-
-`	`// полигональные сетки модели
-
-`	`typedef boost::shared\_ptr<CMesh> CMeshPtr;
-
-`	`std::vector<CMeshPtr> m\_meshes;
-
-`	`// Флаг, сигнализирующий о необходимости перевычисления
-
-`	`// ограничивающего блока модели
-
-`	`mutable bool m\_boundingBoxMustBeUpdated;
-
-`	`// Ограничивающий блок модели
-
-`	`mutable CBoundingBox m\_boundingBox;
-
+    // Ограничивающий блок модели
+    mutable CBoundingBox m_boundingBox;
 };
+```
+
 ##### Конструктор класса CModel
 Конструктор класса лишь устанавливает значение поля m\_boundingBoxMustBeUpdated в true. Данное поле служит для индикации того, что значение ограничивающего блока модели следует рассчитать заново, например, при добавлении или удалении[^16] полигональных сеток. Остальные поля класса инициализируются их конструкторами по умолчанию.
-
+```cpp
 CModel::CModel(void)
-
-:m\_boundingBoxMustBeUpdated(true)
-
+    :m\_boundingBoxMustBeUpdated(true)
 {
 
 }
+```
 ##### Методы управления материалами модели
 Данные методы позволяют добавить материал в коллекцию материалов модели, узнать их количество и получить материал, зная его индекс. Коллекция материалов хранит не сами материалы, а указатели на них, с использованием умного указателя [boost::shared_ptr](http://www.boost.org/doc/libs/1_36_0/libs/smart_ptr/shared_ptr.htm). Это, с одной стороны, гарантирует валидность ранее полученных ссылок на материалы после добавления нового материала к модели (что не выполнялось бы при  хранении объектов типа CModelMaterial). С другой стороны, это гарантирует автоматическое удаление материалов при разрушении контейнера умных указателей.
 
+```cpp
 CModelMaterial & CModel::AddMaterial()
-
 {
-
-`	`CModelMaterialPtr pMaterial(new CModelMaterial());
-
-`	`m\_materials.push\_back(pMaterial);
-
-`	`return \*pMaterial;
-
+    CModelMaterialPtr pMaterial(new CModelMaterial());
+    m_materials.push_back(pMaterial);
+    return *pMaterial;
 }
 
-size\_t CModel::GetMeterialCount()const
-
+size_t CModel::GetMeterialCount() const
 {
-
-`	`return m\_materials.size();
-
+    return m_materials.size();
 }
 
-CModelMaterial const & CModel::GetMaterial(size\_t index)const
-
+CModelMaterial const & CModel::GetMaterial(size_t index) const
 {
-
-`	`return \*m\_materials.at(index);
-
+    return *m_materials.at(index);
 }
 
-CModelMaterial & CModel::GetMaterial(size\_t index)
-
+CModelMaterial & CModel::GetMaterial(size_t index)
 {
-
-`	`return \*m\_materials.at(index);
-
+    return *m_materials.at(index);
 }
+```
 ##### Методы управления текстурами модели
 Данные о текстурах хранятся в модели в двух коллекциях – в контейнере std::vector, хранящем имена текстурных объектов, и в контейнере std::map, в котором хранятся пары «имя текстуры» – «умный указатель на текстурный объект». Такой способ хранения текстурных объектов позволяет получить текстурный объект как по имени текстуры, так и по ее индексу. Доступ по имени удобен для поиска существующего текстурного объекта. Доступ по индексу может оказаться полезен при загрузке моделей форматов, отличных от .3ds.
 
 ![](images/Aspose.Words.1c8fbd76-b881-4d10-95db-b8a605d5501a.014.png)
-
+```cpp
 CTexture2D & CModel::AddTextureImage(std::string const& name)
-
 {
+    // Ищем, есть ли текстура с таким именем
+    CTextures::iterator it = m_textures.find(name);
+    if (it != m_textures.end())
+    {
+        // Если есть, возвращаем ссылку на существующую
+        return *it->second;
+    }
+    // В противном случае создаем новую текстуру
+    CTexture2DPtr pTexture(new CTexture2D());
 
-`	`// Ищем, есть ли текстура с таким именем
+    // и добавляем ее в контейнер текстур,
+    m_textures.insert(CTextures::value_type(name, pTexture));
 
-`	`CTextures::iterator it = m\_textures.find(name);
-
-`	`if (it != m\_textures.end())
-
-`	`{
-
-`		`// Если есть, возвращаем ссылку на существующую
-
-`		`return \*it->second;
-
-`	`}
-
-`	`// В противном случае создаем новую текстуру
-
-`	`CTexture2DPtr pTexture(new CTexture2D());
-
-`	`// и добавляем ее в контейнер текстур,
-
-`	`m\_textures.insert(CTextures::value\_type(name, pTexture));
-
-`	`// а ее имя в вектор имен
-
-`	`m\_textureNames.push\_back(name);
-
-`	`// возвращаем ссылку на добавленную текстуру
-
-`	`return \*pTexture;
-
+    // а ее имя в вектор имен
+    m_textureNames.push_back(name);
+    // возвращаем ссылку на добавленную текстуру
+    return *pTexture;
 }
 
 bool CModel::HasTexture(std::string const& name)const
-
 {
-
-`	`CTextures::const\_iterator it = m\_textures.find(name);
-
-`	`return it != m\_textures.end();
-
+    CTextures::const_iterator it = m_textures.find(name);
+    return it != m_textures.end();
 }
 
-size\_t CModel::GetTexturesCount()const
-
+size_t CModel::GetTexturesCount()const
 {
-
-`	`return m\_textures.size();
-
+    return m_textures.size();
 }
 
-std::string CModel::GetTextureName(size\_t index)const
-
+std::string CModel::GetTextureName(size_t index)const
 {
-
-`	`return m\_textureNames.at(index);
-
+    return m_textureNames.at(index);
 }
 
 // Возвращаем текстурный объект по его имени
-
 CTexture2D & CModel::GetTextureByName(std::string const& name)
-
 {
-
-`	`CTextures::iterator it = m\_textures.find(name);
-
-`	`if (it == m\_textures.end())
-
-`	`{
-
-`		`throw std::logic\_error("Texture with the specified name does not exist");
-
-`	`}
-
-`	`return \*it->second;
-
+    CTextures::iterator it = m_textures.find(name);
+    if (it == m_textures.end())
+    {
+        throw std::logic\_error("Texture with the specified name does not exist");
+    }
+    return *it->second;
 }
 
 // Возвращаем текстурный объект по его имени
-
 CTexture2D const & CModel::GetTextureByName(std::string const& name)const
-
 {
-
-`	`CTextures::const\_iterator it = m\_textures.find(name);
-
-`	`if (it == m\_textures.end())
-
-`	`{
-
-`		`throw std::logic\_error("Texture with the specified name does not exist");
-
-`	`}
-
-`	`return \*it->second;
+    CTextures::const_iterator it = m_textures.find(name);
+    if (it == m_textures.end())
+    {
+        throw std::logic\_error("Texture with the specified name does not exist");
+    }
+    return *it->second;
 
 }
 
 // Возвращаем текстурный объект по его индексу
-
-CTexture2D & CModel::GetTexture(size\_t index)
-
+CTexture2D & CModel::GetTexture(size_t index)
 {
-
-`	`std::string textureName = m\_textureNames.at(index);
-
-`	`return GetTextureByName(textureName);
-
+    std::string textureName = m_textureNames.at(index);
+    return GetTextureByName(textureName);
 }
 
 // Возвращаем текстурный объект по его индексу
-
-CTexture2D const & CModel::GetTexture(size\_t index)const
-
+CTexture2D const & CModel::GetTexture(size_t index)const
 {
-
-`	`std::string textureName = m\_textureNames.at(index);
-
-`	`return GetTextureByName(textureName);
-
+    std::string textureName = m_textureNames.at(index);
+    return GetTextureByName(textureName);
 }
-
+```
 Для того, чтобы поиск текстуры по имени происходил без учета регистров символов, контейнер std::map, хранящий текстуры, использует собственный предикат для сравнения строк-ключей контейнера, вместо стандартно используемого std::less.
 
-bool CModel::CompareTextureNames::operator()(
-
-`	`std::string const& textureName1, std::string const& textureName2)const
-
+```cpp
+bool CModel::CompareTextureNames::operator()(std::string const& textureName1, std::string const& textureName2) const
 {
+    // Переводим имя первой текстуры к нижнему регистру
+    std::string name1LowerCase(textureName1);
+    std::transform(
+        name1LowerCase.begin(),
+        name1LowerCase.end(),
+        name1LowerCase.begin(),
+        tolower);
 
-`	`// Переводим имя первой текстуры к нижнему регистру
+    // Переводим имя второй текстуры к нижнему регистру
+    std::string name2LowerCase(textureName2);
+    std::transform(
+        name2LowerCase.begin(),
+        name2LowerCase.end(),
+        name2LowerCase.begin(),
+        tolower);
 
-`	`std::string name1LowerCase(textureName1);
-
-`	`std::transform(
-
-`		`name1LowerCase.begin(),
-
-`		`name1LowerCase.end(),
-
-`		`name1LowerCase.begin(),
-
-`		`tolower);
-
-`	`// Переводим имя второй текстуры к нижнему регистру
-
-`	`std::string name2LowerCase(textureName2);
-
-`	`std::transform(
-
-`		`name2LowerCase.begin(),
-
-`		`name2LowerCase.end(),
-
-`		`name2LowerCase.begin(),
-
-`		`tolower);
-
-`	`// Возвращаем результат сравнения имен в нижнем регистре
-
-`	`return name1LowerCase < name2LowerCase;
-
+    // Возвращаем результат сравнения имен в нижнем регистре
+    return name1LowerCase < name2LowerCase;
 }
+```
+
 ##### Методы управления полигональными сетками и вычисления ограничивающего блока модели
 Данные методы служат для добавления полигональных сеток к модели, получения количества сеток в модели, а также сетки по ее индексу. Как и в случае текстур и материалов, в коллекции полигональных сеток хранятся умные указатели на полигональные сетки, а не сами сетки. При добавлении полигональной сетки ранее вычисленный ограничивающий блок модели может оказаться неактуальным, если ограничивающий блок добавленной сетки выходит за пределы ограничивающего блока модели. Чтобы не вычислять ограничивающий блок модели при каждом добавлении полигональной сетки, и, тем более, при каждом вызове метода для вычисления ограничивающего блока, мы устанавливаем флаг о необходимости пересчета ограничивающего блока при добавлении полигональной сетки.
 
-CMesh & CModel::AddMesh(unsigned int vertexBufferOffset, 
-
-`	`unsigned int indexBufferOffset, 
-
-`	`unsigned vertexCount, 
-
-`	`unsigned indexCount, 
-
-`	`bool hasTexture,
-
-`	`CBoundingBox const& boundingBox,
-
-`	`GLenum primitiveType,
-
-`	`GLenum indexType
-
-`	`)
-
+```cpp
+CMesh & CModel::AddMesh(unsigned int vertexBufferOffset,
+                        unsigned int indexBufferOffset,
+                        unsigned vertexCount,
+                        unsigned indexCount,
+                        bool hasTexture,
+                        CBoundingBox const& boundingBox,
+                        GLenum primitiveType,
+                        GLenum indexType)
 {
+    CMeshPtr pMesh(new CMesh(
+        vertexBufferOffset,
+        indexBufferOffset,
+        vertexCount,
+        indexCount,
+        hasTexture,
+        boundingBox,
+        primitiveType,
+        indexType
+    ));
+    m_meshes.push_back(pMesh);
 
-`	`CMeshPtr pMesh(new CMesh(
+    // При добавлении полигональной сетки старый bounding box 
+    // может оказаться неактуальным, поэтому делаем пометку о необходимости
+    // его обновления
+    m_boundingBoxMustBeUpdated = true;
 
-`		`vertexBufferOffset, 
-
-`		`indexBufferOffset, 
-
-`		`vertexCount, 
-
-`		`indexCount, 
-
-`		`hasTexture,
-
-`		`boundingBox,
-
-`		`primitiveType,
-
-`		`indexType
-
-`		`));
-
-`	`m\_meshes.push\_back(pMesh);
-
-`	`// При добавлении полигональной сетки старый bounding box 
-
-`	`// может оказаться неактуальным, поэтому делаем пометку о необходимости
-
-`	`// его обновления
-
-`	`m\_boundingBoxMustBeUpdated = true;
-
-`	`return \*pMesh;
-
+    return *pMesh;
 }
 
-size\_t CModel::GetMeshCount()const
-
+size_t CModel::GetMeshCount() const
 {
-
-`	`return m\_meshes.size();
-
+    return m_meshes.size();
 }
 
-CMesh const& CModel::GetMesh(size\_t index)const
-
+CMesh const& CModel::GetMesh(size_t index) const
 {
-
-`	`return \*m\_meshes.at(index);
-
+    return *m_meshes.at(index);
 }
 
-CMesh & CModel::GetMesh(size\_t index)
-
+CMesh & CModel::GetMesh(size_t index)
 {
-
-`	`return \*m\_meshes.at(index);
-
+    return *m_meshes.at(index);
 }
+```
 
 Метод для вычисления ограничивающего блока модели проверяет актуальность текущего вычисленного ограничивающего блока модели и в случае необходимости вычисляет его значение заново.
 
-CBoundingBox const CModel::GetBoundingBox()const
-
+```cpp
+CBoundingBox const CModel::GetBoundingBox() const
 {
+    if (m_boundingBoxMustBeUpdated)
+    {
+        // Ограничивающий блок модели равен объединению ограничивающих блоков
+        // всех сеток, входящих в состав модели
+        CBoundingBox box;
+        for (size_t i = 0; i < m_meshes.size(); ++i)
+        {
+            box = box.Union(m_meshes[i]->GetBoundingBox());
+        }
+        m_boundingBox = box;
 
-`	`if (m\_boundingBoxMustBeUpdated)
-
-`	`{
-
-`		`// Ограничивающий блок модели равен объединению ограничивающих блоков
-
-`		`// всех сеток, входящих в состав модели
-
-`		`CBoundingBox box;
-
-`		`for (size\_t i = 0; i < m\_meshes.size(); ++i)
-
-`		`{
-
-`			`box = box.Union(m\_meshes[i]->GetBoundingBox());
-
-`		`}
-
-`		`m\_boundingBox = box;
-
-`		`// ограничивающий блок теперь актуален
-
-`		`m\_boundingBoxMustBeUpdated = false;
-
-`	`}
-
-`	`return m\_boundingBox;
-
+        // ограничивающий блок теперь актуален
+        m_boundingBoxMustBeUpdated = false;
+    }
+    return m_boundingBox;
 }
+```
 ##### Методы доступа к вершинным и индексным буферам
 Данные методы всего лишь возвращают ссылки на вершинные и индексные буферы, хранящиеся в модели.
-
+```cpp
 CVertexBuffer & CModel::GetVertexBuffer()
-
 {
-
-`	`return m\_vertexBuffer;
-
+    return m_vertexBuffer;
 }
 
-CVertexBuffer const& CModel::GetVertexBuffer()const
-
+CVertexBuffer const & CModel::GetVertexBuffer() const
 {
-
-`	`return m\_vertexBuffer;
-
+    return m_vertexBuffer;
 }
 
 CIndexBuffer & CModel::GetIndexBuffer()
-
 {
-
-`	`return m\_indexBuffer;
-
+    return m_indexBuffer;
 }
 
-CIndexBuffer const & CModel::GetIndexBuffer()const
-
+CIndexBuffer const & CModel::GetIndexBuffer() const
 {
-
-`	`return m\_indexBuffer;
-
+    return m_indexBuffer;
 }
+```
 ### <a name="_toc340531771"></a>**Разрабатываем класс для загрузки модели из файла формата .3ds**
 Разработаем класс CModelLoader, выполняющий загрузку моделей из файлов формата .3ds при помощи метода Load3dsFile. Для начала объявление класса будет следующее (постепенно мы наполним его необходимыми вспомогательными методами).
-
+```cpp
 class CModel;
-
 class CModelLoader
-
 {
-
-`	`class CFile3ds;
-
+    class CFile3ds;
 public:
-
-`	`CModelLoader();
-
-`	`// Выполняем загрузку 3ds файла, заполняя переданную модель
-
-`	`void Load3dsFile(const char \* fileName, CModel & model);
-
+    CModelLoader();
+    // Выполняем загрузку 3ds файла, заполняя переданную модель
+    void Load3dsFile(const char * fileName, CModel & model);
 };
+```
 #### ***Вспомогательный класс CFile3ds для управления ресурсами, связанными с открытым .3ds файлом***
 Для автоматического управления ресурсами, связанными с .3ds файлом создадим класс CModelLoader::CFile3ds. Конструктор данного класса будет выполнять открытие .3ds файла при помощи библиотеки lib3ds, а деструктор – освобождать связанные с открытым файлом ресурсы. Такая автоматизация снимет с нас необходимость освобождения ресурсов при возможных исключениях в ходе построения модели при загрузке.
 
+```cpp
 // Класс для автоматического освобождения ресурсов, связанных с .3ds файлом
-
-class CModelLoader::CFile3ds : boost::noncopyable
-
-{
-
+class CModelLoader::CFile3ds : boost::noncopyable {
 public:
+  CFile3ds(const char *fileName)
+    : m_pFile(lib3ds_file_open(fileName)) {
+    if (m_pFile == NULL) {
+      throw std::runtime_error(std::string("Unable to open ") + fileName);
+    }
+  }
 
-`	`CFile3ds(const char \* fileName)
+  Lib3dsFile const& GetFile() const {
+    return *m_pFile;
+  }
 
-`		`:m\_pFile(lib3ds\_file\_open(fileName))
-
-`	`{
-
-`		`if (m\_pFile == NULL)
-
-`		`{
-
-`			`throw std::runtime\_error(std::string("Unable to open ") + fileName);
-
-`		`}
-
-`	`}
-
-`	`Lib3dsFile const& GetFile()const
-
-`	`{
-
-`		`return \*m\_pFile;
-
-`	`}
-
-`	`~CFile3ds()
-
-`	`{
-
-`		`if (m\_pFile)
-
-`		`{
-
-`			`lib3ds\_file\_free(m\_pFile);
-
-`		`}
-
-`	`}
+  ~CFile3ds() {
+    if (m_pFile) {
+      lib3ds_file_free(m_pFile);
+    }
+  }
 
 private:
-
-`	`Lib3dsFile \* m\_pFile;
-
+  Lib3dsFile *m_pFile;
 };
+```
 #### ***Разрабатываем метод для загрузки модели***
 Для загрузки модели необходимо открыть .3ds файл (воспользуемся для этого классом CFile3ds), а затем загрузить его материалы (с текстурами) и полигональные сетки. При загрузке материалов нужно учесть тот факт, что имя .3ds файла может быть задано с указанием полного или относительного пути, т.е. сам файл и связанные с ним текстуры могут находиться в каталоге, отличном от текущего. В то же время, в 3ds-файле хранятся лишь имена файлов текстур без указания пути к ним. Для того, чтобы наш класс мог их загрузить, методы загрузки текстур и материалов должны принимать в качестве параметра еще и путь к каталогу с .3ds файлом, чтобы сформировать правильный путь к файлу текстуры.
 
 Добавим в объявление класса методы LoadMaterials и LoadMeshes.
-
-...
-
+```cpp
+//...
 class CModelLoader
-
 {
-
-`	`class CFile3ds;
+class CFile3ds;
 
 public:
 
-`	`…
+    //...
 
 private:
+    // Загружаем материалы
 
-`	`// Загружаем материалы
+    void LoadMaterials(
 
-`	`void LoadMaterials(
+    Lib3dsFile const& file, 
 
-`		`Lib3dsFile const& file, 
+    CModel & model, 
 
-`		`CModel & model, 
+    std::string const& baseFolder = "");
 
-`		`std::string const& baseFolder = "");
-
-`	`// Загружаем полигональные сетки
-
-`	`void LoadMeshes(Lib3dsFile const& file, CModel & model);
-
+    // Загружаем полигональные сетки
+    void LoadMeshes(Lib3dsFile const& file, CModel & model);
 };
+```
 
 Исходный код метода Load3dsFile представлен ниже: 
 
-void CModelLoader::Load3dsFile(const char \* fileName, CModel & model)
-
-{
-
-`	`// Открываем файл
-
-`	`CFile3ds file(fileName);
-
-`	`// Опеределяем путь к каталогу с .3ds файлом.
-
-`	`// Он понадобится для поиска текстур
-
-`	`std::string filePath = fileName;
-
-`	`// позиция косой черты (прямой, либо обратной)
-
-`	`size\_t slashPos = filePath.find\_last\_of("/\\");
-
-`	`// fileFolder будет содержать либо пустую строку, либо каталог,
-
-`	`// содержащий 3ds файл
-
-`	`std::string fileFolder = 
-
-`		`(slashPos == std::string::npos) ? "" :
-
-`		`filePath.substr(0, slashPos + 1);
-
-`	`// Загружаем материалы
-
-`	`LoadMaterials(file.GetFile(), model, fileFolder);
-
-`	`// Загружаем полигональные сетки
-
-`	`LoadMeshes(file.GetFile(), model);
-
+```cpp
+void CModelLoader::Load3dsFile(const char *fileName, CModel & model) {
+    // Открываем файл
+    CFile3ds file(fileName);
+    // Определяем путь к каталогу с .3ds файлом.
+    // Он понадобится для поиска текстур
+    std::string filePath = fileName;
+    // позиция косой черты (прямой, либо обратной)
+    size_t slashPos = filePath.find_last_of("/\\");
+    // fileFolder будет содержать либо пустую строку, либо каталог,
+    // содержащий 3ds файл
+    std::string fileFolder =
+      (slashPos == std::string::npos) ? "" :
+      filePath.substr(0, slashPos + 1);
+    // Загружаем материалы
+    LoadMaterials(file.GetFile(), model, fileFolder);
+    // Загружаем полигональные сетки
+    LoadMeshes(file.GetFile(), model);
 }
+```
 #### ***Загружаем материалы 3ds файла***
 Для загрузки материала необходимо для каждой записи в списке материалов 3ds файла создать соответствующий аналог в нашей модели, заполнив его данными из структуры **Lib3dsMaterial**. Поскольку материал может содержать текстурные карты, необходимо загрузить и их с помощью метод **LoadMaterialTextures**, который нужно добавить в класс CModelLoader.
-
-...
-
+```cpp
+//...
 class CModelMaterial;
-
-...
-
+//...
 class CModelLoader
-
 {
-
-...
-
+//...
 private:
+    //...
+    // Загружаем текстуры, связанные с материалом
 
-...
-
-`	`// Загружаем текстуры, связанные с материалом
-
-`	`void LoadMaterialTextures(
-
-`		`Lib3dsMaterial const& materialInfo, 
-
-`		`CModel & model, 
-
-`		`CModelMaterial & material, 
-
-`		`std::string const& baseFolder = "");
-
-...
-
+    void LoadMaterialTextures(
+        Lib3dsMaterial const& materialInfo, 
+        CModel & model, 
+        CModelMaterial & material, 
+        std::string const& baseFolder = "");
+//...
 };
+```
 
 Исходный код метода LoadMaterials:
 
+```cpp
 void CModelLoader::LoadMaterials(
+    Lib3dsFile const& file, 
+    CModel & model, 
+    std::string const& baseFolder) {
+    const int materialsCount = file.nmaterials;
 
-`	`Lib3dsFile const& file, 
-
-`	`CModel & model, 
-
-`	`std::string const& baseFolder)
-
-{
-
-`	`const int materialsCount = file.nmaterials;
-
-`	`for (int i = 0; i < materialsCount; ++i)
-
-`	`{
-
-`		`Lib3dsMaterial const \* pMaterial = file.materials[i];
-
-`		`// Добавляем новый материал к модели
-
-`		`CModelMaterial & material = model.AddMaterial();
-
-`		`// и получаем связанное с этим материлом описание
-
-`		`CMaterial & materialInfo = material.GetMaterial();
-
-`		`// Задаем фоновый цвет материала
-
-`		`{
-
-`			`const float \* ambient = pMaterial->ambient;
-
-`			`materialInfo.SetAmbient(ambient[0],ambient[1], ambient[2]);
-
-`		`}
-
-`		`// Задаем диффузный цвет материала
-
-`		`{
-
-`			`const float \* diffuse = pMaterial->diffuse;
-
-`			`materialInfo.SetDiffuse(diffuse[0], diffuse[1], diffuse[2]);
-
-`		`}
-
-`		`// Задаем зеркальный цвет материала и степень блеска
-
-`		`{
-
-`			`const float \* specular = pMaterial->specular;
-
-`			`materialInfo.SetSpecular(specular[0], specular[1], specular[2]);
-
-`			`materialInfo.SetShininess(pMaterial->shininess);
-
-`		`}
-
-`		`// Загружаем текстуры материала
-
-`		`LoadMaterialTextures(\*pMaterial, model, material, baseFolder);
-
-`	`}
-
+    for (int i = 0; i < materialsCount; ++i) {
+        Lib3dsMaterial const * pMaterial = file.materials[i];
+        // Добавляем новый материал к модели
+        CModelMaterial & material = model.AddMaterial();
+        // и получаем связанное с этим материлом описание
+        CMaterial & materialInfo = material.GetMaterial();
+        // Задаем фоновый цвет материала
+        {
+            const float * ambient = pMaterial->ambient;
+            materialInfo.SetAmbient(ambient[0],ambient[1], ambient[2]);
+        }
+        // Задаем диффузный цвет материала
+        {
+            const float * diffuse = pMaterial->diffuse;
+            materialInfo.SetDiffuse(diffuse[0], diffuse[1], diffuse[2]);
+        }
+        // Задаем зеркальный цвет материала и степень блеска
+        {
+            const float * specular = pMaterial->specular;
+            materialInfo.SetSpecular(specular[0], specular[1], specular[2]);
+            materialInfo.SetShininess(pMaterial->shininess);
+        }
+        // Загружаем текстуры материала
+        LoadMaterialTextures(*pMaterial, model, material, baseFolder);
+    }
 }
+```
 ##### Загружаем текстуры, связанные с материалом
 С материалом в 3ds файле может быть связано несколько текстурных карт[^17]. Здесь для простоты мы будем пытаться загрузить только текстурную карту №1, задающую основное изображение.
 
@@ -3869,209 +2531,131 @@ void CModelLoader::LoadMaterials(
 
 Чтобы облегчить добавление дополнительных текстур к материалу в дальнейшем, вынесем код загрузки текстуры в метод LoadTexture. Код, заполняющий текстурную карту нашей модели данными из .3ds файла, поместим в метод InitTextureMap. Обновленное объявление класса CModelLoader представлено ниже:
 
-…
-
-class CTextureMap;
-
+```cpp
+    //...
+    class CTextureMap;
 class CModelLoader
-
 {
-
-`	`…
-
+    //...
 private:
+    //...
+    // Загружаем текстуры, связанные с материалом
+    void LoadMaterialTextures(
+        Lib3dsMaterial const &materialInfo,
+        CModel &model,
+        CModelMaterial &material,
+        std::string const &baseFolder = "");
 
-`	`…
+    // Загружаем текстуру и добавляем ее в модель
+    GLuint LoadTexture(
+        std::string const &name,
+        CModel &model,
+        std::string const &baseFolder = "");
 
-`	`// Загружаем текстуры, связанные с материалом
+    // Инициализируем текстурную карту данными из .3ds файла
+    void InitTextureMap(
+        Lib3dsTextureMap const &textureMapInfo,
+        CTextureMap &textureMap);
+    //...
 
-`	`void LoadMaterialTextures(
-
-`		`Lib3dsMaterial const& materialInfo, 
-
-`		`CModel & model, 
-
-`		`CModelMaterial & material, 
-
-`		`std::string const& baseFolder = "");
-
-`	`// Загружаем текстуру и добавляем ее в модель
-
-`	`GLuint LoadTexture(
-
-`		`std::string const & name, 
-
-`		`CModel & model, 
-
-`		`std::string const& baseFolder = "");
-
-`	`// Инициализируем текстурную карту данными из .3ds файла
-
-`	`void InitTextureMap(
-
-`		`Lib3dsTextureMap const & textureMapInfo, 
-
-`		`CTextureMap & textureMap);
-
-`	`…
-
-`	`// Игнорировать ошибки загрузки текстур?
-
-`	`bool m\_ignoreMissingTextures;
-
+        // Игнорировать ошибки загрузки текстур?
+        bool m_ignoreMissingTextures;
 };
+```
 
 В конструктор класса CModelLoader добавилась инициализация поля **m\_ignoreMissingTextures**.
-
+```cpp
 CModelLoader::CModelLoader()
-
-:m\_ignoreMissingTextures(true)
-
+    : m_ignoreMissingTextures(true)
 {
-
 }
-
-…
-
+//...
 void CModelLoader::IgnoreMissingTextures(bool ignoreMissingTextures)
-
 {
-
-`	`m\_ignoreMissingTextures = ignoreMissingTextures;
-
+    m_ignoreMissingTextures = ignoreMissingTextures;
 }
+```
 
 Исходный код метода загрузки текстурных карт материала. В случае, если во время загрузки было поймано исключение, то оно перевыбрасывается лишь в том случае, когда пользователем явно было запрещено игнорирование ошибок загрузки текстур.
 
+```cpp
 void CModelLoader::LoadMaterialTextures(
-
-`	`Lib3dsMaterial const& materialInfo, 
-
-`	`CModel & model, 
-
-`	`CModelMaterial & material, 
-
-`	`std::string const& baseFolder)
-
+    Lib3dsMaterial const &materialInfo,
+    CModel &model,
+    CModelMaterial &material,
+    std::string const &baseFolder)
 {
 
-`	`// Пытаемся загрузить текстурную карту №1
+    // Пытаемся загрузить текстурную карту №1
+    {
+        Lib3dsTextureMap const &tex1 = materialInfo.texture1_map;
 
-`	`{
+        // Проверяем, есть ли имя у первой текстуры?
+        if (*tex1.name)
+        {
+            try
+            {
+                // Загружаем текстуру
+                CTexture2DHandle texture1 = LoadTexture(tex1.name, model, baseFolder);
 
-`		`Lib3dsTextureMap const & tex1 = materialInfo.texture1\_map;
+                // Добавляем текстурную карту
+                CTextureMap &textureMap1 = material.AddTextureMap1(texture1);
 
-`		`// Проверяем, есть ли имя у первой текстуры?
-
-`		`if (\*tex1.name)
-
-`		`{
-
-`			`try
-
-`			`{
-
-`				`// Загружаем текстуру
-
-`				`CTexture2DHandle texture1 = 
-
-`					`LoadTexture(tex1.name, model, baseFolder);
-
-`				`// Добавляем текстурную карту
-
-`				`CTextureMap & textureMap1 = material.AddTextureMap1(texture1);
-
-`				`// Наполняем ее сведениями из .3ds файла
-
-`				`InitTextureMap(tex1, textureMap1);
-
-`			`}
-
-`			`catch (std::runtime\_error const&)
-
-`			`{
-
-`				`if (!m\_ignoreMissingTextures)
-
-`				`{
-
-`					`throw;
-
-`				`}
-
-`			`}
-
-`		`}
-
-`	`}
-
+                // Наполняем ее сведениями из .3ds файла
+                InitTextureMap(tex1, textureMap1);
+            }
+            catch (std::runtime_error const &)
+            {
+                if (!m_ignoreMissingTextures)
+                {
+                    throw;
+                }
+            }
+        }
+    }
 }
+```
 
 Метод CModelLoader::LoadTexture загружает текстуру[^18] с использованием класса CTextureLoader, разработанного нами на прошлой лабораторной работе.
 
-GLuint CModelLoader::LoadTexture(
-
-`	`std::string const & name, CModel & model, std::string const& baseFolder)
-
+```cpp
+GLuint CModelLoader::LoadTexture(std::string const &name, CModel &model, std::string const &baseFolder)
 {
+    // Добавляем текстуру с заданным именем к модели
+    CTexture2D &texture = model.AddTextureImage(name);
 
-`	`// Добавляем текстуру с заданным именем к модели
+    // Нам вернут либо ссылку на существующий текстурный объект,
+    // либо ссылку на вновь созданный
+    if (!texture) // Если для текстуры еще не задано текстурное изображение
+    {
+        CTextureLoader loader;
+        std::string textureFilePath = baseFolder + name;
 
-`	`CTexture2D & texture = model.AddTextureImage(name);
+        // Загружаем текстурное изображение и присоединяем его к текстуре
+        // Из-за простейшего перевода имени из string в wstring
+        // корректно загружаться будут только файлы, в пути которых не содержатся
+        // символы за пределами кодовой таблицы ASCII
 
-`	`// Нам вернут либо ссылку на существующий текстурный объект,
+        texture.Attach(
+            loader.LoadTexture2D(std::wstring(textureFilePath.begin(),textureFilePath.end())));
+    }
 
-`	`// либо ссылку на вновь созданный
-
-`	`if (!texture)	// Если для текстуры еще не задано текстурное изображение
-
-`	`{
-
-`		`CTextureLoader loader;
-
-`		`std::string textureFilePath = baseFolder + name;
-
-`		`// Загружаем текстурное изображение и присоединяем его к текстуре
-
-`		`// Из-за простейшего перевода имени из string в wstring
-
-`		`// корректно загружаться будут только файлы, в пути которых не содержатся
-
-`		`// символы за пределами кодовой таблицы ASCII
-
-`		`texture.Attach(
-
-`			`loader.LoadTexture2D(
-
-`				`std::wstring(textureFilePath.begin(), 
-
-`				`textureFilePath.end())
-
-`				`)
-
-`			`);
-
-`	`}
-
-`	`return texture;
-
+    return texture;
 }
+```
 
 Метод InitTextureMap заполняет информацию о текстурной карте данными из .3ds файла
-
-void CModelLoader::InitTextureMap(
-
-`	`Lib3dsTextureMap const & textureMapInfo, CTextureMap & textureMap)
-
+```cpp
+void CModelLoader::InitTextureMap(Lib3dsTextureMap const &textureMapInfo, CTextureMap &textureMap)
 {
+    textureMap.SetOffset(textureMapInfo.offset[0], textureMapInfo.offset[1]);
 
-`	`textureMap.SetOffset(textureMapInfo.offset[0], textureMapInfo.offset[1]);
+    textureMap.SetScale(textureMapInfo.scale[0], textureMapInfo.scale[1]);
 
-`	`textureMap.SetScale(textureMapInfo.scale[0], textureMapInfo.scale[1]);
-
-`	`textureMap.SetRotation(textureMapInfo.rotation);
-
+    textureMap.SetRotation(textureMapInfo.rotation);
 }
+```
+
 #### ***Загружаем полигональные сетки***
 Загрузка полигональных сеток будет осуществляться в два этапа.
 
@@ -4079,481 +2663,318 @@ void CModelLoader::InitTextureMap(
 
 Поскольку на этапе загрузки трехмерной модели ничего не известно о планируемом способе использования загруженных в вершинный и индексный буферы данных, доработаем наш класс, дав пользователю возможность указания желаемого способа использования данных в вершинном и индексном буферах. С этой целью добавим к класс CModelLoader методы SetVertexBufferUsage и SetIndexBufferUsage. 
 
+```cpp
 class CModelLoader
-
 {
-
-`	`…
-
+    //...
 public:
+    //...
+    // Установить режим использования вершинного буфера модели
+    void SetVertexBufferUsage(GLenum vertexBufferUsage);
 
-`	`…
-
-`	`// Установить режим использования вершинного буфера модели
-
-`	`void SetVertexBufferUsage(GLenum vertexBufferUsage);
-
-`	`// Установить режим использования индексного буфера модели
-
-`	`void SetIndexBufferUsage(GLenum indexBufferUsage);
+    // Установить режим использования индексного буфера модели
+    void SetIndexBufferUsage(GLenum indexBufferUsage);
 
 private:
-
-`	`…
-
-`	`// Добавляем к модели полигональную сетку и заполняем
-
-`	`// переданные массивы вершин и индексов данными из 3ds файла
-
-`	`static void LoadMesh(
-
-`		`Lib3dsMesh const& mesh, 
-
-`		`CModel & model, 
-
-`		`std::vector<unsigned char> & vertexBufferData,
-
-`		`std::vector<unsigned short> & indexBufferData
-
-`		`);
-
-`	`…
-
+    //...
+    // Добавляем к модели полигональную сетку и заполняем
+    // переданные массивы вершин и индексов данными из 3ds файла
+    static void
+    LoadMesh(
+        Lib3dsMesh const &mesh,
+        CModel &model,
+        std::vector<unsigned char> &vertexBufferData,
+        std::vector<unsigned short> &indexBufferData
+    );
+    //...
 };
+```
 
 Изначально в конструкторе способ использования вершин и индексов будет установлен в GL\_STATIC\_DRAW. При помощи методов SetVertexBufferUsage и SetIndexBufferUsage можно будет переопределить данные значения.
 
+```cpp
 CModelLoader::CModelLoader()
-
-:m\_vertexBufferUsage(GL\_STATIC\_DRAW)
-
-,m\_indexBufferUsage(GL\_STATIC\_DRAW)
-
-,m\_ignoreMissingTextures(true)
-
+    : m_vertexBufferUsage(GL_STATIC_DRAW),
+      m_indexBufferUsage(GL_STATIC_DRAW),
+      m_ignoreMissingTextures(true)
 {
-
 }
 
 // Установить режим использования вершинного буфера модели
-
 void CModelLoader::SetVertexBufferUsage(GLenum vertexBufferUsage)
-
 {
-
-`	`m\_vertexBufferUsage = vertexBufferUsage;
-
+    m_vertexBufferUsage = vertexBufferUsage;
 }
 
 // Установить режим использования индексного буфера модели
-
 void CModelLoader::SetIndexBufferUsage(GLenum indexBufferUsage)
-
 {
-
-`	`m\_indexBufferUsage = indexBufferUsage;
-
+    m_indexBufferUsage = indexBufferUsage;
 }
+```
 
 На втором этапе в модели будут созданы вершинный и индексный буферы, а затем заполнены данными о вершинах и индексах модели, собранными на первом этапе.
 
 Код метода LoadMeshes представлен ниже.
 
-void CModelLoader::LoadMeshes(Lib3dsFile const& file, CModel & model)
-
+```cpp
+void CModelLoader::LoadMeshes(Lib3dsFile const &file, CModel &model)
 {
+    // Временные массивы вершин и индексов,
+    // которые будут заполнены данными всех сеток 3ds файла
 
-`	`// Временные массивы вершин и индексов, 
+    std::vector<unsigned char> vertexBufferData;
+    std::vector<unsigned short> indexBufferData;
+    const int meshCount = file.nmeshes;
 
-`	`// которые будут заполнены данными всех сеток 3ds файла
+    for (int i = 0; i < meshCount; ++i)
+    {
+        Lib3dsMesh const &mesh = *file.meshes[i];
 
-`	`std::vector<unsigned char> vertexBufferData;
+        // Добавляем данные полигональной сетки из 3ds файла
+        // к текущей модели, а информацию о вершинах и индексах
+        // добавляем в массивы вершин и индексов
 
-`	`std::vector<unsigned short> indexBufferData;
+        LoadMesh(mesh, model, vertexBufferData, indexBufferData);
+    }
 
-`	`const int meshCount = file.nmeshes;
+    // Создаем вершинный буфер
+    model.GetVertexBuffer().Create();
 
-`	`for (int i = 0; i < meshCount; ++i)
+    // и заполняем его данными о вершинах, собранными со всех
+    // полигональных сеток модели
+    model.GetVertexBuffer().BufferData(
+        vertexBufferData.size() * sizeof(vertexBufferData[0]),
+        &vertexBufferData[0],
+        m_vertexBufferUsage);
 
-`	`{
+    // Создаем буфер индексов
+    model.GetIndexBuffer().Create();
+    // и заполняем его данными об индексах вершин, составляющих грани,
+    // собранными со всех полигональных сеток модели
 
-`		`Lib3dsMesh const & mesh = \*file.meshes[i];
-
-`		`// Добавляем данные полигональной сетки из 3ds файла
-
-`		`// к текущей модели, а информацию о вершинах и индексах
-
-`		`// добавляем в массивы вершин и индексов
-
-`		`LoadMesh(mesh, model, vertexBufferData, indexBufferData);
-
-`	`}
-
-`	`// Создаем вершинный буфер
-
-`	`model.GetVertexBuffer().Create();
-
-`	`// и заполняем его данными о вершинах, собранными со всех 
-
-`	`// полигональных сеток модели
-
-`	`model.GetVertexBuffer().BufferData(
-
-`		`vertexBufferData.size() \* sizeof(vertexBufferData[0]), 
-
-`		`&vertexBufferData[0], 
-
-`		`m\_vertexBufferUsage);
-
-`	`// Создаем буфер индексов
-
-`	`model.GetIndexBuffer().Create();
-
-`	`// и заполняем его данными об индексах вершин, составляющих грани,
-
-`	`// собранными со всех полигональных сеток модели
-
-`	`model.GetIndexBuffer().BufferData(
-
-`		`indexBufferData.size() \* sizeof(indexBufferData[0]), 
-
-`		`&indexBufferData[0], 
-
-`		`m\_indexBufferUsage);
-
+    model.GetIndexBuffer().BufferData(
+        indexBufferData.size() * sizeof(indexBufferData[0]),
+        &indexBufferData[0],
+        m_indexBufferUsage);
 }
+```
+
 ##### <a name="_загрузка_полигональной_сетки"></a>Загрузка полигональной сетки
 Для загрузки полигональной сетки необходимо вычислить смещения в массиве вершин и индексов к данным загружаемой полигональной сетки и заполнить массивы данными из .3ds файлов.
 
 Для заполнения массива индексов и вершин добавим методы **FillVertexBufferData** и **FillIndexBufferData** в класс CModelLoader.
 
+```cpp
 class CModelLoader
-
 {
-
-`	`…
-
+    //...
 private:
+    //...
+    // Заполняем массив вершин данными из .3ds файла
+    static void FillVertexBufferData(
+        Lib3dsMesh const &mesh,
+        std::vector<unsigned char> &vertexBufferData);
 
-`	`…
-
-`	`// Заполняем массив вершин данными из .3ds файла
-
-`	`static void FillVertexBufferData(
-
-`		`Lib3dsMesh const& mesh, 
-
-`		`std::vector<unsigned char> & vertexBufferData);
-
-`	`// Заполняем массив индексов данными из .3ds файла
-
-`	`static void FillIndexBufferData(
-
-`		`Lib3dsMesh const& mesh, 
-
-`		`std::vector<unsigned short> & indexBufferData);
-
-`	`…
-
+    // Заполняем массив индексов данными из .3ds файла
+    static void FillIndexBufferData(
+        Lib3dsMesh const &mesh,
+        std::vector<unsigned short> &indexBufferData);
+    //...
 };
+```
 
 Затем необходимо вычислить при помощи функции **lib3ds\_mesh\_bounding\_box** библиотеки lib3ds ограничивающий блок полигональной сетки, и добавить новую сетку к загружаемой модели.
 
-void CModelLoader::LoadMesh(
-
-`	`Lib3dsMesh const& mesh, 
-
-`	`CModel & model, 
-
-`	`std::vector<unsigned char> & vertexBufferData,
-
-`	`std::vector<unsigned short> & indexBufferData
-
-`	`)
-
+```cpp
+void CModelLoader::LoadMesh(Lib3dsMesh const &mesh, CModel &model, std::vector<unsigned char> &vertexBufferData, std::vector<unsigned short> &indexBufferData)
 {
+    // Вычисляем смещение в буфере вершин текущей полигональной сетки
+    const unsigned int vertexBufferOffset =
+        sizeof(unsigned char) * vertexBufferData.size();
 
-`	`// Вычисляем смещение в буфере вершин текущей полигональной сетки
+    // Вычисляем смещение в буфере индексом текущей полигональной сетки
+    const unsigned int indexBufferOffset =
+        sizeof(unsigned short) * indexBufferData.size();
 
-`	`const unsigned int vertexBufferOffset = 
+    // Заполняем вершинный массив данными из .3ds файла
+    FillVertexBufferData(mesh, vertexBufferData);
+    // Заполняем массив индексов данными из .3ds файла
+    FillIndexBufferData(mesh, indexBufferData);
 
-`		`sizeof(unsigned char) \* vertexBufferData.size();
+    // Вычисляем ограничивающий блок текущей полигональной сетки
+    // при помощи средств библиотеки lib3ds
 
-`	`// Вычисляем смещение в буфере индексом текущей полигональной сетки
+    float minMeshBound[3];
+    float maxMeshBound[3];
 
-`	`const unsigned int indexBufferOffset = 
+    lib3ds_mesh_bounding_box(
+        const_cast<Lib3dsMesh *>(&mesh),
+        minMeshBound, maxMeshBound);
 
-`		`sizeof(unsigned short) \* indexBufferData.size();
+    // Создаем Bounding box на основе данных, возвращенных lib3ds
+    CBoundingBox meshBoundingBox((CVector3f(minMeshBound)), (CVector3f(maxMeshBound)));
 
-`	`// Заполняем вершинный массив данными из .3ds файла
-
-`	`FillVertexBufferData(mesh, vertexBufferData);
-
-`	`// Заполняем массив индексов данными из .3ds файла
-
-`	`FillIndexBufferData(mesh, indexBufferData);
-
-`	`// Вычисляем ограничивающий блок текущей полигональной сетки
-
-`	`// при помощи средств библиотеки lib3ds
-
-`	`float minMeshBound[3];
-
-`	`float maxMeshBound[3];
-
-`	`lib3ds\_mesh\_bounding\_box(
-
-`		`const\_cast<Lib3dsMesh\*>(&mesh), 
-
-`		`minMeshBound, maxMeshBound);
-
-`	`// Создаем Bounding box на основе данных, возвращенных lib3ds
-
-`	`CBoundingBox meshBoundingBox(
-
-`		`(CVector3f(minMeshBound)), (CVector3f(maxMeshBound)));
-
-`	`// Добавляем к модели полигональную сетку
-
-`	`model.AddMesh(
-
-`		`vertexBufferOffset, 
-
-`		`indexBufferOffset, 
-
-`		`mesh.nvertices, 
-
-`		`mesh.nfaces \* 3, 
-
-`		`mesh.texcos != NULL,
-
-`		`meshBoundingBox,
-
-`		`GL\_TRIANGLES,
-
-`		`GL\_UNSIGNED\_SHORT
-
-`		`);
-
+    // Добавляем к модели полигональную сетку
+    model.AddMesh(
+        vertexBufferOffset,
+        indexBufferOffset,
+        mesh.nvertices,
+        mesh.nfaces * 3,
+        mesh.texcos != NULL,
+        meshBoundingBox,
+        GL_TRIANGLES,
+        GL_UNSIGNED_SHORT
+    );
 }
+```
 ##### <a name="_ref307877820"></a>Заполнение массива вершин данными 3ds файла
 Пришло время определиться с форматом вершин полигональной сетки, используемым в нашей трехмерной модели. С каждой вершиной связаны ее координаты в пространстве, нормаль[^19] к описываемой полигональной сеткой поверхности в вершине, а также текстурные координаты (при условии, если они заданы для полигональной сетки). 
 
 Объявим соответствующие структуры данных:
 
+```cpp
 struct Vector3
-
 {
-
-`	`float x, y, z;
-
+    float x, y, z;
 };
 
 struct Vector2
-
 {
-
-`	`float x, y;
-
+    float x, y;
 };
 
 struct Vertex
-
 {
-
-`	`Vector3 position;
-
-`	`Vector3 normal;
-
+    Vector3 position;
+    Vector3 normal;
 };
 
 struct TexturedVertex : public Vertex
-
 {
-
-`	`Vector2 texCoord;
-
+    Vector2 texCoord;
 };
+```
 
 При заполнении вершинных данных необходимо получить адреса координат вершин и текстурных координат полигональной сетки из 3ds-файла. Эти сведения мы получаем из полей **vertices** и **texcos** структуры Lib3dsMesh.
 
 Вершины полигональной сетки могут как иметь, так и не иметь текстурных координат. В последнем случае можно сэкономить 8 байт на каждой вершине, если не сохранять для такой полигональной сетки текстурные координаты, используя для хранения вершин тип **Vertex**, а не **TexturedVertex**. Реализуем данный функционал в методе **FillVertexBufferData**, копирующий в конец массива vertexBufferData данные о вершинах полигональной сетки из структуры Lib3dsMesh.
 
-void CModelLoader::FillVertexBufferData(
-
-`	`Lib3dsMesh const& mesh, std::vector<unsigned char> & vertexBufferData)
-
+```cpp
+void CModelLoader::FillVertexBufferData(Lib3dsMesh const &mesh, std::vector<unsigned char> &vertexBufferData)
 {
+    const int numberOfVertices = mesh.nvertices;
 
-`	`const int numberOfVertices = mesh.nvertices;
+    // адрес массива вершин в 3ds-файле
+    float(*pInputVertices)[3] = mesh.vertices;
 
-`	`// адрес массива вершин в 3ds-файле
+    // адрес массива текстурных координат в 3ds файле
+    float(*pInputTexCoords)[2] = mesh.texcos;
 
-`	`float (\*pInputVertices)[3] = mesh.vertices;
+    // смещение до начала данных в 3ds файле
+    size_t vertexBufferOffset = vertexBufferData.size();
 
-`	`// адрес массива текстурных координат в 3ds файле
+    // проверяем, есть ли у сетки текстурные координаты
+    if (pInputTexCoords != NULL)
+    {
+        // сетка с текстурными координатами
+        // увеличиваем массив на размер, занимаемых вершинами
+        // с текстурными координатами
 
-`	`float (\*pInputTexCoords)[2] = mesh.texcos;
+        vertexBufferData.resize(
+            vertexBufferOffset + sizeof(TexturedVertex) \* numberOfVertices);
 
-`	`// смещение до начала данных в 3ds файле
+        // задаем адрес расположения вершинных данных полигональной сетки
+        TexturedVertex *outputVertices = reinterpret_cast<TexturedVertex *>(&vertexBufferData[vertexBufferOffset]);
 
-`	`size\_t vertexBufferOffset = vertexBufferData.size();
+        // Заполняем массив данными о вершинах в формате структуры TexturedVertex
+        for (int v = 0; v < numberOfVertices; ++v)
+        {
+            float *inputPosition = pInputVertices[v];
+            float *inputTexCoord = pInputTexCoords[v];
 
-`	`// проверяем, есть ли у сетки текстурные координаты
+            TexturedVertex &outputVertex = outputVertices[v];
 
-`	`if (pInputTexCoords != NULL)
+            Vector3 &outputPosition = outputVertex.position;
 
-`	`{
+            // задаем координаты вершины в пространстве
+            outputPosition.x = inputPosition[0];
 
-`		`// сетка с текстурными координатами
+            outputPosition.y = inputPosition[1];
 
-`		`// увеличиваем массив на размер, занимаемых вершинами 
+            outputPosition.z = inputPosition[2];
 
-`		`// с текстурными координатами
+            // задаем текстурные координаты вершины
+            outputVertex.texCoord.x = inputTexCoord[0];
+            outputVertex.texCoord.y = inputTexCoord[1];
 
-`		`vertexBufferData.resize(
+            // TODO: нужно вычислить значение вектора нормали
+            Vector3 &outputNormal = outputVertex.normal;
+            outputNormal.x = outputNormal.y = outputNormal.z = 0;
+        }
+    }
 
-`			`vertexBufferOffset + sizeof(TexturedVertex) \* numberOfVertices);
+    else
+    {
+        // сетка без текстурных координат
+        // увеличиваем массив на размер, занимаемых вершинами
+        // без текстурных координат
 
-`		`// задаем адрес расположения вершинных данных полигональной сетки
+        vertexBufferData.resize(vertexBufferOffset + sizeof(Vertex) * numberOfVertices);
 
-`		`TexturedVertex \* outputVertices = 
+        // задаем адрес расположения вершинных данных полигональной сетки
 
-`			`reinterpret\_cast<TexturedVertex\*>(
+        Vertex *outputVertices = reinterpret_cast<Vertex*>(&vertexBufferData[vertexBufferOffset]);
 
-`				`&vertexBufferData[vertexBufferOffset]);
+        // Заполняем массив данными о вершинах в формате структуры Vertex
+        for (int v = 0; v < numberOfVertices; ++v)
+        {
+            float *inputPosition = pInputVertices[v];
+            Vertex &outputVertex = outputVertices[v];
+            Vector3 &outputPosition = outputVertex.position;
 
-`		`// Заполняем массив данными о вершинах в формате структуры TexturedVertex
+            // задаем координаты вершины в пространстве
+            outputPosition.x = inputPosition[0];
+            outputPosition.y = inputPosition[1];
+            outputPosition.z = inputPosition[2];
 
-`		`for (int v = 0; v < numberOfVertices; ++v)
-
-`		`{
-
-`			`float \* inputPosition = pInputVertices[v];
-
-`			`float \* inputTexCoord = pInputTexCoords[v];
-
-`			`TexturedVertex & outputVertex = outputVertices[v];
-
-`			`Vector3 & outputPosition = outputVertex.position;
-
-`			`// задаем координаты вершины в пространстве
-
-`			`outputPosition.x = inputPosition[0];
-
-`			`outputPosition.y = inputPosition[1];
-
-`			`outputPosition.z = inputPosition[2];
-
-`			`// задаем текстурные координаты вершины
-
-`			`outputVertex.texCoord.x = inputTexCoord[0];
-
-`			`outputVertex.texCoord.y = inputTexCoord[1];
-
-`			`// TODO: нужно вычислить значение вектора нормали
-
-`			`Vector3 & outputNormal = outputVertex.normal;
-
-`			`outputNormal.x = outputNormal.y = outputNormal.z = 0;
-
-`		`}
-
-`	`}
-
-`	`else
-
-`	`{
-
-`		`// сетка без текстурных координат
-
-`		`// увеличиваем массив на размер, занимаемых вершинами 
-
-`		`// без текстурных координат
-
-`		`vertexBufferData.resize(
-
-`			`vertexBufferOffset + sizeof(Vertex) \* numberOfVertices);
-
-`		`// задаем адрес расположения вершинных данных полигональной сетки
-
-`		`Vertex \* outputVertices = 
-
-`			`reinterpret\_cast<Vertex\*>(&vertexBufferData[vertexBufferOffset]);
-
-`		`// Заполняем массив данными о вершинах в формате структуры Vertex
-
-`		`for (int v = 0; v < numberOfVertices; ++v)
-
-`		`{
-
-`			`float \* inputPosition = pInputVertices[v];
-
-`			`Vertex & outputVertex = outputVertices[v];
-
-`			`Vector3 & outputPosition = outputVertex.position;
-
-`			`// задаем координаты вершины в пространстве
-
-`			`outputPosition.x = inputPosition[0];
-
-`			`outputPosition.y = inputPosition[1];
-
-`			`outputPosition.z = inputPosition[2];
-
-`			`// TODO: вычислить значение вектора нормали
-
-`			`Vector3 & outputNormal = outputVertex.normal;
-
-`			`outputNormal.x = outputNormal.y = outputNormal.z = 0;
-
-`		`}
-
-`	`}
-
+            // TODO: вычислить значение вектора нормали
+            Vector3 &outputNormal = outputVertex.normal;
+            outputNormal.x = outputNormal.y = outputNormal.z = 0;
+        }
+    }
 }
+```
+
 ##### <a name="_заполнение_массива_индексов"></a><a name="_ref307877746"></a>Заполнение массива индексов данными из .3ds файла
 Метод FillIndexBufferData выполняет копирование индексов треугольных граней в индексный буфер, предварительно зарезервировав в массиве место для их размещения[^20].
 
-void CModelLoader::FillIndexBufferData(
-
-`	`Lib3dsMesh const& mesh, std::vector<unsigned short> & indexBufferData)
-
+```cpp
+void CModelLoader::FillIndexBufferData(Lib3dsMesh const &mesh, std::vector<unsigned short> &indexBufferData)
 {
+    const int numberOfFaces = mesh.nfaces;
+    // Резервируем в массиве место для хранения вершин N граней
+    indexBufferData.reserve(indexBufferData.size() + numberOfFaces * 3);
 
-`	`const int numberOfFaces = mesh.nfaces;
+    for (int i = 0; i < numberOfFaces; ++i)
+    {
+        Lib3dsFace const &inputFace = mesh.faces[i];
+        unsigned short v0 = inputFace.index[0];
+        assert(v0 < mesh.nvertices);
 
-`	`// Резервируем в массиве место для хранения вершин N граней
+        unsigned short v1 = inputFace.index[1];
+        assert(v1 < mesh.nvertices);
+        
+        unsigned short v2 = inputFace.index[2];
+        assert(v2 < mesh.nvertices);
 
-`	`indexBufferData.reserve(indexBufferData.size() + numberOfFaces \* 3);
-
-`	`for (int i = 0; i < numberOfFaces; ++i)
-
-`	`{
-
-`		`Lib3dsFace const& inputFace = mesh.faces[i];
-
-`		`unsigned short v0 = inputFace.index[0];
-
-`		`assert(v0 < mesh.nvertices);
-
-`		`unsigned short v1 = inputFace.index[1];
-
-`		`assert(v1 < mesh.nvertices);
-
-`		`unsigned short v2 = inputFace.index[2];
-
-`		`assert(v2 < mesh.nvertices);
-
-`		`indexBufferData.push\_back(v0);
-
-`		`indexBufferData.push\_back(v1);
-
-`		`indexBufferData.push\_back(v2);
-
-`	`}
-
+        indexBufferData.push_back(v0);
+        indexBufferData.push_back(v1);
+        indexBufferData.push_back(v2);
+    }
 }
+```
+
 ### <a name="_toc340531772"></a>**Каркасная визуализация трехмерной модели**
 За визуализацию трехмерной модели будет отвечать класс **CModelRenderer**[^21]. Делегирование задачи визуализации модели в отдельный класс (вместо реализации его средствами самой модели) позволяет одновременно иметь для одной и той же модели несколько различных визуальных представлений и изменять их независимо от самой модели. Например, класс визуализации может иметь различные режимы[^22] визуализации модели:
 
@@ -4563,295 +2984,192 @@ void CModelLoader::FillIndexBufferData(
 - С визуализацией ограничивающего объем или без него
 - С использованием точного расчета освещения для каждого фрагмента при помощи шейдеров или стандартными средствами OpenGL с расчетом освещения лишь в вершинах
 
+```cpp
 class CModel;
 
 class CModelRenderer : private boost::noncopyable
-
 {
-
 public:
-
-`	`CModelRenderer(void);
-
-`	`void RenderModel(CModel const& model);
-
+    CModelRenderer(void);
+    void RenderModel(CModel const &model);
 };
+```
 
 Визуализация модели начинается с привязки OpenGL к ее вершинным и индексным буферам и получения их базовых адресов. Затем следует разрешить использование массивов вершин и нормалей, т.к. эти данные будут поступать из вершинного буфера.
 
-void CModelRenderer::RenderModel(CModel const& model)
-
+```cpp
+void CModelRenderer::RenderModel(CModel const &model)
 {
+    const size_t meshCount = model.GetMeshCount();
 
-`	`const size\_t meshCount = model.GetMeshCount();
+    // Если нет полигональных сеток, то нечего рисовать
+    if (meshCount == 0)
+    {
+        return;
+    }
 
-`	`// Если нет полигональных сеток, то нечего рисовать
+    // Осуществляем привязку к вершинным и индексным буферам
+    // рисуемой модели
 
-`	`if (meshCount == 0)
+    model.GetVertexBuffer().Bind();
+    model.GetIndexBuffer().Bind();
 
-`	`{
+    // Получаем базовые адреса массивов вершин и индексов
+    GLubyte const *pVertexPointer = reinterpret_cast<GLubyte const *>(model.GetVertexBuffer().GetBufferPointer());
 
-`		`return;
+    GLubyte const *pIndexPointer = reinterpret_cast<GLubyte const *>(model.GetIndexBuffer().GetBufferPointer());
 
-`	`}
+    // Разрешаем использование массивов координат вершин и нормалей
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
 
-`	`// Осуществляем привязку к вершинным и индексным буферам 
-
-`	`// рисуемой модели
-
-`	`model.GetVertexBuffer().Bind();
-
-`	`model.GetIndexBuffer().Bind();
-
-`	`// Получаем базовые адреса массивов вершин и индексов
-
-`	`GLubyte const \* pVertexPointer = reinterpret\_cast<GLubyte const \*>
-
-`		`(model.GetVertexBuffer().GetBufferPointer());
-
-`	`GLubyte const \* pIndexPointer = reinterpret\_cast<GLubyte const \*>
-
-`		`(model.GetIndexBuffer().GetBufferPointer());
-
-`	`// Разрешаем использование массивов координат вершин и нормалей
-
-`	`glEnableClientState(GL\_VERTEX\_ARRAY);
-
-`	`glEnableClientState(GL\_NORMAL\_ARRAY);
-
-`	`// Определяем необходимость включения текстурных координат сетки №0
-
-`	`bool enableTexture = !model.GetMesh(0).HasTextureCoords();
+    // Определяем необходимость включения текстурных координат сетки №0
+    bool enableTexture = !model.GetMesh(0).HasTextureCoords();
+```
 
 Затем в цикле следует «пробежаться» по всем полигональным сеткам модели. Для каждой полигональной сетки следует определить ее смещение в буферах вершин и индексов. Также в зависимости от наличия текстурных координат в полигональной сетке мы должны определить интервал (в байтах) между соседними вершинами, т.к. это требует функции gl\*Pointer, и разрешить или запретить использование массива текстурных координат.
 
-`	`// Цикл по всем полигональным сеткам модели
+```cpp
+// Цикл по всем полигональным сеткам модели
+for (size_t i = 0; i < meshCount; ++i)
+{
+    CMesh const &mesh = model.GetMesh(i);
 
-`	`for (size\_t i = 0; i < meshCount; ++i)
+    // Получаем смещение в вершинном и индексном буферах, по которым
+    // размещаются данные текущей полигональной сетки
+    unsigned vertexBufferOffset = mesh.GetVertexBufferOffset();
+    unsigned indexBufferOffset = mesh.GetIndexBufferOffset();
 
-`	`{
+    // Есть ли в сетке текстурные координаты?
+    bool meshUsesTexture = mesh.HasTextureCoords();
 
-`		`CMesh const& mesh = model.GetMesh(i);
+    // Вычисляем интервал между вершинами полигональной сетки
+    // в зависимости от наличия текстурных координат
+    unsigned stride =meshUsesTexture ? sizeof(TexturedVertex) : sizeof(Vertex);
 
-`		`// Получаем смещение в вершинном и индексном буферах, по которым
+    // Задаем адреса начала массивов вершин и нормалей текущей
+    // полиогональной сетки
 
-`		`// размещаются данные текущей полигональной сетки
+    glVertexPointer(
+        3,
+        GL_FLOAT,
+        stride,
+        pVertexPointer + vertexBufferOffset + offsetof(Vertex, position)
+    );
 
-`		`unsigned vertexBufferOffset = mesh.GetVertexBufferOffset();
+    glNormalPointer(
+        GL_FLOAT,
+        stride,
+        pVertexPointer + vertexBufferOffset + offsetof(Vertex, normal)
+    );
 
-`		`unsigned indexBufferOffset = mesh.GetIndexBufferOffset();
+    // Разрешаем, либо запрещаем использование массива
+    // текстурных координат
+    // При этом минимизируем количество вызовов
+    // метода glEnableClientState/glDisableClientState
+    if (meshUsesTexture && !enableTexture)
+    {
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 
-`		`// Есть ли в сетке текстурные координаты?
+    else if (!meshUsesTexture && enableTexture)
+    {
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+    // Если сетка использует текстурные координаты, задаем
+    // адрес начала массива текстурных координат
+    if (meshUsesTexture)
+    {
+        glTexCoordPointer(
+            2,
+            GL_FLOAT,
+            stride,
+            pVertexPointer + vertexBufferOffset + offsetof(TexturedVertex, texCoord));
+    }
+    enableTexture = meshUsesTexture;
 
-`		`bool meshUsesTexture = mesh.HasTextureCoords();
-
-`		`// Вычисляем интервал между вершинами полигональной сетки
-
-`		`// в зависимости от наличия текстурных координат
-
-`		`unsigned stride = 
-
-`			`meshUsesTexture ? sizeof(TexturedVertex) : sizeof(Vertex);
-
-`		`// Задаем адреса начала массивов вершин и нормалей текущей
-
-`		`// полиогональной сетки
-
-`		`glVertexPointer(
-
-`			`3, 
-
-`			`GL\_FLOAT, 
-
-`			`stride, 
-
-`			`pVertexPointer + vertexBufferOffset + offsetof(Vertex, position)
-
-`			`);
-
-`		`glNormalPointer(
-
-`			`GL\_FLOAT, 
-
-`			`stride, 
-
-`			`pVertexPointer + vertexBufferOffset + offsetof(Vertex, normal)
-
-`			`);
-
-`		`// Разрешаем, либо запрещаем использование массива
-
-`		`// текстурных координат
-
-`		`// При этом минимизируем количество вызовов 
-
-`		`// метода glEnableClientState/glDisableClientState
-
-`		`if (meshUsesTexture && !enableTexture)
-
-`		`{
-
-`			`glEnableClientState(GL\_TEXTURE\_COORD\_ARRAY);
-
-`		`}
-
-`		`else if (!meshUsesTexture && enableTexture)
-
-`		`{
-
-`			`glDisableClientState(GL\_TEXTURE\_COORD\_ARRAY);
-
-`		`}
-
-`		`// Если сетка использует текстурные координаты, задаем
-
-`		`// адрес начала массива текстурных координат
-
-`		`if (meshUsesTexture)
-
-`		`{
-
-`			`glTexCoordPointer(
-
-`				`2, 
-
-`				`GL\_FLOAT, 
-
-`				`stride, 
-
-`				`pVertexPointer + 
-
-`					`vertexBufferOffset + offsetof(TexturedVertex, texCoord));
-
-`		`}
-
-`		`enableTexture = meshUsesTexture;
+```
 
 После того, как адреса используемых массивов указаны и разрешено их использование, необходимо выполнить визуализацию примитивов полигональной сетки. Здесь мы проверяем наличие расширения [GL_EXT_draw_range_elements](http://www.opengl.org/registry/specs/EXT/draw_range_elements.txt), и при его наличии выполнить визуализацию примитивов при помощи функции [glDrawRangeElements](http://www.opengl.org/sdk/docs/man/xhtml/glDrawRangeElements.xml). Использование данной функции является более предпочтительным, т.к. некоторые реализации OpenGL могут использовать знание начального и конечного индексов рисуемых вершин для более быстрой их обработки.
 
 Кроме того, для повышения скорости обработки вершин можно воспользоваться расширением [GL_EXT_compiled_vertex_array](http://www.opengl.org/registry/specs/EXT/compiled_vertex_array.txt), которое позволяет OpenGL выполнить кэширование вершин после их трансформации. В том случае, когда на одну и ту же вершину в массиве индексов ссылаются по нескольку раз (а так оно для полигональных сеток, как правило, и бывает), можно добиться небольшого прироста в производительности за счет того, что каждая вершина будет подвергнута трансформации только один раз, а использована несколько. Для использования возможностей данного расширения приложение должно вызвать функции рисования массивов примитивов между вызовами функций [glLockArraysEXT](http://publib.boulder.ibm.com/infocenter/aix/v6r1/index.jsp?topic=/com.ibm.aix.opengl/doc/openglrf/glLockArraysEXT.htm) и [glUnlockArraysEXT](http://publib.boulder.ibm.com/infocenter/aix/v6r1/index.jsp?topic=/com.ibm.aix.opengl/doc/openglrf/glUnlockArraysEXT.htm).
 
-`		`// Если поддерживается расширение GL\_EXT\_compiled\_vertex\_array,
+```cpp
+// Если поддерживается расширение GL\_EXT\_compiled\_vertex\_array,
+// то мы можем попросить OpenGL выполнить кеширование
+// оттрансформированных вершин полигональной сетки.
 
-`		`// то мы можем попросить OpenGL выполнить кеширование
+// В том случае, когда каждая вершина в среднем используется
+// чаще, чем дважды, это может дать прирост в скорости
+// обработки вершин, т.к. каждая вершина будет
+// оттрансформирована лишь однажды, а использована несколько раз
 
-`		`// оттрансформированных вершин полигональной сетки.
+bool needToUnlockArrays = false;
 
-`		`// В том случае, когда каждая вершина в среднем используется 
+if ((mesh.GetIndexCount() > mesh.GetVertexCount() \* 2) && GLEW_EXT_compiled_vertex_array)
 
-`		`// чаще, чем дважды, это может дать прирост в скорости
+{
+    glLockArraysEXT(0, mesh.GetVertexCount());
+    needToUnlockArrays = true;
+}
 
-`		`// обработки вершин, т.к. каждая вершина будет
+// Если поддерживается расширение GL\_EXT\_draw\_range\_elements,
+// испольузем его для рисования массива примитивов,
+// т.к. его реализация может быть более эффективной
+// по сравнению c glDrawElements
 
-`		`// оттрансформирована лишь однажды, а использована несколько раз
+if (GLEW_EXT_draw_range_elements)
+{
+    glDrawRangeElements(
+        mesh.GetPrimitiveType(),
+        0,
+        mesh.GetVertexCount() - 1,
+        mesh.GetIndexCount(),
+        mesh.GetIndexType(),
+        pIndexPointer + indexBufferOffset
+    );
+}
+else
+{
+    // Если расширение GL\_EXT\_draw\_range\_elements не поддерживается,
+    // рисуем традиционным способом
 
-`		`bool needToUnlockArrays = false;
+    glDrawElements(
+        mesh.GetPrimitiveType(),
+        mesh.GetIndexCount(),
+        mesh.GetIndexType(),
+        pIndexPointer + indexBufferOffset
+    );
+}
 
-`		`if (
+// Если мы кешировали оттрансформирвоанные вершины, то
+// надо вызвать метод glUnlockArraysEXT для освобождения
+// связанных с ними данных
 
-`			`(mesh.GetIndexCount() > mesh.GetVertexCount() \* 2) && 
-
-`			`GLEW\_EXT\_compiled\_vertex\_array
-
-`			`)
-
-`		`{
-
-`			`glLockArraysEXT(0, mesh.GetVertexCount());
-
-`			`needToUnlockArrays = true;
-
-`		`}
-
-`		`// Если поддерживается расширение GL\_EXT\_draw\_range\_elements,
-
-`		`// испольузем его для рисования массива примитивов,
-
-`		`// т.к. его реализация может быть более эффективной
-
-`		`// по сравнению c glDrawElements
-
-`		`if (GLEW\_EXT\_draw\_range\_elements)
-
-`		`{
-
-`			`glDrawRangeElements(
-
-`				`mesh.GetPrimitiveType(),
-
-`				`0,
-
-`				`mesh.GetVertexCount() - 1,
-
-`				`mesh.GetIndexCount(),
-
-`				`mesh.GetIndexType(),
-
-`				`pIndexPointer + indexBufferOffset
-
-`				`);
-
-`		`}
-
-`		`else
-
-`		`{
-
-`			`// Если расширение GL\_EXT\_draw\_range\_elements не поддерживается,
-
-`			`// рисуем традиционным способом
-
-`			`glDrawElements(
-
-`				`mesh.GetPrimitiveType(), 
-
-`				`mesh.GetIndexCount(), 
-
-`				`mesh.GetIndexType(), 
-
-`				`pIndexPointer + indexBufferOffset
-
-`				`);
-
-`		`}
-
-`		`// Если мы кешировали оттрансформирвоанные вершины, то
-
-`		`// надо вызвать метод glUnlockArraysEXT для освобождения
-
-`		`// связанных с ними данных
-
-`		`if (needToUnlockArrays)
-
-`		`{
-
-`			`glUnlockArraysEXT();
-
-`		`}
+if (needToUnlockArrays)
+{
+    glUnlockArraysEXT();
+}
+```
 
 Далее необходимо завершить цикл обработки полигональных сеток и запретить использование ранее разрешенных массивов.
 
-`	`}
-
-`	`// Если использование массива текстурных координат было разрешено,
-
-`	`// то запрещаем его использование
-
-`	`if (enableTexture)
-
-`	`{
-
-`		`glDisableClientState(GL\_TEXTURE\_COORD\_ARRAY);
-
-`	`}
-
-`	`// Аналогично запрещаем использование массивов вершин и нормалей
-
-`	`glDisableClientState(GL\_VERTEX\_ARRAY);
-
-`	`glDisableClientState(GL\_NORMAL\_ARRAY);
-
+```cpp
 }
+
+// Если использование массива текстурных координат было разрешено,
+// то запрещаем его использование
+
+if (enableTexture)
+{
+    glDisableClientState(GL\_TEXTURE\_COORD\_ARRAY);
+}
+
+// Аналогично запрещаем использование массивов вершин и нормалей
+glDisableClientState(GL\_VERTEX\_ARRAY);
+glDisableClientState(GL\_NORMAL\_ARRAY);
+}
+```
 
 Собираем компоненты программы вместе
 
@@ -4863,201 +3181,153 @@ void CModelRenderer::RenderModel(CModel const& model)
 
 В настройках проекта Visual Studio следует указать ссылки на вышеуказанные библиотеки.
 
+```cpp
 class CGdiplusInitializer
-
 {
-
 public:
+    CGdiplusInitializer()
+    {
+        Gdiplus::GdiplusStartupInput input;
+        Gdiplus::GdiplusStartupOutput output;
 
-`	`CGdiplusInitializer()
+        if (Gdiplus::GdiplusStartup(&m_token, &input, &output) != Gdiplus::Ok)
+        {
+            // Не удалось инициализировать GDI+
+            throw std::runtime_error("Failed to initialize GDI+");
+        }
+    }
 
-`	`{
-
-`		`Gdiplus::GdiplusStartupInput input;
-
-`		`Gdiplus::GdiplusStartupOutput output;
-
-`		`if (Gdiplus::GdiplusStartup(&m\_token, &input, &output) != Gdiplus::Ok)
-
-`		`{
-
-`			`// Не удалось инициализировать GDI+
-
-`			`throw std::runtime\_error("Failed to initialize GDI+");
-
-`		`}
-
-`	`}
-
-`	`~CGdiplusInitializer()
-
-`	`{
-
-`		`Gdiplus::GdiplusShutdown(m\_token);
-
-`	`}
+    ~CGdiplusInitializer()
+    {
+        Gdiplus::GdiplusShutdown(m_token);
+    }
 
 private:
-
-`	`ULONG\_PTR m\_token;
-
+    ULONG_PTR m_token;
 };
 
 CMyApplication app("3ds model rendering", 800, 600);
 
 CGdiplusInitializer gdiplusInitializer;
 
-int \_tmain(int /\*argc\*/, \_TCHAR\* /\*argv\*/[])
-
+int _tmain(int argc, _TCHAR* argv[])
 {
+    glewInit();
+    try
+    {
+        app.MainLoop();
+    }
 
-`	`glewInit();
+    catch (std::exception const &e)
+    {
+        std::cout << e.what();
+    }
 
-`	`try
-
-`	`{
-
-`		`app.MainLoop();
-
-`	`}
-
-`	`catch (std::exception const& e)
-
-`	`{
-
-`		`std::cout << e.what();
-
-`	`}
-
-`	`return 0;
-
+    return 0;
 }
+```
 
 В класс CMyApplication добавим экземпляры классов CModel и CModelRenderer.
-
+```cpp
 class CMyApplication : public CGLApplication
-
 {
-
 public:
-
-`	`…
+    //...
 
 protected:
-
-`	`…
+    //...
 
 private:
+    //...
 
-`	`…
+    CModel m_model;
 
-`	`CModel m\_model;
-
-`	`CModelRenderer m\_renderer;
-
+    CModelRenderer m_renderer;
 };
-
+```
 При инициализации приложения выполним загрузку модели из файла и установим камеру таким образом, чтобы направление взгляда камеры было в центр ограничивающего блока модели, а сама камера находилась от центра на расстоянии диагонали ограничивающего блока .
 
+```cpp
 void CMyApplication::OnInit()
-
 {
 
-`	`glEnable(GL\_DEPTH\_TEST);
+    glEnable(GL_DEPTH_TEST);
 
-`	`glClearColor(1, 1, 1, 1);
+    glClearColor(1, 1, 1, 1);
 
+    // Загружаем трехмерную модель
+    CModelLoader loader;
+    loader.Load3dsFile("mercedes.3ds", m_model);
 
+    // Определяем ограничивающий блой данной модели
+    CBoundingBox const &modelBoundingBox = m_model.GetBoundingBox();
 
-`	`// Загружаем трехмерную модель
+    if (modelBoundingBox.IsEmpty())
+    {
+        throw std::runtime_error("Model is empty. Nothing to render");
+    }
 
-`	`CModelLoader loader;
+    // Центр bounding box-а модели
+    CVector3f modelCenter = modelBoundingBox.GetCenter();
 
-`	`loader.Load3dsFile("mercedes.3ds", m\_model);
+    // Длина диагонали bounding box-а
+    float modelDiagonal = modelBoundingBox.GetSize().GetLength();
 
-`	`// Определяем ограничивающий блой данной модели
+    // Отодвигаем камеру от центра на расстояние, равное диагонали
+    // bounding box-а
+    CVector3f cameraPosition = modelCenter + CVector3f(modelDiagonal, 0, 0);
 
-`	`CBoundingBox const& modelBoundingBox = m\_model.GetBoundingBox();
+    // Задаем параметры камеры
+    glLoadIdentity();
 
-`	`if (modelBoundingBox.IsEmpty())
-
-`	`{
-
-`		`throw std::runtime\_error("Model is empty. Nothing to render");
-
-`	`}
-
-`	`// Центр bounding box-а модели
-
-`	`CVector3f modelCenter = modelBoundingBox.GetCenter();
-
-`	`// Длина диагонали bounding box-а
-
-`	`float modelDiagonal = modelBoundingBox.GetSize().GetLength();
-
-`	`// Отодвигаем камеру от центра на расстояние, равное диагонали 
-
-`	`// bounding box-а
-
-`	`CVector3f cameraPosition = modelCenter + CVector3f(modelDiagonal, 0, 0);
-
-`	`// Задаем параметры камеры
-
-`	`glLoadIdentity();
-
-`	`gluLookAt(
-
-`		`cameraPosition.x, cameraPosition.y, cameraPosition.z, 
-
-`		`modelCenter.x, modelCenter.y, modelCenter.z, 
-
-`		`0, 1, 0);
-
+    gluLookAt(
+        cameraPosition.x, cameraPosition.y, cameraPosition.z,
+        modelCenter.x, modelCenter.y, modelCenter.z,
+        0, 1, 0);
 }
+```
 
 Подобным образом рассчитаем расстояние до ближней и дальней плоскостей отсечения камеры.
 
+```cpp
 void CMyApplication::OnReshape(int width, int height)
-
 {
+    glViewport(0, 0, width, height);
 
-`	`glViewport(0, 0, width, height);
+    // Вычисляем соотношение сторон клиентской области окна
+    double aspect = double(width) / double(height);
 
-`	`// Вычисляем соотношение сторон клиентской области окна
+    float zFar = m_model.GetBoundingBox().GetSize().GetLength() * 2;
 
-`	`double aspect = double(width) / double(height);
+    float zNear = zFar * 0.01;
 
-`	`float zFar = m\_model.GetBoundingBox().GetSize().GetLength() \* 2;
+    glMatrixMode(GL_PROJECTION);
 
-`	`float zNear = zFar \* 0.01;
+    glLoadIdentity();
 
-`	`glMatrixMode(GL\_PROJECTION);
+    gluPerspective(FIELD_OF_VIEW, aspect, zNear, zFar);
 
-`	`glLoadIdentity();
-
-`	`gluPerspective(FIELD\_OF\_VIEW, aspect, zNear, zFar);
-
-`	`glMatrixMode(GL\_MODELVIEW);
-
+    glMatrixMode(GL_MODELVIEW);
 }
+```
 
 В обработчике OnDisplay остается только подготовить буфер кадра, установить цвет вершин, задать режим визуализации граней в виде проволочного каркаса[^23] и попросить экземпляр класса CModelRenderer выполнить визуализации загруженной модели.
 
+```cpp
 void CMyApplication::OnDisplay()
-
 {
 
-`	`glClear(GL\_COLOR\_BUFFER\_BIT | GL\_DEPTH\_BUFFER\_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-`	`glColor3ub(0, 0, 0);
+    glColor3ub(0, 0, 0);
 
-`	`glEnable(GL\_CULL\_FACE);
+    glEnable(GL_CULL_FACE);
 
-`	`glPolygonMode(GL\_FRONT\_AND\_BACK, GL\_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-`	`m\_renderer.RenderModel(m\_model);
-
+    m_renderer.RenderModel(m_model);
 }
+```
 
 Примеры моделей, визуализированных с помощью данной программы.
 
@@ -5371,59 +3641,43 @@ void CMyApplication::OnDisplay()
 
 Изменения, вносимые в объявление класса CModelLoader, приведены в следующем листинге.
 
+```cpp
 class CModelLoader
-
 {
-
-`	`…
-
+    //...
 private:
+    // Информация о грани полигональной сетки,
+    // используемая при расщеплении вершин
+    struct MeshFace;
 
-`	`// Информация о грани полигональной сетки,
+    // Информация о вершине полигональной сетки, используемая
+    // при расщеплении вершин
+    class CVertexInfo;
 
-`	`// используемая при расщеплении вершин
+    // Расщепляем вершины полигональной сетки с учетом
+    // групп сглаживания ее граней и формируем новый массив
+    // с информацией о вершинах, а также
+    // обновленную информацию о гранях сетки после
+    // расщепления
 
-`	`struct MeshFace;
+    static void SplitVerticesBySmoothGroup(
+        Lib3dsMesh const &mesh,
 
-`	`// Информация о вершине полигональной сетки, используемая
+        std::vector<CVertexInfo> &outputVertices,
 
-`	`// при расщеплении вершин
-
-`	`class CVertexInfo;
-
-`	`// Расщепляем вершины полигональной сетки с учетом
-
-`	`// групп сглаживания ее граней и формируем новый массив
-
-`	`// с информацией о вершинах, а также
-
-`	`// обновленную информацию о гранях сетки после 
-
-`	`// расщепления
-
-`	`static void SplitVerticesBySmoothGroup(
-
-`		`Lib3dsMesh const& mesh,
-
-`		`std::vector<CVertexInfo>& outputVertices,
-
-`		`std::vector<MeshFace> & outputFaces
-
-`		`);
-
-`	`…
-
+        std::vector<MeshFace> &outputFaces
+    );
+    //...
 };
+```
 
 Структура **CModelLoader::MeshFace** пока будет хранить только индексы вершин, входящих в состав грани.
-
+```cpp
 struct CModelLoader::MeshFace
-
 {
-
-`	`unsigned vertices[3];
-
+    unsigned vertices[3];
 };
+```
 
 Класс CModelLoader::CVertexInfo хранит информацию о нормали вершины полигональной сетки (была ли определена данная нормаль и ее направление), а также индексы порождающей и порожденной вершин (при их наличии). Таким образом класс CVertexInfo представляет из себя элемент односвязного списка
 
@@ -5471,464 +3725,320 @@ struct CModelLoader::MeshFace
 
 Методы данного класса предоставляют доступ к вектору нормали вершины, позволяют получить индекс порождающей вершины (он понадобится на этапе копирования других остальных данных, связанных с вершиной), а также задать и получить индекс порожденной вершины.
 
-// Класс хранящий информацию о вершине, 
-
+```cpp
+// Класс хранящий информацию о вершине,
 // ее прототипе, порожденных вершинах и нормали
-
 class CModelLoader::CVertexInfo
-
 {
-
 public:
+    // Конструктор оригинальной вершины
+    CVertexInfo()
+        : m_originalVertexIndex(-1),
+          m_derivedVertexIndex(-1),
+          m_normalIsDefined(false)
+    {
+    }
 
-`	`// Конструктор оригинальной вершины
+    // Конструктор порожденной вершины
+    CVertexInfo(CVector3f const &normal, int originalVertexIndex)
+        : m_originalVertexIndex(originalVertexIndex),
+          m_derivedVertexIndex(-1),
+          m_normalIsDefined(true),
+          m_normal(normal)
+    {
+        assert(originalVertexIndex >= 0);
+    }
 
-`	`CVertexInfo()
+    // Доступ к вектору нормали
+    CVector3f const &GetNormal() const
+    {
+        assert(NormalIsDefined());
+        return m_normal;
+    }
 
-`		`:m\_originalVertexIndex(-1)
+    // Позволяет задать нормаль для вершины
+    void SetNormal(CVector3f const &normal)
+    {
+        assert(!m_normalIsDefined);
+        m_normal = normal;
+        m_normalIsDefined = true;
+    }
 
-`		`,m\_derivedVertexIndex(-1)
+    // Была ли задана нормаль к грани?
+    bool NormalIsDefined() const
+    {
+        return m_normalIsDefined;
+    }
 
-`		`,m\_normalIsDefined(false)
+    // Индекс оригинальной вершины, породившей данную
+    // Отрицательный индекс оригинальной вершины имеют оригинальные вершины
+    // полигональной сетки
+    int GetOriginalVertexIndex() const
+    {
+        return m_originalVertexIndex;
+    }
 
-`	`{}
+    // Возвращает индекс следующей порожденной вершины в списке вершин,
+    // либо -1, если текущая вершина не имеет порожденных вершин
+    int GetDerivedVertex() const
+    {
+        return m_derivedVertexIndex;
+    }
 
-`	`// Конструктор порожденной вершины
-
-`	`CVertexInfo(CVector3f const& normal, int originalVertexIndex)
-
-`		`:m\_originalVertexIndex(originalVertexIndex)
-
-`		`,m\_derivedVertexIndex(-1)
-
-`		`,m\_normalIsDefined(true)
-
-`		`,m\_normal(normal)
-
-`	`{
-
-`		`assert(originalVertexIndex >= 0);
-
-`	`}
-
-`	`// Доступ к вектору нормали
-
-`	`CVector3f const& GetNormal()const
-
-`	`{
-
-`		`assert(NormalIsDefined());
-
-`		`return m\_normal;
-
-`	`}
-
-`	`// Позволяет задать нормаль для вершины
-
-`	`void SetNormal(CVector3f const& normal)
-
-`	`{
-
-`		`assert(!m\_normalIsDefined);
-
-`		`m\_normal = normal;
-
-`		`m\_normalIsDefined = true;
-
-`	`}
-
-
-`	`// Была ли задана нормаль к грани?
-
-`	`bool NormalIsDefined()const
-
-`	`{
-
-`		`return m\_normalIsDefined;
-
-`	`}
-
-`	`// Индекс оригинальной вершины, породившей данную
-
-`	`// Отрицательный индекс оригинальной вершины имеют оригинальные вершины
-
-`	`// полигональной сетки
-
-`	`int GetOriginalVertexIndex()const
-
-`	`{
-
-`		`return m\_originalVertexIndex;
-
-`	`}
-
-`	`// Возвращает индекс следующей порожденной вершины в списке вершин,
-
-`	`// либо -1, если текущая вершина не имеет порожденных вершин
-
-`	`int GetDerivedVertex()const
-
-`	`{
-
-`		`return m\_derivedVertexIndex;
-
-`	`}
-
-`	`// Задает индекс унаследованной вершины
-
-`	`void DeriveVertex(int vertexIndex)
-
-`	`{
-
-`		`assert(vertexIndex >= 0);
-
-`		`assert(m\_derivedVertexIndex == -1);
-
-`		`m\_derivedVertexIndex = vertexIndex;
-
-`	`}
+    // Задает индекс унаследованной вершины
+    void DeriveVertex(int vertexIndex)
+    {
+        assert(vertexIndex >= 0);
+        assert(m_derivedVertexIndex == -1);
+        m_derivedVertexIndex = vertexIndex;
+    }
 
 private:
+    int m_originalVertexIndex; // индекс базовой вершины
+    int m_derivedVertexIndex;  // индекс порожденной вершины
+    bool m_normalIsDefined;    // задан ли вектор нормали?
 
-`	`int m\_originalVertexIndex;	// индекс базовой вершины
-
-`	`int m\_derivedVertexIndex;	// индекс порожденной вершины
-
-`	`bool m\_normalIsDefined;		// задан ли вектор нормали?
-
-`	`CVector3f m\_normal;
-
+    CVector3f m_normal;
 };
+```
+
 ##### Вычисление нормалей граней при помощи библиотеки lib3ds
 При входе в метод **SplitVerticesBySmoothGroup** создается массив для хранения нормалей вершин каждой грани полигональной сетки, заполняемый при помощи функции lib3ds\_mesh\_calculate\_vertex\_normals. Для его хранения требуется количество элементов типа float ровно в 9 раз превышающее количество граней (каждая грань состоит из трех вершин, а на хранение координат нормали вершины требуется три элемента типа float).
 
+```cpp
 void CModelLoader::SplitVerticesBySmoothGroup(
-
-`   `Lib3dsMesh const& mesh,
-
-`   `std::vector<CVertexInfo>& outputVertices,
-
-`   `std::vector<MeshFace> & outputFaces
-
-`	`)
+    Lib3dsMesh const &mesh,
+    std::vector<CVertexInfo> &outputVertices,
+    std::vector<MeshFace> &outputFaces
+)
 
 {
+    // Массив для хранения нормалей вершин всех граней полигональной сетки
+    std::vector<float> faceVertexNormals(mesh.nfaces * 3 * 3);
 
-`	`// Массив для хранения нормалей вершин всех граней полигональной сетки
+    // Функция lib3ds_mesh_calculate_vertex_normals вычисляет нормаль каждой
+    // вершины каждой треугольной грани сетки с учетом групп сглаживания грани
+    // и прилегающих к ней граней
 
-`	`std::vector<float> faceVertexNormals(mesh.nfaces \* 3 \* 3);
+    // Для ее вызова нам пришлось добавить немного "черной магии":
+    //	а) В качестве первого параметра функция принимает указатель Lib3dsMesh*
+    //		вместо Lib3dsMesh const*, хотя не модифицирует переданную
+    //		полигональную сетку. Судя по всему, это недоработка автора библиотеки.
+    //		Придется снять константность с указателя с использованием const_cast
 
-`	`// Функция lib3ds\_mesh\_calculate\_vertex\_normals вычисляет нормаль каждой 
+    //	б) В качестве второго параметра функция принимает указатель
+    //		на первый элемент массива трехкомпонентных массивов
+    //		float-ов (float[][3]).
+    //		Поскольку контейнер faceVertexNormals хранит элементы типа float, для
+    //		преобразования указателя float* к нужному типу float(*)[3]
+    //		воспользуемся оператором reinterpret_cast
 
-`	`// вершины каждой треугольной грани сетки с учетом групп сглаживания грани 
+    float(*pCalculatedNormals)[3] = reinterpret_cast<float(*)[3]>(&faceVertexNormals[0]);
 
-`	`// и прилегающих к ней граней
+    // Выполняем вычисление нормалей в вершинах при помощи lib3ds
+    lib3ds_mesh_calculate_vertex_normals(const_cast<Lib3dsMesh*>(&mesh), pCalculatedNormals);
+```
 
-`	`// Для ее вызова нам пришлось добавить немного "черной магии":
-
-`	`//	а) В качестве первого параметра функция принимает указатель Lib3dsMesh\*
-
-`	`//		вместо Lib3dsMesh const\*, хотя не модифицирует переданную
-
-`	`//		полигональную сетку. Судя по всему, это недоработка автора библиотеки.
-
-`	`//		Придется снять константность с указателя с использованием const\_cast
-
-`	`//	б) В качестве второго параметра функция принимает указатель
-
-`	`//		на первый элемент массива трехкомпонентных массивов 
-
-`	`//		float-ов (float[][3]).
-
-`	`//		Поскольку контейнер faceVertexNormals хранит элементы типа float, для 
-
-`	`//		преобразования указателя float\* к нужному типу float(\*)[3] 
-
-`	`//		воспользуемся оператором reinterpret\_cast
-
-`	`float (\*pCalculatedNormals)[3] = 
-
-`		`reinterpret\_cast<float(\*)[3]>(&faceVertexNormals[0]);
-
-`	`// Выполняем вычисление нормалей в вершинах при помощи lib3ds
-
-`	`lib3ds\_mesh\_calculate\_vertex\_normals(const\_cast<Lib3dsMesh\*>(&mesh),
-
-`		`pCalculatedNormals);
 ##### Инициализация выходных массивов вершин и граней
 На следующем этапе необходимо подготовить выходные массивы вершин и граней. Массив вершины заполняется информацией[^31] обо всех оригинальных вершинах сетки, а выходной массив граней очищается[^32].
 
-`	`// резервируем память под максимальное возможное количество вершин
+```cpp
+// резервируем память под максимальное возможное количество вершин
+// в данной полигональной сетке(количество граней \* 3)
+outputVertices.clear();
+outputVertices.reserve(mesh.nfaces * 3);
 
-`	`// в данной полигональной сетке(количество граней \* 3)
+// Массив изначально будет заполнен информацией об оригинальных вершинах
+// (метод std::vector::resize выполнит инициализацию добавленных в массив
+// элементов с использованием конструктора по умолчанию, который
+// инициализирует вершину как оригинальную)
 
-`	`outputVertices.clear();
+outputVertices.resize(mesh.nvertices);
 
-`	`outputVertices.reserve(mesh.nfaces \* 3);
+// Очищаем массив выходных вершин (на случай, если он окажется непустым)
+outputFaces.clear();
 
-`	`// Массив изначально будет заполнен информацией об оригинальных вершинах
+// Заранее резервируем в нем место для хранения всех граней полигональной
+// сетки, чтобы добавление в него новых элементов не приводило к повторному
+// выделению памяти в куче (небольшая оптимизация)
 
-`	`// (метод std::vector::resize выполнит инициализацию добавленных в массив
-
-`	`// элементов с использованием конструктора по умолчанию, который
-
-`	`// инициализирует вершину как оригинальную)
-
-`	`outputVertices.resize(mesh.nvertices);
-
-`	`// Очищаем массив выходных вершин (на случай, если он окажется непустым)
-
-`	`outputFaces.clear();
-
-`	`// Заранее резервируем в нем место для хранения всех граней полигональной 
-
-`	`// сетки, чтобы добавление в него новых элементов не приводило к повторному
-
-`	`// выделению памяти в куче (небольшая оптимизация)
-
-`	`outputFaces.reserve(mesh.nfaces);
+outputFaces.reserve(mesh.nfaces);
+```
 ##### Обработка граней полигональной сетки
 В описанном алгоритме происходит последовательная обработка граней полигональной сетки. Для каждой грани с каждой вершиной будет проделан один и тот же набор действий, описанных в алгоритме.
 
-`	`// Индекс нормали в массиве вычисленных при помощи lib3ds нормалей
+```cpp
+// Индекс нормали в массиве вычисленных при помощи lib3ds нормалей
+size_t calculatedNormalIndex = 0;
 
-`	`size\_t calculatedNormalIndex = 0;
+// В цикле будут последовательно обработаны все грани сетки
+for (size_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
+{
+    // Ссылка на текущую грань
+    Lib3dsFace const &face = mesh.faces[faceIndex];
 
-`	`// В цикле будут последовательно обработаны все грани сетки
+    // Выходная грань для помещения в массив outputFaces, которая будет
+    // заполнена индексами вершин (с изменением оригинальной нумерации
+    // при добавлении порожденных вершин)
+    MeshFace outputFace;
 
-`	`for (size\_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
+    // цикл по индексам вершин текущей грани
+    for (unsigned i = 0; i < 3; ++i)
+    {
+```
 
-`	`{
-
-`		`// Ссылка на текущую грань
-
-`		`Lib3dsFace const& face = mesh.faces[faceIndex];
-
-`		`// Выходная грань для помещения в массив outputFaces, которая будет 
-
-`		`// заполнена индексами вершин (с изменением оригинальной нумерации 
-
-`		`// при добавлении порожденных вершин)
-
-`		`MeshFace outputFace;
-
-`		`// цикл по индексам вершин текущей грани
-
-`		`for (unsigned i = 0; i < 3; ++i)
-
-`		`{
 ###### *Обработка вершин граней полигональной сетки*
 Сначала для текущей вершины обрабатываемой грани извлекается вычисленное значение нормали из массива, заполненного функцией **lib3ds\_mesh\_calculate\_vertex\_normals**. Также извлекается исходной значение индекса данной вершины в описании данной грани из структуры **Lib3dsFace**. Для предотвращения возможных проблем (в случае случайного повреждения 3ds-файла) индекс вершины проверяется на выход за пределы массив вершин сетки. Этот необязательный шаг сделан на всякий случай для контроля значений входных данных.
 
-`			`// Получаем вычисленный вектор нормали текущей вершины
+```cpp
+// Получаем вычисленный вектор нормали текущей вершины
+// из массива вычисленных нормалей, увеличивая индекс нормали
+CVector3f calculatedNormal(pCalculatedNormals[calculatedNormalIndex++]);
 
-`			`// из массива вычисленных нормалей, увеличивая индекс нормали
+// Получаем исходный индекс текущей вершины обрабатываемой грани
+unsigned vertexIndex = face.index[i];
 
-`			`CVector3f calculatedNormal(
-
-`				`pCalculatedNormals[calculatedNormalIndex++]);
-
-`			`// Получаем исходный индекс текущей вершины обрабатываемой грани
-
-`			`unsigned vertexIndex = face.index[i];
-
-`			`// Проверяем, не выходит ли индекс вершины за пределы массива вершин.
-
-`			`// В нормальной ситуации такое невозможно, хотя при повреждении
-
-`			`// входного файла не исключено
-
-`			`if (vertexIndex >= mesh.nvertices)
-
-`			`{
-
-`				`throw std::runtime\_error("Vertex index is out of vertex array");
-
-`			`}
+// Проверяем, не выходит ли индекс вершины за пределы массива вершин.
+// В нормальной ситуации такое невозможно, хотя при повреждении
+// входного файла не исключено
+if (vertexIndex >= mesh.nvertices)
+{
+    throw std::runtime_error("Vertex index is out of vertex array");
+}
+```
 
 Следующим этапом будет являться поиск вершины с вычисленным вектором нормали начиная с текущей вершины по всем порожденным от нее вершинам. На каждой итерации цикла поиска возможен один из трех исходов.
 ####### *Нормаль в проверяемой вершине ранее не была задана*
 Такая ситуация может возникнуть при обработке одной из исходных вершин полигональной сетки для которых до начала обработки сетки вектор нормали не задан. При обнаружении данной ситуации поиск прекращается, а вычисленное значение нормали становится нормалью встреченной исходной вершины.
 
-`			`// Цикл поиска вершины, нормаль которой совпадает с вычисленным
+```cpp
+// Цикл поиска вершины, нормаль которой совпадает с вычисленным
+// значением нормали.
+while (true)
+{
+    // Получаем информацию о существующей вершине
+    CVertexInfo &vertex = outputVertices[vertexIndex];
 
-`			`// значением нормали.
+    // задана ли для нее нормаль?
+    if (!vertex.NormalIsDefined())
+    {
+        // Нормаль в проверяемой вершине еще не задана, значит, в нее
+        // нужно записать вычисленное значение нормали
+        vertex.SetNormal(calculatedNormal);
 
-`			`while (true)
+        // Поиск завершен. Индекс искомой вершины - в переменной vertexIndex
 
-`			`{
+        break;
+    }
+    else // нормаль в вершине была определена
+```
 
-`				`// Получаем информацию о существующей вершине
-
-`				`CVertexInfo & vertex = outputVertices[vertexIndex];
-
-`				`// задана ли для нее нормаль?
-
-`				`if (!vertex.NormalIsDefined())	
-
-`				`{
-
-`					`// Нормаль в проверяемой вершине еще не задана, значит, в нее
-
-`					`// нужно записать вычисленное значение нормали
-
-`					`vertex.SetNormal(calculatedNormal);
-
-`					`// Поиск завершен. Индекс искомой вершины - в переменной
-
-`					`// vertexIndex
-
-`					`break;
-
-`				`}
-
-`				`else // нормаль в вершине была определена
 ####### *Вычисленное значение нормали совпадает со значением нормали проверяемой вершины*
 Данная ситуация может возникнуть, когда в проверяемой вершине нормаль задана и совпадает[^33] с вычисленным значением нормали. В таком случае поиск прекращается, а индекс проверяемой вершины будет использоваться в качестве индекса вершины в выходной грани.
 
-`				`{
+```cpp
+{
+    // сравниваем вычbсленный вектор нормали с существующим.
+    // Т.к. вычисление нормалей происходит с некоторой погрешностью,
+    // используем проверку векторов на приблизительное равенство:
+    // их разность по абсолютной величине должна быть меньше 0.00001
+    // Число 0.00001 вполне подходит для сравнения единичных векторов.
+    // Использовать бОльшую точность для чисел типа float особого
+    // смысла не имеет
 
-`					`// сравниваем вычbсленный вектор нормали с существующим.
+    if ((calculatedNormal - vertex.GetNormal()).GetLength() < 1e-5f)
+    {
+        // выходим из цикла - поиск окончен
+        // Индекс искомой вершины находится в переменной vertexIndex
+        break;
+    }
+    else
+```
 
-`					`// Т.к. вычисление нормалей происходит с некоторой погрешностью,
-
-`					`// используем проверку векторов на приблизительное равенство:
-
-`					`// их разность по абсолютной величине должна быть меньше 0.00001
-
-`					`// Число 0.00001 вполне подходит для сравнения единичных векторов.
-
-`					`// Использовать бОльшую точность для чисел типа float особого
-
-`					`// смысла не имеет
-
-`					`if ((calculatedNormal - vertex.GetNormal()).GetLength() < 1e-5f)
-
-`					`{
-
-`						`// выходим из цикла - поиск окончен
-
-`						`// Индекс искомой вершины находится в переменной vertexIndex
-
-`						`break;
-
-`					`}
-
-`					`else
 ####### *Цепочка порожденных вершин закончилась*
 Данная ситуация возникает, когда нормаль проверяемой вершины отличается от вычисленного значения, но порожденных нормалей у проверяемой вершины больше нет. В таком случае проверяемая вершина порождает новую вершину, нормаль которой будет инициализирована вычисленным значением.
 
-`					`{	// вычисленная нормаль отличается от нормали проверяемой
+```cpp
+{
+    // вычисленная нормаль отличается от нормали проверяемой вершины
+    // Получаем индекс вершины, порожденной от данной
+    int derivedVertexIndex = vertex.GetDerivedVertex();
 
-`						`// вершины
+    // Есть ли вообще порожденная вершина?
+    if (derivedVertexIndex < 0)
+    {
+        // Порожденных вершин больше нет, а т.к. вычисленная
+        // нормаль найдена не была, придется добавить
+        // порожденную вершину, породив ее от текущей
+        // Порождаем новую вершину от текущей вершины
+        CVertexInfo newVertex(calculatedNormal, vertexIndex);
 
+        // Индекс \*искомой\* вершины будет равен индексу
+        // созданной вершины. Т.к. вершины добавляются в конец
+        // массива вершин, индекс будет равен текущему
+        // количеству вершин в массиве
+        vertexIndex = static_cast<int>(outputVertices.size());
 
+        // Для текущей вершины задаем индекс порожденной
+        // (найденной) вершины
+        vertex.DeriveVertex(vertexIndex);
 
-`						`// Получаем индекс вершины, порожденной от данной
+        // добавляем новую вершину в массив векторов
+        outputVertices.push_back(newVertex);
 
-`						`int derivedVertexIndex = vertex.GetDerivedVertex();
+        // выходим из цикла - поиск окончен
+        // Индекс искомой вершины находится в переменной
+        // vertexIndex
+        break;
+    }
+```
 
-`						`// Есть ли вообще порожденная вершина?
-
-`						`if (derivedVertexIndex < 0)
-
-`						`{	// Порожденных вершин больше нет, а т.к. вычисленная
-
-`							`// нормаль найдена не была, придется добавить
-
-`							`// порожденную вершину, породив ее от текущей
-
-
-
-`							`// Порождаем новую вершину от текущей вершины
-
-`							`CVertexInfo newVertex(calculatedNormal, vertexIndex);
-
-`							`// Индекс \*искомой\* вершины будет равен индексу
-
-`							`// созданной вершины. Т.к. вершины добавляются в конец
-
-`							`// массива вершин, индекс будет равен текущему
-
-`							`// количеству вершин в массиве
-
-`							`vertexIndex = static\_cast<int>(outputVertices.size());
-
-`							`// Для текущей вершины задаем индекс порожденной 
-
-`							`// (найденной) вершины
-
-`							`vertex.DeriveVertex(vertexIndex);
-
-`							`// добавляем новую вершину в массив векторов
-
-`							`outputVertices.push\_back(newVertex);
-
-`							`// выходим из цикла - поиск окончен
-
-`							`// Индекс искомой вершины находится в переменной
-
-`							`// vertexIndex
-
-`							`break;
-
-`						`}
 ####### *Цепочка порожденных вершин еще не закончилась*
 Данная ситуация возникает, когда нормаль проверяемой вершины отличается от вычисленного значения, но у данной вершины имеются порожденные вершины, среди которых есть вероятность найти вершину с искомым значением нормали. В таком случае происходит переход на следующую итерацию цикла поиска начиная с порожденной вершины.
 
-`						`else
+```cpp
+else
+            {
+                // порожденная вершина у вершины с индексом vertexIndex
+                // имеется. Следовательно вышеописанные действия нужно
+                // проделать над порожденной вершиной на следующей
+                // итерации данного цикла, пока вершина с вычисленным
+                // значением нормали не будет найдена среди цепочки
+                // порожденных вершин, либо пока цепочка не закончится
 
-`						`{
+                vertexIndex = derivedVertexIndex;
 
-`							`// порожденная вершина у вершины с индексом vertexIndex
+                // переходим к следующей итерации цикла поиска вершины
+                // с совпадающем вектором нормали
+            }
+        }
+    }
 
-`							`// имеется. Следовательно вышеописанные действия нужно
-
-`							`// проделать над порожденной вершиной на следующей 
-
-`							`// итерации данного цикла, пока вершина с вычисленным
-
-`							`// значением нормали не будет найдена среди цепочки
-
-`							`// порожденных вершин, либо пока цепочка не закончится
-
-`							`vertexIndex = derivedVertexIndex;
-
-`							`// переходим к следующей итерации цикла поиска вершины 
-
-`							`// с совпадающем вектором нормали
-
-`						`}
-
-`					`}
-
-`				`}
-
-`			`}	// while (true)
+} // while (true)
+```
 
 Данная ситуация является последней из четырех возможных ситуаций.
 ####### *Формирование индекса вершины выходной грани*
 При выходе из цикла поиска в переменной vertexIndex будет находиться индекс вершины, которая будет использоваться вместо изначального значения индекса (считанного из структуры Lib3dsFace). Данная вершина записывается в выходную грань и происходит переход к обработке следующей вершины текущей грани.
 
-`			`// При выходе из предыдущего цикла while в переменной vertexIndex 
+```cpp
+            // При выходе из предыдущего цикла while в переменной vertexIndex
+            // будет находиться индекс вершины (либо существующей, либо
+            // порожденной)
+            outputFace.vertices[i] = vertexIndex;
 
-`			`// будет находиться индекс вершины (либо существующей, либо
+        } // for (unsigned i = 0; i < 3; ++i)
+```
 
-`			`// порожденной)
-
-`			`outputFace.vertices[i] = vertexIndex;
-
-`		`}	// for (unsigned i = 0; i < 3; ++i)
 ###### *Сохранение обработанной грани*
 После обработки всех трех вершин, сформированная грань записывается в массив выходных граней и происходит переход к следующей грани.
 
-`		`// добавляем грань в массив граней
-
-`		`outputFaces.push\_back(outputFace);
-
-`	`}	// for (size\_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
-
+```cpp
+        // добавляем грань в массив граней
+        outputFaces.push_back(outputFace);
+    } // for (size_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
 }
+```
 
 По окончании обработки всех граней задача метода **StripVerticesBySmoothGroup** считается выполненной.
 #### ***Сохранение нормалей и порожденных вершин в вершинный буфер***
@@ -5938,349 +4048,213 @@ void CModelLoader::SplitVerticesBySmoothGroup(
 
 Чтобы занести в вершинный буфер информацию о нормалях необходимо воспользоваться разработанным методом SplitVerticesBySmoothGroup, а затем записать в вершинный буфер полученную информацию о нормалях и порожденных вершинах. Для решения данной задачи добавим в класс **CModelLoader** метод **SplitVerticesAndBuildNormals**. Данный метод должен быть шаблонным, чтобы его можно было использовать как для сеток, вершины которых имеют текстурные координаты, так и для сеток, вершины которых такой информации не содержат. 
 
+```cpp
 class CModelLoader
-
 {
-
-`	`class CFile3ds;
+    class CFile3ds;
 
 public:
-
-`	`…
+    //...
 
 private:
+    // Заполняем массив вершин данными из .3ds файла
+    // вычисляя нормали к вершинам, порождая новые вершины
+    // и обновляя информацию о гранях полигональной сетки
+    // Возвращаем количество вершин в результирующей сетке
+    static unsigned FillVertexBufferData(
+        Lib3dsMesh const &mesh,
+        std::vector<unsigned char> &vertexBufferData,
+        std::vector<MeshFace> &outputFaces);
 
-`	`// Заполняем массив вершин данными из .3ds файла
+    // Заносит в вершинный буфера информацию о нормалях,
+    // а также о дополнительных вершинах, получившихся в результате
+    // расщепления оригинальных вершин с учетом групп сглаживания
+    // Параметры:
+    //		mesh - оригинальная сетка
+    //		vertexBufferData - массив, содержащий данные для буфера вершин
+    //		vertexBufferOffset - смещение в массиве к началу информации о вершинах данной полигональной сетки
+    //		outputFaces - выходной массив с обновленной информацией о гранях
+    //	Возвращаемое значение:
+    //		количество вершин в результирующей сетке
 
-`	`// вычисляя нормали к вершинам, порождая новые вершины
-
-`	`// и обновляя информацию о гранях полигональной сетки
-
-`	`// Возвращаем количество вершин в результирующей сетке
-
-`	`static **unsigned** FillVertexBufferData(
-
-`		`Lib3dsMesh const& mesh, 
-
-`		`std::vector<unsigned char> & vertexBufferData,
-
-`		`**std::vector<MeshFace> & outputFaces**
-
-`		`);
-
-`	`// Заносит в вершинный буфера информацию о нормалях,
-
-`	`// а также о дополнительных вершинах, получившихся в результате
-
-`	`// расщепления оригинальных вершин с учетом групп сглаживания
-
-`	`// Параметры:
-
-`	`//		mesh - оригинальная сетка
-
-`	`//		vertexBufferData - массив, содержащий данные для буфера вершин
-
-`	`//		vertexBufferOffset - смещение в массиве к началу информации 
-
-`	`//			о вершинах данной полигональной сетки
-
-`	`//		outputFaces - выходной массив с обновленной информацией
-
-`	`//			о гранях
-
-`	`//	Возвращаемое значение:
-
-`	`//		количество вершин в результирующей сетке
-
-`	`**template <class VertexType>**
-
-`	`**static unsigned SplitVerticesAndBuildNormals(**
-
-`		`**Lib3dsMesh const& mesh,**
-
-`		`**std::vector<unsigned char> & vertexBufferData,**
-
-`		`**size\_t vertexBufferOffset,**
-
-`		`**std::vector<MeshFace> & outputFaces**
-
-`		`**);**
-
-`	`…
-
+    template <class VertexType>
+    static unsigned
+    SplitVerticesAndBuildNormals(
+        Lib3dsMesh const &mesh,
+        std::vector<unsigned char> &vertexBufferData,
+        size_t vertexBufferOffset,
+        std::vector<MeshFace> &outputFaces);
+    //...
 };
+```
 
 Обновленный код метода FillVertexBufferData приведен ниже.
 
+```cpp
 unsigned CModelLoader::FillVertexBufferData(
-
-`	`Lib3dsMesh const& mesh, 
-
-`	`std::vector<unsigned char> & vertexBufferData,
-
-`	`**std::vector<MeshFace> & outputFaces)**
-
+    Lib3dsMesh const &mesh,
+    std::vector<unsigned char> &vertexBufferData,
+    std::vector<MeshFace> &outputFaces)
 {
-
-`	`const int numberOfVertices = mesh.nvertices;
-
-`	`// адрес массива вершин в 3ds-файле
-
-`	`float (\*pInputVertices)[3] = mesh.vertices;
-
-`	`// адрес массива текстурных координат в 3ds файле
-
-`	`float (\*pInputTexCoords)[2] = mesh.texcos;
-
-`	`// смещение до начала данных в 3ds файле
-
-`	`size\_t const vertexBufferOffset = vertexBufferData.size();
-
-`	`// проверяем, есть ли у сетки текстурные координаты
-
-`	`if (pInputTexCoords != NULL)
-
-`	`{
-
-`		`// сетка с текстурными координатами
-
-`		`// увеличиваем массив на размер, занимаемых вершинами 
-
-`		`// с текстурными координатами
-
-`		`vertexBufferData.resize(
-
-`			`vertexBufferOffset + sizeof(TexturedVertex) \* numberOfVertices);
-
-`		`// задаем адрес расположения вершинных данных полигональной сетки
-
-`		`TexturedVertex \* outputVertices = 
-
-`			`reinterpret\_cast<TexturedVertex\*>(
-
-`				`&vertexBufferData[vertexBufferOffset]);
-
-`		`// Заполняем массив данными о вершинах в формате структуры TexturedVertex
-
-`		`for (int v = 0; v < numberOfVertices; ++v)
-
-`		`{
-
-`			`float \* inputPosition = pInputVertices[v];
-
-`			`float \* inputTexCoord = pInputTexCoords[v];
-
-`			`TexturedVertex & outputVertex = outputVertices[v];
-
-`			`Vector3 & outputPosition = outputVertex.position;
-
-`			`// задаем координаты вершины в пространстве
-
-`			`outputPosition.x = inputPosition[0];
-
-`			`outputPosition.y = inputPosition[1];
-
-`			`outputPosition.z = inputPosition[2];
-
-`			`// задаем текстурные координаты вершины
-
-`			`outputVertex.texCoord.x = inputTexCoord[0];
-
-`			`outputVertex.texCoord.y = inputTexCoord[1];
-
-`		`}
-
-`		`// Добавляем недостающую информацию о нормалях и порожденных вершинах
-
-`		`// и возвращаем количество полученных вершин в сетке
-
-`		`**return SplitVerticesAndBuildNormals<TexturedVertex>**
-
-`			`**(mesh, vertexBufferData, vertexBufferOffset, outputFaces);**
-
-`	`}
-
-`	`else	// сетка без текстурных координат
-
-`	`{
-
-`		`// увеличиваем массив на размер, занимаемых вершинами 
-
-`		`// без текстурных координат
-
-`		`vertexBufferData.resize(
-
-`			`vertexBufferOffset + sizeof(Vertex) \* numberOfVertices);
-
-`		`// задаем адрес расположения вершинных данных полигональной сетки
-
-`		`Vertex \* outputVertices = 
-
-`			`reinterpret\_cast<Vertex\*>(&vertexBufferData[vertexBufferOffset]);
-
-`		`// Заполняем массив данными о вершинах в формате структуры Vertex
-
-`		`for (int v = 0; v < numberOfVertices; ++v)
-
-`		`{
-
-`			`float \* inputPosition = pInputVertices[v];
-
-`			`Vertex & outputVertex = outputVertices[v];
-
-`			`Vector3 & outputPosition = outputVertex.position;
-
-`			`// задаем координаты вершины в пространстве
-
-`			`outputPosition.x = inputPosition[0];
-
-`			`outputPosition.y = inputPosition[1];
-
-`			`outputPosition.z = inputPosition[2];
-
-`		`}
-
-`		`// Добавляем недостающую информацию о нормалях и порожденных вершинах
-
-`		`// и возвращаем количество полученных вершин в сетке
-
-`		`**return SplitVerticesAndBuildNormals<Vertex>**
-
-`			`**(mesh, vertexBufferData, vertexBufferOffset, outputFaces);**
-
-`	`}
-
+    const int numberOfVertices = mesh.nvertices;
+
+    // адрес массива вершин в 3ds-файле
+    float(*pInputVertices)[3] = mesh.vertices;
+
+    // адрес массива текстурных координат в 3ds файле
+    float(*pInputTexCoords)[2] = mesh.texcos;
+
+    // смещение до начала данных в 3ds файле
+    size_t const vertexBufferOffset = vertexBufferData.size();
+
+    // проверяем, есть ли у сетки текстурные координаты
+    if (pInputTexCoords != NULL)
+    {
+        // сетка с текстурными координатами
+        // увеличиваем массив на размер, занимаемых вершинами
+        // с текстурными координатами
+        vertexBufferData.resize(vertexBufferOffset + sizeof(TexturedVertex) * numberOfVertices);
+
+        // задаем адрес расположения вершинных данных полигональной сетки
+        TexturedVertex *outputVertices = reinterpret_cast<TexturedVertex *>(&vertexBufferData[vertexBufferOffset]);
+
+        // Заполняем массив данными о вершинах в формате структуры TexturedVertex
+        for (int v = 0; v < numberOfVertices; ++v)
+        {
+            float *inputPosition = pInputVertices[v];
+            float *inputTexCoord = pInputTexCoords[v];
+            TexturedVertex &outputVertex = outputVertices[v];
+            Vector3 &outputPosition = outputVertex.position;
+
+            // задаем координаты вершины в пространстве
+            outputPosition.x = inputPosition[0];
+            outputPosition.y = inputPosition[1];
+            outputPosition.z = inputPosition[2];
+
+            // задаем текстурные координаты вершины
+            outputVertex.texCoord.x = inputTexCoord[0];
+            outputVertex.texCoord.y = inputTexCoord[1];
+        }
+
+        // Добавляем недостающую информацию о нормалях и порожденных вершинах
+        // и возвращаем количество полученных вершин в сетке
+
+        return SplitVerticesAndBuildNormals<TexturedVertex>(mesh, vertexBufferData, vertexBufferOffset, outputFaces);
+    }
+
+    else // сетка без текстурных координат
+    {
+        // увеличиваем массив на размер, занимаемых вершинами
+        // без текстурных координат
+        vertexBufferData.resize(vertexBufferOffset + sizeof(Vertex) * numberOfVertices);
+
+        // задаем адрес расположения вершинных данных полигональной сетки
+        Vertex *outputVertices = reinterpret_cast<Vertex *>(&vertexBufferData[vertexBufferOffset]);
+
+        // Заполняем массив данными о вершинах в формате структуры Vertex
+        for (int v = 0; v < numberOfVertices; ++v)
+        {
+            float *inputPosition = pInputVertices[v];
+            Vertex &outputVertex = outputVertices[v];
+            Vector3 &outputPosition = outputVertex.position;
+
+            // задаем координаты вершины в пространстве
+            outputPosition.x = inputPosition[0];
+            outputPosition.y = inputPosition[1];
+            outputPosition.z = inputPosition[2];
+        }
+
+        // Добавляем недостающую информацию о нормалях и порожденных вершинах
+        // и возвращаем количество полученных вершин в сетке
+        return SplitVerticesAndBuildNormals<Vertex>(mesh, vertexBufferData, vertexBufferOffset, outputFaces);
+    }
 }
+```
 
 Метод SplitVerticesAndBuildNormals выполняет расщепление вершин и сбор информации о нормалях, а также обновляет размер массива вершин, принимая во внимание количество вершин, получившееся после расщепления. Поскольку данный метод является шаблонным, его можно использовать с вершинными буферами, содержащими элементы Vertex и TexturedVertex. Тип вершины задается при помощи шаблонного параметра VertexType.
 
+```cpp
 template <class VertexType>
 
 unsigned CModelLoader::SplitVerticesAndBuildNormals(
-
-`   `Lib3dsMesh const& mesh,
-
-`   `std::vector<unsigned char> & vertexBufferData,
-
-`   `size\_t vertexBufferOffset,
-
-`   `std::vector<MeshFace> & outputFaces
-
-`   `)
+    Lib3dsMesh const &mesh,
+    std::vector<unsigned char> &vertexBufferData,
+    size_t vertexBufferOffset,
+    std::vector<MeshFace> &outputFaces
+)
 
 {
+    // Создаем массив для хранения информациеи о вершинах
+    // полигональной сетки
+    std::vector<CVertexInfo> vertices;
 
-`	`// Создаем массив для хранения информациеи о вершинах
+    // Вычисляем нормали к вершинам полигональной сетки,
+    // при необходимости выполняя порождение новых вершин
+    // с обновлением индексов граней
+    SplitVerticesBySmoothGroup(mesh, vertices, outputFaces);
 
-`	`// полигональной сетки
+    size_t const numberOfVertices = vertices.size();
 
-`	`std::vector<CVertexInfo> vertices;
+    // Обновляем размер массива вершин, принимая во внимание количество
+    // вершин, получившееся после расщепления вершин
+    vertexBufferData.resize(vertexBufferOffset + sizeof(VertexType) * numberOfVertices);
 
-`	`// Вычисляем нормали к вершинам полигональной сетки,
-
-`	`// при необходимости выполняя порождение новых вершин
-
-`	`// с обновлением индексов граней
-
-`	`SplitVerticesBySmoothGroup(mesh, vertices, outputFaces);
-
-`	`size\_t const numberOfVertices = vertices.size();
-
-`	`// Обновляем размер массива вершин, принимая во внимание количество
-
-`	`// вершин, получившееся после расщепления вершин
-
-`	`vertexBufferData.resize(
-
-`		`vertexBufferOffset + sizeof(VertexType) \* numberOfVertices);
-
-`	`// вычисляем адрес расположения вершинных данных полигональной сетки
-
-`	`// в буфере
-
-`	`VertexType \* outputVertices = 
-
-`		`reinterpret\_cast<VertexType\*>(&vertexBufferData[vertexBufferOffset]);
+    // вычисляем адрес расположения вершинных данных полигональной сетки
+    // в буфере
+    VertexType *outputVertices =reinterpret_cast<VertexType*>(&vertexBufferData[vertexBufferOffset]);
+```
 
 При обработке порожденной вершины необходимо скопировать в буфер данные из породившей ее вершины, поскольку информация о порожденных вершинах в буфере ранее отсутствовала. Кроме того, для каждой вершины в вершинный буфер записывается ее нормаль из массива элементов CVertexInfo.
 
 Результатом работы данного метода будет количество вершин, которое будет содержать полигональная сетке после расщепления.
 
-`	`// Цикл по результирующим вершинам, в котором значение данные о
+```cpp
+// Цикл по результирующим вершинам, в котором значение данные о
+// порожденных вершинах, а также вычисленные нормали будут
+// скопированы в выходной буфер
+for (size_t vertexIndex = 0; vertexIndex < numberOfVertices; ++vertexIndex)
+{
+    // информация о текущей вершине
+    CVertexInfo const &vertexInfo = vertices[vertexIndex];
 
-`	`// порожденных вершинах, а также вычисленные нормали будут
+    // ссылка на данные об этой вершине в вершинном буфере
+    VertexType &outputVertex = outputVertices[vertexIndex];
 
-`	`// скопированы в выходной буфер
+    // Если вершина является порожденной, то копируем в нее данные из
+    // породившей ее вершины
+    int originalVertexIndex = vertexInfo.GetOriginalVertexIndex();
 
-`	`for (size\_t vertexIndex = 0; vertexIndex < numberOfVertices; ++vertexIndex)
+    if (originalVertexIndex >= 0)
+    {
+        // удостоверяемся (в отладочной конфигурации), что данные копируются
+        // из ранее обработанной вершины
+        assert(static_cast<unsigned>(originalVertexIndex) < vertexIndex);
 
-`	`{
+        // ссылка на вершину, породившую данную
+        VertexType const &originalVertex = outputVertices[originalVertexIndex];
 
-`		`// информация о текущей вершине
+        // копируем порождающую вершину в текущую
+        outputVertex = originalVertex;
+    }
 
-`		`CVertexInfo const & vertexInfo = vertices[vertexIndex];
-
-`		`// ссылка на данные об этой вершине в вершинном буфере
-
-`		`VertexType & outputVertex = outputVertices[vertexIndex];
-
-`		`// Если вершина является порожденной, то копируем в нее данные из 
-
-`		`// породившей ее вершины
-
-`		`int originalVertexIndex = vertexInfo.GetOriginalVertexIndex();
-
-`		`if (originalVertexIndex >= 0)
-
-`		`{
-
-`			`// удостоверяемся (в отладочной конфигурации), что данные копируются
-
-`			`// из ранее обработанной вершины
-
-`			`assert(static\_cast<unsigned>(originalVertexIndex) < vertexIndex);
-
-`			`// ссылка на вершину, породившую данную
-
-`			`VertexType const& originalVertex = 
-
-`				`outputVertices[originalVertexIndex];
-
-`			`// копируем порождающую вершину в текущую
-
-`			`outputVertex = originalVertex;
-
-`		`}
-
-`		`// Если у вершины был определен вектор нормали, то копируем его в
-
-`		`// вершинный буфер
-
-`		`// У вершины вектор нормали задан, если вершина входила в состав
-
-`		`// хотя бы одной грани сетки
-
-`		`if (vertexInfo.NormalIsDefined())
-
-`		`{
-
-`			`CVector3f const& normal = vertexInfo.GetNormal();
-
-`			`outputVertex.normal.x = normal.x;
-
-`			`outputVertex.normal.y = normal.y;
-
-`			`outputVertex.normal.z = normal.z;
-
-`		`}
-
-`	`}
-
-`	`// Возвращаем количество вершин, полученных после расщепления
-
-`	`return numberOfVertices;
-
+    // Если у вершины был определен вектор нормали, то копируем его в
+    // вершинный буфер
+    // У вершины вектор нормали задан, если вершина входила в состав
+    // хотя бы одной грани сетки
+    if (vertexInfo.NormalIsDefined())
+    {
+        CVector3f const &normal = vertexInfo.GetNormal();
+        outputVertex.normal.x = normal.x;
+        outputVertex.normal.y = normal.y;
+        outputVertex.normal.z = normal.z;
+    }
 }
+
+// Возвращаем количество вершин, полученных после расщепления
+return numberOfVertices;
+}
+```
+
 #### ***Сохранение обновленной информации о гранях сетки в буфер индексов***
 Изменения затронут и метод **FillIndexBufferData**, также рассмотренный в главе «[\[**Заполнение массива индексов данными из .3ds файла**\](#_ref307877746)](#_заполнение_массива_индексов)». Вместо ссылки на Lib3dsMesh ему будет передаваться массив элементов MeshFace, заполняемый при расщеплении вершин. Кроме того, потребуется учесть ситуацию, когда количество вершин в полигональной сетке после расщепления превысит 65536 штук, и 16-битных целых чисел для хранения индексов вершин будет недостаточно.
 
@@ -6300,503 +4274,341 @@ unsigned CModelLoader::SplitVerticesAndBuildNormals(
 
 Обновленный метод FillIndexBufferData решает описанные выше задачи. В качестве результата метод возвращает смещение к индексным данным внутри массива.
 
+```cpp
 class CModelLoader
-
 {
-
-`	`…
+    //...
 
 private:
+    //...
+    // Заполняем массив индексов вершин
+    // В качестве шаблонного параметра IndexType принимается
+    // целочисленный тип, используемых для хранения индексов
+    template <typename IndexType>
 
-`	`…
-
-`	`// Заполняем массив индексов вершин
-
-`	`// В качестве шаблонного параметра IndexType принимается
-
-// целочисленный тип, используемых для хранения индексов
-
-`	`template <typename IndexType>
-
-`	`static unsigned FillIndexBufferData(
-
-`		`std::vector<MeshFace> const& faces, 
-
-`		`std::vector<unsigned char> & indexBufferData);
-
-`	`…
-
+    static unsigned FillIndexBufferData(
+        std::vector<MeshFace> const &faces,
+        std::vector<unsigned char> &indexBufferData);
+    //...
 };
+```
 
 Рассмотрим реализацию данного метода.
 
 Сначала вычисляется количество памяти, требуемое для хранения одного индекса, а также всех индексов полигональной сетки. При этом также на всякий случай убедимся, что размер данных является степенью двойки.
 
+```cpp
 template <typename IndexType>
 
 unsigned CModelLoader::FillIndexBufferData(
-
-`	`std::vector<MeshFace> const& faces,
-
-`	`std::vector<unsigned char> & indexBufferData)
+    std::vector<MeshFace> const &faces,
+    std::vector<unsigned char> &indexBufferData)
 
 {
+    // количество граней
+    const int numberOfFaces = faces.size();
 
-`	`// количество граней
+    // размер (в байтах), требуемых для хранения одного индекса
+    unsigned indexSize = sizeof(IndexType);
 
-`	`const int numberOfFaces = faces.size();
+    // Проверка на то, что indexSize - степень двойки
+    // Дополнительная проверка на то, что indexSize != 0 не нужна, т.к. sizeof
+    // возращает ненулевое значение, ведь любой тип требует для своего
+    // хранения в памяти хотя бы один байт
 
-`	`// размер (в байтах), требуемых для хранения одного индекса
+    assert((indexSize & (indexSize - 1)) == 0);
 
-`	`unsigned indexSize = sizeof(IndexType);
-
-`	`// Проверка на то, что indexSize - степень двойки
-
-`	`// Дополнительная проверка на то, что indexSize != 0 не нужна, т.к. sizeof
-
-`	`// возращает ненулевое значение, ведь любой тип требует для своего
-
-`	`// хранения в памяти хотя бы один байт
-
-`	`assert((indexSize & (indexSize - 1)) == 0);
-
-`	`// Размер данных, занимаемый всеми индексами полигональной сетки
-
-`	`unsigned meshIndexDataSize = numberOfFaces \* 3 \* indexSize;
+    // Размер данных, занимаемый всеми индексами полигональной сетки
+    unsigned meshIndexDataSize = numberOfFaces * 3 * indexSize;
+```
 
 На следующем этапе вычисляется кратное размеру индекса смещение в индексном буфере, выделяется память для хранения индексов, максимально допустимое значение индекса, а также адрес внутри индексного буфера, по которому будут располагаться индексы сетки.
 
-`	`// Вычисляем смещение в буфере индексов таким образом, чтобы индексы
+```cpp
+    // Вычисляем смещение в буфере индексов таким образом, чтобы индексы
+    // сетки находились по смещению, кратному размеру индекса
+    // (для ускорения доступа к данным)
+    // 8-битные индексы будут выровнены по границе байтов
+    // 16-битные индексы - по двухбайтной границе
+    // 32-битные индексы - по смещению, кратному 4
 
-`	`// сетки находились по смещению, кратному размеру индекса
+    unsigned const indexBufferOffset = ((indexBufferData.size() + indexSize - 1) / indexSize) * indexSize;
 
-`	`// (для ускорения доступа к данным)
+    // Увеличиваем размер буфера индексов так, чтобы по смещению
+    // indexBufferOffset разместить данные размером meshIndexDataSize
+    indexBufferData.resize(indexBufferOffset + meshIndexDataSize);
 
-`	`// 8-битные индексы будут выровнены по границе байтов
+    // Указатель на позицию в массиве индексов, соответствующей началу
+    // данных текущей полигональной сетки
+    IndexType *pOutputIndex = reinterpret_cast<IndexType *>(&indexBufferData[indexBufferOffset]);
 
-`	`// 16-битные индексы - по двухбайтной границе
+    // Из-за конфликтов между макросом max из windows.h
+    // и методом std::numeric_limits::max() придется использовать
+    // следующий способ опеределения максимального значения беззнакового
+    // целочисленного типа IndexType
+    IndexType const maxIndexValue = IndexType(~0);
 
-`	`// 32-битные индексы - по смещению, кратному 4
-
-`	`unsigned const indexBufferOffset = 
-
-`		`((indexBufferData.size() + indexSize - 1) / indexSize) \* indexSize;
-
-`	`// Увеличиваем размер буфера индексов так, чтобы по смещению
-
-`	`// indexBufferOffset разместить данные размером meshIndexDataSize
-
-`	`indexBufferData.resize(indexBufferOffset + meshIndexDataSize);
-
-`	`// Указатель на позицию в массиве индексов, соответствующей началу
-
-`	`// данных текущей полигональной сетки
-
-`	`IndexType \* pOutputIndex = 
-
-`		`reinterpret\_cast<IndexType\*>(&indexBufferData[indexBufferOffset]);
-
-`	`// Из-за конфликтов между макросом max из windows.h 
-
-`	`// и методом std::numeric\_limits::max() придется использовать
-
-`	`// следующий способ опеределения максимального значения беззнакового
-
-`	`// целочисленного типа IndexType
-
-`	`IndexType const maxIndexValue = IndexType(~0);
-
-`	`// Дополнительная проверка на то, что для хранения индексов
-
-// используется беззнаковый тип
-
-`	`assert(maxIndexValue > 0);
+    // Дополнительная проверка на то, что для хранения индексов
+    // используется беззнаковый тип
+    assert(maxIndexValue > 0);
+```
 
 Теперь все готово к тому, чтобы просто пробежаться по массиву граней и скопировать из него индексы вершин в индексный буфер. Для большей надежности в код добавлены проверки того, что индекс вершины не выходит за максимально допустимые пределы типа **IndexType**. По окончании обработки всех граней метод возвращает смещение в буфере индексов к массиву индексов текущей полигональной сетки. Эта информация понадобится на дальнейших этапах обработки сетки.
 
-`	`// Пробегаем по массиву граней
+```cpp
+    // Пробегаем по массиву граней
+    for (int i = 0; i < numberOfFaces; ++i)
+    {
+        // Текущая грань
+        MeshFace const &inputFace = faces[i];
 
-`	`for (int i = 0; i < numberOfFaces; ++i)
+        // Пробегаем по индексам текущей грани
+        for (unsigned j = 0; j < 3; ++j)
+        {
+            // Получаем индекс текущей вершины грани
+            unsigned vertexIndex = inputFace.vertices[j];
 
-`	`{
+            // проверяем, что индекс вершины может быть представлены
+            // при помощи типа IndexType
+            if (vertexIndex > (unsigned)maxIndexValue)
+            {
+                throw std::logic_error("Vertex index is out of range");
+            }
 
-`		`// Текущая грань
+            // все нормально, сохраняем индекс вершины в массив индексов
+            // и переходим к следующей вершине
+            *pOutputIndex++ = static_cast<IndexType>(vertexIndex);
+        }
+    }
 
-`		`MeshFace const& inputFace = faces[i];
-
-`		`// Пробегаем по индексам текущей грани
-
-`		`for (unsigned j = 0; j < 3; ++j)
-
-`		`{
-
-`			`// Получаем индекс текущей вершины грани
-
-`			`unsigned vertexIndex = inputFace.vertices[j];
-
-`			`// проверяем, что индекс вершины может быть представлены
-
-`			`// при помощи типа IndexType
-
-`			`if (vertexIndex > (unsigned)maxIndexValue)
-
-`			`{
-
-`				`throw std::logic\_error("Vertex index is out of range");
-
-`			`}
-
-`			`// все нормально, сохраняем индекс вершины в массив индексов
-
-`			`// и переходим к следующей вершине
-
-`			`\*pOutputIndex++ = static\_cast<IndexType>(vertexIndex);
-
-`		`}
-
-`	`}
-
-`	`// Возвращаем смещение в массиве индексов, по которому располагаются
-
-`	`// индексы данной полигональной сетки
-
-`	`return indexBufferOffset;
-
+    // Возвращаем смещение в массиве индексов, по которому располагаются
+    // индексы данной полигональной сетки
+    return indexBufferOffset;
 }
+```
+
 #### ***Обновленный метод загрузки полигональной сетки***
 Изменения, внесенные в метод FillIndexBuffer, потребовали соответствующей корректировки метода LoadMesh. Во-первых, переход от хранения индексов вершин полигональных сеток в фиксированном 16-битном формате к плавающему (8, 16 и  32 бита в зависимости от количества вершин в сетке) вынуждает нас использовать массив элементов типа unsigned char, а не unsigned short.
 
+```cpp
 class CModelLoader
-
 {
-
-`	`…
+    //...
 
 private:
-
-`	`…
-
-`	`// Добавляем к модели полигональную сетку и заполняем
-
-`	`// переданные массивы вершин и индексов данными из 3ds файла
-
-`	`static void LoadMesh(
-
-`		`Lib3dsMesh const& mesh, 
-
-`		`CModel & model, 
-
-`		`std::vector<unsigned char> & vertexBufferData,
-
-`		`std::vector<unsigned char> & indexBufferData
-
-`		`);
-
-`	`…
-
+    //...
+    // Добавляем к модели полигональную сетку и заполняем
+    // переданные массивы вершин и индексов данными из 3ds файла
+    static void LoadMesh(
+        Lib3dsMesh const &mesh,
+        CModel &model,
+        std::vector<unsigned char> &vertexBufferData,
+        std::vector<unsigned char> &indexBufferData
+    );
+    //...
 };
+```
 
 На первом этапе заполняем вершинный буфер данными при помощи метода FillVertexBufferData, не забывая про массив с обновленной информацией о гранях. Здесь нам как раз пригодится возвращаемое данным методом значение, равное количеству вершин в сетке[^36].
 
+```cpp
 void CModelLoader::LoadMesh(
-
-`	`Lib3dsMesh const& mesh, 
-
-`	`CModel & model, 
-
-`	`std::vector<unsigned char> & vertexBufferData,
-
-`	`std::vector<unsigned char> & indexBufferData
-
-`	`)
+    Lib3dsMesh const &mesh,
+    CModel &model,
+    std::vector<unsigned char> &vertexBufferData,
+    std::vector<unsigned char> &indexBufferData)
 
 {
+    // Вычисляем смещение в буфере вершин текущей полигональной сетки
+    const unsigned int vertexBufferOffset = sizeof(unsigned char) * vertexBufferData.size();
 
-`	`// Вычисляем смещение в буфере вершин текущей полигональной сетки
+    // Обновленный массив граней
+    std::vector<MeshFace> updatedFaces;
 
-`	`const unsigned int vertexBufferOffset = 
+    // Заполняем массив вершин, выполняя при необходимости
+    // их расщепление
+    unsigned const numberOfVertices = FillVertexBufferData(mesh, vertexBufferData, updatedFaces);
 
-`		`sizeof(unsigned char) \* vertexBufferData.size();
+    // Тип, используемый для хранения индексов вершин
+    GLenum indexType = 0;
 
-`	`// Обновленный массив граней
-
-`	`std::vector<MeshFace> updatedFaces;
-
-`	`// Заполняем массив вершин, выполняя при необходимости 
-
-`	`// их расщепление
-
-`	`unsigned const numberOfVertices = 
-
-`		`FillVertexBufferData(mesh, vertexBufferData, updatedFaces);
-
-`	`// Тип, используемый для хранения индексов вершин
-
-`	`GLenum indexType = 0;
-
-`	`// Инициализируем смещение к данным полигональной сетки
-
-`	`// в буфере индексов
-
-`	`unsigned int indexBufferOffset = 0;
+    // Инициализируем смещение к данным полигональной сетки
+    // в буфере индексов
+    unsigned int indexBufferOffset = 0;
+```
 
 Затем заполним массив индексов, отдавая предпочтение 8-, 16- или 32-битным индексам в зависимости от количества вершин в сетке.
 
-`	`// В зависимости от количества вершин после расщепления
+```cpp
+    // В зависимости от количества вершин после расщепления
+    // сохраняем индексы в виде 8, 16 или 32 битных чисел
+    if (numberOfVertices <= UCHAR_MAX + 1) // достаточно 8 бит?
+    {
+        indexType = GL_UNSIGNED_BYTE;
+        indexBufferOffset = FillIndexBufferData<GLubyte>(updatedFaces, indexBufferData);
+    }
 
-`	`// сохраняем индексы в виде 8, 16 или 32 битных чисел
+    else if (numberOfVertices <= USHRT_MAX + 1) // достаточно 16 бит?
+    {
 
-`	`if (numberOfVertices <= UCHAR\_MAX + 1)	// достаточно 8 бит?
-
-`	`{
-
-`		`indexType = GL\_UNSIGNED\_BYTE;
-
-`		`indexBufferOffset = 
-
-`			`FillIndexBufferData<GLubyte>(updatedFaces, indexBufferData);
-
-`	`}
-
-`	`else if (numberOfVertices <= USHRT\_MAX + 1) // достаточно 16 бит?
-
-`	`{
-
-`		`indexType = GL\_UNSIGNED\_SHORT;
-
-`		`indexBufferOffset = 
-
-`			`FillIndexBufferData<GLushort>(updatedFaces, indexBufferData);
-
-`	`}
-
-`	`else	// Используем 32 битные индексы
-
-`	`{
-
-`		`indexType = GL\_UNSIGNED\_INT;
-
-`		`indexBufferOffset =
-
-`			`FillIndexBufferData<GLuint>(updatedFaces, indexBufferData);
-
-`	`}
+        indexType = GL_UNSIGNED_SHORT;
+        indexBufferOffset = FillIndexBufferData<GLushort>(updatedFaces, indexBufferData);
+    }
+    
+    else // Используем 32 битные индексы
+    {
+        indexType = GL_UNSIGNED_INT;
+        indexBufferOffset = FillIndexBufferData<GLuint>(updatedFaces, indexBufferData);
+    }
+```
 
 Затем осталось вычислить ограничивающий блок полигональной сетки и добавить информацию о сетке в 3D модель. Изменениям подверглись лишь параметры, задающие итоговое количество вершин  сетки, а также тип данных, используемый для хранения индексов.
 
-`	`// Вычисляем ограничивающий блок текущей полигональной сетки
+```cpp
+    // Вычисляем ограничивающий блок текущей полигональной сетки
+    // при помощи средств библиотеки lib3ds
 
-`	`// при помощи средств библиотеки lib3ds
+    float minMeshBound[3];
 
-`	`float minMeshBound[3];
+    float maxMeshBound[3];
 
-`	`float maxMeshBound[3];
+    lib3ds_mesh_bounding_box(const_cast<Lib3dsMesh*>(&mesh), minMeshBound, maxMeshBound);
 
-`	`lib3ds\_mesh\_bounding\_box(
+    // Создаем Bounding box на основе данных, возвращенных lib3ds
+    CBoundingBox meshBoundingBox((CVector3f(minMeshBound)), (CVector3f(maxMeshBound)));
 
-`		`const\_cast<Lib3dsMesh\*>(&mesh), 
-
-`		`minMeshBound, maxMeshBound);
-
-`	`// Создаем Bounding box на основе данных, возвращенных lib3ds
-
-`	`CBoundingBox meshBoundingBox(
-
-`		`(CVector3f(minMeshBound)),
-
-`		`(CVector3f(maxMeshBound)));
-
-`	`// Добавляем к модели полигональную сетку
-
-`	`model.AddMesh(
-
-`		`vertexBufferOffset, 
-
-`		`indexBufferOffset, 
-
-`		`numberOfVertices,	// обновленное количество вершин
-
-`		`mesh.nfaces \* 3, 
-
-`		`mesh.texcos != NULL,
-
-`		`meshBoundingBox,
-
-`		`GL\_TRIANGLES,
-
-`		`indexType		// Тип данных, используемый для хранения индексов
-
-`		`);
-
+    // Добавляем к модели полигональную сетку
+    model.AddMesh(
+        vertexBufferOffset,
+        indexBufferOffset,
+        numberOfVertices, // обновленное количество вершин
+        mesh.nfaces * 3,
+        mesh.texcos != NULL,
+        meshBoundingBox,
+        GL_TRIANGLES,
+        indexType // Тип данных, используемый для хранения индексов
+    );
 }
+```
 
 В методе **LoadMeshes** было сделано одно косметическое изменение, связанное с использованием индексов различного типа. Массив indexBufferData теперь хранит элементы типа unsigned char вместо unsigned short.
 
-void CModelLoader::LoadMeshes(Lib3dsFile const& file, CModel & model)
-
+```cpp
+void CModelLoader::LoadMeshes(Lib3dsFile const &file, CModel &model)
 {
+    // Временные массивы вершин и индексов,
+    // которые будут заполнены данными всех сеток 3ds файла
 
-`	`// Временные массивы вершин и индексов, 
+    std::vector<unsigned char> vertexBufferData;
 
-`	`// которые будут заполнены данными всех сеток 3ds файла
+    std::vector<unsigned char> indexBufferData;
 
-`	`std::vector<unsigned char> vertexBufferData;
+    const int meshCount = file.nmeshes;
 
-`	`std::vector<unsigned char> indexBufferData;
+    for (int i = 0; i < meshCount; ++i)
+    {
+        Lib3dsMesh const &mesh = *file.meshes[i];
 
-`	`const int meshCount = file.nmeshes;
+        // Добавляем данные полигональной сетки из 3ds файла
+        // к текущей модели, а информацию о вершинах и индексах
+        // добавляем в массивы вершин и индексов
+        LoadMesh(mesh, model, vertexBufferData, indexBufferData);
+    }
 
-`	`for (int i = 0; i < meshCount; ++i)
+    // Создаем вершинный буфер
+    model.GetVertexBuffer().Create();
 
-`	`{
+    // и заполняем его данными о вершинах, собранными со всех
+    // полигональных сеток модели
+    model.GetVertexBuffer().BufferData(
+        vertexBufferData.size() * sizeof(vertexBufferData[0]),
+        &vertexBufferData[0],
+        m_vertexBufferUsage);
 
-`		`Lib3dsMesh const & mesh = \*file.meshes[i];
+    // Создаем буфер индексов
+    model.GetIndexBuffer().Create();
 
-`		`// Добавляем данные полигональной сетки из 3ds файла
-
-`		`// к текущей модели, а информацию о вершинах и индексах
-
-`		`// добавляем в массивы вершин и индексов
-
-`		`LoadMesh(mesh, model, vertexBufferData, indexBufferData);
-
-`	`}
-
-`	`// Создаем вершинный буфер
-
-`	`model.GetVertexBuffer().Create();
-
-`	`// и заполняем его данными о вершинах, собранными со всех 
-
-`	`// полигональных сеток модели
-
-`	`model.GetVertexBuffer().BufferData(
-
-`		`vertexBufferData.size() \* sizeof(vertexBufferData[0]), 
-
-`		`&vertexBufferData[0], 
-
-`		`m\_vertexBufferUsage);
-
-`	`// Создаем буфер индексов
-
-`	`model.GetIndexBuffer().Create();
-
-`	`// и заполняем его данными об индексах вершин, составляющих грани,
-
-`	`// собранными со всех полигональных сеток модели
-
-`	`model.GetIndexBuffer().BufferData(
-
-`		`indexBufferData.size() \* sizeof(indexBufferData[0]), 
-
-`		`&indexBufferData[0], 
-
-`		`m\_indexBufferUsage);
-
+    // и заполняем его данными об индексах вершин, составляющих грани,
+    // собранными со всех полигональных сеток модели
+    model.GetIndexBuffer().BufferData(
+        indexBufferData.size() * sizeof(indexBufferData[0]),
+        &indexBufferData[0],
+        m_indexBufferUsage);
 }
+```
+
 #### ***Визуализируем модель с учетом освещения***
 Доработаем класс CMyApplication, добавив инициализацию источника света и тестового материала[^37] полигональной сетки в метод OnInit.
 
+```cpp
 void CMyApplication::OnInit()
-
 {
+    glEnable(GL_DEPTH_TEST);
 
-`	`glEnable(GL\_DEPTH\_TEST);
+    glClearColor(1, 1, 1, 1);
 
-`	`glClearColor(1, 1, 1, 1);
+    // Включаем свет и задаем его параметры
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    CDirectLight light;
+    light.SetSpecularIntensity(0.3f, 0.3f, 0.3f);
+    light.SetLight(GL_LIGHT0);
 
+    // Задаем параметры материала
+    CMaterial material;
+    material.SetSpecular(0.3f, 0.3f, 0.3f);
+    material.SetShininess(20);
+    material.SetDiffuse(0.8f, 0.8f, 0.2);
+    material.Activate();
 
+    // Загружаем трехмерную модель
+    CModelLoader loader;
+    loader.Load3dsFile("loader.3DS", m_model);
 
-`	`// Включаем свет и задаем его параметры
+    // Определяем ограничивающий блой данной модели
+    CBoundingBox const &modelBoundingBox = m_model.GetBoundingBox();
 
-`	`glEnable(GL\_LIGHTING);
+    if (modelBoundingBox.IsEmpty())
+    {
+        throw std::runtime_error("Model is empty. Nothing to render");
+    }
 
-`	`glEnable(GL\_LIGHT0);
+    // Центр bounding box-а модели
+    CVector3f modelCenter = modelBoundingBox.GetCenter();
 
-`	`CDirectLight light;
+    // Длина диагонали bounding box-а
+    float modelDiagonal = modelBoundingBox.GetSize().GetLength();
 
-`	`light.SetSpecularIntensity(0.3f, 0.3f, 0.3f);
+    // Отодвигаем камеру от центра на расстояние, равное диагонали
+    // bounding box-а
+    CVector3f cameraPosition = modelCenter + CVector3f(modelDiagonal, 0, 0);
 
-`	`light.SetLight(GL\_LIGHT0);
-
-`	`// Задаем параметры материала
-
-`	`CMaterial material;
-
-`	`material.SetSpecular(0.3f, 0.3f, 0.3f);
-
-`	`material.SetShininess(20);
-
-`	`material.SetDiffuse(0.8f, 0.8f, 0.2);
-
-`	`material.Activate();
-
-`	`// Загружаем трехмерную модель
-
-`	`CModelLoader loader;
-
-`	`loader.Load3dsFile("loader.3DS", m\_model);
-
-`	`// Определяем ограничивающий блой данной модели
-
-`	`CBoundingBox const& modelBoundingBox = m\_model.GetBoundingBox();
-
-`	`if (modelBoundingBox.IsEmpty())
-
-`	`{
-
-`		`throw std::runtime\_error("Model is empty. Nothing to render");
-
-`	`}
-
-`	`// Центр bounding box-а модели
-
-`	`CVector3f modelCenter = modelBoundingBox.GetCenter();
-
-`	`// Длина диагонали bounding box-а
-
-`	`float modelDiagonal = modelBoundingBox.GetSize().GetLength();
-
-`	`// Отодвигаем камеру от центра на расстояние, равное диагонали 
-
-`	`// bounding box-а
-
-`	`CVector3f cameraPosition = modelCenter + CVector3f(modelDiagonal, 0, 0);
-
-`	`// Задаем параметры камеры
-
-`	`glLoadIdentity();
-
-`	`gluLookAt(
-
-`		`cameraPosition.x, cameraPosition.y, cameraPosition.z, 
-
-`		`modelCenter.x, modelCenter.y, modelCenter.z, 
-
-`		`0, 1, 0);
-
+    // Задаем параметры камеры
+    glLoadIdentity();
+    gluLookAt(
+        cameraPosition.x, cameraPosition.y, cameraPosition.z,
+        modelCenter.x, modelCenter.y, modelCenter.z,
+        0, 1, 0);
 }
+```
 
 В методе **OnDisplay** установим сплошной режим визуализации граней. Теперь, когда нормали вершин заданы, освещение будет работать корректно.
 
+```cpp
 void CMyApplication::OnDisplay()
-
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-`	`glClear(GL\_COLOR\_BUFFER\_BIT | GL\_DEPTH\_BUFFER\_BIT);
+    glColor3ub(0, 0, 0);
 
-`	`glColor3ub(0, 0, 0);
+    glEnable(GL_CULL_FACE);
 
-`	`glEnable(GL\_CULL\_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-
-
-`	`glPolygonMode(GL\_FRONT\_AND\_BACK, GL\_FILL);
-
-`	`m\_renderer.RenderModel(m\_model);
-
+    m_renderer.RenderModel(m_model);
 }
+```
+
 #### ***Результаты***
 Следующие иллюстрации наглядно демонстрируют повышение реалистичности отображаемых моделей по сравнению с каркасной визуализацией.
 
@@ -6880,443 +4692,299 @@ void CMyApplication::OnDisplay()
 
 Обновленный листинг объявления класса CMesh приведен ниже.
 
+```cpp
 class CMesh : public boost::noncopyable
-
 {
+public:
+    // Структура, описывающая подсетку
+    struct SubMesh
+    {
+        // Начало подсетки в массиве индексов сетки
+        unsigned startIndex;
+
+        // Количество индексов в подсетке
+        unsigned indexCount;
+    };
 
 public:
+    //...
 
-`	`// Структура, описывающая подсетку
+    // Добавляем подсетку, диапазон индексов внутри сетки, объединенных
+    // по некоторому признаку (например, по общему материалу)
+    // Возвращается индекс добавленной подсетки
+    unsigned AddSubMesh(unsigned startIndex, unsigned subMeshIndexCount);
 
-`	`struct SubMesh
+    // Количество подсеток
+    unsigned GetSubMeshCount() const;
 
-`	`{
+    // Возвращаем информацию о подсетке с заданным индексом
+    SubMesh GetSubMesh(unsigned index) const;
 
-`		`// Начало подсетки в массиве индексов сетки
+    // Задаем индекс подсетки, грани которой имеют материал materialIndex
+    void SetMaterialSubMesh(int materialIndex, unsigned subMeshIndex);
 
-`		`unsigned startIndex;
+    // Получаем индекс подсетки, грани которой имеют материал materialIndex
+    int GetMaterialSubMesh(int materialIndex) const;
 
-`		`// Количество индексов в подсетке
+    // Получаем количество материалов, используемых в сетке
+    unsigned GetMaterialsCount() const;
 
-`		`unsigned indexCount;
+    // Получаем индес материала по его порядковому номеру в сетке
+    int GetMaterial(unsigned index) const;
 
-`	`};
-
-public:
-
-`	`…
-
-`	`// Добавляем подсетку, диапазон индексов внутри сетки, объединенных
-
-`	`// по некоторому признаку (например, по общему материалу)
-
-`	`// Возвращается индекс добавленной подсетки
-
-`	`unsigned AddSubMesh(unsigned startIndex, unsigned subMeshIndexCount);
-
-`	`// Количество подсеток
-
-`	`unsigned GetSubMeshCount()const;
-
-`	`// Возвращаем информацию о подсетке с заданным индексом
-
-`	`SubMesh GetSubMesh(unsigned index)const;
-
-`	`// Задаем индекс подсетки, грани которой имеют материал materialIndex
-
-`	`void SetMaterialSubMesh(int materialIndex, unsigned subMeshIndex);
-
-`	`// Получаем индекс подсетки, грани которой имеют материал materialIndex
-
-`	`int GetMaterialSubMesh(int materialIndex)const;
-
-`	`// Получаем количество материалов, используемых в сетке
-
-`	`unsigned GetMaterialsCount()const;
-
-`	`// Получаем индес материала по его порядковому номеру в сетке
-
-`	`int GetMaterial(unsigned index)const;
-
-`	`// Получаем количество байт, требуемых для хранения одного индекса
-
-`	`unsigned GetIndexSize()const;
+    // Получаем количество байт, требуемых для хранения одного индекса
+    unsigned GetIndexSize() const;
 
 private:
+    // Массив подсеток внутри данной сетки
+    std::vector<SubMesh> m_subMeshes;
 
-`	`// Массив подсеток внутри данной сетки
+    // Массив индексов материалов, используемых данной сеткой
+    std::vector<int> m_materials;
 
-`	`std::vector<SubMesh> m\_subMeshes;
+    // Массив, задающий индекс подсетки для каждого материала
+    std::vector<int> m_materialSubMesh;
 
-`	`// Массив индексов материалов, используемых данной сеткой
-
-`	`std::vector<int> m\_materials;
-
-`	`// Массив, задающий индекс подсетки для каждого материала
-
-`	`std::vector<int> m\_materialSubMesh;
-
-`	`…
-
+    //...
 };
+```
 
 Реализация методов добавления подсеток и доступа к ним приведена ниже и в особых пояснениях не нуждается.
 
+```cpp
 unsigned CMesh::AddSubMesh(unsigned startIndex, unsigned subMeshIndexCount)
-
 {
 
-`	`// Проверяем, что подсетка начинается с существующего индекса
+    // Проверяем, что подсетка начинается с существующего индекса
+    if (startIndex >= m_indexCount)
+    {
+        throw std::out_of_range("Start vertex index is out of range");
+    }
 
-`	`if (startIndex >= m\_indexCount)
+    // Проверка на допустимость количества индексов в подсетке
+    if ((subMeshIndexCount == 0) || (startIndex + subMeshIndexCount < startIndex) || (startIndex + subMeshIndexCount > m_indexCount))
+    {
+        throw std::out_of_range("SubMesh index count is out of range");
+    }
 
-`	`{
+    // Создаем подсетку и добавляем в массив подсеток
+    SubMesh subMesh = {startIndex, subMeshIndexCount};
 
-`		`throw std::out\_of\_range("Start vertex index is out of range");
+    m_subMeshes.push_back(subMesh);
 
-`	`}
-
-`	`// Проверка на допустимость количества индексов в подсетке
-
-`	`if (
-
-`		`(subMeshIndexCount == 0) || 
-
-`		`(startIndex + subMeshIndexCount < startIndex) ||
-
-`		`(startIndex + subMeshIndexCount > m\_indexCount)
-
-`		`)
-
-`	`{
-
-`		`throw std::out\_of\_range("SubMesh index count is out of range");
-
-`	`}
-
-`	`// Создаем подсетку и добавляем в массив подсеток
-
-`	`SubMesh subMesh = {startIndex, subMeshIndexCount};
-
-`	`m\_subMeshes.push\_back(subMesh);
-
-`	`// Возвращаем индекс вставленной подсетки
-
-`	`return m\_subMeshes.size() - 1;
-
+    // Возвращаем индекс вставленной подсетки
+    return m_subMeshes.size() - 1;
 }
 
-CMesh::SubMesh CMesh::GetSubMesh(unsigned index)const
-
+CMesh::SubMesh CMesh::GetSubMesh(unsigned index) const
 {
-
-`	`return m\_subMeshes.at(index);
-
+    return m_subMeshes.at(index);
 }
 
-unsigned CMesh::GetSubMeshCount()const
-
+unsigned CMesh::GetSubMeshCount() const
 {
-
-`	`return m\_subMeshes.size();
-
+    return m_subMeshes.size();
 }
+```
 
 Метод **SetMaterialSubMesh** задает соответствие между индексом материала и индексом подсетки, использующей данный материал. При этом в соответствующий индексу материала элемент[^38] массива[^39] m\_materialSubMesh производится запись индекса подсетки. Элементы массива m\_materialSubMesh, соответствующие материалам, для которых подсетка не задана, содержат значения, равные -1.
 
 Кроме того, в массив m\_materials, который содержит индексы используемых сеткой материалов, записывается индекс добавляемого материала.
 
+```cpp
 void CMesh::SetMaterialSubMesh(int materialIndex, unsigned subMeshIndex)
-
 {
+    // Проверка индекса подсетки на допустимость
+    if (subMeshIndex >= GetSubMeshCount())
+    {
+        throw std::out_of_range("Sub mesh index is out of range");
+    }
 
-`	`// Проверка индекса подсетки на допустимость
+    // Индекс материала, равный -1, задается в подсетках,
+    // использующих материал по умолчанию.
 
-`	`if (subMeshIndex >= GetSubMeshCount())
+    // Т.к. нулевой элемент массива m_materialSubMesh хранит индекс
+    // подсетки с материалом равным -1, увеличиваем индекс материала на 1
+    ++materialIndex;
 
-`	`{
+    // проверяем его на допустимость (-1 - единственное отрицательное
+    // значение допустимое для использования в качестве индекса материала)
+    if (materialIndex < 0)
+    {
+        throw std::out_of_range("Invalid material index");
+    }
 
-`		`throw std::out\_of\_range("Sub mesh index is out of range");
+    // Если мы пытаемся задать подсетку для материала, отсутствующего
+    // в полигональной сетке, нужно выделить для него место в массиве m_materialSubMesh
 
-`	`}
+    if (static_cast<unsigned>(materialIndex) >= m_materialSubMesh.size())
+    {
+        m_materialSubMesh.insert(m_materialSubMesh.end(), materialIndex - m_materialSubMesh.size() + 1, -1);
+    }
 
-`	`// Индекс материала, равный -1, задается в подсетках,
+    // Если для данного материала подсетка уже была задана,
+    // то не даем переопределить ее
+    if (m_materialSubMesh[materialIndex] >= 0)
+    {
+        throw std::logic_error("Material sub mesh has already specified");
+    }
 
-`	`// использующих материал по умолчанию.
+    // добавляем индекс материала в массив используемых материалов,
+    // предварительно уменьшив его на 1 (компенсируем инкремент индекса)
+    m_materials.push_back(materialIndex - 1);
 
-`	`// Т.к. нулевой элемент массива m\_materialSubMesh хранит индекс
-
-`	`// подсетки с материалом равным -1, увеличиваем индекс материала на 1
-
-`	`++materialIndex;
-
-`	`// проверяем его на допустимость (-1 - единственное отрицательное
-
-`	`// значение допустимое для использования в качестве индекса материала)
-
-`	`if (materialIndex < 0)
-
-`	`{
-
-`		`throw std::out\_of\_range("Invalid material index");
-
-`	`}
-
-`	`// Если мы пытаемся задать подсетку для материала, отсутствующего
-
-`	`// в полигональной сетке, нужно выделить для него место в массиве
-
-`	`// m\_materialSubMesh
-
-`	`if (static\_cast<unsigned>(materialIndex) >= m\_materialSubMesh.size())
-
-`	`{
-
-`		`m\_materialSubMesh.insert(
-
-`			`m\_materialSubMesh.end(), 
-
-`			`materialIndex - m\_materialSubMesh.size() + 1, 
-
-`			`-1);
-
-`	`}
-
-`	`// Если для данного материала подсетка уже была задана,
-
-`	`// то не даем переопределить ее
-
-`	`if (m\_materialSubMesh[materialIndex] >= 0)
-
-`	`{
-
-`		`throw std::logic\_error("Material sub mesh has already specified");
-
-`	`}
-
-`	`// добавляем индекс материала в массив используемых материалов,
-
-`	`// предварительно уменьшив его на 1 (компенсируем инкремент индекса)
-
-`	`m\_materials.push\_back(materialIndex - 1);
-
-`	`// Задаем для данного материала индекс использующей его подсетки
-
-`	`m\_materialSubMesh[materialIndex] = subMeshIndex;
-
+    // Задаем для данного материала индекс использующей его подсетки
+    m_materialSubMesh[materialIndex] = subMeshIndex;
 }
+```
 
 Метод GetMaterialSubMesh позволяет получить индекс подсетки, грани которой используют материал с заданным индексом. Методы **GetMaterialsCount** и **GetMaterial**, позволяют узнать количество материалов, используемых подсетками данной сетки и получить индекс материала по его порядковому номеру.
 
-int CMesh::GetMaterialSubMesh(int materialIndex)const
-
+```cpp
+int CMesh::GetMaterialSubMesh(int materialIndex) const
 {
+    // Т.к. индексация элементов массива m\_materialSubMesh "виртуально"
+    // начинается с -1, увеличиваем индекс материала на 1, не забывая проверить
+    // на допустимость значений
+    ++materialIndex;
 
-`	`// Т.к. индексация элементов массива m\_materialSubMesh "виртуально"
+    if (materialIndex < 0)
+    {
+        throw std::out_of_range("Invalid material index");
+    }
 
-`	`// начинается с -1, увеличиваем индекс материала на 1, не забывая проверить
+    // Если индекс материала превышает количество материалов, для которых были
+    // указаны индексы подсеток, то возвращаем значение -1, сигнализируя
+    // об отсутствии подсетки для данного материала
+    if (static_cast<unsigned>(materialIndex) >= m_materialSubMesh.size())
+    {
+        // нет подсетки, ассоциированной с данным материалом
+        return -1;
+    }
 
-`	`// на допустимость значений
-
-`	`++materialIndex;
-
-`	`if (materialIndex < 0)
-
-`	`{
-
-`		`throw std::out\_of\_range("Invalid material index");
-
-`	`}
-
-`	`// Если индекс материала превышает количество материалов, для которых были
-
-`	`// указаны индексы подсеток, то возвращаем значение -1, сигнализируя
-
-`	`// об отсутствии подсетки для данного материала
-
-`	`if (static\_cast<unsigned>(materialIndex) >= m\_materialSubMesh.size())
-
-`	`{
-
-`		`// нет подсетки, ассоциированной с данным материалом
-
-`		`return -1;
-
-`	`}
-
-`	`// Иначе возвращаем индекс подсетки, соответствующей запрошенному материалу
-
-`	`return m\_materialSubMesh[materialIndex];
-
+    // Иначе возвращаем индекс подсетки, соответствующей запрошенному материалу
+    return m_materialSubMesh[materialIndex];
 }
 
-unsigned CMesh::GetMaterialsCount()const
-
+unsigned CMesh::GetMaterialsCount() const
 {
-
-`	`return m\_materials.size();
-
+    return m_materials.size();
 }
 
-int CMesh::GetMaterial(unsigned index)const
-
+int CMesh::GetMaterial(unsigned index) const
 {
-
-`	`return m\_materials.at(index);
-
+    return m_materials.at(index);
 }
+```
 
 Метод **GetIndexSize** возвращает размер (в байтах) типа данных, используемого для хранения индексов сетки. Он нам понадобится при вычислении смещения до начального элемента подсетки в массиве индексов.
 
-unsigned CMesh::GetIndexSize()const
-
+```cpp
+unsigned CMesh::GetIndexSize() const
 {
-
-`	`return
-
-`		`(m\_indexType == GL\_UNSIGNED\_BYTE) ? sizeof(GLubyte) :
-
-`		`(m\_indexType == GL\_UNSIGNED\_SHORT) ? sizeof(GLshort) :
-
-`		`(m\_indexType == GL\_UNSIGNED\_INT) ? sizeof(GLuint) : 0;
-
+    return (m_indexType == GL_UNSIGNED_BYTE) ? sizeof(GLubyte) :
+           (m_indexType == GL_UNSIGNED_SHORT) ? sizeof(GLshort) :
+           (m_indexType == GL_UNSIGNED_INT) ? sizeof(GLuint) :
+           0;
 }
+```
+
 #### ***Добавляем поддержку материалов граней в класс CModelLoader***
 Для решения данной задачи потребуется расширить структуру CModelLoader::MeshFace, добавив в нее индекс материала грани.
 
+```cpp
 // Информация о грани полигональной сетки
-
 struct CModelLoader::MeshFace
-
 {
+    unsigned vertices[3];
 
-`	`unsigned vertices[3];
-
-`	`int materialIndex;
-
+    int materialIndex;
 };
+```
 
 Изменения, вносимые в объявление класса CModelLoader, приведены ниже.
 
+```cpp
 class CModelLoader
-
 {
-
-`	`…
+    //...
 
 private:
+    //...
 
-`	`…
+    // Добавляем к модели полигональную сетку и заполняем
+    // переданные массивы вершин и индексов данными из 3ds файла
+    static void LoadMesh(
+        unsigned materialCount,
+        Lib3dsMesh const &mesh,
+        CModel &model,
+        std::vector<unsigned char> &vertexBufferData,
+        std::vector<unsigned char> &indexBufferData
+    );
 
-`	`// Добавляем к модели полигональную сетку и заполняем
+    //...
 
-`	`// переданные массивы вершин и индексов данными из 3ds файла
+    // Заполняем массив индексов вершин
+    // В качестве шаблонного параметра IndexType принимается
+    // целочисленный тип, используемых для хранения индексов.
 
-`	`static void LoadMesh(
+    // Возвращаем смещение к индексам сетки внутри
+    // массива indexBufferData
+    template <typename IndexType>
 
-`		`unsigned materialCount,
+    static unsigned FillIndexBufferData(
+        std::vector<MeshFace> const &faces,
+        std::vector<std::vector<unsigned>> const &materialFaces,
+        std::vector<unsigned char> &indexBufferData
+    );
 
-`		`Lib3dsMesh const& mesh,
+    //...
 
-`		`CModel & model, 
+    // Выполняем построение списков граней, использующих
+    // сгруппированных по индексу материала
+    static void BuildMaterialFacesList(
+        unsigned meshMaterialCount,
+        std::vector<MeshFace> const &faces,
+        std::vector<std::vector<unsigned>> &materialFaces);
 
-`		`std::vector<unsigned char> & vertexBufferData,
-
-`		`std::vector<unsigned char> & indexBufferData
-
-`		`);
-
-`	`…
-
-`	`// Заполняем массив индексов вершин
-
-`	`// В качестве шаблонного параметра IndexType принимается
-
-`	`// целочисленный тип, используемых для хранения индексов.
-
-`	`// Возвращаем смещение к индексам сетки внутри
-
-`	`// массива indexBufferData
-
-`	`template <typename IndexType>
-
-`	`static unsigned FillIndexBufferData(
-
-`		`std::vector<MeshFace> const& faces, 
-
-`		`std::vector< std::vector<unsigned> > const & materialFaces,
-
-`		`std::vector<unsigned char> & indexBufferData
-
-`		`);
-
-`	`…
-
-`	`// Выполняем построение списков граней, использующих
-
-`	`// сгруппированных по индексу материала
-
-`	`static void BuildMaterialFacesList(
-
-`		`unsigned meshMaterialCount,
-
-`		`std::vector<MeshFace> const& faces,
-
-`		`std::vector< std::vector<unsigned> > & materialFaces);
-
-`	`…
-
+    //...
 };
+```
+
 ##### Сбор информации о материалах граней
 Индекс материала будет заполняться на этапе сбора информации о гранях сетки. Как и в 3ds файле, индекс материала, равный -1, будет означать, что для данной грани материал не задан и при визуализации должен использоваться материал по умолчанию.
 
 Ниже приведены изменения, вносимые в код метода **SplitVerticesBySmoothGroup**.
 
+```cpp
 void CModelLoader::SplitVerticesBySmoothGroup(
-
-`   `Lib3dsMesh const& mesh,
-
-`   `std::vector<CVertexInfo>& outputVertices,
-
-`   `std::vector<MeshFace> & outputFaces
-
-`	`)
+    Lib3dsMesh const &mesh,
+    std::vector<CVertexInfo> &outputVertices,
+    std::vector<MeshFace> &outputFaces)
 
 {
+    //...
 
-`	`…
+    // В цикле будут последовательно обработаны все грани сетки
+    for (size_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
+    {
+        // Ссылка на текущую грань
+        Lib3dsFace const &face = mesh.faces[faceIndex];
 
-`	`// В цикле будут последовательно обработаны все грани сетки
+        // Выходная грань для помещения в массив outputFaces, которая будет
+        // заполнена индексами вершин (с изменением оригинальной нумерации
+        // при добавлении порожденных вершин)
+        MeshFace outputFace;
 
-`	`for (size\_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
-
-`	`{
-
-`		`// Ссылка на текущую грань
-
-`		`Lib3dsFace const& face = mesh.faces[faceIndex];
-
-`		`// Выходная грань для помещения в массив outputFaces, которая будет 
-
-`		`// заполнена индексами вершин (с изменением оригинальной нумерации 
-
-`		`// при добавлении порожденных вершин)
-
-`		`MeshFace outputFace;
-
-`		`**// Задаем индекс материала**
-
-`		`**outputFace.materialIndex = face.material;**
-
-`		`…
-
-`		`// добавляем грань в массив граней
-
-`		`outputFaces.push\_back(outputFace);
-
-`	`}	// for (size\_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
-
+        // Задаем индекс материала**
+        outputFace.materialIndex = face.material;
+        //...
+        // добавляем грань в массив граней
+        outputFaces.push_back(outputFace);
+    } // for (size\_t faceIndex = 0; faceIndex < mesh.nfaces; ++faceIndex)
 }
+```
+
 ##### Группировка граней по индексу материала
 Метод **BuildMaterialFacesList** выполняет построение списка граней для каждого материала модели. [Рисунок 11](#_ref308744544) иллюстрирует построение списка граней для заданной полигональной сетки.
 
@@ -7330,113 +4998,70 @@ void CModelLoader::SplitVerticesBySmoothGroup(
 1. Происходит резервирование места памяти в массивах индексов граней
 1. Заполнение массивов индексов граней
 
+```cpp
 void CModelLoader::BuildMaterialFacesList(
-
-`	`unsigned materialCount,
-
-`	`std::vector<MeshFace> const& faces,
-
-`	`std::vector< std::vector<unsigned> > & materialFaces)
+    unsigned materialCount,
+    std::vector<MeshFace> const &faces,
+    std::vector<std::vector<unsigned>> &materialFaces)
 
 {
+    // обнуляем счетчики граней каждого материала
+    // (включая материал с индексом -1, используемый
+    // для граней, без материала)
+    std::vector<unsigned> materialFaceCount(materialCount + 1);
 
-`	`// обнуляем счетчики граней каждого материала 
+    size_t const faceCount = faces.size();
 
-`	`// (включая материал с индексом -1, используемый
+    // Пробегаем по всем граням полигональной сетки
+    for (size_t faceIndex = 0; faceIndex < faceCount; ++faceIndex)
+    {
+        // индекс материала грани
+        int faceMaterial = faces[faceIndex].materialIndex;
+        if (faceMaterial < -1 || faceMaterial >= static_cast<int>(materialCount))
+        {
+            // некорректый индекс материала
+            throw std::out_of_range("Face material index is out of range");
+        }
 
-`	`// для граней, без материала)
+        // Увеличиваем счетчик граней, использующих данный материал
+        // (0 индекс соответствует материалу=-1)
+        ++materialFaceCount[faceMaterial + 1];
+    }
 
-`	`std::vector<unsigned> materialFaceCount(materialCount + 1);
+    // Каждому материалу сетки изначально будет соответствовать
+    // пустой массив индексов граней
+    materialFaces.assign(materialCount + 1, std::vector<unsigned>());
 
-`	`size\_t const faceCount = faces.size();
+    // Резервируем место в массивах индексов граней для хранения
+    // требуемого количества граней (чтобы избежать перевыделения памяти)
+    // при росте размера массивов
+    // Цикл от 0 до materialCount (включительно, для обработки материала
+    // с индексом равным -1)
+    for (size_t materialIndex = 0; materialIndex <= materialCount; ++materialIndex)
+    {
+        std::vector<unsigned> &faces = materialFaces[materialIndex];
 
-`	`// Пробегаем по всем граням полигональной сетки
+        faces.reserve(materialFaceCount[materialIndex]);
+    }
 
-`	`for (size\_t faceIndex = 0; faceIndex < faceCount; ++faceIndex)
+    // пробегаем по граням сетки, добавляя индекс грани
+    // в массив граней, использующих соответствующий материал
+    for (size_t faceIndex = 0; faceIndex < faceCount; ++faceIndex)
+    {
+        // индекс материала грани
+        int faceMaterial = faces[faceIndex].materialIndex;
 
-`	`{
+        assert(static_cast<unsigned>(faceMaterial) + 1 <= materialCount);
 
-`		`// индекс материала грани
+        // ссылка на массив граней, использующих данный материал
+        std::vector<unsigned> &faces = materialFaces[faceMaterial + 1];
 
-`		`int faceMaterial = faces[faceIndex].materialIndex;
-
-`		`if (faceMaterial < -1 || 
-
-`			`faceMaterial >= static\_cast<int>(materialCount))
-
-`		`{
-
-`			`// некорректый индекс материала
-
-`			`throw std::out\_of\_range(
-
-`				`"Face material index is out of range");
-
-`		`}
-
-`		`// Увеличиваем счетчик граней, использующих данный материал
-
-`		`// (0 индекс соответствует материалу=-1)
-
-`		`++materialFaceCount[faceMaterial + 1];
-
-`	`}
-
-`	`// Каждому материалу сетки изначально будет соответствовать
-
-`	`// пустой массив индексов граней
-
-`	`materialFaces.assign(materialCount + 1, std::vector<unsigned>());
-
-`	`// Резервируем место в массивах индексов граней для хранения
-
-`	`// требуемого количества граней (чтобы избежать перевыделения памяти)
-
-`	`// при росте размера массивов
-
-`	`// Цикл от 0 до materialCount (включительно, для обработки материала
-
-`	`// с индексом равным -1)
-
-`	`for (size\_t materialIndex = 0; 
-
-`		`materialIndex <= materialCount; 
-
-`		`++materialIndex)
-
-`	`{
-
-`		`std::vector<unsigned> & faces = materialFaces[materialIndex];
-
-`		`faces.reserve(materialFaceCount[materialIndex]);
-
-`	`}
-
-`	`// пробегаем по граням сетки, добавляя индекс грани
-
-`	`// в массив граней, использующих соответствующий материал
-
-`	`for (size\_t faceIndex = 0; faceIndex < faceCount; ++faceIndex)
-
-`	`{
-
-`		`// индекс материала грани
-
-`		`int faceMaterial = faces[faceIndex].materialIndex;
-
-`		`assert(static\_cast<unsigned>(faceMaterial) + 1 <= materialCount);
-
-`		`// ссылка на массив граней, использующих данный материал
-
-`		`std::vector<unsigned> & faces = materialFaces[faceMaterial + 1];
-
-`		`// заносим в полученный массив граней индекс текущей грани
-
-`		`faces.push\_back(faceIndex);
-
-`	`}
-
+        // заносим в полученный массив граней индекс текущей грани
+        faces.push_back(faceIndex);
+    }
 }
+```
+
 ##### Построение массива индексов вершин, отсортированных по материалам граней
 Реализация метода FillIndexBufferData была обовлена таким образом, чтобы сформировать массив индексов вершин с учетом группировки граней по используемому ими индексу материала. [Рисунок 12](#_ref308745988) иллюстрирует данный процесс.
 
@@ -7446,757 +5071,465 @@ void CModelLoader::BuildMaterialFacesList(
 
 Изменения в методе FillIndexBufferData показаны в следующем листинге.
 
+```cpp
 template <typename IndexType>
 
 unsigned CModelLoader::FillIndexBufferData(
-
-`	`std::vector<MeshFace> const& faces,
-
-`	`**std::vector< std::vector<unsigned> > const & materialFaces,**
-
-`	`std::vector<unsigned char> & indexBufferData)
+    std::vector<MeshFace> const &faces,
+    std::vector<std::vector<unsigned>> const &materialFaces,
+    std::vector<unsigned char> &indexBufferData)
 
 {
+    //...
+    // Из-за конфликтов между макросом max из windows.h
+    // и методом std::numeric\_limits::max() придется использовать
+    // следующий способ опеределения максимального значения беззнакового
+    // целочисленного типа IndexType
 
-`	`…
+    IndexType const maxIndexValue = IndexType(~0);
 
-`	`// Из-за конфликтов между макросом max из windows.h 
+    // Дополнительная проверка на то, что для хранения индексов
+    // используется беззнаковый тип
+    assert(maxIndexValue > 0);
 
-`	`// и методом std::numeric\_limits::max() придется использовать
+    size_t const materialCount = materialFaces.size();
+    // Пробегаемся по списку материалов**
 
-`	`// следующий способ опеределения максимального значения беззнакового
+    for (size_t materialIndex = 0; materialIndex < materialCount; ++materialIndex)
+    {
+        // Массив граней, входящих в состав подсетки с текущим индексом**
+        // материала
+        std::vector<unsigned> const &subMeshFaces = materialFaces[materialIndex];
 
-`	`// целочисленного типа IndexType
+        size_t const subMeshFaceCount = subMeshFaces.size();
 
-`	`IndexType const maxIndexValue = IndexType(~0);
+        // Пробегаем по массиву граней текущей подсетки**
+        for (unsigned i = 0; i < subMeshFaceCount; ++i)
+        {
 
-`	`// Дополнительная проверка на то, что для хранения индексов
+            // индекс грани подсетки**
+            unsigned faceIndex = subMeshFaces[i];
+            MeshFace const &inputFace = faces[faceIndex];
 
-`	`// используется беззнаковый тип
+            // Пробегаем по индексам текущей грани
+            for (unsigned j = 0; j < 3; ++j)
+            {
+                // Получаем индекс текущей вершины грани
+                unsigned vertexIndex = inputFace.vertices[j];
 
-`	`assert(maxIndexValue > 0);
+                // проверяем, что индекс вершины может быть представлены
+                // при помощи типа IndexType**
+                if (vertexIndex > (unsigned)maxIndexValue)
+                {
+                    throw std::logic_error("Vertex index is out of range");
+                }
 
-`	`**size\_t const materialCount = materialFaces.size();**
-
-`	`**// Пробегаемся по списку материалов**
-
-`	`**for (**
-
-`		`**size\_t materialIndex = 0;** 
-
-`		`**materialIndex < materialCount;** 
-
-`		`**++materialIndex)**
-
-`	`**{**
-
-`		`**// Массив граней, входящих в состав подсетки с текущим индексом**
-
-`		`**// материала**
-
-`		`**std::vector<unsigned> const& subMeshFaces =** 
-
-`			`**materialFaces[materialIndex];**
-
-`		`**size\_t const subMeshFaceCount = subMeshFaces.size();**
-
-`		`**// Пробегаем по массиву граней текущей подсетки**
-
-`		`**for (unsigned i = 0; i < subMeshFaceCount; ++i)**
-
-`		`**{**
-
-`			`**// индекс грани подсетки**
-
-`			`**unsigned faceIndex = subMeshFaces[i];**
-
-`			`**MeshFace const& inputFace = faces[faceIndex];**
-
-`			`**// Пробегаем по индексам текущей грани**
-
-`			`**for (unsigned j = 0; j < 3; ++j)**
-
-`			`**{**
-
-`				`**// Получаем индекс текущей вершины грани**
-
-`				`**unsigned vertexIndex = inputFace.vertices[j];**
-
-`				`**// проверяем, что индекс вершины может быть представлены**
-
-`				`**// при помощи типа IndexType**
-
-`				`**if (vertexIndex > (unsigned)maxIndexValue)**
-
-`				`**{**
-
-`					`**throw std::logic\_error("Vertex index is out of range");**
-
-`				`**}**
-
-`				`**// все нормально, сохраняем индекс вершины в массив индексов**
-
-`				`**// и переходим к следующей вершине**
-
-`				`**\*pOutputIndex++ = static\_cast<IndexType>(vertexIndex);**
-
-`			`**}**
-
-`		`**}**
-
-`	`**}**
-
-`	`// Возвращаем смещение в массиве индексов, по которому располагаются
-
-`	`// индексы данной полигональной сетки
-
-`	`return indexBufferOffset;
-
+                // все нормально, сохраняем индекс вершины в массив индексов
+                // и переходим к следующей вершине**
+                *pOutputIndex++ = static_cast<IndexType>(vertexIndex);
+            }
+        }
+    }
+    // Возвращаем смещение в массиве индексов, по которому располагаются
+    // индексы данной полигональной сетки
+    return indexBufferOffset;
 }
+```
+
 ##### Сохранение в сетке о содержащихся в ней подсетках и их материалах
 В метод LoadMesh добавилось построение списков граней, сгруппированных по используемому индексу материалов. В загруженную полигональную сетку добавляется информация о ее подсетках и материалах. 
 
+```cpp
 void CModelLoader::LoadMesh(
-
-`	`unsigned materialCount,
-
-`	`Lib3dsMesh const& mesh, 
-
-`	`CModel & model, 
-
-`	`std::vector<unsigned char> & vertexBufferData,
-
-`	`std::vector<unsigned char> & indexBufferData
-
-`	`)
+    unsigned materialCount,
+    Lib3dsMesh const &mesh,
+    CModel &model,
+    std::vector<unsigned char> &vertexBufferData,
+    std::vector<unsigned char> &indexBufferData)
 
 {
-
-`	`// Вычисляем смещение в буфере вершин текущей полигональной сетки
-
-`	`const unsigned int vertexBufferOffset = 
-
-`		`sizeof(unsigned char) \* vertexBufferData.size();
-
-`	`// Обновленный массив граней
-
-`	`std::vector<MeshFace> updatedFaces;
-
-`	`// Заполняем массив вершин, выполняя при необходимости 
-
-`	`// их расщепление
-
-`	`unsigned const numberOfVertices = 
-
-`		`FillVertexBufferData(mesh, vertexBufferData, updatedFaces);
-
-`	`// Тип, используемый для хранения индексов вершин
-
-`	`GLenum indexType = 0;
-
-`	`// Инициализируем смещение к данным полигональной сетки
-
-`	`// в буфере индексов
-
-`	`unsigned int indexBufferOffset = 0;
-
-`	`**// Строим списки граней, сгруппированные по используемому**
-
-`	`**// индексу материала**
-
-`	`**std::vector< std::vector<unsigned> > materialFaces;**
-
-`	`**BuildMaterialFacesList(materialCount, updatedFaces, materialFaces);**
-
-`	`// В зависимости от количества вершин после расщепления
-
-`	`// сохраняем индексы в виде 8, 16 или 32 битных чисел
-
-`	`if (numberOfVertices <= UCHAR\_MAX + 1)	// достаточно 8 бит?
-
-`	`{
-
-`		`indexType = GL\_UNSIGNED\_BYTE;
-
-`		`indexBufferOffset = FillIndexBufferData<GLubyte>(
-
-`			`updatedFaces, **materialFaces**, indexBufferData);
-
-`	`}
-
-`	`else if (numberOfVertices <= USHRT\_MAX + 1) // достаточно 16 бит?
-
-`	`{
-
-`		`indexType = GL\_UNSIGNED\_SHORT;
-
-`		`indexBufferOffset = FillIndexBufferData<GLushort>(
-
-`			`updatedFaces, **materialFaces**, indexBufferData);
-
-`	`}
-
-`	`else	// Используем 32 битные индексы
-
-`	`{
-
-`		`indexType = GL\_UNSIGNED\_INT;
-
-`		`indexBufferOffset = FillIndexBufferData<GLuint>(
-
-`			`updatedFaces, **materialFaces**, indexBufferData);
-
-`	`}
-
-`	`// Вычисляем ограничивающий блок текущей полигональной сетки
-
-`	`// при помощи средств библиотеки lib3ds
-
-`	`float minMeshBound[3];
-
-`	`float maxMeshBound[3];
-
-`	`lib3ds\_mesh\_bounding\_box(
-
-`		`const\_cast<Lib3dsMesh\*>(&mesh), 
-
-`		`minMeshBound, maxMeshBound);
-
-`	`// Создаем Bounding box на основе данных, возвращенных lib3ds
-
-`	`CBoundingBox meshBoundingBox(
-
-`		`(CVector3f(minMeshBound)), 
-
-`		`(CVector3f(maxMeshBound)));
-
-`	`// Добавляем к модели полигональную сетку
-
-`	`**CMesh & addedMesh =** model.AddMesh(
-
-`		`vertexBufferOffset, 
-
-`		`indexBufferOffset, 
-
-`		`numberOfVertices,
-
-`		`mesh.nfaces \* 3, 
-
-`		`mesh.texcos != NULL,
-
-`		`meshBoundingBox,
-
-`		`GL\_TRIANGLES,
-
-`		`indexType
-
-`		`);
-
-`	`**// Порядковый номер индекса самой первой подсетки равен 0**
-
-`	`**unsigned submeshStartIndex = 0;**
-
-`	`**// Добавляем в сетук информацию о содержащихся в ней подсетках**
-
-`	`**// и материалах**
-
-`	`**for (unsigned materialIndex = 0; materialIndex <= materialCount;** 
-
-`		`**++materialIndex)**
-
-`	`**{**
-
-`		`**// Массив граней, использующих материал materialIndex**
-
-`		`**std::vector<unsigned> const& subMeshFaces =** 
-
-`			`**materialFaces[materialIndex];**
-
-`		`**// количество граней, имеющих материал materialIndex**
-
-`		`**size\_t const subMeshFaceCount = subMeshFaces.size();**
-
-`		`**// Если подсетка не пустая, то добавляем ее в виде подсетки**
-
-`		`**if (subMeshFaceCount != 0)**
-
-`		`**{**
-
-`			`**// Т.к. грани треугольный, количество индексов в 3 раза больше**
-
-`			`**// количества граней**
-
-`			`**unsigned const subMeshIndexCount = subMeshFaceCount \* 3;**
-
-`			`**// Добавляем подсетку**
-
-`			`**unsigned subMeshIndex = addedMesh.AddSubMesh(**
-
-`				`**submeshStartIndex, subMeshIndexCount);**
-
-`			`**// Задаем в сетке связь между текущим индексом материала и** 
-
-`			`**// добавленной подсеткой**
-
-`			`**addedMesh.SetMaterialSubMesh(**
-
-`				`**static\_cast<int>(materialIndex) - 1, subMeshIndex);**
-
-`			`**// вычисляем порядковый номер индекса следующей подсетки**
-
-`			`**submeshStartIndex += subMeshIndexCount;**
-
-`		`**}**
-
-`	`**}**
-
+    // Вычисляем смещение в буфере вершин текущей полигональной сетки
+    const unsigned int vertexBufferOffset = sizeof(unsigned char) * vertexBufferData.size();
+
+    // Обновленный массив граней
+    std::vector<MeshFace> updatedFaces;
+
+    // Заполняем массив вершин, выполняя при необходимости их расщепление
+    unsigned const numberOfVertices = FillVertexBufferData(mesh, vertexBufferData, updatedFaces);
+
+    // Тип, используемый для хранения индексов вершин
+    GLenum indexType = 0;
+
+    // Инициализируем смещение к данным полигональной сетки
+    // в буфере индексов
+    unsigned int indexBufferOffset = 0;
+
+    // Строим списки граней, сгруппированные по используемому
+    // индексу материала
+
+    std::vector<std::vector<unsigned>> materialFaces;
+
+    BuildMaterialFacesList(materialCount, updatedFaces, materialFaces);
+
+    // В зависимости от количества вершин после расщепления
+    // сохраняем индексы в виде 8, 16 или 32 битных чисел
+    if (numberOfVertices <= UCHAR_MAX + 1) // достаточно 8 бит?
+    {
+        indexType = GL_UNSIGNED\_BYTE;
+        indexBufferOffset = FillIndexBufferData<GLubyte>(updatedFaces, materialFaces, indexBufferData);
+    }
+
+    else if (numberOfVertices <= USHRT_MAX + 1) // достаточно 16 бит?
+    {
+        indexType = GL_UNSIGNED_SHORT;
+        indexBufferOffset = FillIndexBufferData<GLushort>(updatedFaces, materialFaces, indexBufferData);
+    }
+
+    else // Используем 32 битные индексы
+    {
+        indexType = GL_UNSIGNED\_INT;
+        indexBufferOffset = FillIndexBufferData<GLuint>(updatedFaces, materialFaces, indexBufferData);
+    }
+
+    // Вычисляем ограничивающий блок текущей полигональной сетки
+    // при помощи средств библиотеки lib3ds
+    float minMeshBound[3];
+    float maxMeshBound[3];
+
+    lib3ds_mesh_bounding_box(
+        const_cast<Lib3dsMesh *>(&mesh),
+        minMeshBound, maxMeshBound);
+
+    // Создаем Bounding box на основе данных, возвращенных lib3ds
+    CBoundingBox meshBoundingBox((CVector3f(minMeshBound)), (CVector3f(maxMeshBound)));
+
+    // Добавляем к модели полигональную сетку
+    CMesh &addedMesh = model.AddMesh(
+        vertexBufferOffset,
+        indexBufferOffset,
+        numberOfVertices,
+        mesh.nfaces * 3,
+        mesh.texcos != NULL,
+        meshBoundingBox,
+        GL_TRIANGLES,
+        indexType);
+
+    // Порядковый номер индекса самой первой подсетки равен 0
+    unsigned submeshStartIndex = 0;
+
+    // Добавляем в сетук информацию о содержащихся в ней подсетках**
+    // и материалах
+    for (unsigned materialIndex = 0; materialIndex <= materialCount; ++materialIndex)
+    {
+        // Массив граней, использующих материал materialIndex**
+
+        std::vector<unsigned> const &subMeshFaces = materialFaces[materialIndex];
+        // количество граней, имеющих материал materialIndex**
+
+        size_t const subMeshFaceCount = subMeshFaces.size();
+        // Если подсетка не пустая, то добавляем ее в виде подсетки**
+
+        if (subMeshFaceCount != 0)
+        {
+            // Т.к. грани треугольный, количество индексов в 3 раза больше
+            // количества граней
+            unsigned const subMeshIndexCount = subMeshFaceCount * 3;
+
+            // Добавляем подсетку
+            unsigned subMeshIndex = addedMesh.AddSubMesh(submeshStartIndex, subMeshIndexCount);
+
+            // Задаем в сетке связь между текущим индексом материала и
+            // добавленной подсеткой
+            addedMesh.SetMaterialSubMesh(static_cast<int>(materialIndex) - 1, subMeshIndex);
+
+            // вычисляем порядковый номер индекса следующей подсетки**
+            submeshStartIndex += subMeshIndexCount;
+        }
+    }
 }
+```
+
 #### ***Добавляем поддержку подсеток и материалов в класс CModelRenderer***
 Разработанный ранее метод **RenderModel** получился достаточно большим и трудным для понимания и дальнейшего сопровождения, поэтому попутно проведем его декомпозицию на несколько более простых методов.
 
 Обновленное обновление класса CModelRenderer приведено ниже.
 
+```cpp
 class CModel;
 
 class CMesh;
 
 class CModelRenderer : private boost::noncopyable
-
 {
-
 public:
-
-`	`CModelRenderer(void);
-
-`	`void RenderModel(CModel const& model)const;
+    CModelRenderer(void);
+    void RenderModel(CModel const &model) const;
 
 private:
+    // Визуализируем подсетку, грани которой используют материал
+    // materialIndex
+    // Возвращает true, если при вызове метода был активирован материал
 
-`	`// Визуализируем подсетку, грани которой используют материал
+    bool RenderMaterialSubMesh(
+        CModel const &model,  // модель
+        unsigned meshIndex,   // индекс сетки
+        int materialIndex,    // индекс материала
+        bool activateMaterial // нужно ли активировать материал?
+    ) const;
 
-`	`// materialIndex
+    // Инициализируем указатели OpenGL адресами массивов вершин, нормалей
+    // и текстурных координат полигональной сетки
+    void SetupMeshVertexPointers(
+        CMesh const &mesh,               // Сетка
+        GLubyte const *pVertexBufferData // Адрес буфера
+    ) const;
 
-`	`// Возвращает true, если при вызове метода был активирован материал
+    // Визуализация граней подсетки
+    // Предполагается, что адреса массивов вершин, нормалей и текстурных
+    // координат уже настроены на текущую сетки
+    void RenderSubMeshFaces(
+        CMesh const &mesh,          // сетка
+        unsigned subMeshIndex,      // индекс рисуемой подсетки
+        GLubyte const *pMeshIndices // адрес массива индексов сетки
+    ) const;
 
-`	`bool RenderMaterialSubMesh(
-
-`		`CModel const& model,	// модель
-
-`		`unsigned meshIndex,	// индекс сетки
-
-`		`int materialIndex,		// индекс материала
-
-`		`bool activateMaterial	// нужно ли активировать материал?
-
-`		`)const;
-
-`	`// Инициализируем указатели OpenGL адресами массивов вершин, нормалей
-
-`	`// и текстурных координат полигональной сетки
-
-`	`void SetupMeshVertexPointers(
-
-`		`CMesh const& mesh,				// Сетка
-
-`		`GLubyte const \* pVertexBufferData	// Адрес буфера 
-
-`		`)const;
-
-`	`// Визуализация граней подсетки
-
-`	`// Предполагается, что адреса массивов вершин, нормалей и текстурных
-
-`	`// координат уже настроены на текущую сетки
-
-`	`void RenderSubMeshFaces(
-
-`		`CMesh const & mesh,		// сетка
-
-`		`unsigned subMeshIndex,		// индекс рисуемой подсетки
-
-`		`GLubyte const \* pMeshIndices	// адрес массива индексов сетки
-
-`		`)const;
-
-`	`// Был ли включен массив текстурных координат?
-
-`	`mutable bool m\_texCoordsEnabled;
-
+    // Был ли включен массив текстурных координат?
+    mutable bool m_texCoordsEnabled;
 };
+```
 
 Поскольку одни сетки, входящие в состав модели могут иметь текстурные коордианты, в то время как другие сетки их могут не иметь, в целях минимизации количества вызовов функций glEnableClientState/glDisableClientState, управляющих использованием массивов текстурных коордиант, пришлось добавить mutable-переменную[^41] m\_texCoordsEnabled, хранящую информацию о текущем состоянии данного массива.
 
 Конструктор класса CModelRenderer выполняет инициализацию[^42] данной mutable переменной.
 
+```cpp
 CModelRenderer::CModelRenderer(void)
-
-:m\_texCoordsEnabled(false)
-
+    : m_texCoordsEnabled(false)
 {
-
 }
+```
+
 ##### Визуализируем модель
 Метод **RenderModel** выполняет визуализацию модели, сначала нарисовав все ее подсетки, использующие материал по умолчанию (материал с индексом, равным -1), затем подсетки, использующие индекс, равный 0 и т.д. Тем самым минимизируется количество операций по смене параметров материала[^43].
 
-void CModelRenderer::RenderModel(CModel const& model)const
-
+```cpp
+void CModelRenderer::RenderModel(CModel const &model) const
 {
+    const size_t meshCount = model.GetMeshCount();
 
-`	`const size\_t meshCount = model.GetMeshCount();
+    // Если нет полигональных сеток, то нечего рисовать
+    if (meshCount == 0)
+    {
+        return;
+    }
 
-`	`// Если нет полигональных сеток, то нечего рисовать
+    // Осуществляем привязку к вершинным и индексным буферам
+    // рисуемой модели
+    model.GetVertexBuffer().Bind();
 
-`	`if (meshCount == 0)
+    model.GetIndexBuffer().Bind();
 
-`	`{
+    // Разрешаем использование массивов координат вершин и нормалей
+    glEnableClientState(GL_VERTEX_ARRAY);
 
-`		`return;
+    glEnableClientState(GL_NORMAL_ARRAY);
 
-`	`}
+    // Определяем необходимость включения текстурных координат сетки №0
+    m_texCoordsEnabled = !model.GetMesh(0).HasTextureCoords();
 
-`	`// Осуществляем привязку к вершинным и индексным буферам 
+    // m_cullFace = true;
+    const int materialCount = model.GetMeterialCount();
 
-`	`// рисуемой модели
+    // Пробегаемся по всем материалам модели
+    for (int material = -1; material < materialCount; ++material)
+    {
+        // Флаг, сигнализирующий о том, что текущий материал был
+        // уже активирован.
+        // Он нужен для того, чтобы не тратить время на активацию
+        // материала, если он был активирован одонй из ранее
+        // визуализированных сеток
 
-`	`model.GetVertexBuffer().Bind();
+        bool materialActivated = false;
 
-`	`model.GetIndexBuffer().Bind();
+        // В каждой сетке рисуем подсетку, использующую данный материал
+        for (size_t mesh = 0; mesh < meshCount; ++mesh)
+        {
+            // При рисоваии подсетки материал нужно активировать материал,
+            // если он не был ранее активирован и это не материал
+            // с индексом=-1 (материал по умолчанию)
 
-`	`// Разрешаем использование массивов координат вершин и нормалей
+            bool needToActivateMaterial = !materialActivated && material >= 0;
 
-`	`glEnableClientState(GL\_VERTEX\_ARRAY);
+            // Рисуем подсетку сетки mesh модели model,
+            // использующую материал с индексом material
 
-`	`glEnableClientState(GL\_NORMAL\_ARRAY);
+            materialActivated |= RenderMaterialSubMesh(model, mesh, material, needToActivateMaterial);
+        }
+    }
 
-`	`// Определяем необходимость включения текстурных координат сетки №0
+    // Если использование массива текстурных координат было разрешено,
+    // то запрещаем его использование
+    if (m_texCoordsEnabled)
+    {
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 
-`	`m\_texCoordsEnabled = !model.GetMesh(0).HasTextureCoords();
+    // Аналогично запрещаем использование массивов вершин и нормалей
+    glDisableClientState(GL_VERTEX_ARRAY);
 
-`	`//m\_cullFace = true;
-
-`	`const int materialCount = model.GetMeterialCount();
-
-`	`// Пробегаемся по всем материалам модели
-
-`	`for (int material = -1; material < materialCount; ++material)
-
-`	`{
-
-`		`// Флаг, сигнализирующий о том, что текущий материал был 
-
-`		`// уже активирован.
-
-`		`// Он нужен для того, чтобы не тратить время на активацию
-
-`		`// материала, если он был активирован одонй из ранее
-
-`		`// визуализированных сеток
-
-`		`bool materialActivated = false;
-
-`		`// В каждой сетке рисуем подсетку, использующую данный материал
-
-`		`for (size\_t mesh = 0; mesh < meshCount; ++mesh)
-
-`		`{
-
-`			`// При рисоваии подсетки материал нужно активировать материал,
-
-`			`// если он не был ранее активирован и это не материал
-
-`			`// с индексом=-1 (материал по умолчанию)
-
-`			`bool needToActivateMaterial = 
-
-`				`!materialActivated && material >= 0;
-
-`			`// Рисуем подсетку сетки mesh модели model,
-
-`			`// использующую материал с индексом material
-
-`			`materialActivated |= RenderMaterialSubMesh(
-
-`				`model, mesh, material, needToActivateMaterial);
-
-`		`}
-
-`	`}
-
-`	`// Если использование массива текстурных координат было разрешено,
-
-`	`// то запрещаем его использование
-
-`	`if (m\_texCoordsEnabled)
-
-`	`{
-
-`		`glDisableClientState(GL\_TEXTURE\_COORD\_ARRAY);
-
-`	`}
-
-`	`// Аналогично запрещаем использование массивов вершин и нормалей
-
-`	`glDisableClientState(GL\_VERTEX\_ARRAY);
-
-`	`glDisableClientState(GL\_NORMAL\_ARRAY);
-
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
+```
+
 ###### *Визуализируем грани сетки, имеющей заданный материал*
 Метод **RenderMateralSubMesh** выполняет визуализацию тех граней сетки, имеющих указанный индекс материала. Данный метод также выполняет активацию материала в случае необходимости.
 
+```cpp
 bool CModelRenderer::RenderMaterialSubMesh(
-
-`	`CModel const& model, 
-
-`	`unsigned meshIndex, 
-
-`	`int materialIndex,
-
-`	`bool activateMaterial
-
-`	`)const
+    CModel const &model,
+    unsigned meshIndex,
+    int materialIndex,
+    bool activateMaterial) const
 
 {
-
-`	`// Получаем сетку по ее индексу
-
-`	`CMesh const& mesh = model.GetMesh(meshIndex);
-
-`	`// Получаем индекс подсетки, использующей материал materialIndex
-
-`	`const int materialSubMeshIndex = 
-
-`		`mesh.GetMaterialSubMesh(materialIndex);
-
-`	`// Если в данной сетке нет граней, использующих материал
-
-`	`// materialIndex, то выходим, т.к. рисовать нечего
-
-`	`if (materialSubMeshIndex < 0)
-
-`	`{
-
-`		`// т.к. мы ничего не рисуем, то сообщаем, что материал
-
-`		`// мы не активировали
-
-`		`return false;
-
-`	`}
-
-`	`bool materialActivated = false;
-
-`	`// Активируем материал, если его следует активировать и текущий
-
-`	`// материал не является материалом по умолчанию
-
-`	`if (activateMaterial && (materialIndex >= 0))
-
-`	`{
-
-`		`// Получили материал модели
-
-`		`CModelMaterial const& modelMaterial = model.GetMaterial(materialIndex);
-
-`		`// Извлекли параметры материала OpenGL и активировали его
-
-`		`modelMaterial.GetMaterial().Activate();
-
-
-
-`		`// Сигнализируем о том, что материал был активирован
-
-`		`materialActivated = true;
-
-`	`}
-
-`	`// Получаем адрес данных буфера вершин модели
-
-`	`GLubyte const \* pVertexPointer = reinterpret\_cast<GLubyte const \*>
-
-`		`(model.GetVertexBuffer().GetBufferPointer());
-
-`	`// Инициализируем указатели OpenGL на массивы вершин
-
-`	`// и текстурных координат данной полигональной сетки
-
-`	`SetupMeshVertexPointers(mesh, pVertexPointer);
-
-`	`// Если поддерживается расширение GL\_EXT\_compiled\_vertex\_array,
-
-`	`// то мы можем попросить OpenGL выполнить кеширование
-
-`	`// оттрансформированных вершин полигональной сетки.
-
-`	`// В том случае, когда каждая вершина в среднем используется 
-
-`	`// чаще, чем дважды, это может дать прирост в скорости
-
-`	`// обработки вершин, т.к. каждая вершина будет
-
-`	`// оттрансформирована лишь однажды, а использована несколько раз
-
-`	`bool needToUnlockArrays = false;
-
-`	`if (
-
-`		`(mesh.GetIndexCount() > mesh.GetVertexCount() \* 2) && 
-
-`		`GLEW\_EXT\_compiled\_vertex\_array
-
-`		`)
-
-`	`{
-
-`		`glLockArraysEXT(0, mesh.GetVertexCount());
-
-`		`needToUnlockArrays = true;
-
-`	`}
-
-`	`// Получаем адрес данных буфера индексов модели
-
-`	`GLubyte const \* pIndexPointer = reinterpret\_cast<GLubyte const \*>
-
-`		`(model.GetIndexBuffer().GetBufferPointer());
-
-`	`// Визуализируем подсетку, использующую текущий материал
-
-`	`RenderSubMeshFaces(
-
-`		`mesh, 
-
-`		`materialSubMeshIndex, 
-
-`		`pIndexPointer + mesh.GetIndexBufferOffset());
-
-`	`// Если мы кешировали оттрансформированные вершины, то
-
-`	`// надо вызвать метод glUnlockArraysEXT для освобождения
-
-`	`// связанных с ними данных
-
-`	`if (needToUnlockArrays)
-
-`	`{
-
-`		`glUnlockArraysEXT();
-
-`	`}
-
-`	`// Сообщаем о том, был ли активирован материал
-
-`	`return materialActivated;
-
+    // Получаем сетку по ее индексу
+    CMesh const &mesh = model.GetMesh(meshIndex);
+
+    // Получаем индекс подсетки, использующей материал materialIndex
+    const int materialSubMeshIndex = mesh.GetMaterialSubMesh(materialIndex);
+
+    // Если в данной сетке нет граней, использующих материал
+    // materialIndex, то выходим, т.к. рисовать нечего
+    if (materialSubMeshIndex < 0)
+    {
+        // т.к. мы ничего не рисуем, то сообщаем, что материал
+        // мы не активировали
+        return false;
+    }
+
+    bool materialActivated = false;
+
+    // Активируем материал, если его следует активировать и текущий
+    // материал не является материалом по умолчанию
+    if (activateMaterial && (materialIndex >= 0))
+    {
+        // Получили материал модели
+        CModelMaterial const &modelMaterial = model.GetMaterial(materialIndex);
+
+        // Извлекли параметры материала OpenGL и активировали его
+        modelMaterial.GetMaterial().Activate();
+
+        // Сигнализируем о том, что материал был активирован
+        materialActivated = true;
+    }
+
+    // Получаем адрес данных буфера вершин модели
+    GLubyte const *pVertexPointer = reinterpret_cast<GLubyte const *>(model.GetVertexBuffer().GetBufferPointer());
+
+    // Инициализируем указатели OpenGL на массивы вершин
+    // и текстурных координат данной полигональной сетки
+    SetupMeshVertexPointers(mesh, pVertexPointer);
+
+    // Если поддерживается расширение GL\_EXT\_compiled\_vertex\_array,
+    // то мы можем попросить OpenGL выполнить кеширование
+    // оттрансформированных вершин полигональной сетки.
+    // В том случае, когда каждая вершина в среднем используется
+    // чаще, чем дважды, это может дать прирост в скорости
+    // обработки вершин, т.к. каждая вершина будет
+    // оттрансформирована лишь однажды, а использована несколько раз
+
+    bool needToUnlockArrays = false;
+    if ((mesh.GetIndexCount() > mesh.GetVertexCount() * 2) && GLEW_EXT_compiled_vertex_array)
+    {
+        glLockArraysEXT(0, mesh.GetVertexCount());
+        needToUnlockArrays = true;
+    }
+
+    // Получаем адрес данных буфера индексов модели
+    GLubyte const *pIndexPointer = reinterpret_cast<GLubyte const *>(model.GetIndexBuffer().GetBufferPointer());
+
+    // Визуализируем подсетку, использующую текущий материал
+    RenderSubMeshFaces(
+        mesh,
+        materialSubMeshIndex,
+        pIndexPointer + mesh.GetIndexBufferOffset());
+
+    // Если мы кешировали оттрансформированные вершины, то
+    // надо вызвать метод glUnlockArraysEXT для освобождения
+    // связанных с ними данных
+    if (needToUnlockArrays)
+    {
+        glUnlockArraysEXT();
+    }
+
+    // Сообщаем о том, был ли активирован материал
+    return materialActivated;
 }
+```
+
 ####### *Настраиваем OpenGL на использованием массивов вершин, нормалей и текстурных координат полигональной сетки*
 Метод **SetupMeshVertexPointers** вычисляет адреса массивов вершин, нормалей и текстурных координат в вершинном буфере модели, используя информацию из переданной сетки.
 
+```cpp
 void CModelRenderer::SetupMeshVertexPointers(
-
-`	`CMesh const& mesh, 
-
-`	`GLubyte const \* pVertexBufferData)const
+    CMesh const &mesh,
+    GLubyte const *pVertexBufferData) const
 
 {
+    // Получаем смещение в вершинном и индексном буферах, по которым
+    // размещаются данные текущей полигональной сетки
+    unsigned vertexBufferOffset = mesh.GetVertexBufferOffset();
 
-`	`// Получаем смещение в вершинном и индексном буферах, по которым
+    // Есть ли в сетке текстурные координаты?
+    bool meshUsesTexture = mesh.HasTextureCoords();
 
-`	`// размещаются данные текущей полигональной сетки
+    // Вычисляем интервал между вершинами полигональной сетки
+    // в зависимости от наличия текстурных координат
+    unsigned stride = meshUsesTexture ? sizeof(TexturedVertex) : sizeof(Vertex);
 
-`	`unsigned vertexBufferOffset = mesh.GetVertexBufferOffset();
+    // Задаем адреса начала массивов вершин и нормалей текущей
+    // полиогональной сетки
+    glVertexPointer(
+        3,
+        GL_FLOAT,
+        stride,
+        pVertexBufferData + vertexBufferOffset + offsetof(Vertex, position));
 
-`	`// Есть ли в сетке текстурные координаты?
+    glNormalPointer(
+        GL_FLOAT,
+        stride,
+        pVertexBufferData + vertexBufferOffset + offsetof(Vertex, normal));
 
-`	`bool meshUsesTexture = mesh.HasTextureCoords();
+    // Разрешаем, либо запрещаем использование массива
+    // текстурных координат
+    // При этом минимизируем количество вызовов
+    // метода glEnableClientState/glDisableClientState
+    if (meshUsesTexture && !m_texCoordsEnabled)
+    {
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 
-`	`// Вычисляем интервал между вершинами полигональной сетки
+    else if (!meshUsesTexture && m_texCoordsEnabled)
+    {
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 
-`	`// в зависимости от наличия текстурных координат
+    // Если сетка использует текстурные координаты, задаем
+    // адрес начала массива текстурных координат
+    if (meshUsesTexture)
+    {
+        glTexCoordPointer(
+            2,
+            GL_FLOAT,
+            stride,
+            pVertexBufferData + vertexBufferOffset + offsetof(TexturedVertex, texCoord));
+    }
 
-`	`unsigned stride = 
-
-`		`meshUsesTexture ? sizeof(TexturedVertex) : sizeof(Vertex);
-
-`	`// Задаем адреса начала массивов вершин и нормалей текущей
-
-`	`// полиогональной сетки
-
-`	`glVertexPointer(
-
-`		`3, 
-
-`		`GL\_FLOAT, 
-
-`		`stride, 
-
-`		`pVertexBufferData + vertexBufferOffset + offsetof(Vertex, position)
-
-`		`);
-
-`	`glNormalPointer(
-
-`		`GL\_FLOAT, 
-
-`		`stride, 
-
-`		`pVertexBufferData + vertexBufferOffset + offsetof(Vertex, normal)
-
-`		`);
-
-`	`// Разрешаем, либо запрещаем использование массива
-
-`	`// текстурных координат
-
-`	`// При этом минимизируем количество вызовов 
-
-`	`// метода glEnableClientState/glDisableClientState
-
-`	`if (meshUsesTexture && !m\_texCoordsEnabled)
-
-`	`{
-
-`		`glEnableClientState(GL\_TEXTURE\_COORD\_ARRAY);
-
-`	`}
-
-`	`else if (!meshUsesTexture && m\_texCoordsEnabled)
-
-`	`{
-
-`		`glDisableClientState(GL\_TEXTURE\_COORD\_ARRAY);
-
-`	`}
-
-`	`// Если сетка использует текстурные координаты, задаем
-
-`	`// адрес начала массива текстурных координат
-
-`	`if (meshUsesTexture)
-
-`	`{
-
-`		`glTexCoordPointer(
-
-`			`2, 
-
-`			`GL\_FLOAT, 
-
-`			`stride, 
-
-`			`pVertexBufferData + 
-
-`			`vertexBufferOffset + 
-
-`			`offsetof(TexturedVertex, texCoord));
-
-`	`}
-
-`	`// Обновляем информацию о том, был ли включен массив текстурных координат
-
-`	`m\_texCoordsEnabled = meshUsesTexture;
-
+    // Обновляем информацию о том, был ли включен массив текстурных координат
+    m_texCoordsEnabled = meshUsesTexture;
 }
+```
+
 ####### *Визуализируем грани заданной подсетки*
 Метод **RenderSubMeshFaces** выполняет визуализацию граней заданной подсетки. Вычисление адреса подсетки в буфере индексов происходит по формуле:
 
@@ -8208,117 +5541,74 @@ p=p0+i×s, где
 
 Затем происходит рисование массива индексов вершин при помощи одной из функций **glDrawRangeElements** и **glDrawElements**.
 
+```cpp
 void CModelRenderer::RenderSubMeshFaces(
-
-`	`CMesh const & mesh,			// сетка
-
-`	`unsigned subMeshIndex,		// индекс подсетки
-
-`	`GLubyte const \* pMeshIndices	// адрес массива индексов сетки
-
-`	`)const
+    CMesh const &mesh,          // сетка
+    unsigned subMeshIndex,      // индекс подсетки
+    GLubyte const *pMeshIndices // адрес массива индексов сетки
+) const
 
 {
+    // получаем подсетку с индексом subMeshIndex
+    CMesh::SubMesh const subMesh = mesh.GetSubMesh(subMeshIndex);
 
-`	`// получаем подсетку с индексом subMeshIndex
+    // Вычисляем адрес подсетки в индексном буфере
+    GLubyte const *pSubMeshPointer = pMeshIndices + (subMesh.startIndex * mesh.GetIndexSize());
 
-`	`CMesh::SubMesh const subMesh = mesh.GetSubMesh(subMeshIndex);
+    // Если поддерживается расширение GL\_EXT\_draw\_range\_elements,
+    // используем его для рисования массива примитивов,
+    // т.к. его реализация может быть более эффективной
+    // по сравнению c glDrawElements
+    if (GLEW_EXT_draw_range_elements)
+    {
+        // Используем более производительный способ рисования
+        glDrawRangeElements(
+            mesh.GetPrimitiveType(),
+            0,
+            mesh.GetVertexCount() - 1,
+            subMesh.indexCount,
+            mesh.GetIndexType(),
+            pSubMeshPointer);
+    }
 
-`	`// Вычисляем адрес подсетки в индексном буфере
-
-`	`GLubyte const \* pSubMeshPointer = 
-
-`		`pMeshIndices + (subMesh.startIndex \* mesh.GetIndexSize());
-
-`	`// Если поддерживается расширение GL\_EXT\_draw\_range\_elements,
-
-`	`// используем его для рисования массива примитивов,
-
-`	`// т.к. его реализация может быть более эффективной
-
-`	`// по сравнению c glDrawElements
-
-`	`if (GLEW\_EXT\_draw\_range\_elements)
-
-`	`{
-
-`		`// Используем более производительный способ рисования 
-
-`		`glDrawRangeElements(
-
-`			`mesh.GetPrimitiveType(),
-
-`			`0,
-
-`			`mesh.GetVertexCount() - 1,
-
-`			`subMesh.indexCount,
-
-`			`mesh.GetIndexType(),
-
-`			`pSubMeshPointer
-
-`			`);
-
-`	`}
-
-`	`else
-
-`	`{
-
-`		`// Если расширение GL\_EXT\_draw\_range\_elements не поддерживается,
-
-`		`// рисуем традиционным способом
-
-`		`glDrawElements(
-
-`			`mesh.GetPrimitiveType(), 
-
-`			`subMesh.indexCount, 
-
-`			`mesh.GetIndexType(), 
-
-`			`pSubMeshPointer
-
-`			`);
-
-`	`}
-
+    else
+    {
+        // Если расширение GL\_EXT\_draw\_range\_elements не поддерживается,
+        // рисуем традиционным способом
+        glDrawElements(
+            mesh.GetPrimitiveType(),
+            subMesh.indexCount,
+            mesh.GetIndexType(),
+            pSubMeshPointer);
+    }
 }
+```
+
 #### ***Визуализация трехмерной модели***
 В метод **CMyApplication::OnDisplay** перенесем установку материала по умолчанию, который будет использоваться для визуализации граней, не имеющих явно указанного материала (индекс материала, равный -1).
 
+```cpp
 void CMyApplication::OnDisplay()
-
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER\_BIT);
 
-`	`glClear(GL\_COLOR\_BUFFER\_BIT | GL\_DEPTH\_BUFFER\_BIT);
+    glColor3ub(0, 0, 0);
 
-`	`glColor3ub(0, 0, 0);
+    glEnable(GL_CULL_FACE);
 
-`	`glEnable(GL\_CULL\_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-
-
-`	`glPolygonMode(GL\_FRONT\_AND\_BACK, GL\_FILL);
-
-`	`// Задаем параметры материала, используемого по умолчанию для 
-
-`	`// граней, для которых материал не был указан
-
-`	`CMaterial material;
-
-`	`material.SetSpecular(0.3f, 0.3f, 0.3f);
-
-`	`material.SetShininess(20);
-
-`	`material.SetDiffuse(0.3f, 0.3f, 0.7);
-
-`	`material.Activate();
-
-`	`m\_renderer.RenderModel(m\_model);
-
+    // Задаем параметры материала, используемого по умолчанию для
+    // граней, для которых материал не был указан
+    CMaterial material;
+    material.SetSpecular(0.3f, 0.3f, 0.3f);
+    material.SetShininess(20);
+    material.SetDiffuse(0.3f, 0.3f, 0.7);
+    material.Activate();
+    m_renderer.RenderModel(m_model);
 }
+```
+
 ##### Результаты работы
 ![](images/Aspose.Words.1c8fbd76-b881-4d10-95db-b8a605d5501a.042.png) ![](images/Aspose.Words.1c8fbd76-b881-4d10-95db-b8a605d5501a.043.png)
 
@@ -8328,277 +5618,182 @@ void CMyApplication::OnDisplay()
 ##### Доработка класса CModelMaterial
 Добавим методы, позволяющие получить и установить свойство «двусторонний» в класс CModelMaterial.
 
+```cpp
 class CModelMaterial : private boost::noncopyable
-
 {
-
 public:
+    //...
 
-`	`…
-
-`	`// Материал видим с лицевой и нелицевой грани?
-
-`	`bool IsTwoSided()const;
-
-`	`void SetTwoSided(bool value);
+    // Материал видим с лицевой и нелицевой грани?
+    bool IsTwoSided() const;
+    void SetTwoSided(bool value);
 
 private:
-
-`	`…
-
-`	`bool m\_twoSided;
-
+    //...
+    bool m_twoSided;
 };
 
 CModelMaterial::CModelMaterial()
-
-:m\_twoSided(false)
-
+    : m_twoSided(false)
 {
-
 }
 
-bool CModelMaterial::IsTwoSided()const
-
+bool CModelMaterial::IsTwoSided() const
 {
-
-`	`return m\_twoSided;
-
+    return m_twoSided;
 }
 
 void CModelMaterial::SetTwoSided(bool value)
-
 {
-
-`	`m\_twoSided = value;
-
+    m_twoSided = value;
 }
+```
+
 ##### Доработка метода CModelLoader::LoadMaterials
 В методе CModelLoader::LoadMaterials добавим загрузку свойства «two sided» из стурктуры Lib3dsMaterial.
 
+```cpp
 void CModelLoader::LoadMaterials(
-
-`	`Lib3dsFile const& file, CModel & model, std::string const& baseFolder)
-
+    Lib3dsFile const &file, CModel &model, std::string const &baseFolder)
 {
+    const int materialsCount = file.nmaterials;
+    for (int i = 0; i < materialsCount; ++i)
+    {
+        Lib3dsMaterial const *pMaterial = file.materials[i];
 
-`	`const int materialsCount = file.nmaterials;
+        // Добавляем новый материал к модели
+        CModelMaterial &material = model.AddMaterial();
 
-`	`for (int i = 0; i < materialsCount; ++i)
+        // и получаем связанное с этим материлом описание
+        CMaterial &materialInfo = material.GetMaterial();
 
-`	`{
+        // Задаем фоновый цвет материала
+        {
+            const float *ambient = pMaterial->ambient;
+            materialInfo.SetAmbient(ambient[0], ambient[1], ambient[2]);
+        }
 
-`		`Lib3dsMaterial const \* pMaterial = file.materials[i];
+        // Задаем диффузный цвет материалаF
+        {
+            const float *diffuse = pMaterial->diffuse;
+            materialInfo.SetDiffuse(diffuse[0], diffuse[1], diffuse[2]);
+        }
 
-`		`// Добавляем новый материал к модели
+        // Задаем зеркальный цвет материала и степень блеска
+        {
+            const float *specular = pMaterial->specular;
 
-`		`CModelMaterial & material = model.AddMaterial();
+            materialInfo.SetSpecular(specular[0], specular[1], specular[2]);
 
-`		`// и получаем связанное с этим материлом описание
+            materialInfo.SetShininess(pMaterial->shininess);
+        }
 
-`		`CMaterial & materialInfo = material.GetMaterial();
+        {
+            material.SetTwoSided(pMaterial->two_sided != 0);
+        }
 
-`		`// Задаем фоновый цвет материала
-
-`		`{
-
-`			`const float \* ambient = pMaterial->ambient;
-
-`			`materialInfo.SetAmbient(ambient[0],ambient[1], ambient[2]);
-
-`		`}
-
-`		`// Задаем диффузный цвет материала
-
-`		`{
-
-`			`const float \* diffuse = pMaterial->diffuse;
-
-`			`materialInfo.SetDiffuse(diffuse[0], diffuse[1], diffuse[2]);
-
-`		`}
-
-`		`// Задаем зеркальный цвет материала и степень блеска
-
-`		`{
-
-`			`const float \* specular = pMaterial->specular;
-
-`			`materialInfo.SetSpecular(specular[0], specular[1], specular[2]);
-
-`			`materialInfo.SetShininess(pMaterial->shininess);
-
-`		`}
-
-`		`{
-
-`			`material.SetTwoSided(pMaterial->two\_sided != 0);
-
-`		`}
-
-`		`// Загружаем текстуры материала
-
-`		`LoadMaterialTextures(\*pMaterial, model, material, baseFolder);
-
-`	`}
-
+        // Загружаем текстуры материала
+        LoadMaterialTextures(* pMaterial, model, material, baseFolder);
+    }
 }
+```
+
 ##### Доработка класса CModelRenderer
 Добавим в класс поле m\_cullFace, сигнализирующее о том, был ли включен режим отбраковки граней.
 
+```cpp
 class CModelRenderer : private boost::noncopyable
-
 {
-
 public:
-
-`	`…
+    //...
 
 private:
+    //...
 
-`	`…
-
-`	`// Был ли включен режим отбраковки граней?
-
-`	`mutable bool m\_cullFace;
-
+    // Был ли включен режим отбраковки граней?
+    mutable bool m_cullFace;
 };
+```
 
 При визуализации модели будет учитываться свойство видимости материала с изнаночной стороны и включаться или выключаться режим отбраковки граней, а также двустороннего освещения.
 
+```cpp
 CModelRenderer::CModelRenderer(void)
-
-:m\_texCoordsEnabled(false)
-
-**,m\_cullFace(false)**
-
+    : m_texCoordsEnabled(false),
+      m_cullFace(false)
 {
-
 }
 
-void CModelRenderer::RenderModel(CModel const& model)const
-
+void CModelRenderer::RenderModel(CModel const &model) const
 {
+    //...
+    // Определяем необходимость включения текстурных координат сетки №0
+    m_texCoordsEnabled = !model.GetMesh(0).HasTextureCoords();
+    m_cullFace = true;
+    const int materialCount = model.GetMeterialCount();
 
-`	`…
+    // Пробегаемся по всем материалам модели
+    for (int material = -1; material < materialCount; ++material)
+    {
+        //...
+    }
 
-`	`// Определяем необходимость включения текстурных координат сетки №0
-
-`	`m\_texCoordsEnabled = !model.GetMesh(0).HasTextureCoords();
-
-`	`**m\_cullFace = true;**
-
-`	`const int materialCount = model.GetMeterialCount();
-
-`	`// Пробегаемся по всем материалам модели
-
-`	`for (int material = -1; material < materialCount; ++material)
-
-`	`{
-
-`		`…
-
-`	`}
-
-`	`**if (!m\_cullFace)**
-
-`	`**{**
-
-`		`**glLightModeli(GL\_LIGHT\_MODEL\_TWO\_SIDE, GL\_FALSE);**
-
-`		`**glEnable(GL\_CULL\_FACE);**
-
-`	`**}**
-
-`	`…
-
+    if (!m_cullFace)
+    {
+        glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+        glEnable(GL_CULL_FACE);
+    }
+    //...
 }
 
 bool CModelRenderer::RenderMaterialSubMesh(
-
-`	`CModel const& model, 
-
-`	`unsigned meshIndex, 
-
-`	`int materialIndex,
-
-`	`bool activateMaterial
-
-`	`)const
+    CModel const &model,
+    unsigned meshIndex,
+    int materialIndex,
+    bool activateMaterial) const
 
 {
+    //...
+    bool materialActivated = false;
 
-`	`…
+    // Активируем материал, если его следует активировать и текущий
+    // материал не является материалом по умолчанию
+    if (activateMaterial && (materialIndex >= 0))
+    {
+        // Получили материал модели
+        CModelMaterial const &modelMaterial = model.GetMaterial(materialIndex);
 
-`	`bool materialActivated = false;
+        // Извлекли параметры материала OpenGL и активировали его
+        modelMaterial.GetMaterial().Activate(GL_FRONT_AND_BACK);
 
-`	`// Активируем материал, если его следует активировать и текущий
+        // Сигнализируем о том, что материал был активирован
+        materialActivated = true;
 
-`	`// материал не является материалом по умолчанию
-
-`	`if (activateMaterial && (materialIndex >= 0))
-
-`	`{
-
-`		`// Получили материал модели
-
-`		`CModelMaterial const& modelMaterial = model.GetMaterial(materialIndex);
-
-`		`// Извлекли параметры материала OpenGL и активировали его
-
-`		`modelMaterial.GetMaterial().Activate(**GL\_FRONT\_AND\_BACK**);
-
-
-
-`		`// Сигнализируем о том, что материал был активирован
-
-`		`materialActivated = true;
-
-`		`**// Если материал двусторонний, включаем двусторонний режим освещения**
-
-`		`**// и выключаем режим отбраковки граней**
-
-`		`**if (modelMaterial.IsTwoSided())**
-
-`		`**{**
-
-`			`**if (m\_cullFace)**
-
-`			`**{**
-
-`				`**glDisable(GL\_CULL\_FACE);**
-
-`				`**m\_cullFace = false;**
-
-`				`**glLightModeli(GL\_LIGHT\_MODEL\_TWO\_SIDE, GL\_TRUE);**
-
-`			`**}**
-
-`		`**}**
-
-`		`**else	// материал не видим с нелицевой стороны**
-
-`		`**{**
-
-`			`**if (!m\_cullFace)**
-
-`			`**{**
-
-`				`**glEnable(GL\_CULL\_FACE);**
-
-`				`**m\_cullFace = true;**
-
-`				`**glLightModeli(GL\_LIGHT\_MODEL\_TWO\_SIDE, GL\_FALSE);**
-
-`			`**}**
-
-`		`**}**
-
-`	`}
-
-`	`…
-
+        // Если материал двусторонний, включаем двусторонний режим освещения
+        // и выключаем режим отбраковки граней
+        if (modelMaterial.IsTwoSided())
+        {
+            if (m_cullFace)
+            {
+                glDisable(GL_CULL_FACE);
+                m_cullFace = false;
+                glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+            }
+        }
+        else // материал не видим с нелицевой стороны
+        {
+            if (!m_cullFace)
+            {
+                glEnable(GL_CULL_FACE);
+                m_cullFace = true;
+                glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+            }
+        }
+    }
+    //...
 }
+```
+
 ##### Результаты
 Нами разработаны классы, позволяющие хранить, загружать и визуализировать трехмерные модели формата .3ds с учетом освещения и материалов.
 
