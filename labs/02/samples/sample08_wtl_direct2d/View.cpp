@@ -19,14 +19,34 @@ View::View()
 	ATLENSURE_SUCCEEDED(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(m_dwriteFactory),
 		reinterpret_cast<IUnknown**>(&m_dwriteFactory)));
 	ATLENSURE_SUCCEEDED(m_dwriteFactory->CreateTextFormat(
-		L"Verdana",
+		L"Calibri Light",
+		nullptr, // Font collection
+		DWRITE_FONT_WEIGHT_LIGHT,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		18.0f, // Font size
+		L"", // locale
+		&m_textFormat));
+
+	ATLENSURE_SUCCEEDED(m_dwriteFactory->CreateTextFormat(
+		L"Calibri Light",
 		nullptr, // Font collection
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		18.0f, // Font size
 		L"", // locale
-		&m_textFormat));
+		&m_textFormat1));
+
+	ATLENSURE_SUCCEEDED(m_dwriteFactory->CreateTextFormat(
+		L"Calibri Light",
+		nullptr, // Font collection
+		DWRITE_FONT_WEIGHT_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		18.0f, // Font size
+		L"", // locale
+		&m_textFormat2));
 }
 
 BOOL View::PreTranslateMessage([[maybe_unused]] MSG* pMsg)
@@ -130,9 +150,16 @@ void View::DrawFPS() const
 {
 	CRect clientRect;
 	GetClientRect(&clientRect);
-	std::wstring fpsStr = std::format(L"FPS: {:.2f}", m_fps);
+	//std::wstring fpsStr = std::format(L"FPS: {:.2f}", m_fps);
+	std::wstring fpsStr = L"Lorem ipsum dolor sit amet, consectetur adipiscing elit";
 	m_renderTarget->DrawText(fpsStr.c_str(), static_cast<int>(fpsStr.length()), m_textFormat,
-		D2D1::RectF(10.0f, 10.0f, 310.0, 30), m_textBrush);
+		D2D1::RectF(10.0f, 10.0f, 500.0, 30), m_textBrush);
+
+	m_renderTarget->DrawText(fpsStr.c_str(), static_cast<int>(fpsStr.length()), m_textFormat1,
+		D2D1::RectF(10.0f, 30.0f, 500.0, 60), m_textBrush);
+
+	m_renderTarget->DrawText(fpsStr.c_str(), static_cast<int>(fpsStr.length()), m_textFormat2,
+		D2D1::RectF(10.0f, 60.0f, 500.0, 90), m_textBrush);
 }
 
 void View::DrawWorld() const

@@ -15,13 +15,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04_simple_mfc_applica
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample09_animation_with_timer", "sample09_animation_with_timer\sample09_animation_with_timer.vcxproj", "{BF7EA61B-5983-4BE8-99BE-ADF0E2DC35ED}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample07-handling-wm_paint-mfc.vcproj", "sample07-handling-wm_paint-mfc\sample07-handling-wm_paint-mfc.vcxproj", "{9BB0DFFE-2CB4-4733-8218-C2D328026491}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample07-handling-wm_paint-mfc", "sample07-handling-wm_paint-mfc\sample07-handling-wm_paint-mfc.vcxproj", "{9BB0DFFE-2CB4-4733-8218-C2D328026491}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample08_handling-wm_paint-wtl", "sample08_handling-wm_paint-wtl\sample08_handling-wm_paint-wtl.vcxproj", "{ED83C7F3-16C7-4068-A1D0-D652D576C948}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample06-handling-wm_paint", "sample06-handling-wm_paint\sample06-handling-wm_paint.vcxproj", "{51B7FC4B-5D4C-48D2-B9BC-C34BEB758AC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample10_animation_with_timer-wtl", "sample10_animation_with_timer-wtl\sample10_animation_with_timer-wtl.vcxproj", "{FD83C7F3-16C7-4068-A1D0-D652D576C948}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03_1_custom_window_with_class", "sample03_1_custom_window_with_class\sample03_1_custom_window_with_class.vcxproj", "{B4D66BB8-E3C3-457D-A3BB-AD4A1A785D05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{FD83C7F3-16C7-4068-A1D0-D652D576C948}.Debug|Win32.Build.0 = Debug|Win32
 		{FD83C7F3-16C7-4068-A1D0-D652D576C948}.Release|Win32.ActiveCfg = Release|Win32
 		{FD83C7F3-16C7-4068-A1D0-D652D576C948}.Release|Win32.Build.0 = Release|Win32
+		{B4D66BB8-E3C3-457D-A3BB-AD4A1A785D05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B4D66BB8-E3C3-457D-A3BB-AD4A1A785D05}.Debug|Win32.Build.0 = Debug|Win32
+		{B4D66BB8-E3C3-457D-A3BB-AD4A1A785D05}.Release|Win32.ActiveCfg = Release|Win32
+		{B4D66BB8-E3C3-457D-A3BB-AD4A1A785D05}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

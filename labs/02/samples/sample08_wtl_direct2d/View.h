@@ -38,6 +38,8 @@ private:
 	ATL::CComPtr<IDWriteFactory> m_dwriteFactory;
 	ATL::CComPtr<IWICImagingFactory> m_WICFactory;
 	ATL::CComPtr<IDWriteTextFormat> m_textFormat;
+	ATL::CComPtr<IDWriteTextFormat> m_textFormat1;
+	ATL::CComPtr<IDWriteTextFormat> m_textFormat2;
 	
 	ATL::CComPtr<ID2D1HwndRenderTarget> m_renderTarget;
 	ATL::CComPtr<ID2D1SolidColorBrush> m_brush;
