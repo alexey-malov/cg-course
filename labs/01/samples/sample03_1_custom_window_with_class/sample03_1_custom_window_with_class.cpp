@@ -7,11 +7,25 @@
 #include <stdexcept>
 #include <windowsx.h>
 
-#define MAX_LOADSTRING 100
+// Message handler for about box.
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
 
-// Global Variables:
-HINSTANCE hInst; // current instance
-WCHAR szTitle[MAX_LOADSTRING]; // The title bar text
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
 
 class Window
 {
@@ -34,6 +48,8 @@ template <typename Base = Window>
 class WindowImpl : public Base
 {
 	static constexpr WCHAR szWindowClass[] = L"MyWindow"; // the main window class name
+	HINSTANCE m_hInstance = nullptr;
+
 public:
 	WindowImpl() = default;
 
@@ -42,10 +58,11 @@ public:
 
 	void Create(HINSTANCE hInstance, const WCHAR* title)
 	{
+		m_hInstance = hInstance;
 		RegisterWindowClassOnce(hInstance);
 
 		HWND hWnd = CreateWindowW(szWindowClass, title, WS_OVERLAPPEDWINDOW,
-			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, this);
 		if (!hWnd)
 		{
 			throw std::runtime_error("Failed to create window");
@@ -102,14 +119,47 @@ private:
 		return ::DefWindowProc(wnd, msg, wParam, lParam);
 	}
 
+	void OnCommand(HWND hWnd, int id, HWND /*hwndCtl*/, UINT /*codeNotify*/)
+	{
+		switch (id)
+		{
+		case IDM_ABOUT:
+			DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+			break;
+		case IDM_EXIT:
+			DestroyWindow(hWnd);
+			break;
+		}
+	}
+
+	void OnPaint(HWND hWnd)
+	{
+		PAINTSTRUCT ps;
+		[[maybe_unused]] HDC hdc = BeginPaint(hWnd, &ps);
+		auto releaseDC = util::Finally([hWnd, &ps] {
+			EndPaint(hWnd, &ps);
+		});
+	}
+
+	void OnDestroy(HWND)
+	{
+		PostQuitMessage(0);
+	}
+
 	LRESULT ThisWndProc(UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 	{
+		switch (msg)
+		{
+			HANDLE_MSG(*this, WM_COMMAND, OnCommand);
+			HANDLE_MSG(*this, WM_PAINT, OnPaint);
+			HANDLE_MSG(*this, WM_DESTROY, OnDestroy);
+		}
+
 		return ::DefWindowProc(*this, msg, wParam, lParam);
 	}
 };
 
 // Forward declarations of functions included in this code module:
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -143,81 +193,4 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	return (int)msg.wParam;
-}
-
-BOOL MainWnd_OnNCCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
-{
-	::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(lpCreateStruct->lpCreateParams));
-	return TRUE;
-}
-
-//
-//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Processes messages for the main window.
-//
-//  WM_COMMAND  - process the application menu
-//  WM_PAINT    - Paint the main window
-//  WM_DESTROY  - post a quit message and return
-//
-//
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-		HANDLE_MSG(hWnd, WM_NCCREATE, MainWnd_OnNCCreate);
-	case WM_COMMAND:
-	{
-		int wmId = LOWORD(wParam);
-		// Parse the menu selections:
-		switch (wmId)
-		{
-		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-			break;
-		case IDM_EXIT:
-			DestroyWindow(hWnd);
-			break;
-		default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-	}
-	break;
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		[[maybe_unused]] HDC hdc = BeginPaint(hWnd, &ps);
-		auto releaseDC = util::Finally([hWnd, &ps] {
-			EndPaint(hWnd, &ps);
-		});
-		// TODO: Add any drawing code that uses hdc here...
-	}
-	break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
-	}
-	return 0;
-}
-
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
-
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		break;
-	}
-	return (INT_PTR)FALSE;
 }
