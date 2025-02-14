@@ -7,6 +7,6 @@ int WINAPI WinMain(
 	LPSTR /*lpCmdLine*/,
 	int /*nCmdShow*/)
 {
-	MessageBox(NULL, _T("Hello world"), _T("My first windows program"), MB_OK);
+	MessageBoxW(NULL, L"Hello world", L"My first windows program", MB_OK);
 	return 0;
 }

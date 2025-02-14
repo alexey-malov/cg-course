@@ -4,6 +4,8 @@
 #include "sample03_1_custom_window_with_class.h"
 #include "Finally.h"
 #include "framework.h"
+#include <cassert>
+#include <random>
 #include <stdexcept>
 #include <windowsx.h>
 
@@ -26,6 +28,67 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return (INT_PTR)FALSE;
 }
+
+class Brush
+{
+public:
+	Brush() = default;
+	explicit Brush(COLORREF color)
+		: m_handle(CreateSolidBrush(color))
+	{
+		if (!m_handle)
+		{
+			throw std::runtime_error("Failed to create solid brush");
+		}
+	}
+
+	Brush(const Brush&) = delete;
+	Brush& operator=(const Brush&) = delete;
+
+	Brush(Brush&& other)
+		: m_handle(std::exchange(other.m_handle, nullptr))
+	{
+	}
+
+	Brush& operator=(Brush&& rhs) noexcept
+	{
+		assert(this != &rhs);
+		if (m_handle)
+		{
+			DeleteObject(m_handle);
+		}
+		m_handle = std::exchange(rhs.m_handle, nullptr);
+		return *this;
+	}
+
+	~Brush()
+	{
+		if (m_handle)
+		{
+			DeleteObject(m_handle);
+		}
+	}
+
+	void Delete() noexcept
+	{
+		assert(m_handle);
+		DeleteObject(m_handle);
+		m_handle = nullptr;
+	}
+
+	operator HBRUSH() const noexcept
+	{
+		return m_handle;
+	}
+
+	explicit operator bool() const noexcept
+	{
+		return m_handle != nullptr;
+	}
+
+private:
+	HBRUSH m_handle = nullptr;
+};
 
 class Window
 {
@@ -62,7 +125,8 @@ public:
 		RegisterWindowClassOnce(hInstance);
 
 		HWND hWnd = CreateWindowW(szWindowClass, title, WS_OVERLAPPEDWINDOW,
-			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, this);
+			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance,
+			/* lpParam= */ this);
 		if (!hWnd)
 		{
 			throw std::runtime_error("Failed to create window");
@@ -81,7 +145,7 @@ private:
 				wcex.cbSize = sizeof(WNDCLASSEX);
 
 				wcex.style = CS_HREDRAW | CS_VREDRAW;
-				wcex.lpfnWndProc = WndProc;
+				wcex.lpfnWndProc = WndProcThunk;
 				wcex.cbClsExtra = 0;
 				wcex.cbWndExtra = 0;
 				wcex.hInstance = hInstance;
@@ -102,17 +166,23 @@ private:
 		static ClassRegistrator registrator{ hInstance };
 	}
 
-	static LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+	// Переходник оконной процедуры. Он должен определить по дескриптору окна
+	// адрес связанного с окном C++-класса и передать управление оконной процедуре класса
+	static LRESULT CALLBACK WndProcThunk(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 	{
 		WindowImpl* thisPtr = nullptr;
 		if (msg == WM_NCCREATE)
 		{
+			// Извлекаем адрес экземпляра окна из поля lpCreateParams
 			auto createParams = reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams;
 			thisPtr = static_cast<WindowImpl*>(createParams);
 			thisPtr->Attach(wnd);
+			// Помещаем адрес экземпляра окна в поле USERDATA
 			SetWindowLongPtr(wnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(createParams));
 		}
-		if ((thisPtr = thisPtr ? thisPtr : reinterpret_cast<WindowImpl*>(GetWindowLongPtr(wnd, GWLP_USERDATA))))
+		if ((thisPtr = thisPtr
+					? thisPtr
+					: reinterpret_cast<WindowImpl*>(GetWindowLongPtr(wnd, GWLP_USERDATA))))
 		{
 			return thisPtr->ThisWndProc(msg, wParam, lParam);
 		}
@@ -135,10 +205,19 @@ private:
 	void OnPaint(HWND hWnd)
 	{
 		PAINTSTRUCT ps;
-		[[maybe_unused]] HDC hdc = BeginPaint(hWnd, &ps);
+		HDC hdc = BeginPaint(hWnd, &ps);
+		RECT rc;
+		GetClientRect(hWnd, &rc);
+
 		auto releaseDC = util::Finally([hWnd, &ps] {
 			EndPaint(hWnd, &ps);
 		});
+
+		auto restoreBrush = util::Finally([this, hdc, oldBrush = SelectObject(hdc, m_brush)] {
+			SelectObject(hdc, oldBrush);
+		});
+
+		Ellipse(hdc, 0, 0, rc.right, rc.bottom);
 	}
 
 	void OnDestroy(HWND)
@@ -146,17 +225,40 @@ private:
 		PostQuitMessage(0);
 	}
 
+	BOOL OnCreate(HWND /*hwnd*/, LPCREATESTRUCT /*lpCreateStruct*/)
+	{
+		UpdateBrush();
+		return TRUE;
+	}
+
+	void OnLButtonUp(HWND hwnd, int /*x*/, int /*y*/, UINT /*keyFlags*/)
+	{
+		UpdateBrush();
+		InvalidateRect(hwnd, /* rect= */ nullptr, /* erase= */ TRUE);
+	}
+
 	LRESULT ThisWndProc(UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 	{
 		switch (msg)
 		{
-			HANDLE_MSG(*this, WM_COMMAND, OnCommand);
 			HANDLE_MSG(*this, WM_PAINT, OnPaint);
+			HANDLE_MSG(*this, WM_COMMAND, OnCommand);
 			HANDLE_MSG(*this, WM_DESTROY, OnDestroy);
+			HANDLE_MSG(*this, WM_CREATE, OnCreate);
+			HANDLE_MSG(*this, WM_LBUTTONUP, OnLButtonUp);
 		}
 
 		return ::DefWindowProc(*this, msg, wParam, lParam);
 	}
+
+	void UpdateBrush()
+	{
+		std::uniform_int_distribution<unsigned> dist(0, 255);
+		m_brush = Brush(RGB(dist(m_gen), dist(m_gen), dist(m_gen)));
+	}
+
+	static inline std::mt19937 m_gen;
+	Brush m_brush;
 };
 
 // Forward declarations of functions included in this code module:
