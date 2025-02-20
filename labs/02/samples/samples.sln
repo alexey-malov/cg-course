@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample07_double_buffering",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample08_wtl_direct2d", "sample08_wtl_direct2d\sample08_wtl_direct2d.vcxproj", "{E17F5E9F-6D30-4EEF-AF27-550971A217FA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample09_wtl_d2d_basics", "sample09_wtl_d2d_basics\sample09_wtl_d2d_basics.vcxproj", "{643D114A-0316-47D4-AEC5-F4251C551906}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -91,6 +93,14 @@ Global
 		{E17F5E9F-6D30-4EEF-AF27-550971A217FA}.Release|Win32.Build.0 = Release|Win32
 		{E17F5E9F-6D30-4EEF-AF27-550971A217FA}.Release|x64.ActiveCfg = Release|x64
 		{E17F5E9F-6D30-4EEF-AF27-550971A217FA}.Release|x64.Build.0 = Release|x64
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Debug|Win32.ActiveCfg = Debug|Win32
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Debug|Win32.Build.0 = Debug|Win32
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Debug|x64.ActiveCfg = Debug|x64
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Debug|x64.Build.0 = Debug|x64
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Release|Win32.ActiveCfg = Release|Win32
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Release|Win32.Build.0 = Release|Win32
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Release|x64.ActiveCfg = Release|x64
+		{643D114A-0316-47D4-AEC5-F4251C551906}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
