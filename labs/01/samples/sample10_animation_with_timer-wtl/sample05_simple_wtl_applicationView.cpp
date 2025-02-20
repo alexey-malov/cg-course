@@ -39,8 +39,15 @@ LRESULT CSample05_simple_wtl_applicationView::OnPaint(UINT /*uMsg*/, WPARAM /*wP
 	
 	dc.MoveTo(centerX, centerY);
 	dc.LineTo(
-		int(centerX + 100 * cos(angleInRadians)), 
-		int(centerY + 100 * sin(angleInRadians))
+		int(centerX + 300 * cos(angleInRadians)), 
+		int(centerY + 300 * sin(angleInRadians))
+		);
+
+	dc.Ellipse(
+		int(centerX + 300 * cos(angleInRadians)) - 230,
+		int(centerY + 300 * sin(angleInRadians)) - 230,
+		int(centerX + 300 * cos(angleInRadians)) + 230,
+		int(centerY + 300 * sin(angleInRadians)) + 230
 		);
 	
 
