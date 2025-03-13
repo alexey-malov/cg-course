@@ -29,6 +29,9 @@ extern WTL::CAppModule _Module;
 #include <cmath>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include <glm/gtx/orthonormalize.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 #include <numbers>
