@@ -31,21 +31,13 @@ Window::Window(int w, int h, const char* title)
 	: BaseWindow(w, h, title)
 	, m_cube(CUBE_SIZE)
 {
-#if 1
 	m_cube.SetSideColor(CubeSide::NEGATIVE_X, { 1, 0, 0, 1 });
 	m_cube.SetSideColor(CubeSide::POSITIVE_X, { 0, 1, 0, 1 });
 	m_cube.SetSideColor(CubeSide::NEGATIVE_Y, { 0, 0, 1, 1 });
 	m_cube.SetSideColor(CubeSide::POSITIVE_Y, { 1, 1, 0, 1 });
 	m_cube.SetSideColor(CubeSide::NEGATIVE_Z, { 0, 1, 1, 1 });
 	m_cube.SetSideColor(CubeSide::POSITIVE_Z, { 1, 0, 1, 1 });
-#else
-	m_cube.SetSideColor(CubeSide::NEGATIVE_X, { 1, 1, 1, 1 });
-	m_cube.SetSideColor(CubeSide::POSITIVE_X, { 1, 1, 1, 1 });
-	m_cube.SetSideColor(CubeSide::NEGATIVE_Y, { 1, 1, 1, 1 });
-	m_cube.SetSideColor(CubeSide::POSITIVE_Y, { 1, 1, 1, 1 });
-	m_cube.SetSideColor(CubeSide::NEGATIVE_Z, { 1, 1, 1, 1 });
-	m_cube.SetSideColor(CubeSide::POSITIVE_Z, { 1, 1, 1, 1 });
-#endif
+
 	m_cube.SetSpecularColor({ 1, 1, 1, 1 });
 	m_cube.SetShininess(4.0f);
 }
