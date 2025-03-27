@@ -12,7 +12,7 @@ private:
 
 	void OnMouseMove(double x, double y) override;
 
-	// Вращаем камеру вокруг начала координат
+	// Р’СЂР°С‰Р°РµРј РєР°РјРµСЂСѓ РІРѕРєСЂСѓРі РЅР°С‡Р°Р»Р° РєРѕРѕСЂРґРёРЅР°С‚
 	void RotateCamera(double xAngleRadians, double yAngleRadians);
 
 	void OnResize(int width, int height) override;
@@ -24,7 +24,7 @@ private:
 	void SetupCameraMatrix();
 
 	Cube m_cube;
-	// Расстояние от камеры до точки вращения
+	// Р Р°СЃСЃС‚РѕСЏРЅРёРµ РѕС‚ РєР°РјРµСЂС‹ РґРѕ С‚РѕС‡РєРё РІСЂР°С‰РµРЅРёСЏ
 	static constexpr double DISTANCE_TO_ORIGIN = 2;
 
 	bool m_leftButtonPressed = false;

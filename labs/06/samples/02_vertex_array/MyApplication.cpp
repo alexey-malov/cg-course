@@ -27,9 +27,9 @@ struct Vertex
 	Color4 color;
 };
 
-CMyApplication::CMyApplication(const char * title, int width, int height)
-:CGLApplication(title, width, height)
-,m_rotationController(width, height)
+CMyApplication::CMyApplication(const char* title, int width, int height)
+	: CGLApplication(title, width, height)
+	, m_rotationController(width, height)
 {
 }
 
@@ -46,26 +46,24 @@ void CMyApplication::OnInit()
 	gluLookAt(0, 3, 4, 0, 0, 0, 0, 1, 0);
 }
 
-void CMyApplication::DrawTriangle()const
+void CMyApplication::DrawTriangle() const
 {
-	static const Vec3 coords[3] = 
-	{
-		{-1, -1, -3},
-		{1, -1, -3},
-		{0, 1, -3},
+	static const Vec3 coords[3] = {
+		{ -1, -1, -3 },
+		{ 1, -1, -3 },
+		{ 0, 1, -3 },
 	};
 
-	static const Color4 colors[3] = 
-	{
-		{255, 0, 0, 255},
-		{0, 255, 0, 255},
-		{0, 0, 255, 255},
+	static const Color4 colors[3] = {
+		{ 255, 0, 0, 255 },
+		{ 0, 255, 0, 255 },
+		{ 0, 0, 255, 255 },
 	};
 
 	// Задаем адрес массива вершин
 	glVertexPointer(
-		3,			// Координаты задаются в виде трехкомпонентного вектора
-		GL_FLOAT,	// типа float
+		3, // Координаты задаются в виде трехкомпонентного вектора
+		GL_FLOAT, // типа float
 		sizeof(Vec3), // Количество байт между началом i-ой и i+1-ой вершинами
 		&coords[0]); // Адрес первой вершины
 
@@ -86,7 +84,7 @@ void CMyApplication::DrawTriangle()const
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void CMyApplication::DrawCube()const
+void CMyApplication::DrawCube() const
 {
 	/*
 
@@ -108,29 +106,27 @@ void CMyApplication::DrawCube()const
 	4----5
 	*/
 	// Массив координат вершин
-	static const Vertex vertices[8] = 
-	{
-		{{-1, -1, -1}, {255, 0, 0, 255}},		// 0
-		{{+1, -1, -1}, {255, 255, 0, 255}},		// 1
-		{{+1, +1, -1}, {0, 255, 0, 255}},		// 2
-		{{-1, +1, -1}, {0, 0, 0, 255}},			// 3
-		{{-1, -1, +1}, {255, 0, 255, 255}},		// 4
-		{{+1, -1, +1}, {255, 255, 255, 255}},	// 5
-		{{+1, +1, +1}, {0, 255, 255, 255}},		// 6
-		{{-1, +1, +1}, {0, 0, 255, 255}},		// 7
+	static const Vertex vertices[8] = {
+		{ { -1, -1, -1 }, { 255, 0, 0, 255 } }, // 0
+		{ { +1, -1, -1 }, { 255, 255, 0, 255 } }, // 1
+		{ { +1, +1, -1 }, { 0, 255, 0, 255 } }, // 2
+		{ { -1, +1, -1 }, { 0, 0, 0, 255 } }, // 3
+		{ { -1, -1, +1 }, { 255, 0, 255, 255 } }, // 4
+		{ { +1, -1, +1 }, { 255, 255, 255, 255 } }, // 5
+		{ { +1, +1, +1 }, { 0, 255, 255, 255 } }, // 6
+		{ { -1, +1, +1 }, { 0, 0, 255, 255 } }, // 7
 	};
 
 	// Массив граней, а точнее, индексов составляющих их вершин.
 	// Индексы вершин граней перечисляются в порядке их обхода
 	// против часовой стрелки (если смотреть на грань снаружи)
-	static const unsigned char faces[6][4] = 
-	{
-		{4, 7, 3, 0},	// грань x<0
-		{5, 1, 2, 6},	// грань x>0
-		{4, 0, 1, 5},	// грань y<0
-		{7, 6, 2, 3},	// грань y>0
-		{0, 3, 2, 1},	// грань z<0
-		{4, 5, 6, 7},	// грань z>0
+	static const unsigned char faces[6][4] = {
+		{ 4, 7, 3, 0 }, // грань x<0
+		{ 5, 1, 2, 6 }, // грань x>0
+		{ 4, 0, 1, 5 }, // грань y<0
+		{ 7, 6, 2, 3 }, // грань y>0
+		{ 0, 3, 2, 1 }, // грань z<0
+		{ 4, 5, 6, 7 }, // грань z>0
 	};
 
 	// Передаем информацию о массиве вершин
@@ -171,7 +167,6 @@ void CMyApplication::OnMotion(int x, int y)
 		PostRedisplay();
 	}
 }
-
 
 void CMyApplication::OnReshape(int width, int height)
 {
