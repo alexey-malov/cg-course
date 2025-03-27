@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <memory>
 #include <stdexcept>
 
 class GLFWInitializer final
@@ -21,6 +22,13 @@ public:
 	}
 };
 
+using GLFWwindowPtr = std::unique_ptr<GLFWwindow, decltype([](GLFWwindow* w) {
+	if (w)
+	{
+		glfwDestroyWindow(w);
+	}
+})>;
+
 class BaseWindow
 {
 public:
@@ -32,23 +40,18 @@ public:
 			throw std::runtime_error("Failed to create window");
 		}
 	}
-	BaseWindow(const BaseWindow&) = delete;
-	BaseWindow& operator=(const BaseWindow&) = delete;
 
-	virtual ~BaseWindow()
-	{
-		glfwDestroyWindow(m_window);
-	}
+	virtual ~BaseWindow() = default;
 
 	void Run()
 	{
-		glfwMakeContextCurrent(m_window);
-		while (!glfwWindowShouldClose(m_window))
+		glfwMakeContextCurrent(m_window.get());
+		while (!glfwWindowShouldClose(m_window.get()))
 		{
 			int w, h;
-			glfwGetFramebufferSize(m_window, &w, &h);
+			glfwGetFramebufferSize(m_window.get(), &w, &h);
 			Draw(w, h);
-			glfwSwapBuffers(m_window);
+			glfwSwapBuffers(m_window.get());
 			glfwPollEvents();
 		}
 	}
@@ -56,11 +59,11 @@ public:
 private:
 	virtual void Draw(int width, int height) = 0;
 
-	static GLFWwindow* CreateWindow(int w, int h, const char* title)
+	static GLFWwindowPtr CreateWindow(int w, int h, const char* title)
 	{
-		return glfwCreateWindow(w, h, title, nullptr, nullptr);
+		return GLFWwindowPtr{ glfwCreateWindow(w, h, title, nullptr, nullptr) };
 	}
-	GLFWwindow* m_window;
+	GLFWwindowPtr m_window;
 };
 
 class Window : public BaseWindow

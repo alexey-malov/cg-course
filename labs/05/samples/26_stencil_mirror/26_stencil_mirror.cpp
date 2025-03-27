@@ -132,18 +132,18 @@ void SetProjection(double aspect)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-float angleX = 0;
-float angleY = 0;
-float angleZ = 0;
+float angleX = 10;
+float angleY = 20;
+float angleZ = 30;
 
 DWORD lastTick = GetTickCount();
 float g_delta = 0;
 
-bool b = true;
+bool g_animate = true;
 void ShiftTime()
 {
 	// подсчитываем время, прошедшее с момента последнего нарисованного кадра
-	if (b)
+	if (g_animate)
 	{
 		DWORD currentTick = GetTickCount();
 		g_delta = (currentTick - lastTick) * 0.001f;
