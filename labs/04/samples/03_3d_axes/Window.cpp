@@ -88,9 +88,9 @@ void Window::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glFrustum(
-		-frustumWidth * 0.5, frustumWidth * 0.5, // left, right
-		-frustumHeight * 0.5, frustumHeight * 0.5, // top, bottom
-		FRUSTUM_SIZE * 0.5, FRUSTUM_SIZE * 20 // znear, zfar
+		-frustumWidth * 0.3, frustumWidth * 0.3, // left, right
+		-frustumHeight * 0.3, frustumHeight * 0.3, // top, bottom
+		FRUSTUM_SIZE * 0.3, FRUSTUM_SIZE * 20 // znear, zfar
 	);
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -110,6 +110,12 @@ void Window::OnRunStart()
 void Window::Draw(int width, int height)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_FOG);
+
+	const float fogColor[4]{1, 1, 1, 1};
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogf(GL_FOG_DENSITY, 0.6f);
 
 	SetupCameraMatrix();
 
