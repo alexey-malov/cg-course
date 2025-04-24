@@ -23,7 +23,7 @@ const TCHAR WINDOW_TITLE[] = L"Color blending"; // The title bar text
 
 // Foward declarations of functions included in this code module:
 ATOM MyRegisterClass(HINSTANCE hInstance);
-BOOL InitInstance(HINSTANCE, int);
+HWND InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void DrawScene();
 
@@ -41,7 +41,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	MyRegisterClass(hInstance);
 
 	// Perform application initialization:
-	if (!InitInstance(hInstance, nCmdShow))
+	HWND hMainWnd = InitInstance(hInstance, nCmdShow);
+	if (!hMainWnd)
+	{
+		return FALSE;
+	}
+
+	HACCEL accel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_MAIN_MENU));
+	if (!accel)
 	{
 		return FALSE;
 	}
@@ -53,8 +60,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		{
 			if (GetMessage(&msg, NULL, 0, 0))
 			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
+				if (!TranslateAccelerator(hMainWnd, accel, &msg))
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
 			}
 			else
 			{
@@ -92,7 +102,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	return RegisterClassEx(&wcex);
 }
 
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+HWND InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	HWND hWnd;
 
@@ -111,13 +121,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	if (!hWnd)
 	{
-		return FALSE;
+		return nullptr;
 	}
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
-	return TRUE;
+	return hWnd;
 }
 void CalculateSpherePointColor(float alpha, float beta, Color4d* color)
 {
@@ -418,7 +428,7 @@ bool OnCreate(HWND hWnd)
 	// инициализируем OpenGL
 	if (InitOpenGL(hWnd))
 	{
-		if ((g_earthTexture = textureLoader.LoadTexture2D(L"earth.bmp")) != 0)
+		if ((g_earthTexture = textureLoader.LoadTexture2D(L"earth.png")) != 0)
 		{
 			return true;
 		}
@@ -451,7 +461,8 @@ void OnSize(HWND hWnd)
 
 void OnCommandMessage(WPARAM wParam, LPARAM lParam)
 {
-	switch (wParam)
+	// Младшие 16 бит хранят id команды. Старшие 16 бит - id уведомления или 1 (акселератор)
+	switch (LOWORD(wParam))
 	{
 	case ID_WHITE_BACKGROUND:
 		g_bgColor.r = 1;
@@ -534,6 +545,9 @@ void OnCommandMessage(WPARAM wParam, LPARAM lParam)
 		break;
 	case ID_ANIMATION_OFF:
 		g_animate = false;
+		break;
+	case ID_TOGGLE_ANIMATION:
+		g_animate = !g_animate;
 		break;
 	default:
 		break;

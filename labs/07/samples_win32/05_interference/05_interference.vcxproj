@@ -166,6 +166,9 @@ xcopy /Y *.raw "$(OutDir)"</Command>
     <ClCompile Include="05_interference.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="interference.fsh">
+      <FileType>Document</FileType>
+    </Text>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -44,12 +44,14 @@ void Frame::Draw(void) const
 		glColor3ub(0, 0, 255);
 		// Рисуем ось Z
 		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, -m_size);
+
+		const float scale = -1.0f;
+		glVertex3f(0, 0, scale * m_size);
 		// Рисуем наконечник оси Z
-		glVertex3f(0, 0, -m_size);
-		glVertex3f(-arrowOffset2, 0, -(m_size - arrowOffset));
-		glVertex3f(0, 0, -m_size);
-		glVertex3f(+arrowOffset2, 0, -(m_size - arrowOffset));
+		glVertex3f(0, 0, scale * m_size);
+		glVertex3f(-arrowOffset2, 0, scale * (m_size - arrowOffset));
+		glVertex3f(0, 0, scale * m_size);
+		glVertex3f(+arrowOffset2, 0, scale * (m_size - arrowOffset));
 	}
 	glEnd();
 }

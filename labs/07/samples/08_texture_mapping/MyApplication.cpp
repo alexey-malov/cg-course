@@ -49,23 +49,22 @@ void CMyApplication::OnDisplay()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	// Основная текстура выбрана в Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 	m_sphereTexture.Bind();
 
+	// Текстура облаков выбрана в Texture Unit 1
 	glActiveTexture(GL_TEXTURE1);
 	glEnable(GL_TEXTURE_2D);
 	m_cloudsTexture.Bind();
 
-	// Подключаем шейдерную программу
 	glUseProgram(m_program);
 
-	// Устанавливаем значение uniform-переменной mainTexture
-	// Значением переменной типа sampler должен быть номер текстурного блока,
-	// к которому она привязана
+	// Передаём в шейдер номер текстурного блока, к которому привязана текстура
 	glUniform1i(m_mainTextureSamplerLocation, 0);
 	glUniform1i(m_cloudsTextureSamplerLocation, 1);
-
+	
 	m_sphere.Draw();
 
 	glUseProgram(0);
@@ -121,6 +120,20 @@ void CMyApplication::OnMotion(int x, int y)
 	{
 		m_rotationController.OnMotion(x, y);
 		PostRedisplay();
+	}
+}
+
+inline void CMyApplication::OnKeyboard(unsigned char key, int, int)
+{
+	if (key == 'L' || key == 'l')
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glutPostRedisplay();
+	}
+	else if (key == 'F' || key == 'f')
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glutPostRedisplay();
 	}
 }
 

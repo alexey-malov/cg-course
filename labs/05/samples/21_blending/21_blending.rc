@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -16,13 +16,32 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Russian resources
+// Neutral (Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAIN_MENU ACCELERATORS
+BEGIN
+    VK_SPACE,       ID_TOGGLE_ANIMATION,    VIRTKEY, NOINVERT
+END
+
+#endif    // Neutral (Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian (Russia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
-#ifdef _WIN32
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 #pragma code_page(1251)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -30,25 +49,23 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // Russian resources
+#endif    // Russian (Russia) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -56,7 +73,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
     "#include ""windows.h""\r\n"
@@ -65,7 +82,7 @@ BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -81,15 +98,17 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_GL                  ICON    DISCARDABLE     "21_blending.ICO"
-IDI_SMALL               ICON    DISCARDABLE     "SMALL.ICO"
+IDI_GL                  ICON                    "21_blending.ICO"
+
+IDI_SMALL               ICON                    "SMALL.ICO"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDR_MAIN_MENU MENU DISCARDABLE 
+IDR_MAIN_MENU MENU
 BEGIN
     POPUP "Background"
     BEGIN
@@ -99,11 +118,8 @@ BEGIN
     POPUP "Transparency"
     BEGIN
         MENUITEM "Draw only back faces",        ID_TRANSPARENCY_DRAWONLYBACKFACES
-
         MENUITEM "Draw only front faces",       ID_TRANSPARENCY_DRAWONLYFRONTFACES
-
         MENUITEM "Draw front and back faces",   ID_TRANSPARENCY_DRAWFRONTANDBACKFACES
-
     END
     POPUP "Src blend"
     BEGIN
@@ -111,15 +127,11 @@ BEGIN
         MENUITEM "GL_ONE",                      ID_SRCBLEND_GLONE
         MENUITEM "GL_DST_COLOR",                ID_SRCBLEND_GLDSTCOLOR
         MENUITEM "GL_ONE_MINUS_DST_COLOR",      ID_SRCBLEND_GLONEMINUSDSTCOLOR
-
         MENUITEM "GL_SRC_ALPHA",                ID_SRCBLEND_GLSRCALPHA
         MENUITEM "GL_ONE_MINUS_SRC_ALPHA",      ID_SRCBLEND_GLONEMINUSSRCALPHA
-
         MENUITEM "GL_DST_ALPHA",                ID_SRCBLEND_GLDSTALPHA
         MENUITEM "GL_ONE_MINUS_DST_ALPHA",      ID_SRCBLEND_GLONEMINUSDSTALPHA
-
         MENUITEM "GL_SRC_ALPHA_SATURATE",       ID_SRCBLEND_GLSRCALPHASATURATE
-
     END
     POPUP "Dst blend"
     BEGIN
@@ -127,22 +139,21 @@ BEGIN
         MENUITEM "GL_ONE",                      ID_DSTBLEND_GLONE
         MENUITEM "GL_SRC_COLOR",                ID_DSTBLEND_GLSRCCOLOR
         MENUITEM "GL_ONE_MINUS_SRC_COLOR",      ID_DSTBLEND_GLONEMINUSSRCCOLOR
-
         MENUITEM "GL_SRC_ALPHA",                ID_DSTBLEND_GLSRCALPHA
         MENUITEM "GL_ONE_MINUS_SRC_ALPHA",      ID_DSTBLEND_GLONEMINUSSRCALPHA
-
         MENUITEM "GL_DST_ALPHA",                ID_DSTBLEND_GLDSTALPHA
         MENUITEM "GL_ONE_MINUS_DST_ALPHA",      ID_DSTBLEND_GLONEMINUSDSTALPHA
-
     END
     POPUP "Animation"
     BEGIN
         MENUITEM "On",                          ID_ANIMATION_ON
         MENUITEM "Off",                         ID_ANIMATION_OFF
+        MENUITEM SEPARATOR
+        MENUITEM "Toggle",                      ID_TOGGLE_ANIMATION
     END
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

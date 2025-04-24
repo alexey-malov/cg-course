@@ -149,7 +149,6 @@ void Window::Draw(int width, int height)
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, glm::value_ptr(glm::vec4{ 1, 1, 1, 1 }));
 	glLightfv(GL_LIGHT0, GL_SPECULAR, glm::value_ptr(glm::vec4{1, 1, 1, 1 }));
 
-	//glUseProgram(m_diffuseLighting->GetProgramId());
 	glUseProgram(m_useSpecular ? m_diffuseAndSpecularLighting->GetProgramId() : m_diffuseLighting->GetProgramId());
 	m_cube.Draw();
 }

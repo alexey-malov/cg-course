@@ -13,11 +13,12 @@ public:
 	~CMyApplication(void);
 
 protected:
-	virtual void OnInit();
-	virtual void OnDisplay();
-	virtual void OnReshape(int width, int height);
-	virtual void OnMouse(int button, int state, int x, int y);
-	virtual void OnMotion(int x, int y);
+	void OnInit() override;
+	void OnDisplay() override;
+	void OnReshape(int width, int height) override;
+	void OnMouse(int button, int state, int x, int y) override;
+	void OnMotion(int x, int y) override;
+	void OnKeyboard(unsigned char key, int /*x*/, int /*y*/) override;
 
 private:
 	void InitShaders();

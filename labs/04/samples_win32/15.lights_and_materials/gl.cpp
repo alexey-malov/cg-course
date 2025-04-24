@@ -7,6 +7,14 @@
 #include "../libgl/Vector3d.h"
 #include "../libgl/Color4d.h"
 
+Color4d g_bgColor = { 0, 0, 0, 1 };
+
+bool g_animation = true;
+
+GLenum g_polygonMode = GL_FILL;
+
+GLuint g_sphereList = 0;
+
 // Global Variables:
 HINSTANCE hInst; // current instance
 const TCHAR WINDOW_CLASS_NAME[] = TEXT("gl"); // window class name
@@ -446,41 +454,37 @@ ULONGLONG lastTick = GetTickCount64();
 
 void RotateSphere()
 {
-	//	glTranslatef(-0.5, 0, 0);
-
-	glRotatef(angleX, 1, 0, 0);
-	glRotatef(angleY, 0, 1, 0);
-	glRotatef(angleZ, 0, 0, 1);
-
 	// подсчитываем время, прошедшее с момента последнего нарисованного кадра
+
 	ULONGLONG currentTick = GetTickCount64();
 	float time = (currentTick - lastTick) * 0.001f;
 	lastTick = currentTick;
 
-	angleX += 23 * time;
-	if (angleX >= 360)
+	if (g_animation)
 	{
-		angleX -= 360;
+		// вращаем объект
+		angleX += 23 * time;
+		if (angleX >= 360)
+		{
+			angleX -= 360;
+		}
+		angleY += 31 * time;
+		if (angleY >= 360)
+		{
+			angleY -= 360;
+		}
+		angleZ += 29 * time;
+		if (angleZ >= 360)
+		{
+			angleZ -= 360;
+		}
 	}
-
-	angleY += 31 * time;
-	if (angleY >= 360)
-	{
-		angleY -= 360;
-	}
-
-	angleZ += 29 * time;
-	if (angleZ >= 360)
-	{
-		angleZ -= 360;
-	}
+	glRotatef(angleX, 1, 0, 0);
+	glRotatef(angleY, 0, 1, 0);
+	glRotatef(angleZ, 0, 0, 1);
 }
 
-Color4d g_bgColor = { 0, 0, 0, 1 };
 
-GLenum g_polygonMode = GL_FILL;
-
-GLuint g_sphereList = 0;
 void DrawScene()
 {
 	// просто очищаем буфер рисования
@@ -596,6 +600,18 @@ void OnCommandMessage(WPARAM wParam, LPARAM lParam)
 		break;
 	case ID_POINTS_MODE:
 		g_polygonMode = GL_POINT;
+		break;
+	case ID_OPTIONS_DISABLEANIMATION:
+		g_animation = false;
+		break;
+	case ID_OPTIONS_ENABLEANIMATION:
+		g_animation = true;
+		break;
+	case ID_OPTIONS_USELOCALVIEWER:
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+		break;
+	case ID_OPTIONS_USEINFINITEVIEWER:
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 		break;
 	default:
 		break;

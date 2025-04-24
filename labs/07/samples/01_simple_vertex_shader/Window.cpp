@@ -120,7 +120,8 @@ void Window::OnRunStart()
 	m_glState->vertexShader.SetSource(R"(
 void main()
 {
-	gl_Position = ftransform();
+	// gl_Position = ftransform();
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 	gl_FrontColor = gl_Color;
 }
 )");

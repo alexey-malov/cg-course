@@ -192,6 +192,7 @@ void CMyApplication::InitFrameBuffer()
 		glGetIntegerv(
 			GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,
 			&maxAnisotropy);
+
 		glTexParameteri(
 			GL_TEXTURE_2D,
 			GL_TEXTURE_MAX_ANISOTROPY_EXT,
