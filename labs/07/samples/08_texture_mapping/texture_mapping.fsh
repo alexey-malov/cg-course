@@ -11,6 +11,11 @@ void main()
 	
 	// Calculate clouds color
 	vec4 cloudsColor = vec4(clouds.r);
+
+	if (clouds.g > 0.8)
+	{
+		// earthColor = vec4(1.0, 0.0, 0.0, 1.0);
+	}
 	
 	// Add Earth and clouds color to determine the resulting color
 	gl_FragColor = earthColor + cloudsColor;

@@ -51,12 +51,10 @@ void CMyApplication::OnDisplay()
 
 	// Основная текстура выбрана в Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
-	glEnable(GL_TEXTURE_2D);
 	m_sphereTexture.Bind();
 
 	// Текстура облаков выбрана в Texture Unit 1
 	glActiveTexture(GL_TEXTURE1);
-	glEnable(GL_TEXTURE_2D);
 	m_cloudsTexture.Bind();
 
 	glUseProgram(m_program);

@@ -132,8 +132,8 @@ private:
 		glPointSize(10.0f);
 
 		glBegin(GL_POINTS);
-		glVertexAttrib2fv(m_program->GetPhase0Location(), glm::value_ptr(glm::vec2(0.1f, 0.3f)));
-		glVertexAttrib2fv(m_program->GetFrequencyLocation(), glm::value_ptr(glm::vec2(4.3f, 6.5f)));
+		glVertexAttrib2fv(m_program->GetPhase0Location(), glm::value_ptr(glm::vec2(0.0f, std::numbers::pi / 2)));
+		glVertexAttrib2fv(m_program->GetFrequencyLocation(), glm::value_ptr(glm::vec2(6.28f, 6.28f)));
 		glVertexAttrib2fv(m_program->GetAmplitudeLocation(), glm::value_ptr(glm::vec2(0.1f, 0.1f)));
 		glVertex2f(m_mousePos.x / width * 2 - 1, (height - m_mousePos.y) * 2 / height - 1);
 
