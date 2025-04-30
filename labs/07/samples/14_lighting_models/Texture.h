@@ -71,7 +71,7 @@ public:
 	{
 	}
 
-	explicit Texture(Texture&& other) noexcept
+	Texture(Texture&& other) noexcept
 		: TextureBase{ other.Detach() }
 	{
 	}

@@ -111,7 +111,7 @@ void CMyApplication::DrawQuad()
 	glm::vec3 p2(vertices[2].pos);
 	glm::vec2 t2(vertices[2].tex);
 
-	glm::vec3 tangent = CUtils3D::CalculateTangent(p0, p1, p2, t0, t1, t2);
+	glm::vec3 tangent = CalculateTangent(p0, p1, p2, t0, t1, t2);
 
 	glBegin(GL_QUADS);
 	for (size_t i = 0; i < 4; ++i)

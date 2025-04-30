@@ -58,7 +58,7 @@ TextureInfo TextureInfoFromBitmap(Gdiplus::Bitmap& bmp)
 
 } // namespace
 
-Texture TextureLoader::LoadTexture2D(const std::filesystem::path& path, GLenum target) const
+void TextureLoader::LoadTexture2D(const std::filesystem::path& path, GLenum target) const
 {
 	OnceInitGdiPlus();
 
@@ -71,9 +71,6 @@ Texture TextureLoader::LoadTexture2D(const std::filesystem::path& path, GLenum t
 	const Gdiplus::Rect lockRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
 
 	auto textureInfo = TextureInfoFromBitmap(bmp);
-	Texture texture;
-	texture.Create();
-	glBindTexture(target, texture);
 
 	Gdiplus::BitmapData bitmapData{};
 	if (Gdiplus::Ok != bmp.LockBits(&lockRect, Gdiplus::ImageLockModeRead, textureInfo.pixelFormat, &bitmapData))
@@ -87,4 +84,7 @@ Texture TextureLoader::LoadTexture2D(const std::filesystem::path& path, GLenum t
 	glTexImage2D(target, 0, textureInfo.internalFormat,
 		bmp.GetWidth(), bmp.GetHeight(),
 		0, textureInfo.textureFormat, GL_UNSIGNED_BYTE, bitmapData.Scan0);
+	auto errorCode = glGetError();
+	assert(errorCode == GL_NO_ERROR);
+
 }

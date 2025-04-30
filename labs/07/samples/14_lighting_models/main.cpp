@@ -3,9 +3,13 @@
 #include "GLFWInitializer.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
+#include "TextureLoader.h"
+#include <array>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <filesystem>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/vector_double3.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
@@ -15,9 +19,26 @@
 #include <iostream>
 #include <numbers>
 #include <optional>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/orthonormalize.hpp>
 
 namespace
 {
+
+// Ортонормируем матрицу 4*4 (это должна быть аффинная матрица)
+glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m)
+{
+	// Извлекаем подматрицу 3*3 из матрицы m и ортонормируем её
+	const auto normalizedMatrix = glm::orthonormalize(glm::dmat3x3{ m });
+	// Заменяем 3 столбца исходной матрицы
+	return {
+		glm::dvec4{ normalizedMatrix[0], 0.0 },
+		glm::dvec4{ normalizedMatrix[1], 0.0 },
+		glm::dvec4{ normalizedMatrix[2], 0.0 },
+		m[3]
+	};
+}
+
 class Program
 {
 public:
@@ -33,20 +54,21 @@ public:
 #version 430 core
 
 layout(location = 0) uniform mat4 u_modelViewProjectionMatrix;
-layout(location = 1) uniform mat4 u_modelViewMatrix;
-layout(location = 2) uniform mat3 u_normalMatrix;
+layout(location = 1) uniform mat4 u_modelMatrix;
+layout(location = 2) uniform mat3 u_normalMatrix; // inverse transpose of u_modelMatrix
 
 layout(location = 0) in vec4 a_pos;
 layout(location = 1) in vec3 a_normal;
 
-varying vec3 v_normal;
-varying vec3 v_pos;
+varying vec3 v_worldPos;
+varying vec3 v_worldNormal;
 
 void main()
 {
+	v_worldPos = (u_modelMatrix * a_pos).xyz;
+	v_worldNormal = u_normalMatrix * a_normal;
+
 	gl_Position = u_modelViewProjectionMatrix * a_pos;
-	v_normal = u_normalMatrix * a_normal;
-	v_pos = vec3(u_modelViewMatrix * a_pos);
 }
 )");
 		vertexShader.Compile();
@@ -57,24 +79,25 @@ void main()
 		Shader fragmentShader(GL_FRAGMENT_SHADER);
 		fragmentShader.SetSource(R"(
 #version 430 core
+layout (location = 3) uniform vec3 u_worldCamera;
+layout (location = 4) uniform samplerCube u_envMap; 
 
-struct LightSource
-{
-    vec3 pos;
-	vec3 intensity;
-};
+varying vec3 v_worldPos;
+varying vec3 v_worldNormal;
 
-layout(location = 3) uniform LightSource u_light;
-
-varying vec3 v_normal;
-varying vec3 v_pos;
+const vec3 WorldLightPos = vec3(10.0, 10.0, 10.0);
+const float ambientFactor = 0.2;
 
 void main()
 {
-	vec3 n = normalize(v_normal);
-	vec3 l = normalize(u_light.pos - v_pos);
+	vec3 worldLightDir = normalize(WorldLightPos - v_worldPos);
+	vec3 worldNormal = normalize(v_worldNormal);
 
-	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0) * max(dot(n, l), 0.0);
+	vec3 reflected = reflect(v_worldPos - u_worldCamera, worldNormal);
+	vec4 color = textureCube(u_envMap, reflected);
+	
+	float diffuseFactor = max(0.0, dot(worldNormal, worldLightDir));
+	gl_FragColor = (diffuseFactor + ambientFactor) * color;
 }
 )");
 		fragmentShader.Compile();
@@ -89,9 +112,14 @@ void main()
 			throw std::runtime_error(m_program.GetInfoLog());
 	}
 
-	void SetModelViewMatrix(const glm::dmat4& m)
+	void SetModelMatrix(const glm::dmat4& m)
 	{
-		m_modelViewMatrix = m;
+		m_modelMatrix = m;
+	}
+
+	void SetViewMatrix(const glm::dmat4& m)
+	{
+		m_viewMatrix = m;
 	}
 
 	void SetProjectionMatrix(const glm::dmat4& m)
@@ -99,27 +127,36 @@ void main()
 		m_projectionMatrix = m;
 	}
 
-	void SetLightSource(const LightSource& light)
+	void SetEnvCubeTextureUnit(GLint cubeTextureIndex)
 	{
-		m_lightSource = light;
+		m_envCubeTextureIndex = cubeTextureIndex;
 	}
 
 	void Activate() const noexcept
 	{
 		glUseProgram(m_program);
-		auto modelViewProjectionMatrix = m_projectionMatrix * m_modelViewMatrix;
-		auto normalMatrix = glm::inverseTranspose(glm::dmat3{ m_modelViewMatrix });
-		glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(glm::mat4{ modelViewProjectionMatrix }));
-		glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(glm::mat4{ m_modelViewMatrix }));
+
+		const auto modelViewProj = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+		glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(glm::mat4{ modelViewProj }));
+
+		glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(glm::mat4({ m_modelMatrix })));
+
+		const auto normalMatrix = glm::inverseTranspose(glm::dmat3{ m_modelMatrix });
 		glUniformMatrix3fv(2, 1, GL_FALSE, glm::value_ptr(glm::mat3{ normalMatrix }));
-		glUniform3fv(2, 1, glm::value_ptr(m_lightSource.pos));
+
+		const auto cameraPos = glm::vec3{ glm::inverse(m_viewMatrix)[3] };
+		glUniform3fv(3, 1, glm::value_ptr(cameraPos));
+
+		assert(m_envCubeTextureIndex >= 0);
+		glUniform1i(4, m_envCubeTextureIndex);
 	}
 
 private:
 	ShaderProgram m_program;
-	glm::dmat4 m_modelViewMatrix{};
-	glm::dmat4 m_projectionMatrix{};
-	LightSource m_lightSource;
+	glm::dmat4 m_modelMatrix{ 1.0 };
+	glm::dmat4 m_viewMatrix{ 1.0 };
+	glm::dmat4 m_projectionMatrix{ 1.0 };
+	GLint m_envCubeTextureIndex = -1;
 };
 
 class SceneRenderer
@@ -131,7 +168,8 @@ public:
 		GLint normal = 1;
 	};
 
-	SceneRenderer()
+	SceneRenderer(VertexLayout layout = {})
+		: m_layout{ layout }
 	{
 	}
 
@@ -141,6 +179,8 @@ public:
 	}
 
 private:
+	VertexLayout m_layout;
+
 	void RenderNode(const aiScene& scene, const aiNode& node)
 	{
 		for (unsigned int i = 0; i < node.mNumMeshes; ++i)
@@ -172,9 +212,29 @@ private:
 		}
 		glEnd();
 	}
-
-	VertexLayout m_layout;
 };
+
+using CubeTextureFiles = std::array<std::filesystem::path, 6>;
+
+Texture LoadCubeMap(const CubeTextureFiles& files)
+{
+	Texture tex;
+	tex.Create();
+	glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+
+	TextureLoader loader;
+
+	for (int i = 0; i < 6; ++i)
+	{
+		loader.LoadTexture2D(files[i], GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
+	}
+
+	glGenerateTextureMipmap(tex);
+	auto errorCode = glGetError();
+	assert(errorCode == GL_NO_ERROR);
+
+	return tex;
+}
 
 } // namespace
 
@@ -193,6 +253,15 @@ private:
 		// Инициализируем GLEW
 		m_glewInit.emplace();
 		m_program.emplace();
+
+		m_cubeTexture = LoadCubeMap({
+			"res/brightday2_positive_x.png",
+			"res/brightday2_negative_x.png",
+			"res/brightday2_positive_y.png",
+			"res/brightday2_negative_y.png",
+			"res/brightday2_positive_z.png",
+			"res/brightday2_negative_z.png",
+		});
 	}
 
 	void OnResize(int width, int height) override
@@ -202,8 +271,44 @@ private:
 
 	void OnMouseMove(double x, double y) override
 	{
-		m_mousePos = glm::vec2{ x, y };
+		const glm::dvec2 mousePos{ x, y };
+		if (m_leftButtonPressed)
+		{
+			const auto windowSize = GetFramebufferSize();
+
+			const auto mouseDelta = mousePos - m_mousePos;
+			const double xAngle = mouseDelta.y * std::numbers::pi / windowSize.y;
+			const double yAngle = mouseDelta.x * std::numbers::pi / windowSize.x;
+			RotateCamera(xAngle, yAngle);
+		}
+		m_mousePos = mousePos;
 		glfwPostEmptyEvent();
+	}
+
+	void RotateCamera(double xAngleRadians, double yAngleRadians)
+	{
+		// Извлекаем из 1 и 2 строки матрицы камеры направления осей вращения,
+		// совпадающих с экранными осями X и Y.
+		// Строго говоря, для этого надо извлекать столбцы их обратной матрицы камеры, но так как
+		// матрица камеры ортонормированная, достаточно транспонировать её подматрицу 3*3
+		const glm::dvec3 xAxis{
+			m_cameraMatrix[0][0], m_cameraMatrix[1][0], m_cameraMatrix[2][0]
+		};
+		const glm::dvec3 yAxis{
+			m_cameraMatrix[0][1], m_cameraMatrix[1][1], m_cameraMatrix[2][1]
+		};
+		m_cameraMatrix = glm::rotate(m_cameraMatrix, xAngleRadians, xAxis);
+		m_cameraMatrix = glm::rotate(m_cameraMatrix, yAngleRadians, yAxis);
+
+		m_cameraMatrix = Orthonormalize(m_cameraMatrix);
+	}
+
+	void OnMouseButton(int button, int action, int mods) override
+	{
+		if (button == GLFW_MOUSE_BUTTON_1)
+		{
+			m_leftButtonPressed = (action & GLFW_PRESS) != 0;
+		}
 	}
 
 	void Draw(int width, int height) override
@@ -214,14 +319,11 @@ private:
 		glEnable(GL_DEPTH_TEST);
 
 		m_program->SetProjectionMatrix(glm::perspective(60.0 * std::numbers::pi / 180.0, static_cast<double>(width) / height, 0.1, 100.0));
-		m_program->SetModelViewMatrix(glm::lookAt(glm::dvec3{ 1.0, 2.0, 5.0 }, glm::dvec3{ 0.0, 0.0, 0.0 }, glm::dvec3{ 0.0, 1.0, 0.0 }));
-		m_program->SetLightSource({ .pos = glm::vec3{ 0.0, 0.0, 0.0 } });
+		m_program->SetViewMatrix(m_cameraMatrix);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixd(glm::value_ptr(glm::ortho(-10.0, 10.0, -5.0, 5.0, 0.1, 100.0)));
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixd(glm::value_ptr(glm::lookAt(glm::dvec3{ 0.0, 0.0, 5.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 })));
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubeTexture);
+		m_program->SetEnvCubeTextureUnit(0);
 
 		m_program->Activate();
 
@@ -231,11 +333,18 @@ private:
 
 	std::optional<GLEWInitializer> m_glewInit;
 	std::optional<Program> m_program;
-	glm::vec2 m_mousePos{};
+
+	Texture m_cubeTexture;
+
+	glm::dvec2 m_mousePos{};
+	bool m_leftButtonPressed = false;
+	glm::dmat4x4 m_cameraMatrix = glm::lookAt(
+		glm::dvec3{ 0.0, 0.0, 3.0 },
+		glm::dvec3{ 0.0, 0.0, 0.0 },
+		glm::dvec3{ 0.0, 1.0, 0.0 });
 
 	const aiScene& m_scene;
 };
-
 
 int main()
 {
@@ -248,7 +357,7 @@ int main()
 				| aiProcess_SortByPType);
 
 		GLFWInitializer glfwInit;
-		Window win(800, 600, "Custom attribtue variables", *scene);
+		Window win(800, 600, "Reflection", *scene);
 
 		win.Run();
 	}
