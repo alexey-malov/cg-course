@@ -3,8 +3,10 @@
 #include "Cube.h"
 #include "DiffuseAndSpecular.h"
 #include "DiffuseLighting.h"
+#include "DrawShadowMapAsGrayscale.h"
 #include "FrameBuffer.h"
 #include "GLEWInitializer.h"
+#include "ShadowPass.h"
 #include "Texture.h"
 
 class Window : public BaseWindow
@@ -29,6 +31,10 @@ private:
 
 	void Draw(int width, int height) override;
 
+	void DrawShadowToTexture();
+	void DrawShadowMap();
+	void DrawWithShadow();
+
 	void SetupCameraMatrix();
 
 	void OnKey(int /*key*/, int /*scanCode*/, int /*action*/, int /*mods*/) override;
@@ -38,6 +44,9 @@ private:
 	Cube m_cube;
 	std::optional<DiffuseLighting> m_diffuseLighting;
 	std::optional<DiffuseAndSpecular> m_diffuseAndSpecularLighting;
+	std::optional<ShadowPass> m_shadowPass;
+	std::optional<DrawShadowMapAsGrayscale> m_drawShadowMap;
+
 	FrameBuffer m_shadowFrameBuffer;
 	Texture m_shadowTexture;
 
@@ -52,7 +61,8 @@ private:
 		glm::dvec3{ 0.0, 1.0, 0.0 });
 
 	bool m_useSpecular = false;
-	bool m_usePointLight = true;
+	bool m_usePointLight = false;
 	glm::vec4 m_pointLightPos{ 0, 0, 0, 1.0 };
+	// Ќаправление к направленному источнику света
 	glm::vec4 m_directedLightDirection{ 0, 0, 1.0, 0.0 };
 };

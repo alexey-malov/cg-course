@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/glew.h>
+#include "gl.h"
 #include <cassert>
 #include <utility>
 
@@ -65,18 +65,19 @@ class Texture : public TextureBase
 {
 public:
 	Texture() = default;
-	
+
 	explicit Texture(GLuint texture) noexcept
 		: TextureBase{ texture }
 	{
 	}
-	
-	explicit Texture(Texture&& other) noexcept
+
+	Texture(Texture&& other) noexcept
 		: TextureBase{ other.Detach() }
 	{
 	}
-	
-	Texture& operator=(Texture&& other) noexcept {
+
+	Texture& operator=(Texture&& other) noexcept
+	{
 		if (this != &other)
 		{
 			Delete();
@@ -88,7 +89,8 @@ public:
 	Texture(const Texture&) = delete;
 	Texture& operator=(const Texture&) = delete;
 
-	~Texture() {
+	~Texture()
+	{
 		Delete();
 	}
 };

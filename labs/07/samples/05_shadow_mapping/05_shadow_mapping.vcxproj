@@ -190,6 +190,8 @@
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DiffuseAndSpecular.cpp" />
+    <ClCompile Include="DrawShadowMapAsGrayscale.cpp" />
+    <ClCompile Include="DrawWithShadowMap.cpp" />
     <ClCompile Include="GLFWInitializer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
@@ -200,6 +202,7 @@
     </ClCompile>
     <ClCompile Include="DiffuseLighting.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="ShadowPass.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +212,10 @@
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DiffuseAndSpecular.h" />
+    <ClInclude Include="DrawShadowMapAsGrayscale.h" />
+    <ClInclude Include="DrawWithShadowMap.h" />
     <ClInclude Include="FrameBuffer.h" />
+    <ClInclude Include="gl.h" />
     <ClInclude Include="GLEWInitializer.h" />
     <ClInclude Include="GLFWInitializer.h" />
     <ClInclude Include="pch.h" />
@@ -217,6 +223,7 @@
     <ClInclude Include="Program.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="ShadowPass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

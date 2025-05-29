@@ -9,8 +9,13 @@ public:
 
 	GLuint GetId() const noexcept { return m_program; }
 
+	const ShaderProgram& GetProgram() const noexcept
+	{
+		return m_program;
+	}
+
 private:
-	Shader m_vertexShader{ GL_VERTEX_SHADER };
-	Shader m_fragmentShader{ GL_FRAGMENT_SHADER };
 	ShaderProgram m_program;
 };
+
+static_assert(std::is_move_constructible_v<Program>);

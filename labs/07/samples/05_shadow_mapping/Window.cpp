@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "Window.h"
+#include <glm/gtx/io.hpp>
 
 namespace
 {
@@ -10,6 +11,9 @@ constexpr double CUBE_SIZE = 1;
 
 constexpr double Z_NEAR = 0.1;
 constexpr double Z_FAR = 10;
+
+constexpr int ShadowWidth = 1024;
+constexpr int ShadowHeight = 1024;
 
 // Ортонормируем матрицу 4*4 (это должна быть аффинная матрица)
 glm::dmat4x4 Orthonormalize(const glm::dmat4x4& m)
@@ -123,7 +127,7 @@ void Window::OnRunStart()
 	{
 		throw std::runtime_error("Shaders are not supported");
 	}
-
+	InitFrameBuffer();
 	InitShaders();
 }
 
@@ -131,23 +135,50 @@ void Window::InitShaders()
 {
 	m_diffuseLighting.emplace();
 	m_diffuseAndSpecularLighting.emplace();
+	m_shadowPass.emplace();
+	m_drawShadowMap.emplace();
 }
 
 void Window::InitFrameBuffer()
 {
+	// Создаем фреймбуфер для теней
 	m_shadowFrameBuffer.Create();
 	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFrameBuffer);
 
+	// Создаем текстуру для хранения теней
 	m_shadowTexture.Create();
 	glBindTexture(GL_TEXTURE_2D, m_shadowTexture);
 
+	glTexImage2D(GL_TEXTURE_2D, /* level= */ 0,
+		/* internalFormat= */ GL_DEPTH_COMPONENT,
+		ShadowWidth, ShadowHeight,
+		/* border= */ 0, /* format= */ GL_DEPTH_COMPONENT,
+		/* type= */ GL_FLOAT, /*pixels=*/nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	// Устанавливаем "глубину" на границе текстуры в 1.0 (максимальное значение глубины)
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR,
+		glm::value_ptr(glm::vec4{ 1.f, 1.f, 1.f, 1.f }));
+
+	// Привязываем текстуру к фреймбуферу
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		GL_TEXTURE_2D, m_shadowTexture, /* level= */ 0);
+	glDrawBuffer(GL_NONE); // Отключаем рисование в буфер цвета в фреймбуфере
+	glReadBuffer(GL_NONE); // Отключаем чтение из буфера цвета в фреймбуфере
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Отключили фреймбуфер
 }
 
 void Window::Draw(int width, int height)
 {
-	glClearColor(1, 1, 1, 1);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	DrawShadowToTexture();
+	DrawShadowMap();
+
+#if 0
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
@@ -162,6 +193,70 @@ void Window::Draw(int width, int height)
 	//glUseProgram(m_diffuseLighting->GetProgramId());
 	glUseProgram(m_useSpecular ? m_diffuseAndSpecularLighting->GetProgramId() : m_diffuseLighting->GetProgramId());
 	m_cube.Draw();
+#endif
+}
+
+void Window::DrawShadowToTexture()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFrameBuffer);
+	glViewport(0, 0, ShadowWidth, ShadowHeight);
+	glClearDepth(1.0f);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	const auto lightDir = glm::normalize(
+		glm::vec3(m_usePointLight ? m_pointLightPos : m_directedLightDirection));
+	const auto lightView = glm::lookAt(
+		glm::vec3{ 0.f, 0.f, 3.f }, //-lightDir * 3.0f, // eye
+		glm::vec3{ 0.0 },
+		glm::vec3{ 0, 1, 0 });
+	// std::cout << lightView << "\n";
+	const auto lightProj = glm::ortho(-10.f, 10.f, -10.f, 10.f, 1.f, 20.f);
+	const auto cubeModelMatrix = glm::rotate(glm::radians(30.f), glm::vec3{ 1.0, 1.0, 1.0 }) * glm::mat4(1.0f);
+	const auto lightSpaceMatrix = lightProj * lightView * cubeModelMatrix;
+
+	m_shadowPass->SetLightSpaceMatrix(lightSpaceMatrix);
+	std::cout << lightSpaceMatrix << "\n";
+	m_shadowPass->Activate();
+
+	m_cube.Draw();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	const auto framebufferSize = GetFramebufferSize();
+	glViewport(0, 0, framebufferSize.x, framebufferSize.y);
+	glUseProgram(0);
+	assert(glGetError() == GL_NO_ERROR);
+}
+
+void Window::DrawShadowMap()
+{
+	m_drawShadowMap->SetDepthTexture(m_shadowTexture);
+	m_drawShadowMap->Activate();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glBegin(GL_TRIANGLE_STRIP);
+
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex2f(0.1f, -0.1f);
+
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex2f(0.1f, -0.9f);
+
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex2f(0.9f, -0.1f);
+
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex2f(0.9f, -0.9f);
+
+	glEnd();
+	glUseProgram(0);
+}
+
+void Window::DrawWithShadow()
+{
+
 }
 
 void Window::SetupCameraMatrix()

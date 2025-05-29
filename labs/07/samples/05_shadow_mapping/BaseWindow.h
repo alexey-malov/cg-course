@@ -1,4 +1,5 @@
 #pragma once
+#include "gl.h"
 
 class BaseWindow
 {

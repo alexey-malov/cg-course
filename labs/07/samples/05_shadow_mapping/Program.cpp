@@ -3,20 +3,25 @@
 
 Program::Program(const char* vertexShaderSource, const char* fragmentShaderSource)
 {
-	m_vertexShader.SetSource(vertexShaderSource);
-	m_vertexShader.Compile();
-	m_fragmentShader.SetSource(fragmentShaderSource);
-	m_fragmentShader.Compile();
-	if (!m_vertexShader.IsCompiled())
+	Shader vertexShader{ GL_VERTEX_SHADER };
+
+	vertexShader.SetSource(vertexShaderSource);
+	vertexShader.Compile();
+
+	Shader fragmentShader{ GL_FRAGMENT_SHADER };
+	fragmentShader.SetSource(fragmentShaderSource);
+	fragmentShader.Compile();
+
+	if (!vertexShader.IsCompiled())
 	{
-		throw std::runtime_error("Failed to compile vertex shader: " + m_vertexShader.GetInfoLog());
+		throw std::runtime_error("Failed to compile vertex shader: " + vertexShader.GetInfoLog());
 	}
-	if (!m_fragmentShader.IsCompiled())
+	if (!fragmentShader.IsCompiled())
 	{
-		throw std::runtime_error("Failed to compile fragment shader: " + m_fragmentShader.GetInfoLog());
+		throw std::runtime_error("Failed to compile fragment shader: " + fragmentShader.GetInfoLog());
 	}
-	m_program.AttachShader(m_vertexShader);
-	m_program.AttachShader(m_fragmentShader);
+	m_program.AttachShader(vertexShader);
+	m_program.AttachShader(fragmentShader);
 	m_program.Link();
 	m_program.Validate();
 	if (!m_program.IsLinked())

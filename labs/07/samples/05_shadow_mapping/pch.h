@@ -1,9 +1,7 @@
 #pragma once
 
 #define _USE_MATH_DEFINES
-#include <GL/glew.h>
-// GLEW must be included before GL/gl.h
-#include <GLFW/glfw3.h>
+#include "gl.h"
 #include <chrono>
 #include <cmath>
 #include <mutex>
