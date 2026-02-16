@@ -150,8 +150,8 @@ void View::DrawFPS() const
 {
 	CRect clientRect;
 	GetClientRect(&clientRect);
-	//std::wstring fpsStr = std::format(L"FPS: {:.2f}", m_fps);
-	std::wstring fpsStr = L"Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+	std::wstring fpsStr = std::format(L"FPS: {:.2f}", m_fps);
+	//std::wstring fpsStr = L"Lorem ipsum dolor sit amet, consectetur adipiscing elit";
 	m_renderTarget->DrawText(fpsStr.c_str(), static_cast<int>(fpsStr.length()), m_textFormat,
 		D2D1::RectF(10.0f, 10.0f, 500.0, 30), m_textBrush);
 
@@ -166,7 +166,7 @@ void View::DrawWorld() const
 {
 	m_renderTarget->DrawRectangle(
 		D2D1::RectF(0, 0, static_cast<float>(m_world.GetSize().width), static_cast<float>(m_world.GetSize().height)),
-		m_brush);
+		m_brush, 3.0f);
 
 	for (const auto& particle : m_world.GetParticles())
 	{
