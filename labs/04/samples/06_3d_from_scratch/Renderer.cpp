@@ -39,9 +39,9 @@ Renderer::TransformedVertex Renderer::TransformVertex(const Vertex& vertex) cons
 {
 	glm::vec4 pos = m_modelViewProjMatrix * vertex.position;
 
-	// Перспективное деление.
+	// РџРµСЂСЃРїРµРєС‚РёРІРЅРѕРµ РґРµР»РµРЅРёРµ.
 	pos *= 1.0f / pos.w;
-	// pos - координаты внутри видового объёма находятся в диапазоне от - до 1
+	// pos - РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРЅСѓС‚СЂРё РІРёРґРѕРІРѕРіРѕ РѕР±СЉС‘РјР° РЅР°С…РѕРґСЏС‚СЃСЏ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ - РґРѕ 1
 
 	auto pos2D = glm::vec2(pos) * 0.5f + 0.5f;
 	pos2D.x = pos2D.x * m_viewPort.width + m_viewPort.left;

@@ -49,14 +49,25 @@ Z
 4----5
 */
 
+	#if 1
 	constexpr static std::array<uint8_t, 24> indices{
-		4, 7, 3, 0, // грань x<0
-		5, 1, 2, 6, // грань x>0
-		4, 0, 1, 5, // грань y<0
-		7, 6, 2, 3, // грань y>0
-		0, 3, 2, 1, // грань z<0
-		4, 5, 6, 7, // грань z>0
+		4, 7, 3, 0, // РіСЂР°РЅСЊ x<0
+		5, 1, 2, 6, // РіСЂР°РЅСЊ x>0
+		4, 0, 1, 5, // РіСЂР°РЅСЊ y<0
+		7, 6, 2, 3, // РіСЂР°РЅСЊ y>0
+		0, 3, 2, 1, // РіСЂР°РЅСЊ z<0
+		4, 5, 6, 7, // РіСЂР°РЅСЊ z>0
 	};
+	#endif
+
+	#if 0
+		constexpr static std::array<uint8_t, 12> indices{
+			0, 1, 5,
+			6, 5, 1,
+			0, 5, 6,
+			0, 6, 1,
+		};
+	#endif
 
 	renderer.DrawElements(PrimitiveType::Quads, m_vertices, indices);
 }
