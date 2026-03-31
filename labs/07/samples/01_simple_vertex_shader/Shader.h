@@ -15,6 +15,10 @@ public:
 			throw std::runtime_error("Failed to create shader");
 		}
 	}
+
+	Shader(const Shader&) = delete;
+	Shader& operator=(const Shader&) = delete;
+
 	Shader(Shader&& other) noexcept
 		: m_shader(std::exchange(other.m_shader, 0))
 	{
