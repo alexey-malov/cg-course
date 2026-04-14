@@ -34,7 +34,8 @@ vec4 CalculateSpecularColor(
 
 void main()
 {
-	vec2 tex = gl_TexCoord[0].xy;	
+	vec2 tex = gl_TexCoord[0].xy;
+	// We must normalize normal because of texture filtering inaccuracies
 	vec3 normal = normalize((texture2D(normalMap, tex).xyz - 0.5));
 	vec3 eyeDir = normalize(eyeDir);
 	float lightDistance = length(lightDir);
