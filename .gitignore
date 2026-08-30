@@ -236,3 +236,20 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 samples/01-basics/string-joiner/out.txt
+
+# CMakeFiles
+out/
+build*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CMakeUserPresets.json
+Makefile
+*.exe
+*.lib
+*.dll
+*.ipch
+*.tlog
+*.lastbuildstate
+*.unsuccessfulbuild
+*.spv
